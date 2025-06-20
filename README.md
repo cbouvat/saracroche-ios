@@ -42,7 +42,9 @@ You can also try the latest beta version through [TestFlight](https://testflight
 The first list is the one containing numbers reserved for telemarketing by ARCEP : https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/la-numerotation.html
 And other numbers by the community.
 
-### Second list
+### Information about prefixes
+
+All prefixes are communicated by ARCEP; here is the list. : https://www.data.gouv.fr/fr/datasets/ressources-en-numerotation-telephonique/
 
 ## Contributing
 
