@@ -31,29 +31,22 @@ class SaracrocheViewModel: ObservableObject {
 
   // List of phone number patterns to block
   let blockPhoneNumberPatterns: [String] = [
-    "33162XXXXXX",
-    "33163XXXXXX",
-    "33270XXXXXX",
-    "33271XXXXXX",
-    "33377XXXXXX",
-    "33378XXXXXX",
-    "33424XXXXXX",
-    "33425XXXXXX",
-    "33568XXXXXX",
-    "33569XXXXXX",
-    "33948XXXXXX",
-    "339475XXXXX",
-    "339476XXXXX",
-    "339477XXXXX",
-    "339478XXXXX",
-    "339479XXXXX",
-  ]
-
-  // List of phone number patterns to inform the user about (not blocked)
-  let informPhoneNumberPatterns: [String] = [
-    "33937XXXXXX",
-    "33938XXXXXX",
-    "33939XXXXXX",
+    "33162XXXXXX", // ARCEP
+    "33163XXXXXX", // ARCEP
+    "33270XXXXXX", // ARCEP
+    "33271XXXXXX", // ARCEP
+    "33377XXXXXX", // ARCEP
+    "33378XXXXXX", // ARCEP
+    "33424XXXXXX", // ARCEP
+    "33425XXXXXX", // ARCEP
+    "33568XXXXXX", // ARCEP
+    "33569XXXXXX", // ARCEP
+    "33948XXXXXX", // ARCEP
+    "339475XXXXX", // ARCEP
+    "339476XXXXX", // ARCEP
+    "339477XXXXX", // ARCEP
+    "339478XXXXX", // ARCEP
+    "339479XXXXX", // ARCEP
   ]
 
   let sharedUserDefaults = UserDefaults(
