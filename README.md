@@ -45,8 +45,8 @@ And other numbers by the community.
 ### Information about prefixes
 
 All prefixes are communicated by ARCEP; here is the list. : https://www.data.gouv.fr/fr/datasets/ressources-en-numerotation-telephonique/
-- MAJNUM file for the list of prefixes
-- MAJRIO file for the name of the operator
+- MAJNUM file for the list of prefixes : https://extranet.arcep.fr/uploads/MAJNUM.csv
+- MAJRIO file for the name of the operator : https://extranet.arcep.fr/uploads/MAJRIO.csv or https://extranet.arcep.fr/uploads/MAJCPSI.csv
 
 ## Contributing
 
