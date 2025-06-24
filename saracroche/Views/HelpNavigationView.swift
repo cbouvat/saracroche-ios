@@ -15,13 +15,15 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "L'application bloque les préfixes suivants, communiqués par l'ARCEP : 0162, 0163, 0270, 0271, 0377, 0378, 0424, 0425, 0568, 0569, 0948, 0949, ainsi que ceux allant de 09475 à 09479. Ces préfixes sont réservés au démarchage téléphonique."
+              "L'application bloque les préfixes suivants, communiqués par l'ARCEP : " +
+              "0162, 0163, 0270, 0271, 0377, 0378, 0424, 0425, 0568, 0569, 0948, 0949, " +
+              "ainsi que ceux allant de 09475 à 09479. Ces préfixes sont réservés au démarchage téléphonique. " +
+              "Elle bloque aussi des numéros de téléphone de certains opérateurs comme Manifone, DVS Connect et bientôt d’autres."
             )
             .font(.body)
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -39,7 +41,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -51,13 +52,12 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "Pour signaler un numéro indésirable, utilisez le bouton 'Signaler' dans l'onglet 'Signaler'. Cela aidera à améliorer la liste de blocage et à rendre l'application plus efficace."
+              "Pour signaler un numéro indésirable, utilisez le bouton 'Signaler' dans l'onglet 'Signaler'. Cela aide à améliorer la liste de blocage et à rendre l’application plus efficace."
             )
             .font(.body)
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -77,7 +77,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -89,7 +88,7 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "L'application Saracroche est open source et développée bénévolement. Vous pouvez soutenir le projet, ce qui est précieux pour maintenir et améliorer l'application."
+              "L’application Saracroche est open source et développée bénévolement. Vous pouvez soutenir le projet, ce qui est précieux pour maintenir et améliorer l’application."
             )
             .font(.body)
             .padding(.top, 4)
@@ -123,7 +122,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -158,7 +156,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -208,7 +205,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -220,13 +216,12 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "L'application Saracroche est gratuite et sans publicité. Elle est développée bénévolement par un développeur indépendant (Camille), qui en avait assez de recevoir des appels indésirables. L'application est développée sur son temps libre. Vous pouvez soutenir le projet en faisant un don sur GitHub ou Liberapay."
+              "L’application Saracroche est gratuite et sans publicité. Elle est développée bénévolement par un développeur indépendant (Camille), qui en avait assez de recevoir des appels indésirables. L’application est développée sur son temps libre. Vous pouvez soutenir le projet en faisant un don sur GitHub ou Liberapay."
             )
             .font(.body)
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -238,7 +233,7 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "Saracroche ne collecte aucune donnée personnelle, n'utilise aucun service tiers et ne transmet aucune information à qui que ce soit. Toutes les données restent sur votre appareil. Le respect de votre vie privée est un droit fondamental même si vous n'avez rien à cacher."
+              "Saracroche ne collecte aucune donnée personnelle, n’utilise aucun service tiers et ne transmet aucune information à qui que ce soit. Toutes les données restent sur votre appareil. Le respect de la vie privée est un droit fondamental, même si on n’a rien à cacher."
             )
             .font(.body)
             .padding(.top, 4)

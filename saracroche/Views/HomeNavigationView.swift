@@ -30,6 +30,7 @@ struct HomeNavigationView: View {
                   Text("Le bloqueur d'appels est actif")
                     .font(.title3)
                     .bold()
+                    .multilineTextAlignment(.center)
                 } else if viewModel.blockerExtensionStatus == .disabled {
                   if #available(iOS 18.0, *) {
                     Image(systemName: "xmark.circle.fill")
@@ -50,6 +51,7 @@ struct HomeNavigationView: View {
                   Text("Le bloqueur d'appels n'est pas activé")
                     .font(.title3)
                     .bold()
+                    .multilineTextAlignment(.center)
 
                   Text(
                     "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
@@ -89,6 +91,7 @@ struct HomeNavigationView: View {
                   Text("Vérification du statut du bloqueur en cours…")
                     .font(.title3)
                     .bold()
+                    .multilineTextAlignment(.center)
                 } else if viewModel.blockerExtensionStatus == .error {
                   if #available(iOS 18.0, *) {
                     Image(systemName: "xmark.octagon.fill")
@@ -129,6 +132,7 @@ struct HomeNavigationView: View {
                   Text("Statut inattendu")
                     .font(.title3)
                     .bold()
+                    .multilineTextAlignment(.center)
                 }
               }
               .padding(.vertical)
