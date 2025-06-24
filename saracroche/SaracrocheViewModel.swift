@@ -160,7 +160,8 @@ class SaracrocheViewModel: ObservableObject {
   }
 
   func checkBlockerExtensionStatus() {
-    if self.blockerActionState !== .nothing {
+    if self.blockerActionState != .nothing {
+      // If an action is in progress, we don't check the status
       return self.blockerExtensionStatus = .unknown
     }
     
