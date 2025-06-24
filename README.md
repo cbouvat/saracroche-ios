@@ -2,7 +2,7 @@
 
 ## 🇫🇷 Description
 
-Saracroche est une application iOS qui vous protège des appels indésirables en bloquant les appels téléphoniques provenant des numéros figurant sur la liste des numéros dédié au démarchage de l'ARCEP (Autorité de Régulation des Communications Électroniques en France). Elle est conçue pour être simple, efficace et respectueuse de la vie privée.
+Saracroche est une application iOS qui vous protège des appels indésirables en bloquant les appels téléphoniques indésirables. Elle est conçue pour être simple, efficace et respectueuse de la vie privée.
 
 ## 🇫🇷 Fonctionnalités
 
@@ -10,11 +10,10 @@ Saracroche est une application iOS qui vous protège des appels indésirables en
 - 📱 Extension native iOS
 - 🔒 Respect de la vie privée : aucune donnée d'appel n'est collectée
 - 🔄 Mises à jour régulières de la base de données des numéros
-- 🇫🇷 Basé sur les données officielles de l'ARCEP
 
 ## 🇬🇧 Description
 
-Saracroche is an iOS app that protects you from unwanted calls by blocking phone calls from numbers on the ARCEP (French Regulatory Authority for Electronic Communications) spam list. It is designed to be simple, effective, and privacy-respectful.
+Saracroche is an iOS app that protects you from unwanted calls by blocking spam phone calls. It's designed to be simple, effective, and privacy-friendly.
 
 ## 🇬🇧 Features
 
@@ -22,7 +21,6 @@ Saracroche is an iOS app that protects you from unwanted calls by blocking phone
 - 📱 Native iOS extension
 - 🔒 Privacy-respectful: no call data is collected
 - 🔄 Regular updates of the number database
-- 🇫🇷 Based on official ARCEP data
 
 ---
 
@@ -41,31 +39,16 @@ You can also try the latest beta version through [TestFlight](https://testflight
 
 ## List of prefix numbers
 
-The list of prefix numbers is available on the ARCEP website: https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/la-numerotation.html
+The first list is the one containing numbers reserved for telemarketing by ARCEP : https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/la-numerotation.html
+And other numbers by the community.
 
-### Table of Blocked Prefixes
+### Information about prefixes
 
-Date of last update: 2025-03-23
+All prefixes are communicated by ARCEP : https://www.data.gouv.fr/fr/datasets/ressources-en-numerotation-telephonique/ and https://www.data.gouv.fr/fr/datasets/identifiants-de-communications-electroniques/
+- `MAJNUM.csv` file for the list of prefixes : https://extranet.arcep.fr/uploads/MAJNUM.csv
+- `identifiants_CE.csv` file for the operators of the prefixes : https://extranet.arcep.fr/uploads/identifiants_CE.csv
 
-| E.164 Format |
-| ------------ |
-| +33162###### |
-| +33163###### |
-| +33270###### |
-| +33271###### |
-| +33377###### |
-| +33378###### |
-| +33424###### |
-| +33425###### |
-| +33568###### |
-| +33569###### |
-| +33948###### |
-| +33949###### |
-| +339475##### |
-| +339476##### |
-| +339477##### |
-| +339478##### |
-| +339479##### |
+Tool to identify the operator by prefix : https://www.arcep.fr/mes-demarches-et-services/entreprises/fiches-pratiques/base-numerotation.html
 
 ## Contributing
 

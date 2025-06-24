@@ -23,7 +23,7 @@ class SaracrocheViewModel: ObservableObject {
   @Published var blockerPhoneNumberBlocked: Int64 = 0
   @Published var blockerPhoneNumberTotal: Int64 = 0
   @Published var blocklistInstalledVersion: String = ""
-  @Published var blocklistVersion: String = "2.0"
+  @Published var blocklistVersion: String = "3.0"
   @Published var showBlockerStatusSheet: Bool = false
 
   private var statusTimer: Timer? = nil
@@ -31,6 +31,7 @@ class SaracrocheViewModel: ObservableObject {
 
   // List of phone number patterns to block
   let blockPhoneNumberPatterns: [String] = [
+    // ARCEP
     "33162XXXXXX",
     "33163XXXXXX",
     "33270XXXXXX",
@@ -47,13 +48,100 @@ class SaracrocheViewModel: ObservableObject {
     "339477XXXXX",
     "339478XXXXX",
     "339479XXXXX",
-  ]
 
-  // List of phone number patterns to inform the user about (not blocked)
-  let informPhoneNumberPatterns: [String] = [
-    "33937XXXXXX",
-    "33938XXXXXX",
-    "33939XXXXXX",
+    // DVS Connect : DVSC
+    "33186706XXX",
+    "33188440XXX",
+    "33188441XXX",
+    "33188442XXX",
+    "33188443XXX",
+    "33188444XXX",
+    "33188445XXX",
+    "33188446XXX",
+    "33188447XXX",
+    "33188448XXX",
+    "33188449XXX",
+    "33189366XXX",
+    "33259590XXX",
+    "33259591XXX",
+    "33259592XXX",
+    "33259593XXX",
+    "33259594XXX",
+    "33259595XXX",
+    "33259596XXX",
+    "33259597XXX",
+    "33259598XXX",
+    "33259599XXX",
+    "33376470XXX",
+    "33376471XXX",
+    "33376472XXX",
+    "33376473XXX",
+    "33376474XXX",
+    "33376475XXX",
+    "33376476XXX",
+    "33376477XXX",
+    "33376478XXX",
+    "33376479XXX",
+    "33451630XXX",
+    "33451631XXX",
+    "33451632XXX",
+    "33451633XXX",
+    "33451634XXX",
+    "33451635XXX",
+    "33451636XXX",
+    "33451637XXX",
+    "33451638XXX",
+    "33451639XXX",
+    "33537160XXX",
+    "33537161XXX",
+    "33537162XXX",
+    "33537163XXX",
+    "33537164XXX",
+    "33537165XXX",
+    "33537166XXX",
+    "33537167XXX",
+    "33537168XXX",
+    "33537169XXX",
+    "33939401XXX",
+    "33974071XXX",
+    "33974720XXX",
+    "33974721XXX",
+    "33974722XXX",
+    "33974723XXX",
+    "33974724XXX",
+    "33974725XXX",
+    "33974726XXX",
+    "33974727XXX",
+    "33974728XXX",
+    "33974729XXX",
+    "33987282XXX",
+    "33987283XXX",
+    "33987284XXX",
+
+    // Manifone : LGC
+    "3318656XXXX",
+    "3318764XXXX",
+    "3318961XXXX",
+    "3321901XXXX",
+    "3322164XXXX",
+    "3325545XXXX",
+    "3327983XXXX",
+    "3335349XXXX",
+    "3336748XXXX",
+    "3337466XXXX",
+    "3337933XXXX",
+    "3342285XXXX",
+    "3344902XXXX",
+    "3346563XXXX",
+    "3348793XXXX",
+    "3351807XXXX",
+    "3353294XXXX",
+    "3355464XXXX",
+    "3355465XXXX",
+    "3380300XXXX",
+    "3380603XXXX",
+    "3397396XXXX",
+    "3398829XXXX",
   ]
 
   let sharedUserDefaults = UserDefaults(
