@@ -10,77 +10,128 @@ struct HomeNavigationView: View {
             // Affichage du statut du bloqueur d'appels
             VStack(alignment: .center) {
               VStack {
-                if #available(iOS 18.0, *) {
-                  Image(
-                    systemName: viewModel.blockerExtensionStatus == .enabled
-                      ? "checkmark.shield.fill" : "xmark.circle.fill"
-                  )
-                  .font(.system(size: 48))
-                  .symbolEffect(
-                    .bounce.up.byLayer,
-                    options: .repeat(.periodic(delay: 1.0))
-                  )
-                  .foregroundColor(
-                    viewModel.blockerExtensionStatus == .enabled ? .green : .red
-                  )
-                  .padding(.bottom)
-                } else {
-                  Image(
-                    systemName: viewModel.blockerExtensionStatus == .enabled
-                      ? "checkmark.shield.fill" : "xmark.circle.fill"
-                  )
-                  .font(.system(size: 48))
-                  .foregroundColor(
-                    viewModel.blockerExtensionStatus == .enabled ? .green : .red
-                  )
-                  .padding(.bottom)
-                }
+                if viewModel.blockerExtensionStatus == .enabled {
+                  if #available(iOS 18.0, *) {
+                    Image(systemName: "checkmark.shield.fill")
+                      .font(.system(size: 48))
+                      .symbolEffect(
+                        .bounce.up.byLayer,
+                        options: .repeat(.periodic(delay: 1.0))
+                      )
+                      .foregroundColor(.green)
+                      .padding(.bottom)
+                  } else {
+                    Image(systemName: "checkmark.shield.fill")
+                      .font(.system(size: 48))
+                      .foregroundColor(.green)
+                      .padding(.bottom)
+                  }
 
-                switch viewModel.blockerExtensionStatus {
-                case .enabled:
                   Text("Le bloqueur d'appels est actif")
                     .font(.title3)
                     .bold()
-                case .disabled:
+                } else if viewModel.blockerExtensionStatus == .disabled {
+                  if #available(iOS 18.0, *) {
+                    Image(systemName: "xmark.circle.fill")
+                      .font(.system(size: 48))
+                      .symbolEffect(
+                        .bounce.up.byLayer,
+                        options: .repeat(.periodic(delay: 1.0))
+                      )
+                      .foregroundColor(.red)
+                      .padding(.bottom)
+                  } else {
+                    Image(systemName: "xmark.circle.fill")
+                      .font(.system(size: 48))
+                      .foregroundColor(.red)
+                      .padding(.bottom)
+                  }
+
                   Text("Le bloqueur d'appels n'est pas activé")
                     .font(.title3)
                     .bold()
-                case .unknown:
-                  Text("Statut inconnu")
+
+                  Text(
+                    "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
+                  )
+                  .font(.body)
+                  .padding(.vertical)
+                  .frame(maxWidth: .infinity, alignment: .center)
+
+                  Button {
+                    viewModel.openSettings()
+                  } label: {
+                    HStack {
+                      Image(systemName: "gear")
+                      Text("Activer dans les réglages")
+                    }
+                  }
+                  .buttonStyle(
+                    .fullWidth(background: Color.red, foreground: .white)
+                  )
+                } else if viewModel.blockerExtensionStatus == .unknown {
+                  if #available(iOS 18.0, *) {
+                    Image(systemName: "questionmark.circle.fill")
+                      .font(.system(size: 48))
+                      .symbolEffect(
+                        .bounce.up.byLayer,
+                        options: .repeat(.periodic(delay: 1.0))
+                      )
+                      .foregroundColor(.gray)
+                      .padding(.bottom)
+                  } else {
+                    Image(systemName: "questionmark.circle.fill")
+                      .font(.system(size: 48))
+                      .foregroundColor(.gray)
+                      .padding(.bottom)
+                  }
+
+                  Text("Vérification du statut du bloqueur en cours…")
                     .font(.title3)
                     .bold()
-                case .error:
-                  Text("Erreur")
+                } else if viewModel.blockerExtensionStatus == .error {
+                  if #available(iOS 18.0, *) {
+                    Image(systemName: "xmark.octagon.fill")
+                      .font(.system(size: 48))
+                      .symbolEffect(
+                        .bounce.up.byLayer,
+                        options: .repeat(.periodic(delay: 1.0))
+                      )
+                      .foregroundColor(.red)
+                      .padding(.bottom)
+                  } else {
+                    Image(systemName: "xmark.octagon.fill")
+                      .font(.system(size: 48))
+                      .foregroundColor(.red)
+                      .padding(.bottom)
+                  }
+
+                  Text("Erreur lors de la vérification")
                     .font(.title3)
                     .bold()
-                case .unexpected:
+                } else if viewModel.blockerExtensionStatus == .unexpected {
+                  if #available(iOS 18.0, *) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                      .font(.system(size: 48))
+                      .symbolEffect(
+                        .bounce.up.byLayer,
+                        options: .repeat(.periodic(delay: 1.0))
+                      )
+                      .foregroundColor(.orange)
+                      .padding(.bottom)
+                  } else {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                      .font(.system(size: 48))
+                      .foregroundColor(.orange)
+                      .padding(.bottom)
+                  }
+
                   Text("Statut inattendu")
                     .font(.title3)
                     .bold()
                 }
               }
               .padding(.vertical)
-
-              if viewModel.blockerExtensionStatus != .enabled {
-                Text(
-                  "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et de suivre les instructions pour l'activer dans les réglages de votre iPhone. Une fois l'activation effectuée, il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
-                )
-                .font(.body)
-                .padding(.vertical)
-                .frame(maxWidth: .infinity, alignment: .center)
-
-                Button {
-                  viewModel.openSettings()
-                } label: {
-                  HStack {
-                    Image(systemName: "gear")
-                    Text("Activer dans les réglages")
-                  }
-                }
-                .buttonStyle(
-                  .fullWidth(background: Color.red, foreground: .white)
-                )
-              }
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
@@ -102,10 +153,7 @@ struct HomeNavigationView: View {
                 )
             )
 
-            // Affichage du statut de la liste de blocage
-            if viewModel.blockerExtensionStatus == .enabled
-              && viewModel.blockerActionState == .nothing
-            {
+            if viewModel.blockerExtensionStatus == .enabled {
               VStack {
                 if viewModel.blockerPhoneNumberBlocked == 0 {
                   Image(
