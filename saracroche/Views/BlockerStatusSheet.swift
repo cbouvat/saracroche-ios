@@ -21,14 +21,14 @@ struct BlockerStatusSheet: View {
             options: .repeat(.periodic(delay: 0.5))
           )
           .foregroundColor(Color("AppColor"))
-          .padding(.top)
+          .padding(.vertical)
         } else {
           Image(
             systemName: "gearshape.arrow.trianglehead.2.clockwise.rotate.90"
           )
           .font(.system(size: 100))
           .foregroundColor(Color("AppColor"))
-          .padding(.top)
+          .padding(.vertical)
         }
 
         Text("Installation de la liste de blocage")
@@ -82,12 +82,12 @@ struct BlockerStatusSheet: View {
               options: .repeat(.periodic(delay: 1.0))
             )
             .foregroundColor(.red)
-            .padding(.top)
+            .padding(.vertical)
         } else {
           Image(systemName: "trash.fill")
             .font(.system(size: 100))
             .foregroundColor(.red)
-            .padding(.top)
+            .padding(.vertical)
         }
 
         Text("Suppression de la liste de blocage")
@@ -122,12 +122,12 @@ struct BlockerStatusSheet: View {
               options: .repeat(.periodic(delay: 0.5))
             )
             .foregroundColor(Color.green)
-            .padding(.top)
+            .padding(.vertical)
         } else {
           Image(systemName: "checkmark.circle.fill")
             .font(.system(size: 100))
             .foregroundColor(Color.green)
-            .padding(.top)
+            .padding(.vertical)
         }
 
         Text("La liste de blocage a été installée avec succès")
