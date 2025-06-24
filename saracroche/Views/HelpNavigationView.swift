@@ -21,7 +21,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -39,7 +38,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -57,7 +55,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -77,7 +74,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -123,7 +119,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -158,7 +153,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -208,7 +202,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
@@ -226,7 +219,6 @@ struct HelpNavigationView: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
           }
-          .padding(.bottom)
 
           GroupBox(
             label:
