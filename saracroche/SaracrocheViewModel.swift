@@ -23,7 +23,7 @@ class SaracrocheViewModel: ObservableObject {
   @Published var blockerPhoneNumberBlocked: Int64 = 0
   @Published var blockerPhoneNumberTotal: Int64 = 0
   @Published var blocklistInstalledVersion: String = ""
-  @Published var blocklistVersion: String = "3.0"
+  @Published var blocklistVersion: String = "3"
   @Published var showBlockerStatusSheet: Bool = false
 
   private var statusTimer: Timer? = nil
