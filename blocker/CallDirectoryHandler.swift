@@ -1,8 +1,3 @@
-//
-//  CallDirectoryHandler.swift
-//  blocker
-//
-
 import CallKit
 import Foundation
 
