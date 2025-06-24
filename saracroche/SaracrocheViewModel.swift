@@ -160,6 +160,10 @@ class SaracrocheViewModel: ObservableObject {
   }
 
   func checkBlockerExtensionStatus() {
+    if self.blockerActionState !== .nothing {
+      return self.blockerExtensionStatus = .unknown
+    }
+    
     let manager = CXCallDirectoryManager.sharedInstance
 
     manager.getEnabledStatusForExtension(
