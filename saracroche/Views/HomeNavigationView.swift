@@ -9,133 +9,130 @@ struct HomeNavigationView: View {
           VStack {
             // Affichage du statut du bloqueur d'appels
             VStack(alignment: .center) {
-              VStack {
-                if viewModel.blockerExtensionStatus == .enabled {
-                  if #available(iOS 18.0, *) {
-                    Image(systemName: "checkmark.shield.fill")
-                      .font(.system(size: 48))
-                      .symbolEffect(
-                        .bounce.up.byLayer,
-                        options: .repeat(.periodic(delay: 1.0))
-                      )
-                      .foregroundColor(.green)
-                      .padding(.bottom)
-                  } else {
-                    Image(systemName: "checkmark.shield.fill")
-                      .font(.system(size: 48))
-                      .foregroundColor(.green)
-                      .padding(.bottom)
-                  }
-
-                  Text("Le bloqueur d'appels est actif")
-                    .font(.title3)
-                    .bold()
-                    .multilineTextAlignment(.center)
-                } else if viewModel.blockerExtensionStatus == .disabled {
-                  if #available(iOS 18.0, *) {
-                    Image(systemName: "xmark.circle.fill")
-                      .font(.system(size: 48))
-                      .symbolEffect(
-                        .bounce.up.byLayer,
-                        options: .repeat(.periodic(delay: 1.0))
-                      )
-                      .foregroundColor(.red)
-                      .padding(.bottom)
-                  } else {
-                    Image(systemName: "xmark.circle.fill")
-                      .font(.system(size: 48))
-                      .foregroundColor(.red)
-                      .padding(.bottom)
-                  }
-
-                  Text("Le bloqueur d'appels n'est pas activé")
-                    .font(.title3)
-                    .bold()
-                    .multilineTextAlignment(.center)
-
-                  Text(
-                    "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
-                  )
-                  .font(.body)
-                  .padding(.vertical)
-                  .frame(maxWidth: .infinity, alignment: .center)
-
-                  Button {
-                    viewModel.openSettings()
-                  } label: {
-                    HStack {
-                      Image(systemName: "gear")
-                      Text("Activer dans les réglages")
-                    }
-                  }
-                  .buttonStyle(
-                    .fullWidth(background: Color.red, foreground: .white)
-                  )
-                } else if viewModel.blockerExtensionStatus == .unknown {
-                  if #available(iOS 18.0, *) {
-                    Image(systemName: "questionmark.circle.fill")
-                      .font(.system(size: 48))
-                      .symbolEffect(
-                        .bounce.up.byLayer,
-                        options: .repeat(.periodic(delay: 1.0))
-                      )
-                      .foregroundColor(.gray)
-                      .padding(.bottom)
-                  } else {
-                    Image(systemName: "questionmark.circle.fill")
-                      .font(.system(size: 48))
-                      .foregroundColor(.gray)
-                      .padding(.bottom)
-                  }
-
-                  Text("Vérification du statut du bloqueur en cours…")
-                    .font(.title3)
-                    .bold()
-                    .multilineTextAlignment(.center)
-                } else if viewModel.blockerExtensionStatus == .error {
-                  if #available(iOS 18.0, *) {
-                    Image(systemName: "xmark.octagon.fill")
-                      .font(.system(size: 48))
-                      .symbolEffect(
-                        .bounce.up.byLayer,
-                        options: .repeat(.periodic(delay: 1.0))
-                      )
-                      .foregroundColor(.red)
-                      .padding(.bottom)
-                  } else {
-                    Image(systemName: "xmark.octagon.fill")
-                      .font(.system(size: 48))
-                      .foregroundColor(.red)
-                      .padding(.bottom)
-                  }
-
-                  Text("Erreur lors de la vérification")
-                    .font(.title3)
-                    .bold()
-                } else if viewModel.blockerExtensionStatus == .unexpected {
-                  if #available(iOS 18.0, *) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                      .font(.system(size: 48))
-                      .symbolEffect(
-                        .bounce.up.byLayer,
-                        options: .repeat(.periodic(delay: 1.0))
-                      )
-                      .foregroundColor(.orange)
-                      .padding(.bottom)
-                  } else {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                      .font(.system(size: 48))
-                      .foregroundColor(.orange)
-                      .padding(.bottom)
-                  }
-
-                  Text("Statut inattendu")
-                    .font(.title3)
-                    .bold()
-                    .multilineTextAlignment(.center)
+              if viewModel.blockerExtensionStatus == .enabled {
+                if #available(iOS 18.0, *) {
+                  Image(systemName: "checkmark.shield.fill")
+                    .font(.system(size: 48))
+                    .symbolEffect(
+                      .bounce.up.byLayer,
+                      options: .repeat(.periodic(delay: 1.0))
+                    )
+                    .foregroundColor(.green)
+                    .padding(.bottom)
+                } else {
+                  Image(systemName: "checkmark.shield.fill")
+                    .font(.system(size: 48))
+                    .foregroundColor(.green)
+                    .padding(.bottom)
                 }
+
+                Text("Le bloqueur d'appels est actif")
+                  .font(.title3)
+                  .bold()
+                  .multilineTextAlignment(.center)
+              } else if viewModel.blockerExtensionStatus == .disabled {
+                if #available(iOS 18.0, *) {
+                  Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 48))
+                    .symbolEffect(
+                      .bounce.up.byLayer,
+                      options: .repeat(.periodic(delay: 1.0))
+                    )
+                    .foregroundColor(.red)
+                    .padding(.bottom)
+                } else {
+                  Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 48))
+                    .foregroundColor(.red)
+                    .padding(.bottom)
+                }
+
+                Text("Le bloqueur d'appels n'est pas activé")
+                  .font(.title3)
+                  .bold()
+                  .multilineTextAlignment(.center)
+
+                Text(
+                  "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
+                )
+                .font(.body)
+                .padding(.vertical)
+                .frame(maxWidth: .infinity, alignment: .center)
+
+                Button {
+                  viewModel.openSettings()
+                } label: {
+                  HStack {
+                    Image(systemName: "gear")
+                    Text("Activer dans les réglages")
+                  }
+                }
+                .buttonStyle(
+                  .fullWidth(background: Color.red, foreground: .white)
+                )
+              } else if viewModel.blockerExtensionStatus == .unknown {
+                if #available(iOS 18.0, *) {
+                  Image(systemName: "questionmark.circle.fill")
+                    .font(.system(size: 48))
+                    .symbolEffect(
+                      .bounce.up.byLayer,
+                      options: .repeat(.periodic(delay: 1.0))
+                    )
+                    .foregroundColor(.orange)
+                    .padding(.bottom)
+                } else {
+                  Image(systemName: "questionmark.circle.fill")
+                    .font(.system(size: 48))
+                    .foregroundColor(.orange)
+                    .padding(.bottom)
+                }
+
+                Text("Vérification du statut du bloqueur en cours…")
+                  .font(.title3)
+                  .bold()
+                  .multilineTextAlignment(.center)
+              } else if viewModel.blockerExtensionStatus == .error {
+                if #available(iOS 18.0, *) {
+                  Image(systemName: "xmark.octagon.fill")
+                    .font(.system(size: 48))
+                    .symbolEffect(
+                      .bounce.up.byLayer,
+                      options: .repeat(.periodic(delay: 1.0))
+                    )
+                    .foregroundColor(.red)
+                    .padding(.bottom)
+                } else {
+                  Image(systemName: "xmark.octagon.fill")
+                    .font(.system(size: 48))
+                    .foregroundColor(.red)
+                    .padding(.bottom)
+                }
+
+                Text("Erreur lors de la vérification")
+                  .font(.title3)
+                  .bold()
+              } else if viewModel.blockerExtensionStatus == .unexpected {
+                if #available(iOS 18.0, *) {
+                  Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 48))
+                    .symbolEffect(
+                      .bounce.up.byLayer,
+                      options: .repeat(.periodic(delay: 1.0))
+                    )
+                    .foregroundColor(.orange)
+                    .padding(.bottom)
+                } else {
+                  Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 48))
+                    .foregroundColor(.orange)
+                    .padding(.bottom)
+                }
+
+                Text("Statut inattendu")
+                  .font(.title3)
+                  .bold()
+                  .multilineTextAlignment(.center)
               }
-              .padding(.vertical)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
