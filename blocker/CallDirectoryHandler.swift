@@ -31,10 +31,10 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   }
 
   private func patternToRange(pattern: String) -> (start: Int64, end: Int64)? {
-    guard pattern.contains("X") else { return nil }
+    guard pattern.contains("#") else { return nil }
 
-    let digits = pattern.filter { $0 != "X" }
-    let xCount = pattern.filter { $0 == "X" }.count
+    let digits = pattern.filter { $0 != "#" }
+    let xCount = pattern.filter { $0 == "#" }.count
 
     guard let base = Int64(digits) else { return nil }
 
@@ -56,7 +56,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     var blockedNumbers = Int64(
       sharedUserDefaults?.integer(forKey: "blockedNumbers") ?? 0
     )
-
+    
     if let pattern = sharedUserDefaults?.string(forKey: "phonePattern"),
       let range = patternToRange(pattern: pattern)
     {
@@ -69,10 +69,12 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
         blockedNumbers += 1
 
-        if blockedNumbers % 1000 == 0 {
+        if blockedNumbers % 10000 == 0 {
           sharedUserDefaults?.set(blockedNumbers, forKey: "blockedNumbers")
         }
       }
+
+      sharedUserDefaults?.set(blockedNumbers, forKey: "blockedNumbers")
     }
   }
 }

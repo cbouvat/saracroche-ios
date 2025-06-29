@@ -1,0 +1,3074 @@
+[
+    {
+        "operator": "ARCEP",
+        "prefix": "33162######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33163######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33270######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33271######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33377######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33378######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33424######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33425######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33568######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33569######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33948######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "33949######"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "339475#####"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "339476#####"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "339477#####"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "339478#####"
+    },
+    {
+        "operator": "ARCEP",
+        "prefix": "339479#####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3315928####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3315929####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3317650####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3317972####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3317973####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3317975####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318410####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318460####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318474####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318475####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318476####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318477####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318478####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318479####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318480####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318481####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318535####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318536####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318537####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318538####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318583####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318584####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318586####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318587####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318623####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318624####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318628####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318629####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318630####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318632####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318633####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318634####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318635####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318636####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318637####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318638####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318639####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3318656####"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33186706###"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3318764####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318766####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3318831####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3318840####"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188440###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188441###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188442###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188443###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188444###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188445###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188446###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188447###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188448###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33188449###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318857####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318870####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318871####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318872####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318873####"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3318900####"
+    },
+    {
+        "operator": "ZETE",
+        "prefix": "3318926####"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33189366###"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3318961####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3318970####"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3318978####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3318986####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3321900####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3321901####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3321906####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33219310###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33219319###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219340###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219348###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219350###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219354###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219355###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219360###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219370###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33219371###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3322000####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3322001####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3322002####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33220030###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33220031###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33220032###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33220033###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3322108####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3322161####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3322162####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3322164####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3322169####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33221890###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33221899###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33221990###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33221999###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3322244####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3322290####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3322291####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324205####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324206####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324207####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324225####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324226####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324244####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324298####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3324299####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3324484####"
+    },
+    {
+        "operator": "ZETE",
+        "prefix": "33252149###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325269####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325271####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325275####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325298####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325299####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325500####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325508####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3325542####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325543####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3325545####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325552####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325553####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325565####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325588####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325589####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325590####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3325599####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325794####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325795####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325796####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325797####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325798####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325799####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3325806####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33258340###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33258349###"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3325835####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33258370###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33258379###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33258380###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33258389###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33258419###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33258530###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33258535###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33258580###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33258581###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33258582###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33258583###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33258584###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33258585###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33258589###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33259190###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33259199###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259380###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259390###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259393###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259395###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259399###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259400###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259404###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259405###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33259410###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33259530###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33259539###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259590###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259591###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259592###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259593###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259594###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259595###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259596###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259597###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259598###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33259599###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3326179####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3326180####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3326190####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3326205####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3326266####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33263020###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33263070###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33263071###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3326314####"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33269026###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33269040###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3326950####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3327915####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3327916####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279430###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279434###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279439###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279440###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279449###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279450###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279459###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279470###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33279550###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33279555###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33279560###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33279565###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279590###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33279599###"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3327983####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3328567####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3331045####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3333949####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3333956####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33339620###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33339629###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33339660###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33339666###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3333981####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3333983####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3333989####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335278####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335290####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3335349####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335350####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335351####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353700###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353702###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353705###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353707###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353710###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353711###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353712###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33353718###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335417####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335611####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335613####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335614####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335615####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335653####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3335659####"
+    },
+    {
+        "operator": "ZETE",
+        "prefix": "33356664###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33356800###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33356801###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33356805###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33356808###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33356810###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33356817###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3336202####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336226####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336658####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336729####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3336747####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3336748####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336750####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336751####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336761####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336766####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336782####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3336783####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3336838####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337251####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337280####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337285####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337294####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337299####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337362####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337381####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337422####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3337447####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3337466####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337478####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337479####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337480####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337481####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337483####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337494####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337514####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337515####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337516####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337518####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337519####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337521####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337524####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337527####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337548####"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3337577####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33375880###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33375888###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33375890###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33375892###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337603####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33376110###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33376111###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33376115###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33376230###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33376239###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33376300###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33376303###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33376440###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33376441###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33376449###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376470###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376471###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376472###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376473###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376474###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376475###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376476###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376477###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376478###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33376479###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337908####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3337933####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337942####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3337943####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33379510###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33379519###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33379600###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33379609###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33379620###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33379630###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33379640###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33392180###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33392181###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33392185###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33392190###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3341202####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412050###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412051###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412052###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412053###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412054###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412055###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412057###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33412059###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33412270###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33412276###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412370###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412371###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412372###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412373###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412374###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412377###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412378###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33412379###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3341333####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3341554####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3341582####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3341583####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33415960###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33415969###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33415970###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33415990###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33415999###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342019####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33420960###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33420965###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33420969###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342245####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342258####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342259####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342260####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342266####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3342285####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342288####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342289####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3342310####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423240###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423242###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423244###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423245###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423246###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423430###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423431###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423432###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423433###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33423434###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342688####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3342810####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342843####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342864####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342868####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342871####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342872####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342873####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342874####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3342879####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3343448####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33444080###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33444084###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33444085###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33444088###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344447####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344827####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344850####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344851####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344852####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344853####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344854####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3344866####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3344902####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449360###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449370###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449372###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449380###"
+    },
+    {
+        "operator": "ZETE",
+        "prefix": "33449381###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449382###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449383###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449390###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449392###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449393###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449394###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33449399###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33449450###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33449459###"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3345109####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33451370###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33451380###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33451382###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33451390###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3345140####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33451610###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33451619###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451630###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451631###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451632###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451633###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451634###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451635###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451636###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451637###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451638###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33451639###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3345619####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3345839####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3345840####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3345842####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3345857####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3345883####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346500####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346526####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346528####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346529####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346530####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346532####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3346563####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346569####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346570####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3346580####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3346584####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3346996####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33481060###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33481061###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33481062###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33481064###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33481065###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33481066###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33481069###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348112####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348113####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348114####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348115####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3348333####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3348343####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3348450####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348540####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348542####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485510###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485513###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485515###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33485570###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485600###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485602###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485605###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485606###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485608###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485610###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485611###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485614###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33485616###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348586####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348587####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348589####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348593####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348601####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348721####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348722####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348726####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3348772####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3348793####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3351807####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33518250###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33518252###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33518255###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3351908####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3351998####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3352484####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33525000###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33525002###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33525004###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33525006###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33525009###"
+    },
+    {
+        "operator": "ZETE",
+        "prefix": "33525261###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33525490###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33525495###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3352550####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33525510###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33525515###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33525516###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33525610###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33525611###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33525612###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33525615###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "33525619###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3353160####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353197####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353240####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33532770###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33532777###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33532779###"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3353292####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3353294####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353609####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33536100###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33536101###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33536102###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353629####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353630####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353633####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353634####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353638####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353646####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3353648####"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3353666####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3353700####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33537010###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537160###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537161###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537162###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537163###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537164###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537165###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537166###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537167###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537168###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33537169###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33548210###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33548219###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548240###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548242###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548244###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548250###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548252###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548255###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548260###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548270###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33548272###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33548300###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33548309###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355400####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355401####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355403####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355404####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355405####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355408####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355412####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3355454####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3355462####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3355464####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3355465####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3356431####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3356474####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358628####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358645####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358651####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358675####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358681####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358682####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358683####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358685####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358687####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3358699####"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33590160###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33590162###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33590169###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3359030####"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33590340###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33590344###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33590345###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33590349###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3359069####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3359410####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3359441####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33594920###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33594921###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33594923###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33594929###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33594950###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33594952###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33594959###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3359610####"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "33596450###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3359649####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "337000057##"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743030###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743031###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743032###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743033###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743039###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3374317####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3374318####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3374319####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3374320####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3374321####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743420###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743421###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743422###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743423###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33743424###"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "3374403####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3374588####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3374589####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33748930###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33748931###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33748932###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33748933###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33748934###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33748935###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33755502###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33755505###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33755506###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33755510###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33755523###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33755545###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3375621####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3375788####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3375789####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757933###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757940###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757942###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757946###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757947###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757953###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757954###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757957###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33757958###"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3380300####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3380538####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805390###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805391###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805392###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805393###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805394###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805395###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805396###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805397###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805398###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33805399###"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3380603####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3381138####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3381148####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3381154####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3381168####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812020###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812021###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812022###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812023###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812024###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812025###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812026###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812027###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812028###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33812029###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3382138####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3382175####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3382514####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825180###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825181###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825182###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825183###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825184###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825185###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825186###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825187###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825188###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33825189###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3382638####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3382699####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389020####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389034####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389035####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389075####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389138####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389148####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389238####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389248####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389275####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33895123###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33895200###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389710####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389738####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389750####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389844####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3389938####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33939311###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3393938####"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33939401###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33939521###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33939621###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33939721###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33939811###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "33939931###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397019####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3397070####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397071####"
+    },
+    {
+        "operator": "UBIC",
+        "prefix": "3397276####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397344####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397345####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397379####"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3397396####"
+    },
+    {
+        "operator": "ZETE",
+        "prefix": "3397403####"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974071###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397408####"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3397433####"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974720###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974721###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974722###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974723###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974724###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974725###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974726###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974727###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974728###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33974729###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974960###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974961###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974962###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974963###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974964###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974965###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974966###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974967###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974968###"
+    },
+    {
+        "operator": "SPAR",
+        "prefix": "33974969###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33976280###"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "33976281###"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397828####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397831####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3397849####"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3397882####"
+    },
+    {
+        "operator": "OXIL",
+        "prefix": "3397883####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "3398080####"
+    },
+    {
+        "operator": "OPEN",
+        "prefix": "3398299####"
+    },
+    {
+        "operator": "KAVE",
+        "prefix": "3398540####"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33987282###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33987283###"
+    },
+    {
+        "operator": "DVSC",
+        "prefix": "33987284###"
+    },
+    {
+        "operator": "LGC",
+        "prefix": "3398829####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "333277#####"
+    },
+    {
+        "operator": "BJTP",
+        "prefix": "333644#####"
+    }
+]
