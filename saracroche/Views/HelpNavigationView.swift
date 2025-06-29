@@ -18,7 +18,8 @@ struct HelpNavigationView: View {
               "L'application bloque les préfixes suivants, communiqués par l'ARCEP : " +
               "0162, 0163, 0270, 0271, 0377, 0378, 0424, 0425, 0568, 0569, 0948, 0949, " +
               "ainsi que ceux allant de 09475 à 09479. Ces préfixes sont réservés au démarchage téléphonique. " +
-              "Elle bloque aussi des numéros de téléphone de certains opérateurs comme Manifone, DVS Connect et bientôt d’autres."
+              "Elle bloque aussi des numéros de téléphone de certains opérateurs comme Manifone, DVS Connect, " +
+              "Ze Telecom, Oxilog, BJT Partners, Ubicentrex, Destiny, Kav El International, Spartel Services et d'autres."
             )
             .font(.body)
             .padding(.top, 4)
@@ -35,7 +36,8 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "L'application utilise une extension de blocage d'appels et de SMS fournie par le système pour filtrer les numéros indésirables. Elle est conçue pour être simple et efficace, sans nécessiter de configuration complexe."
+              "L'application utilise une extension de blocage d'appels et de SMS fournie par le système pour filtrer " +
+              "les numéros indésirables. Elle est conçue pour être simple et efficace, sans nécessiter de configuration complexe."
             )
             .font(.body)
             .padding(.top, 4)
@@ -52,7 +54,8 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "Pour signaler un numéro indésirable, utilisez le bouton 'Signaler' dans l'onglet 'Signaler'. Cela aide à améliorer la liste de blocage et à rendre l’application plus efficace."
+              "Pour signaler un numéro indésirable, utilisez le bouton 'Signaler' dans l'onglet 'Signaler'. " +
+              "Cela aide à améliorer la liste de blocage et à rendre l’application plus efficace."
             )
             .font(.body)
             .padding(.top, 4)
@@ -71,7 +74,9 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "Depuis iOS 18, les numéros bloqués par les extensions de blocage d'appels sont visibles dans l'historique des appels. Cela permet de garder une trace des appels bloqués, mais ne signifie pas que l'appel a été reçu ou que vous devez y répondre."
+              "Depuis iOS 18, les numéros bloqués par les extensions de blocage d'appels sont visibles dans " +
+              "l'historique des appels. Cela permet de garder une trace des appels bloqués, mais ne signifie " +
+              "pas que l'appel a été reçu ou que vous devez y répondre."
             )
             .font(.body)
             .padding(.top, 4)
@@ -88,7 +93,8 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "L’application Saracroche est open source et développée bénévolement. Vous pouvez soutenir le projet, ce qui est précieux pour maintenir et améliorer l’application."
+              "L’application Saracroche est open source et développée bénévolement. Vous pouvez soutenir le projet, " +
+              "ce qui est précieux pour maintenir et améliorer l’application."
             )
             .font(.body)
             .padding(.top, 4)
@@ -121,6 +127,20 @@ struct HelpNavigationView: View {
             .font(.body)
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
+
+            Button {
+              if let url = URL(string: "https://paypal.me/cbouvat") {
+                UIApplication.shared.open(url)
+              }
+            } label: {
+              HStack {
+                Image(systemName: "heart.fill")
+                Text("Soutenir le projet par PayPal")
+              }
+            }
+            .font(.body)
+            .padding(.top, 4)
+            .frame(maxWidth: .infinity, alignment: .leading)
           }
 
           GroupBox(
@@ -133,7 +153,8 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "Si l'application Saracroche vous est utile, une évaluation sur l'App Store serait appréciée. Ce soutien aide à toucher davantage de personnes et à améliorer continuellement l'application."
+              "Si l'application Saracroche vous est utile, une évaluation sur l'App Store serait appréciée. " +
+              "Ce soutien aide à toucher davantage de personnes et à améliorer continuellement l'application."
             )
             .font(.body)
             .padding(.top, 4)
@@ -216,7 +237,9 @@ struct HelpNavigationView: View {
               }
           ) {
             Text(
-              "L’application Saracroche est gratuite et sans publicité. Elle est développée bénévolement par un développeur indépendant (Camille), qui en avait assez de recevoir des appels indésirables. L’application est développée sur son temps libre. Vous pouvez soutenir le projet en faisant un don sur GitHub ou Liberapay."
+              "L’application Saracroche est gratuite et sans publicité. Elle est développée bénévolement par un développeur " +
+              "indépendant (Camille), qui en avait assez de recevoir des appels indésirables. L’application est développée sur " +
+              "son temps libre. Vous pouvez soutenir le projet en faisant un don sur GitHub, Liberapay ou PayPal"
             )
             .font(.body)
             .padding(.top, 4)
