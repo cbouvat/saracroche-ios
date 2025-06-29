@@ -33,22 +33,6 @@ class SaracrocheViewModel: ObservableObject {
     suiteName: "group.com.cbouvat.saracroche"
   )
 
-  private func loadPhoneNumberPatterns() -> [String] {
-    if let url = Bundle.main.url(forResource: "prefixes", withExtension: "json") {
-      do {
-        let data = try Data(contentsOf: url)
-        if let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: String]] {
-          return jsonArray.compactMap { $0["prefix"] }
-        }
-      } catch {
-        print("Error loading prefixes.json: \(error.localizedDescription)")
-      }
-    } else {
-      print("prefixes.json not found in bundle.")
-    }
-    return []
-  }
-
   init() {
     checkBlockerExtensionStatus()
     startTimerBlockerExtensionStatus()
@@ -61,11 +45,12 @@ class SaracrocheViewModel: ObservableObject {
   }
 
   func checkBlockerExtensionStatus() {
-    if self.blockerActionState != .nothing {
+    guard self.blockerActionState == .nothing else {
       // If an action is in progress, we don't check the status
-      return self.blockerExtensionStatus = .unknown
+      self.blockerExtensionStatus = .unknown
+      return
     }
-    
+
     let manager = CXCallDirectoryManager.sharedInstance
 
     manager.getEnabledStatusForExtension(
@@ -103,13 +88,14 @@ class SaracrocheViewModel: ObservableObject {
     let blocklistInstalledVersion =
       sharedUserDefaults?.string(forKey: "blocklistVersion") ?? ""
 
-    if blockerActionState == "update" {
+    switch blockerActionState {
+    case "update":
       self.blockerActionState = .update
-    } else if blockerActionState == "delete" {
+    case "delete":
       self.blockerActionState = .delete
-    } else if blockerActionState == "finish" {
+    case "finish":
       self.blockerActionState = .finish
-    } else {
+    default:
       self.blockerActionState = .nothing
     }
 
@@ -117,56 +103,73 @@ class SaracrocheViewModel: ObservableObject {
     self.blockerPhoneNumberTotal = Int64(totalBlockedNumbers)
     self.blocklistInstalledVersion = blocklistInstalledVersion
 
-    if self.blockerActionState == .update || self.blockerActionState == .delete
-      || self.blockerActionState == .finish
-    {
+    switch self.blockerActionState {
+    case .update, .delete, .finish:
       self.showBlockerStatusSheet = true
-    } else {
+    case .nothing:
       self.showBlockerStatusSheet = false
     }
   }
 
   func updateBlockerList() {
     UIApplication.shared.isIdleTimerDisabled = true
+    let manager = CXCallDirectoryManager.sharedInstance
+
     sharedUserDefaults?.set("update", forKey: "blockerActionState")
+    sharedUserDefaults?.set(0, forKey: "blockedNumbers")
+    sharedUserDefaults?.set(self.blocklistVersion, forKey: "blocklistVersion")
     sharedUserDefaults?.set(
       countAllBlockedNumbers(),
       forKey: "totalBlockedNumbers"
     )
-    sharedUserDefaults?.set(0, forKey: "blockedNumbers")
-    sharedUserDefaults?.set(self.blocklistVersion, forKey: "blocklistVersion")
 
     var patternsToProcess = loadPhoneNumberPatterns()
-    let manager = CXCallDirectoryManager.sharedInstance
 
     func processNextPattern() {
-      if sharedUserDefaults?.string(forKey: "blockerActionState") != "update" {
-        return
-      }
-      sharedUserDefaults?.set("addPrefix", forKey: "action")
       if !patternsToProcess.isEmpty {
         let pattern = patternsToProcess.removeFirst()
+        let numbersListForPattern = generatePhoneNumbers(prefix: pattern)
 
-        sharedUserDefaults?.set(pattern, forKey: "phonePattern")
+        let chunkSize = 50_000
+        var chunkIndex = 0
 
-        manager.reloadExtension(
-          withIdentifier: "com.cbouvat.saracroche.blocker"
-        ) { error in
-          DispatchQueue.main.async {
-            if error != nil {
-              self.blockerExtensionStatus = .error
+        func processNextChunk() {
+          guard
+            sharedUserDefaults?.string(forKey: "blockerActionState") == "update"
+          else {
+            return
+          }
+
+          let start = chunkIndex * chunkSize
+          let end = min(start + chunkSize, numbersListForPattern.count)
+          if start < end {
+            let chunk = Array(numbersListForPattern[start..<end])
+            sharedUserDefaults?.set("addNumbersList", forKey: "action")
+            sharedUserDefaults?.set(chunk, forKey: "numbersList")
+            manager.reloadExtension(
+              withIdentifier: "com.cbouvat.saracroche.blocker"
+            ) { error in
+              DispatchQueue.main.async {
+                if error != nil {
+                  self.blockerExtensionStatus = .error
+                }
+                chunkIndex += 1
+                processNextChunk()
+              }
             }
-
+          } else {
             processNextPattern()
           }
         }
+
+        processNextChunk()
       } else {
         sharedUserDefaults?.set("finish", forKey: "blockerActionState")
         UIApplication.shared.isIdleTimerDisabled = false
       }
     }
 
-    sharedUserDefaults?.set("reset", forKey: "action")
+    sharedUserDefaults?.set("resetNumbersList", forKey: "action")
     manager.reloadExtension(withIdentifier: "com.cbouvat.saracroche.blocker") {
       error in
       DispatchQueue.main.async {
@@ -192,7 +195,7 @@ class SaracrocheViewModel: ObservableObject {
 
     let manager = CXCallDirectoryManager.sharedInstance
 
-    sharedUserDefaults?.set("reset", forKey: "action")
+    sharedUserDefaults?.set("resetNumbersList", forKey: "action")
     manager.reloadExtension(withIdentifier: "com.cbouvat.saracroche.blocker") {
       error in
       DispatchQueue.main.async {
@@ -228,16 +231,50 @@ class SaracrocheViewModel: ObservableObject {
     })
   }
 
+  private func loadPhoneNumberPatterns() -> [String] {
+    if let url = Bundle.main.url(forResource: "prefixes", withExtension: "json")
+    {
+      do {
+        let data = try Data(contentsOf: url)
+        if let jsonArray = try JSONSerialization.jsonObject(
+          with: data,
+          options: []
+        ) as? [[String: String]] {
+          return jsonArray.compactMap { $0["prefix"] }
+        }
+      } catch {
+        print("Error loading prefixes.json: \(error.localizedDescription)")
+      }
+    } else {
+      print("prefixes.json not found in bundle.")
+    }
+    return []
+  }
+
   private func countAllBlockedNumbers() -> Int64 {
     var totalCount: Int64 = 0
 
-    // Count all numbers using the patterns
     for pattern in loadPhoneNumberPatterns() {
       let xCount = pattern.filter { $0 == "#" }.count
       totalCount += Int64(pow(10, Double(xCount)))
     }
 
     return totalCount
+  }
+
+  func generatePhoneNumbers(prefix: String) -> [String] {
+    if !prefix.contains("#") {
+      return [prefix]
+    }
+    
+    let replacements = (0...9).map { String($0) }
+    let firstWildcard = prefix.firstIndex(of: "#")!
+    
+    return replacements.flatMap { digit in
+      var newPrefix = prefix
+      newPrefix.replaceSubrange(firstWildcard...firstWildcard, with: digit)
+      return generatePhoneNumbers(prefix: newPrefix)
+    }
   }
 
   private func startTimerBlockerExtensionStatus() {

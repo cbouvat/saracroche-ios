@@ -18,15 +18,6 @@ struct SettingsNavigationView: View {
         }
 
         Section(header: Text("Liste de blocage")) {
-          Button {
-            viewModel.updateBlockerList()
-          } label: {
-            Label(
-              "Réinstaller la liste de blocage",
-              systemImage: "arrow.counterclockwise.circle.fill"
-            )
-          }
-
           Button(role: .destructive) {
             showDeleteConfirmation = true
           } label: {
