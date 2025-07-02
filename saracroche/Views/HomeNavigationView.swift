@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeNavigationView: View {
   @ObservedObject var viewModel: SaracrocheViewModel
+  @Environment(\.scenePhase) private var scenePhase
   var body: some View {
     NavigationView {
       VStack {
@@ -295,6 +296,14 @@ struct HomeNavigationView: View {
         Spacer()
       }
       .navigationTitle("Saracroche")
+      .onAppear {
+        viewModel.checkBlockerExtensionStatus()
+      }
+      .onChange(of: scenePhase) { newPhase in
+        if newPhase == .active {
+          viewModel.checkBlockerExtensionStatus()
+        }
+      }
     }
   }
 }

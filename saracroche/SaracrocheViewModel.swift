@@ -33,32 +33,17 @@ class SaracrocheViewModel: ObservableObject {
     suiteName: "group.com.cbouvat.saracroche"
   )
 
-  init() {
-    checkBlockerExtensionStatus()
-    startTimerBlockerExtensionStatus()
-    startUpdateTimer()
-  }
-
-  deinit {
-    stopStatusBlockerExtensionStatus()
-    stopUpdateTimer()
-  }
-
   func checkBlockerExtensionStatus() {
-    guard self.blockerActionState == .nothing else {
-      // If an action is in progress, we don't check the status
-      self.blockerExtensionStatus = .unknown
-      return
-    }
-
     let manager = CXCallDirectoryManager.sharedInstance
-
+    print("Checking blocker extension status...")
     manager.getEnabledStatusForExtension(
       withIdentifier: "com.cbouvat.saracroche.blocker"
     ) {
       status,
       error in
       DispatchQueue.main.async {
+        self.updateBlockerState()
+
         if error != nil {
           self.blockerExtensionStatus = .error
           return
@@ -112,9 +97,6 @@ class SaracrocheViewModel: ObservableObject {
   }
 
   func updateBlockerList() {
-    UIApplication.shared.isIdleTimerDisabled = true
-    let manager = CXCallDirectoryManager.sharedInstance
-
     sharedUserDefaults?.set("update", forKey: "blockerActionState")
     sharedUserDefaults?.set(0, forKey: "blockedNumbers")
     sharedUserDefaults?.set(self.blocklistVersion, forKey: "blocklistVersion")
@@ -122,6 +104,11 @@ class SaracrocheViewModel: ObservableObject {
       countAllBlockedNumbers(),
       forKey: "totalBlockedNumbers"
     )
+
+    self.updateBlockerState()
+
+    UIApplication.shared.isIdleTimerDisabled = true
+    let manager = CXCallDirectoryManager.sharedInstance
 
     var patternsToProcess = loadPhoneNumberPatterns()
 
@@ -134,6 +121,8 @@ class SaracrocheViewModel: ObservableObject {
         var chunkIndex = 0
 
         func processNextChunk() {
+          self.checkBlockerExtensionStatus()
+
           guard
             sharedUserDefaults?.string(forKey: "blockerActionState") == "update"
           else {
@@ -151,6 +140,7 @@ class SaracrocheViewModel: ObservableObject {
             ) { error in
               DispatchQueue.main.async {
                 if error != nil {
+                  // TODO handle error
                   self.blockerExtensionStatus = .error
                 }
                 chunkIndex += 1
@@ -166,6 +156,7 @@ class SaracrocheViewModel: ObservableObject {
       } else {
         sharedUserDefaults?.set("finish", forKey: "blockerActionState")
         UIApplication.shared.isIdleTimerDisabled = false
+        self.checkBlockerExtensionStatus()
       }
     }
 
@@ -174,6 +165,7 @@ class SaracrocheViewModel: ObservableObject {
       error in
       DispatchQueue.main.async {
         if error != nil {
+          // TODO handle error
           self.blockerExtensionStatus = .error
         }
 
@@ -185,13 +177,14 @@ class SaracrocheViewModel: ObservableObject {
   func cancelUpdateBlockerAction() {
     UIApplication.shared.isIdleTimerDisabled = false
     sharedUserDefaults?.set("", forKey: "blockerActionState")
-    updateBlockerState()
+    self.checkBlockerExtensionStatus()
   }
 
   func removeBlockerList() {
     UIApplication.shared.isIdleTimerDisabled = true
     sharedUserDefaults?.set("delete", forKey: "blockerActionState")
     sharedUserDefaults?.set(0, forKey: "blockedNumbers")
+    self.updateBlockerState()
 
     let manager = CXCallDirectoryManager.sharedInstance
 
@@ -204,6 +197,7 @@ class SaracrocheViewModel: ObservableObject {
         }
         self.sharedUserDefaults?.set("", forKey: "blockerActionState")
         UIApplication.shared.isIdleTimerDisabled = false
+        self.checkBlockerExtensionStatus()
       }
     }
   }
@@ -211,13 +205,13 @@ class SaracrocheViewModel: ObservableObject {
   func cancelRemoveBlockerAction() {
     UIApplication.shared.isIdleTimerDisabled = false
     sharedUserDefaults?.set("", forKey: "blockerActionState")
-    updateBlockerState()
+    self.checkBlockerExtensionStatus()
   }
 
   func markBlockerActionFinished() {
     UIApplication.shared.isIdleTimerDisabled = false
     sharedUserDefaults?.set("", forKey: "blockerActionState")
-    updateBlockerState()
+    self.checkBlockerExtensionStatus()
   }
 
   func openSettings() {
@@ -275,29 +269,5 @@ class SaracrocheViewModel: ObservableObject {
       newPrefix.replaceSubrange(firstWildcard...firstWildcard, with: digit)
       return generatePhoneNumbers(prefix: newPrefix)
     }
-  }
-
-  private func startTimerBlockerExtensionStatus() {
-    statusTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) {
-      [weak self] _ in
-      self?.checkBlockerExtensionStatus()
-    }
-  }
-
-  private func stopStatusBlockerExtensionStatus() {
-    statusTimer?.invalidate()
-    statusTimer = nil
-  }
-
-  private func startUpdateTimer() {
-    updateTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) {
-      [weak self] _ in
-      self?.updateBlockerState()
-    }
-  }
-
-  private func stopUpdateTimer() {
-    updateTimer?.invalidate()
-    updateTimer = nil
   }
 }
