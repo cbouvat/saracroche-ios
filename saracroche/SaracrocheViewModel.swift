@@ -130,7 +130,7 @@ class SaracrocheViewModel: ObservableObject {
         let pattern = patternsToProcess.removeFirst()
         let numbersListForPattern = generatePhoneNumbers(prefix: pattern)
 
-        let chunkSize = 50_000
+        let chunkSize = 10_000
         var chunkIndex = 0
 
         func processNextChunk() {
