@@ -26,9 +26,6 @@ class SaracrocheViewModel: ObservableObject {
   @Published var blocklistVersion: String = "4"
   @Published var showBlockerStatusSheet: Bool = false
 
-  private var statusTimer: Timer? = nil
-  private var updateTimer: Timer? = nil
-
   let sharedUserDefaults = UserDefaults(
     suiteName: "group.com.cbouvat.saracroche"
   )
@@ -121,7 +118,7 @@ class SaracrocheViewModel: ObservableObject {
         var chunkIndex = 0
 
         func processNextChunk() {
-          self.checkBlockerExtensionStatus()
+          self.updateBlockerState()
 
           guard
             sharedUserDefaults?.string(forKey: "blockerActionState") == "update"
@@ -142,9 +139,11 @@ class SaracrocheViewModel: ObservableObject {
                 if error != nil {
                   // TODO handle error
                   self.blockerExtensionStatus = .error
+                  self.cancelUpdateBlockerAction()
+                } else {
+                  chunkIndex += 1
+                  processNextChunk()
                 }
-                chunkIndex += 1
-                processNextChunk()
               }
             }
           } else {
@@ -167,9 +166,10 @@ class SaracrocheViewModel: ObservableObject {
         if error != nil {
           // TODO handle error
           self.blockerExtensionStatus = .error
+          self.cancelUpdateBlockerAction()
+        } else {
+          processNextPattern()
         }
-
-        processNextPattern()
       }
     }
   }
@@ -177,6 +177,7 @@ class SaracrocheViewModel: ObservableObject {
   func cancelUpdateBlockerAction() {
     UIApplication.shared.isIdleTimerDisabled = false
     sharedUserDefaults?.set("", forKey: "blockerActionState")
+    sharedUserDefaults?.set("", forKey: "action")
     self.checkBlockerExtensionStatus()
   }
 
@@ -260,14 +261,16 @@ class SaracrocheViewModel: ObservableObject {
     if !prefix.contains("#") {
       return [prefix]
     }
-    
-    let replacements = (0...9).map { String($0) }
-    let firstWildcard = prefix.firstIndex(of: "#")!
-    
-    return replacements.flatMap { digit in
-      var newPrefix = prefix
-      newPrefix.replaceSubrange(firstWildcard...firstWildcard, with: digit)
-      return generatePhoneNumbers(prefix: newPrefix)
+
+    let minNumberInPrefix = Int64(prefix.replacingOccurrences(of: "#", with: "0")) ?? 0
+    let maxNumberInPrefix = Int64(prefix.replacingOccurrences(of: "#", with: "9")) ?? 0
+
+    var results: [String] = []
+
+    for number in minNumberInPrefix ... maxNumberInPrefix {
+      results.append(String(number))
     }
+    
+    return results
   }
 }

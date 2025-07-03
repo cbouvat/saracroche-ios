@@ -15,13 +15,10 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
       let action = sharedUserDefaults?.string(forKey: "action")
 
-      switch action {
-      case "resetNumbersList":
+      if action == "resetNumbersList" {
         handleResetNumbersList(to: context)
-      case "addNumbersList":
+      } else if action == "addNumbersList" {
         handleAddNumbersList(to: context)
-      default:
-        break
       }
       
       sharedUserDefaults?.set("", forKey: "action")
@@ -47,7 +44,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     let numbersList =
       sharedUserDefaults?.stringArray(forKey: "numbersList") ?? []
 
-    print("Adding numbers : count \(numbersList.count)")
+    print("Adding numbers : count \(numbersList.count), first \(numbersList.first ?? "")")
 
     for number in numbersList {
       let number = Int64("\(number)") ?? 0
