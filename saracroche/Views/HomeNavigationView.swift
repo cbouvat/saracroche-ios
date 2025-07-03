@@ -8,7 +8,6 @@ struct HomeNavigationView: View {
       VStack {
         ScrollView {
           VStack {
-            // Affichage du statut du bloqueur d'appels
             VStack(alignment: .center) {
               if viewModel.blockerExtensionStatus == .enabled {
                 if #available(iOS 18.0, *) {
@@ -65,7 +64,7 @@ struct HomeNavigationView: View {
                 } label: {
                   HStack {
                     Image(systemName: "gear")
-                    Text("Activer dans les réglages")
+                    Text("Activer dans les réglages de l'iPhone")
                   }
                 }
                 .buttonStyle(
@@ -296,9 +295,6 @@ struct HomeNavigationView: View {
         Spacer()
       }
       .navigationTitle("Saracroche")
-      .onAppear {
-        viewModel.checkBlockerExtensionStatus()
-      }
       .onChange(of: scenePhase) { newPhase in
         if newPhase == .active {
           viewModel.checkBlockerExtensionStatus()
