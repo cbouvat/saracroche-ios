@@ -11,8 +11,8 @@ struct SettingsNavigationView: View {
             viewModel.openSettings()
           } label: {
             Label(
-              "L’extension de blocage dans Réglages",
-              systemImage: "gear"
+              "L’extension de blocage dans Réglages de l'iPhone",
+              systemImage: "gearshape.fill"
             )
           }
         }
@@ -47,23 +47,25 @@ struct SettingsNavigationView: View {
             }
           } label: {
             Label(
-              "Code source sur GitHub",
-              systemImage: "chevron.left.slash.chevron.right"
+              "Code source",
+              systemImage: "keyboard.fill"
             )
           }
+
           Button {
             if let url = URL(string: "https://cbouvat.com/saracroche") {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Site officiel", systemImage: "safari")
+            Label("Site officiel", systemImage: "safari.fill")
           }
+
           Button {
             if let url = URL(string: "https://mastodon.social/@cbouvat") {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Mastodon : @cbouvat", systemImage: "at")
+            Label("Mastodon : @cbouvat", systemImage: "person.bubble.fill")
           }
         }
 
@@ -78,6 +80,40 @@ struct SettingsNavigationView: View {
           } label: {
             Label("Noter l'application", systemImage: "star.fill")
           }
+
+          Button {
+            if let version = Bundle.main.infoDictionary?[
+              "CFBundleShortVersionString"
+            ] as? String,
+              let build = Bundle.main.infoDictionary?["CFBundleVersion"]
+                as? String
+            {
+              let deviceModel = UIDevice.current.model
+              let systemVersion = UIDevice.current.systemVersion
+              
+              let body =
+                "Détaillez le problème ici.\n\n" +
+                "-----------\n" +
+                "Version de l'application : " + version + " (" + build + ")\n" +
+                "Appareil : " + deviceModel + "\n" +
+                "Version iOS : " + systemVersion
+              let encodedBody =
+                body.addingPercentEncoding(
+                  withAllowedCharacters: .urlQueryAllowed
+                ) ?? ""
+              let urlString =
+                "mailto:saracroche@cbouvat.com?subject=Signalement%20bug&body="
+                + encodedBody
+              if let url = URL(string: urlString) {
+                UIApplication.shared.open(url)
+              }
+            }
+          } label: {
+            Label ("Signaler un bug",systemImage: "envelope.fill")
+          }
+
+          Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
+            .foregroundColor(.secondary)
         }
       }
       .navigationTitle("Réglages")
