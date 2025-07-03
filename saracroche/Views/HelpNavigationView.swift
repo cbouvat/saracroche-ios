@@ -197,32 +197,21 @@ struct HelpNavigationView: View {
               .frame(maxWidth: .infinity, alignment: .leading)
 
               Button {
-                if let url = URL(
-                  string: "https://github.com/cbouvat/saracroche/issues"
-                ) {
-                  UIApplication.shared.open(url)
-                }
-              } label: {
-                HStack {
-                  Image(systemName: "chevron.left.slash.chevron.right")
-                  Text("Signaler un bug sur GitHub")
-                    .multilineTextAlignment(.leading)
-                }
-              }
-              .font(.body)
-              .padding(.top)
-              .frame(maxWidth: .infinity, alignment: .leading)
-
-              Button {
                 if let version = Bundle.main.infoDictionary?[
                   "CFBundleShortVersionString"
                 ] as? String,
                   let build = Bundle.main.infoDictionary?["CFBundleVersion"]
                     as? String
                 {
+                  let deviceModel = UIDevice.current.model
+                  let systemVersion = UIDevice.current.systemVersion
+                  
                   let body =
-                    "Détaillez le problème avec une capture d'écran et le modèle d'iPhone. Merci\n\nVersion de l'application : "
-                    + version + " (" + build + ")"
+                    "Détaillez le problème ici.\n\n" +
+                    "-----------\n" +
+                    "Version de l'application : " + version + " (" + build + ")\n" +
+                    "Appareil : " + deviceModel + "\n" +
+                    "Version iOS : " + systemVersion
                   let encodedBody =
                     body.addingPercentEncoding(
                       withAllowedCharacters: .urlQueryAllowed
@@ -237,7 +226,7 @@ struct HelpNavigationView: View {
               } label: {
                 HStack {
                   Image(systemName: "envelope.fill")
-                  Text("Signaler un bug par email")
+                  Text("Signaler un bug")
                     .multilineTextAlignment(.leading)
                 }
               }
@@ -357,8 +346,9 @@ struct HelpNavigationView: View {
           .background(Color(.systemGray6))
           .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
-          Text("Bisous 😘")
+          Text("Bisou 😘")
             .font(.footnote)
+            .multilineTextAlignment(.center)
             .padding(.top)
             .frame(maxWidth: .infinity, alignment: .center)
         }
