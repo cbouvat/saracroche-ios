@@ -1,9 +1,7 @@
 import SwiftUI
 
 struct ReportNavigationView: View {
-  @State private var phoneNumber: String = ""
-  @State private var showAlert = false
-  @State private var alertMessage = ""
+  @StateObject private var viewModel = ReportViewModel()
   @FocusState private var isPhoneFieldFocused: Bool
 
   var body: some View {
@@ -32,15 +30,23 @@ struct ReportNavigationView: View {
               .padding(.top, 4)
               .frame(maxWidth: .infinity, alignment: .leading)
 
-              TextField("Numéro au format E.164", text: $phoneNumber)
+              TextField("Numéro au format E.164", text: $viewModel.phoneNumber)
                 .keyboardType(.phonePad)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled(true)
-                .padding(8)
+                .padding(12)
                 .font(.title3)
-                .background(Color(.white))
-                .cornerRadius(8)
+                .background(Color(.systemBackground))
+                .cornerRadius(10)
+                .overlay(
+                  RoundedRectangle(cornerRadius: 10)
+                    .stroke(isPhoneFieldFocused ? Color("AppColor") : Color(.systemGray4), lineWidth: 2)
+                )
                 .focused($isPhoneFieldFocused)
+                .disabled(viewModel.isLoading)
+                .onChange(of: viewModel.phoneNumber) { newValue in
+                  viewModel.phoneNumber = viewModel.formatPhoneNumber(newValue)
+                }
                 .toolbar {
                   ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
@@ -50,8 +56,13 @@ struct ReportNavigationView: View {
                     .fontWeight(.semibold)
                   }
                 }
+                .accessibilityLabel("Champ de saisie du numéro de téléphone")
+                .accessibilityHint("Saisissez le numéro au format E.164, par exemple +33612345678")
+              
               Button {
-                submitPhoneNumber()
+                Task {
+                  await viewModel.submitPhoneNumber()
+                }
               } label: {
                 HStack {
                   Image(systemName: "paperplane.fill")
@@ -59,9 +70,14 @@ struct ReportNavigationView: View {
                 }
               }
               .buttonStyle(
-                .fullWidth(background: Color("AppColor"), foreground: .black)
+                .fullWidth(
+                  background: Color("AppColor"), 
+                  foreground: .black, 
+                  isLoading: viewModel.isLoading
+                )
               )
-              .padding(.top, 4)
+              .padding(.top, 8)
+              .accessibilityLabel("Bouton d'envoi du signalement")
             }
           }
           .background(Color(.systemGray6))
@@ -148,76 +164,14 @@ struct ReportNavigationView: View {
         .padding(.horizontal)
       }
       .navigationTitle("Signaler")
-      .alert(isPresented: $showAlert) {
-        Alert(
-          title: Text("Information"),
-          message: Text(alertMessage),
-          dismissButton: .default(Text("OK"))
-        )
+      .alert(viewModel.alertType.title, isPresented: $viewModel.showAlert) {
+        Button("OK", role: .cancel) { }
+      } message: {
+        Text(viewModel.alertMessage)
       }
       .onTapGesture {
         isPhoneFieldFocused = false
       }
     }
-  }
-
-  private func submitPhoneNumber() {
-    let e164Regex = "^\\+[1-9]\\d{7,14}$"
-    if !phoneNumber.matches(e164Regex) {
-      alertMessage = "Le numéro doit être au format E.164 (ex: +33612345678)."
-      showAlert = true
-      return
-    }
-    guard let url = URL(string: Config.reportServerURL) else {
-      alertMessage = "URL invalide."
-      showAlert = true
-      return
-    }
-    var request = URLRequest(url: url)
-    request.httpMethod = "POST"
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
-    let appVersion =
-      Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-      ?? "unknown"
-    let json: [String: String] = [
-      "number": phoneNumber,
-      "deviceId": deviceId,
-      "appVersion": appVersion,
-    ]
-    do {
-      let jsonData = try JSONSerialization.data(
-        withJSONObject: json,
-        options: []
-      )
-      request.httpBody = jsonData
-    } catch {
-      alertMessage = "Erreur lors de la création du JSON."
-      showAlert = true
-      return
-    }
-    let task = URLSession.shared.dataTask(with: request) {
-      data,
-      response,
-      error in
-      DispatchQueue.main.async {
-        if let error = error {
-          alertMessage =
-            "Erreur lors de l'envoi : \(error.localizedDescription)"
-        } else {
-          alertMessage =
-            "Numéro signalé avec succès ! Merci de votre contribution 😘."
-          phoneNumber = ""
-        }
-        showAlert = true
-      }
-    }
-    task.resume()
-  }
-}
-
-extension String {
-  fileprivate func matches(_ regex: String) -> Bool {
-    return self.range(of: regex, options: .regularExpression) != nil
   }
 }
