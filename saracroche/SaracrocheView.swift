@@ -1,34 +1,7 @@
 import SwiftUI
 
-struct FullWidthButtonStyle: ButtonStyle {
-  var backgroundColor: Color
-  var foregroundColor: Color
-
-  func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .padding()
-      .bold()
-      .frame(maxWidth: .infinity)
-      .background(backgroundColor)
-      .foregroundColor(foregroundColor)
-      .cornerRadius(16)
-      .opacity(configuration.isPressed ? 0.8 : 1.0)
-  }
-}
-
-extension ButtonStyle where Self == FullWidthButtonStyle {
-  static func fullWidth(background: Color, foreground: Color)
-    -> FullWidthButtonStyle
-  {
-    return FullWidthButtonStyle(
-      backgroundColor: background,
-      foregroundColor: foreground
-    )
-  }
-}
-
 struct SaracrocheView: View {
-  @StateObject private var viewModel = SaracrocheViewModel()
+  @StateObject private var viewModel = BlockerViewModel()
   @State private var showDeleteConfirmation = false
 
   var body: some View {

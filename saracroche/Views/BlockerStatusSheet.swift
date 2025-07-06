@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct BlockerStatusSheet: View {
-  @ObservedObject var viewModel: SaracrocheViewModel
+  @ObservedObject var viewModel: BlockerViewModel
 
   var body: some View {
     VStack(alignment: .center) {

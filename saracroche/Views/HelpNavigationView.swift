@@ -203,11 +203,11 @@ struct HelpNavigationView: View {
                   let build = Bundle.main.infoDictionary?["CFBundleVersion"]
                     as? String
                 {
-                  let deviceModel = UIDevice.current.model
+                  let deviceModel = UIDevice.current.modelIdentifier
                   let systemVersion = UIDevice.current.systemVersion
                   
                   let body =
-                    "Détaillez le problème ici.\n\n" +
+                    "\n\n" +
                     "-----------\n" +
                     "Version de l'application : " + version + " (" + build + ")\n" +
                     "Appareil : " + deviceModel + "\n" +
@@ -217,7 +217,7 @@ struct HelpNavigationView: View {
                       withAllowedCharacters: .urlQueryAllowed
                     ) ?? ""
                   let urlString =
-                    "mailto:saracroche@cbouvat.com?subject=Signalement%20bug&body="
+                    "mailto:saracroche@cbouvat.com?subject=Bug&body="
                     + encodedBody
                   if let url = URL(string: urlString) {
                     UIApplication.shared.open(url)

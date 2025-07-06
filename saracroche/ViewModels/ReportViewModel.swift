@@ -72,10 +72,18 @@ class ReportViewModel: ObservableObject {
     }
     
     private func handleError(_ error: Error) {
-        alertType = .error
         if let networkError = error as? NetworkError {
-            alertMessage = networkError.userMessage
+            switch networkError {
+            case .alreadyReported:
+                alertType = .info
+                alertMessage = "Ce numéro a déjà été signalé par vous. Merci de votre contribution ! 😊"
+                phoneNumber = "" // Clear the input on already reported
+            default:
+                alertType = .error
+                alertMessage = networkError.userMessage
+            }
         } else {
+            alertType = .error
             alertMessage = "Une erreur inattendue s'est produite. Veuillez réessayer."
         }
         showAlert = true

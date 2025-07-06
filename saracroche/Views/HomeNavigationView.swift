@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeNavigationView: View {
-  @ObservedObject var viewModel: SaracrocheViewModel
+  @ObservedObject var viewModel: BlockerViewModel
   @Environment(\.scenePhase) private var scenePhase
   var body: some View {
     NavigationView {

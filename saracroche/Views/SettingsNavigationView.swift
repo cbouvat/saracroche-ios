@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SettingsNavigationView: View {
-  @ObservedObject var viewModel: SaracrocheViewModel
+  @ObservedObject var viewModel: BlockerViewModel
   @Binding var showDeleteConfirmation: Bool
   var body: some View {
     NavigationView {
@@ -88,11 +88,11 @@ struct SettingsNavigationView: View {
               let build = Bundle.main.infoDictionary?["CFBundleVersion"]
                 as? String
             {
-              let deviceModel = UIDevice.current.model
+              let deviceModel = UIDevice.current.modelIdentifier
               let systemVersion = UIDevice.current.systemVersion
               
               let body =
-                "Détaillez le problème ici.\n\n" +
+                "\n\n" +
                 "-----------\n" +
                 "Version de l'application : " + version + " (" + build + ")\n" +
                 "Appareil : " + deviceModel + "\n" +
@@ -102,14 +102,15 @@ struct SettingsNavigationView: View {
                   withAllowedCharacters: .urlQueryAllowed
                 ) ?? ""
               let urlString =
-                "mailto:saracroche@cbouvat.com?subject=Signalement%20bug&body="
+                "mailto:saracroche@cbouvat.com?subject=Contact&body="
                 + encodedBody
               if let url = URL(string: urlString) {
                 UIApplication.shared.open(url)
               }
             }
           } label: {
-            Label ("Signaler un bug",systemImage: "envelope.fill")
+            Label ("Signaler un bug ou suggérer une amélioration",
+                   systemImage: "exclamationmark.bubble.fill")
           }
 
           Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
