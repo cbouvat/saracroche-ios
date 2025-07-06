@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct HelpNavigationView: View {
+  @State private var showDonationSheet = false
+  
   var body: some View {
     NavigationStack {
       ScrollView {
@@ -129,43 +131,11 @@ struct HelpNavigationView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 Button {
-                  if let url = URL(
-                    string: "https://github.com/sponsors/cbouvat"
-                  ) {
-                    UIApplication.shared.open(url)
-                  }
+                  showDonationSheet = true
                 } label: {
                   HStack {
                     Image(systemName: "heart.fill")
-                    Text("Soutenir le projet sur GitHub")
-                  }
-                }
-                .font(.body)
-                .padding(.top)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                Button {
-                  if let url = URL(string: "https://liberapay.com/cbouvat") {
-                    UIApplication.shared.open(url)
-                  }
-                } label: {
-                  HStack {
-                    Image(systemName: "heart.fill")
-                    Text("Soutenir le projet sur Liberapay")
-                  }
-                }
-                .font(.body)
-                .padding(.top)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                Button {
-                  if let url = URL(string: "https://paypal.me/cbouvat") {
-                    UIApplication.shared.open(url)
-                  }
-                } label: {
-                  HStack {
-                    Image(systemName: "heart.fill")
-                    Text("Soutenir le projet par PayPal")
+                    Text("Faire un don")
                   }
                 }
                 .font(.body)
@@ -203,21 +173,19 @@ struct HelpNavigationView: View {
                   let build = Bundle.main.infoDictionary?["CFBundleVersion"]
                     as? String
                 {
-                  let deviceModel = UIDevice.current.model
+                  let deviceModel = UIDevice.current.modelIdentifier
                   let systemVersion = UIDevice.current.systemVersion
-                  
+
                   let body =
-                    "Détaillez le problème ici.\n\n" +
-                    "-----------\n" +
-                    "Version de l'application : " + version + " (" + build + ")\n" +
-                    "Appareil : " + deviceModel + "\n" +
-                    "Version iOS : " + systemVersion
+                    "\n\n" + "-----------\n" + "Version de l'application : "
+                    + version + " (" + build + ")\n" + "Appareil : "
+                    + deviceModel + "\n" + "Version iOS : " + systemVersion
                   let encodedBody =
                     body.addingPercentEncoding(
                       withAllowedCharacters: .urlQueryAllowed
                     ) ?? ""
                   let urlString =
-                    "mailto:saracroche@cbouvat.com?subject=Signalement%20bug&body="
+                    "mailto:saracroche@cbouvat.com?subject=Bug&body="
                     + encodedBody
                   if let url = URL(string: urlString) {
                     UIApplication.shared.open(url)
@@ -299,13 +267,24 @@ struct HelpNavigationView: View {
                 [
                   "Elle est développée bénévolement par un développeur indépendant (Camille), ",
                   "qui en avait assez de recevoir des appels indésirables. L’application est développée sur ",
-                  "son temps libre. Vous pouvez soutenir le projet en faisant un don sur GitHub, Liberapay ou PayPal. ",
-                  "Voir la section 'Comment faire un don ?' pour plus de détails.",
+                  "son temps libre. Vous pouvez soutenir le projet en faisant un don.",
                 ].joined()
               )
               .font(.body)
               .padding(.top, 4)
               .frame(maxWidth: .infinity, alignment: .leading)
+
+              Button {
+                  showDonationSheet = true
+                } label: {
+                  HStack {
+                    Image(systemName: "heart.fill")
+                    Text("Faire un don")
+                  }
+                }
+                .font(.body)
+                .padding(.top)
+                .frame(maxWidth: .infinity, alignment: .leading)
             },
             label: {
               HStack(alignment: .center) {
@@ -356,6 +335,9 @@ struct HelpNavigationView: View {
         .frame(maxWidth: .infinity, alignment: .center)
       }
       .navigationTitle("Aide")
+      .sheet(isPresented: $showDonationSheet) {
+        DonationSheet()
+      }
     }
   }
 }

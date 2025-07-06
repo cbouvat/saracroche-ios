@@ -33,6 +33,8 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     print("Resetting all numbers list")
     context.removeAllBlockingEntries()
     context.removeAllIdentificationEntries()
+
+    sharedUserDefaults?.set(0, forKey: "blockedNumbers")
   }
 
   private func handleAddNumbersList(to context: CXCallDirectoryExtensionContext)

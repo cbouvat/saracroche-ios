@@ -7,7 +7,7 @@ struct ReportNavigationView: View {
   var body: some View {
     NavigationView {
       ScrollView {
-        VStack {
+        VStack(spacing: 16) {
           GroupBox(
             label:
               Label(
@@ -24,13 +24,13 @@ struct ReportNavigationView: View {
               .frame(maxWidth: .infinity, alignment: .leading)
 
               Text(
-                "Saisissez le numéro de téléphone au format E.164 (ex: +33612345678)"
+                "Saisissez le numéro de téléphone au format international E.164"
               )
               .fontWeight(.semibold)
               .padding(.top, 4)
               .frame(maxWidth: .infinity, alignment: .leading)
 
-              TextField("Numéro au format E.164", text: $viewModel.phoneNumber)
+              TextField("+33612345678", text: $viewModel.phoneNumber)
                 .keyboardType(.phonePad)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled(true)
@@ -40,7 +40,11 @@ struct ReportNavigationView: View {
                 .cornerRadius(10)
                 .overlay(
                   RoundedRectangle(cornerRadius: 10)
-                    .stroke(isPhoneFieldFocused ? Color("AppColor") : Color(.systemGray4), lineWidth: 2)
+                    .stroke(
+                      isPhoneFieldFocused
+                        ? Color("AppColor") : Color(.systemGray4),
+                      lineWidth: 2
+                    )
                 )
                 .focused($isPhoneFieldFocused)
                 .disabled(viewModel.isLoading)
@@ -57,8 +61,10 @@ struct ReportNavigationView: View {
                   }
                 }
                 .accessibilityLabel("Champ de saisie du numéro de téléphone")
-                .accessibilityHint("Saisissez le numéro au format E.164, par exemple +33612345678")
-              
+                .accessibilityHint(
+                  "Saisissez le numéro au format E.164, par exemple +33612345678"
+                )
+
               Button {
                 Task {
                   await viewModel.submitPhoneNumber()
@@ -71,8 +77,8 @@ struct ReportNavigationView: View {
               }
               .buttonStyle(
                 .fullWidth(
-                  background: Color("AppColor"), 
-                  foreground: .black, 
+                  background: Color("AppColor"),
+                  foreground: .black,
                   isLoading: viewModel.isLoading
                 )
               )
@@ -161,11 +167,11 @@ struct ReportNavigationView: View {
           .background(Color(.systemGray6))
           .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
-        .padding(.horizontal)
+        .padding()
       }
       .navigationTitle("Signaler")
       .alert(viewModel.alertType.title, isPresented: $viewModel.showAlert) {
-        Button("OK", role: .cancel) { }
+        Button("OK", role: .cancel) {}
       } message: {
         Text(viewModel.alertMessage)
       }
