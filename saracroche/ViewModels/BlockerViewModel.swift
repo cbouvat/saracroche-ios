@@ -9,10 +9,10 @@ class BlockerViewModel: ObservableObject {
   @Published var blocklistInstalledVersion: String = ""
   @Published var blocklistVersion: String = AppConstants.currentBlocklistVersion
   @Published var showBlockerStatusSheet: Bool = false
-  
+
   private let callDirectoryService = CallDirectoryService.shared
   private let sharedUserDefaults = SharedUserDefaultsService.shared
-  
+
   // MARK: - Status Management
   func checkBlockerExtensionStatus() {
     callDirectoryService.checkExtensionStatus { [weak self] status in
@@ -20,13 +20,13 @@ class BlockerViewModel: ObservableObject {
       self?.updateBlockerState()
     }
   }
-  
+
   func updateBlockerState() {
     let blockerActionState = sharedUserDefaults.getBlockerActionState()
     let blockedNumbers = sharedUserDefaults.getBlockedNumbers()
     let totalBlockedNumbers = sharedUserDefaults.getTotalBlockedNumbers()
     let blocklistInstalledVersion = sharedUserDefaults.getBlocklistVersion()
-    
+
     switch blockerActionState {
     case "update":
       self.blockerActionState = .update
@@ -37,11 +37,11 @@ class BlockerViewModel: ObservableObject {
     default:
       self.blockerActionState = .nothing
     }
-    
+
     self.blockerPhoneNumberBlocked = Int64(blockedNumbers)
     self.blockerPhoneNumberTotal = Int64(totalBlockedNumbers)
     self.blocklistInstalledVersion = blocklistInstalledVersion
-    
+
     switch self.blockerActionState {
     case .update, .delete, .finish:
       self.showBlockerStatusSheet = true
@@ -49,7 +49,7 @@ class BlockerViewModel: ObservableObject {
       self.showBlockerStatusSheet = false
     }
   }
-  
+
   // MARK: - Actions
   func updateBlockerList() {
     callDirectoryService.updateBlockerList(
@@ -66,7 +66,7 @@ class BlockerViewModel: ObservableObject {
       }
     )
   }
-  
+
   func removeBlockerList() {
     callDirectoryService.removeBlockerList(
       onProgress: { [weak self] in
@@ -80,22 +80,22 @@ class BlockerViewModel: ObservableObject {
       }
     )
   }
-  
+
   func cancelUpdateBlockerAction() {
     callDirectoryService.cancelUpdateAction()
     checkBlockerExtensionStatus()
   }
-  
+
   func cancelRemoveBlockerAction() {
     callDirectoryService.cancelRemoveAction()
     checkBlockerExtensionStatus()
   }
-  
+
   func markBlockerActionFinished() {
     callDirectoryService.markActionFinished()
     checkBlockerExtensionStatus()
   }
-  
+
   func openSettings() {
     callDirectoryService.openSettings()
   }

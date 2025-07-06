@@ -90,13 +90,11 @@ struct SettingsNavigationView: View {
             {
               let deviceModel = UIDevice.current.modelIdentifier
               let systemVersion = UIDevice.current.systemVersion
-              
+
               let body =
-                "\n\n" +
-                "-----------\n" +
-                "Version de l'application : " + version + " (" + build + ")\n" +
-                "Appareil : " + deviceModel + "\n" +
-                "Version iOS : " + systemVersion
+                "\n\n" + "-----------\n" + "Version de l'application : "
+                + version + " (" + build + ")\n" + "Appareil : " + deviceModel
+                + "\n" + "Version iOS : " + systemVersion
               let encodedBody =
                 body.addingPercentEncoding(
                   withAllowedCharacters: .urlQueryAllowed
@@ -109,12 +107,16 @@ struct SettingsNavigationView: View {
               }
             }
           } label: {
-            Label ("Signaler un bug ou suggérer une amélioration",
-                   systemImage: "exclamationmark.bubble.fill")
+            Label(
+              "Signaler un bug ou suggérer une amélioration",
+              systemImage: "exclamationmark.bubble.fill"
+            )
           }
 
-          Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
-            .foregroundColor(.secondary)
+          Text(
+            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+          )
+          .foregroundColor(.secondary)
         }
       }
       .navigationTitle("Réglages")

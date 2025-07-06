@@ -40,7 +40,11 @@ struct ReportNavigationView: View {
                 .cornerRadius(10)
                 .overlay(
                   RoundedRectangle(cornerRadius: 10)
-                    .stroke(isPhoneFieldFocused ? Color("AppColor") : Color(.systemGray4), lineWidth: 2)
+                    .stroke(
+                      isPhoneFieldFocused
+                        ? Color("AppColor") : Color(.systemGray4),
+                      lineWidth: 2
+                    )
                 )
                 .focused($isPhoneFieldFocused)
                 .disabled(viewModel.isLoading)
@@ -57,8 +61,10 @@ struct ReportNavigationView: View {
                   }
                 }
                 .accessibilityLabel("Champ de saisie du numéro de téléphone")
-                .accessibilityHint("Saisissez le numéro au format E.164, par exemple +33612345678")
-              
+                .accessibilityHint(
+                  "Saisissez le numéro au format E.164, par exemple +33612345678"
+                )
+
               Button {
                 Task {
                   await viewModel.submitPhoneNumber()
@@ -71,8 +77,8 @@ struct ReportNavigationView: View {
               }
               .buttonStyle(
                 .fullWidth(
-                  background: Color("AppColor"), 
-                  foreground: .black, 
+                  background: Color("AppColor"),
+                  foreground: .black,
                   isLoading: viewModel.isLoading
                 )
               )
@@ -165,7 +171,7 @@ struct ReportNavigationView: View {
       }
       .navigationTitle("Signaler")
       .alert(viewModel.alertType.title, isPresented: $viewModel.showAlert) {
-        Button("OK", role: .cancel) { }
+        Button("OK", role: .cancel) {}
       } message: {
         Text(viewModel.alertMessage)
       }
