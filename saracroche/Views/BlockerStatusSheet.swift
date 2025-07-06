@@ -20,14 +20,14 @@ struct BlockerStatusSheet: View {
             .rotate.byLayer,
             options: .repeat(.periodic(delay: 0.5))
           )
-          .foregroundColor(Color("AppColor"))
+          .foregroundColor(.app)
           .padding(.vertical)
         } else {
           Image(
             systemName: "gearshape.arrow.trianglehead.2.clockwise.rotate.90"
           )
           .font(.system(size: 100))
-          .foregroundColor(Color("AppColor"))
+          .foregroundColor(.app)
           .padding(.vertical)
         }
 
