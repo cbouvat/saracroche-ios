@@ -5,7 +5,7 @@ enum NetworkError: Error {
   case invalidURL
   case noData
   case decodingError
-  case serverError(Int)
+  case serverError(Int, String?)
   case networkUnavailable
   case timeout
   case unknown
@@ -18,7 +18,10 @@ enum NetworkError: Error {
       return "Aucune donnée reçue du serveur."
     case .decodingError:
       return "Erreur lors du traitement des données."
-    case .serverError(let code):
+    case .serverError(let code, let message):
+      if let serverMessage = message, !serverMessage.isEmpty {
+        return serverMessage
+      }
       return "Erreur serveur (\(code)). Veuillez réessayer plus tard."
     case .networkUnavailable:
       return "Connexion réseau indisponible. Vérifiez votre connexion Internet."
@@ -64,16 +67,16 @@ class NetworkService {
     }
 
     do {
-      let (_, response) = try await session.data(for: request)
+      let (data, response) = try await session.data(for: request)
 
       if let httpResponse = response as? HTTPURLResponse {
         switch httpResponse.statusCode {
         case 200...299:
           return  // Success, no action needed
-        case 400...499:
-          throw NetworkError.serverError(httpResponse.statusCode)
-        case 500...599:
-          throw NetworkError.serverError(httpResponse.statusCode)
+        case 400...499, 500...599:
+          // Try to extract error message from response
+          let errorMessage = extractErrorMessage(from: data)
+          throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
         default:
           throw NetworkError.unknown
         }
@@ -93,6 +96,29 @@ class NetworkService {
         throw NetworkError.unknown
       }
     }
+  }
+
+  private func extractErrorMessage(from data: Data) -> String? {
+    // Try to decode JSON error response
+    if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+      // Common error message keys
+      if let message = json["message"] as? String {
+        return message
+      }
+      if let error = json["error"] as? String {
+        return error
+      }
+      if let detail = json["detail"] as? String {
+        return detail
+      }
+    }
+    
+    // Try to decode as plain text
+    if let text = String(data: data, encoding: .utf8), !text.isEmpty {
+      return text
+    }
+    
+    return nil
   }
 }
 
