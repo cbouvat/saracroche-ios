@@ -11,18 +11,16 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     context.delegate = self
 
     if context.isIncremental {
-      print("Incremental update requested")
-
-      let action = sharedUserDefaults?.string(forKey: "action")
+      let action = sharedUserDefaults?.string(forKey: "action") ?? ""
 
       if action == "resetNumbersList" {
         handleResetNumbersList(to: context)
       } else if action == "addNumbersList" {
         handleAddNumbersList(to: context)
       }
-      
-      sharedUserDefaults?.set("", forKey: "action")
-    }
+    } else {
+      context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
+    } 
 
     context.completeRequest()
   }
@@ -35,6 +33,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     context.removeAllIdentificationEntries()
 
     sharedUserDefaults?.set(0, forKey: "blockedNumbers")
+    sharedUserDefaults?.set("", forKey: "action")
   }
 
   private func handleAddNumbersList(to context: CXCallDirectoryExtensionContext)
@@ -55,6 +54,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     }
 
     sharedUserDefaults?.set(blockedNumbers, forKey: "blockedNumbers")
+    sharedUserDefaults?.set("", forKey: "action")
   }
 }
 
