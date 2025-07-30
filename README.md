@@ -1,5 +1,7 @@
 # Saracroche iOS
 
+> 🤖 **Also available for Android**: Check out [Saracroche Android](https://github.com/cbouvat/saracroche-android) for Android users!
+
 ## 🇫🇷 Description
 
 Saracroche est une application iOS qui vous protège des appels indésirables en bloquant les appels téléphoniques indésirables. Elle est conçue pour être simple, efficace et respectueuse de la vie privée.
@@ -14,6 +16,8 @@ Saracroche est une application iOS qui vous protège des appels indésirables en
 ## 🇬🇧 Description
 
 Saracroche is an iOS app that protects you from unwanted calls by blocking spam phone calls. It's designed to be simple, effective, and privacy-friendly.
+
+> 🤖 **Also available for Android**: Check out [Saracroche Android](https://github.com/cbouvat/saracroche-android) for Android users!
 
 ## 🇬🇧 Features
 
@@ -34,8 +38,33 @@ You can also try the latest beta version through [TestFlight](https://testflight
 
 ### Building from Source
 1. Clone the repository
-2. Open `saracroche.xcodeproj` in Xcode
-3. Build and run the project on your device
+2. Copy `saracroche/Config.swift.example` to `Config.swift`
+3. Update the configuration with your server URL
+4. Open `saracroche.xcodeproj` in Xcode
+5. Build and run the project on your device
+
+**Requirements:**
+- Xcode 15.0+
+- iOS 15.0+
+- Swift 5.9+
+
+## Configuration
+
+The app requires a configuration file `Config.swift` that contains sensitive information like server URLs. This file is gitignored for security.
+
+1. Copy the example configuration:
+   ```bash
+   cp saracroche/Config.swift.example saracroche/Config.swift
+   ```
+
+2. Edit `Config.swift` with your actual configuration values.
+
+## Technology Stack
+
+- **Swift** - Primary programming language
+- **SwiftUI** - Modern UI framework
+- **CallKit** - iOS call blocking framework
+- **MVVM Architecture** - Clean architecture pattern
 
 ## List of prefix numbers
 
