@@ -6,7 +6,7 @@ struct SettingsNavigationView: View {
   var body: some View {
     NavigationView {
       Form {
-        Section(header: Text("Extension de blocage")) {
+        Section(header: Text("Configuration système")) {
           Button {
             viewModel.openSettings()
           } label: {
@@ -15,9 +15,7 @@ struct SettingsNavigationView: View {
               systemImage: "gearshape.fill"
             )
           }
-        }
-
-        Section(header: Text("Liste de blocage")) {
+          
           Button(role: .destructive) {
             showDeleteConfirmation = true
           } label: {
@@ -112,11 +110,15 @@ struct SettingsNavigationView: View {
               systemImage: "exclamationmark.bubble.fill"
             )
           }
-
+        }
+        
+        HStack {
+          Spacer()
           Text(
-            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+            "Version de l'application : \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
           )
-          .foregroundColor(.secondary)
+          .font(.footnote)
+          Spacer()
         }
       }
       .navigationTitle("Réglages")
