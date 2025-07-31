@@ -256,9 +256,24 @@ struct HelpNavigationView: View {
                     let deviceModel = UIDevice.current.modelIdentifier
                     let systemVersion = UIDevice.current.systemVersion
 
-                    let body = "\n\n" + "-----------\n" + "Version de l'application : " + version + " (" + build + ")\n" + "Appareil : " + deviceModel + "\n" + "Version iOS : " + systemVersion
+                    let deviceInfo = """
+                    Appareil : \(deviceModel)
+                    Version iOS : \(systemVersion)
+                    Version de l'application : \(version)
+                    """
+                    
+                    let body = """
+                    Bonjour,
+
+                    J'ai rencontré un problème avec l'application et voici une capture d'écran :
+
+                    \(deviceInfo)
+
+                    Bisou 😘
+                    """
+                    
                     let encodedBody = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-                    let urlString = "mailto:saracroche@cbouvat.com?subject=Bug&body=" + encodedBody
+                    let urlString = "mailto:saracroche@cbouvat.com?subject=Bug%20-%20Saracroche%20iOS&body=" + encodedBody
                     if let url = URL(string: urlString) {
                       UIApplication.shared.open(url)
                     }
