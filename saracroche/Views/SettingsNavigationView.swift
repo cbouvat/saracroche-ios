@@ -15,7 +15,7 @@ struct SettingsNavigationView: View {
               systemImage: "gearshape.fill"
             )
           }
-          
+
           Button(role: .destructive) {
             showDeleteConfirmation = true
           } label: {
@@ -82,23 +82,32 @@ struct SettingsNavigationView: View {
           Button {
             if let version = Bundle.main.infoDictionary?[
               "CFBundleShortVersionString"
-            ] as? String,
-              let build = Bundle.main.infoDictionary?["CFBundleVersion"]
-                as? String
-            {
+            ] as? String {
               let deviceModel = UIDevice.current.modelIdentifier
               let systemVersion = UIDevice.current.systemVersion
 
-              let body =
-                "\n\n" + "-----------\n" + "Version de l'application : "
-                + version + " (" + build + ")\n" + "Appareil : " + deviceModel
-                + "\n" + "Version iOS : " + systemVersion
+              let deviceInfo = """
+                Appareil : \(deviceModel)
+                Version iOS : \(systemVersion)
+                Version de l'application : \(version)
+                """
+
+              let body = """
+                Bonjour,
+
+                Je souhaite signaler un problème ou faire une suggestion concernant l'application :
+
+                \(deviceInfo)
+
+                Bisou 😘
+                """
+
               let encodedBody =
                 body.addingPercentEncoding(
                   withAllowedCharacters: .urlQueryAllowed
                 ) ?? ""
               let urlString =
-                "mailto:saracroche@cbouvat.com?subject=Contact&body="
+                "mailto:saracroche@cbouvat.com?subject=Contact%20-%20Saracroche%20iOS&body="
                 + encodedBody
               if let url = URL(string: urlString) {
                 UIApplication.shared.open(url)
@@ -111,7 +120,7 @@ struct SettingsNavigationView: View {
             )
           }
         }
-        
+
         HStack {
           Spacer()
           Text(
