@@ -73,11 +73,11 @@ class CallDirectoryService {
     UIApplication.shared.isIdleTimerDisabled = true
 
     var patternsToProcess = phoneNumberService.loadPhoneNumberPatterns()
-    
+
     sharedUserDefaults.setBlocklistVersion(
       AppConstants.currentBlocklistVersion
     )
-    
+
     sharedUserDefaults.setTotalBlockedNumbers(
       phoneNumberService.countAllBlockedNumbers()
     )
