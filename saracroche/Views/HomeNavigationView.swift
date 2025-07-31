@@ -4,7 +4,7 @@ struct HomeNavigationView: View {
   @ObservedObject var viewModel: BlockerViewModel
   @Environment(\.scenePhase) private var scenePhase
   @State private var showDonationSheet = false
-  
+
   var body: some View {
     NavigationView {
       ScrollView {
@@ -290,22 +290,24 @@ struct HomeNavigationView: View {
             )
             .padding(.top)
           }
-          
+
           VStack(alignment: .leading, spacing: 12) {
             HStack {
               Image(systemName: "heart.fill")
                 .font(.system(size: 20))
                 .foregroundColor(.red)
-              
+
               Text("Application gratuite et open-source")
                 .font(.headline)
                 .fontWeight(.semibold)
             }
-            
-            Text("Saracroche est une application entièrement gratuite et open-source. Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité.")
-              .font(.body)
-              .multilineTextAlignment(.leading)
-            
+
+            Text(
+              "Saracroche est une application entièrement gratuite et open-source. Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
+            )
+            .font(.body)
+            .multilineTextAlignment(.leading)
+
             Button {
               showDonationSheet = true
             } label: {
