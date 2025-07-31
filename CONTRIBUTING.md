@@ -5,13 +5,13 @@ Thank you for considering contributing to Saracroche! We welcome contributions o
 ## How to Contribute
 
 ### 1. Fork the Repository
-- Navigate to the [Saracroche repository](https://github.com/cbouvat/saracroche).
+- Navigate to the [Saracroche repository](https://github.com/cbouvat/saracroche-ios).
 - Click the "Fork" button to create your own copy of the repository.
 
 ### 2. Clone the Repository
 - Clone your forked repository to your local machine:
   ```bash
-  git clone https://github.com/your-username/saracroche.git
+  git clone https://github.com/your-username/saracroche-ios.git
   cd saracroche
   ```
 
@@ -50,7 +50,7 @@ Please note that this project is governed by the [Code of Conduct](CODE_OF_CONDU
 
 ## Reporting Issues
 
-If you encounter a bug or have a feature request, please open an issue in the [GitHub Issues](https://github.com/cbouvat/saracroche/issues) section. Provide as much detail as possible to help us address the issue.
+If you encounter a bug or have a feature request, please open an issue in the [GitHub Issues](https://github.com/cbouvat/saracroche-ios/issues) section. Provide as much detail as possible to help us address the issue.
 
 ## Development Environment
 
