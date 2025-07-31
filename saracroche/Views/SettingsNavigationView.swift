@@ -40,7 +40,7 @@ struct SettingsNavigationView: View {
 
         Section(header: Text("Liens utiles")) {
           Button {
-            if let url = URL(string: "https://github.com/cbouvat/saracroche") {
+            if let url = URL(string: "https://github.com/cbouvat/saracroche-ios") {
               UIApplication.shared.open(url)
             }
           } label: {
