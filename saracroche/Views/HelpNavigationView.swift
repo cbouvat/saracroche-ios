@@ -4,7 +4,7 @@ struct HelpNavigationView: View {
   @State private var showDonationSheet = false
 
   var body: some View {
-    NavigationStack {
+    NavigationView {
       ScrollView {
         VStack(spacing: 24) {
           VStack(alignment: .leading, spacing: 16) {
