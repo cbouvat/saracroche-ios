@@ -57,7 +57,7 @@ struct ReportNavigationView: View {
                     Button("Terminé") {
                       isPhoneFieldFocused = false
                     }
-                    .fontWeight(.semibold)
+                    .font(.body.weight(.bold))
                   }
                 }
                 .accessibilityLabel("Champ de saisie du numéro de téléphone")
