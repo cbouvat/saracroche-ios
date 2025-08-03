@@ -16,6 +16,15 @@ struct SettingsNavigationView: View {
             )
           }
 
+          Button {
+            viewModel.updateBlockerList()
+          } label: {
+            Label(
+              "Recharger la liste de blocage",
+              systemImage: "arrow.clockwise.circle.fill"
+            )
+          }
+
           Button(role: .destructive) {
             showDeleteConfirmation = true
           } label: {
@@ -40,7 +49,9 @@ struct SettingsNavigationView: View {
 
         Section(header: Text("Liens utiles")) {
           Button {
-            if let url = URL(string: "https://github.com/cbouvat/saracroche-ios") {
+            if let url = URL(
+              string: "https://github.com/cbouvat/saracroche-ios"
+            ) {
               UIApplication.shared.open(url)
             }
           } label: {
