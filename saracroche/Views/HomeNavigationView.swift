@@ -290,46 +290,53 @@ struct HomeNavigationView: View {
             )
             .padding(.top)
 
-            VStack(alignment: .leading, spacing: 12) {
-              HStack {
-                Image(systemName: "heart.fill")
-                  .font(.system(size: 20))
-                  .foregroundColor(.red)
-
-                Text("Application gratuite et open-source")
-                  .font(.headline)
-                  .fontWeight(.semibold)
-              }
-
-              Text(
-                "Saracroche est une application entièrement gratuite et open-source. Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
-              )
-              .font(.body)
-              .multilineTextAlignment(.leading)
-
-              Button {
-                showDonationSheet = true
-              } label: {
+            if viewModel.blockerPhoneNumberBlocked > 0
+              && viewModel.blocklistVersion
+                == viewModel.blocklistInstalledVersion
+              && viewModel.blockerPhoneNumberBlocked
+                == viewModel.blockerPhoneNumberTotal
+            {
+              VStack(alignment: .leading, spacing: 12) {
                 HStack {
                   Image(systemName: "heart.fill")
-                  Text("Soutenez")
+                    .font(.system(size: 20))
+                    .foregroundColor(.red)
+
+                  Text("Application gratuite et open-source")
+                    .font(.headline)
+                    .fontWeight(.semibold)
                 }
+
+                Text(
+                  "Saracroche est une application entièrement gratuite et open-source. Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
+                )
+                .font(.body)
+                .multilineTextAlignment(.leading)
+
+                Button {
+                  showDonationSheet = true
+                } label: {
+                  HStack {
+                    Image(systemName: "heart.fill")
+                    Text("Soutenez")
+                  }
+                }
+                .buttonStyle(
+                  .fullWidth(background: Color.red, foreground: .white)
+                )
               }
-              .buttonStyle(
-                .fullWidth(background: Color.red, foreground: .white)
+              .padding()
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .background(
+                RoundedRectangle(cornerRadius: 16)
+                  .fill(Color.gray.opacity(0.1))
               )
+              .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                  .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+              )
+              .padding(.top)
             }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-              RoundedRectangle(cornerRadius: 16)
-                .fill(Color.gray.opacity(0.1))
-            )
-            .overlay(
-              RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            )
-            .padding(.top)
           }
         }
         .padding()
