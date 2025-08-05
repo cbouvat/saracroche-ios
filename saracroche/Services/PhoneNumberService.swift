@@ -9,9 +9,9 @@ class PhoneNumberService {
   // MARK: - Load Patterns
   func loadPhoneNumberPatterns() -> [String] {
     guard
-      let url = Bundle.main.url(forResource: "prefixes", withExtension: "json")
+      let url = Bundle.main.url(forResource: "blocked-prefixes", withExtension: "json")
     else {
-      print("prefixes.json not found in bundle.")
+      print("blocked-prefixes.json not found in bundle.")
       return []
     }
 
@@ -21,10 +21,10 @@ class PhoneNumberService {
         with: data,
         options: []
       ) as? [[String: String]] {
-        return jsonArray.compactMap { $0["prefix"] }
+        return jsonArray.compactMap { $0["pattern"] }
       }
     } catch {
-      print("Error loading prefixes.json: \(error.localizedDescription)")
+      print("Error loading blocked-prefixes.json: \(error.localizedDescription)")
     }
 
     return []
@@ -43,15 +43,15 @@ class PhoneNumberService {
   }
 
   // MARK: - Generate Phone Numbers
-  func generatePhoneNumbers(prefix: String) -> [String] {
-    if !prefix.contains("#") {
-      return [prefix]
+  func generatePhoneNumbers(pattern: String) -> [String] {
+    if !pattern.contains("#") {
+      return [pattern]
     }
 
     let minNumberInPrefix =
-      Int64(prefix.replacingOccurrences(of: "#", with: "0")) ?? 0
+      Int64(pattern.replacingOccurrences(of: "#", with: "0")) ?? 0
     let maxNumberInPrefix =
-      Int64(prefix.replacingOccurrences(of: "#", with: "9")) ?? 0
+      Int64(pattern.replacingOccurrences(of: "#", with: "9")) ?? 0
 
     var results: [String] = []
 

@@ -16,8 +16,6 @@ class CallDirectoryService {
   func checkExtensionStatus(
     completion: @escaping (BlockerExtensionStatus) -> Void
   ) {
-    print("Checking blocker extension status...")
-
     manager.getEnabledStatusForExtension(
       withIdentifier: AppConstants.callDirectoryExtensionIdentifier
     ) { status, error in
@@ -68,9 +66,11 @@ class CallDirectoryService {
     onProgress: @escaping () -> Void,
     onCompletion: @escaping (Bool) -> Void
   ) {
-    sharedUserDefaults.setBlockerActionState("update")
-
     UIApplication.shared.isIdleTimerDisabled = true
+    sharedUserDefaults.setBlockerActionState("update")
+    sharedUserDefaults.setBlockedNumbers(0)
+    
+    onProgress()
 
     var patternsToProcess = phoneNumberService.loadPhoneNumberPatterns()
 
@@ -86,7 +86,7 @@ class CallDirectoryService {
       if !patternsToProcess.isEmpty {
         let pattern = patternsToProcess.removeFirst()
         let numbersListForPattern = phoneNumberService.generatePhoneNumbers(
-          prefix: pattern
+          pattern: pattern
         )
 
         var chunkIndex = 0

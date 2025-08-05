@@ -44,7 +44,7 @@ KISS (Keep It Simple, Stupid) principles are followed to ensure clarity and main
 - Log important actions for debugging
 
 #### Data Management
-- Use JSON for structured data (prefixes.json)
+- Use JSON for structured data (blocked-prefixes.json)
 - Validate data before processing
 - Handle errors gracefully
 - Persist critical states
