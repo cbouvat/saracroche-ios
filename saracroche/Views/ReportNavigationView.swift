@@ -24,7 +24,7 @@ struct ReportNavigationView: View {
               .frame(maxWidth: .infinity, alignment: .leading)
 
               Text(
-                "Saisissez le numéro de téléphone au format international E.164"
+                "Saisissez le numéro de téléphone au format international, par exemple +33612345678 pour la France."
               )
               .fontWeight(.semibold)
               .padding(.top, 4)
