@@ -16,6 +16,7 @@ class BlockerViewModel: ObservableObject {
   // MARK: - Status Management
   func checkBlockerExtensionStatus() {
     callDirectoryService.checkExtensionStatus { [weak self] status in
+      print("Blocker extension status: \(status)")
       self?.blockerExtensionStatus = status
       self?.updateBlockerState()
     }
@@ -27,6 +28,10 @@ class BlockerViewModel: ObservableObject {
     let totalBlockedNumbers = sharedUserDefaults.getTotalBlockedNumbers()
     let blocklistInstalledVersion = sharedUserDefaults.getBlocklistVersion()
 
+    self.blockerPhoneNumberBlocked = Int64(blockedNumbers)
+    self.blockerPhoneNumberTotal = Int64(totalBlockedNumbers)
+    self.blocklistInstalledVersion = blocklistInstalledVersion
+
     switch blockerActionState {
     case "update":
       self.blockerActionState = .update
@@ -37,15 +42,10 @@ class BlockerViewModel: ObservableObject {
     default:
       self.blockerActionState = .nothing
     }
-
-    self.blockerPhoneNumberBlocked = Int64(blockedNumbers)
-    self.blockerPhoneNumberTotal = Int64(totalBlockedNumbers)
-    self.blocklistInstalledVersion = blocklistInstalledVersion
-
-    switch self.blockerActionState {
-    case .update, .delete, .finish:
+    
+    if self.blockerActionState != .nothing {
       self.showBlockerStatusSheet = true
-    case .nothing:
+    } else {
       self.showBlockerStatusSheet = false
     }
   }
@@ -83,17 +83,17 @@ class BlockerViewModel: ObservableObject {
 
   func cancelUpdateBlockerAction() {
     callDirectoryService.cancelUpdateAction()
-    checkBlockerExtensionStatus()
+    self.checkBlockerExtensionStatus()
   }
 
   func cancelRemoveBlockerAction() {
     callDirectoryService.cancelRemoveAction()
-    checkBlockerExtensionStatus()
+    self.checkBlockerExtensionStatus()
   }
 
   func markBlockerActionFinished() {
     callDirectoryService.markActionFinished()
-    checkBlockerExtensionStatus()
+    self.checkBlockerExtensionStatus()
   }
 
   func openSettings() {
