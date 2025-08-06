@@ -66,21 +66,7 @@ class CallDirectoryService {
     onProgress: @escaping () -> Void,
     onCompletion: @escaping (Bool) -> Void
   ) {
-    UIApplication.shared.isIdleTimerDisabled = true
-    sharedUserDefaults.setBlockerActionState("update")
-    sharedUserDefaults.setBlockedNumbers(0)
-    
-    onProgress()
-
     var patternsToProcess = phoneNumberService.loadPhoneNumberPatterns()
-
-    sharedUserDefaults.setBlocklistVersion(
-      AppConstants.currentBlocklistVersion
-    )
-
-    sharedUserDefaults.setTotalBlockedNumbers(
-      phoneNumberService.countAllBlockedNumbers()
-    )
 
     func processNextPattern() {
       if !patternsToProcess.isEmpty {
@@ -114,7 +100,6 @@ class CallDirectoryService {
                 chunkIndex += 1
                 processNextChunk()
               } else {
-                self.cancelAction()
                 onCompletion(false)
               }
             }
@@ -125,8 +110,6 @@ class CallDirectoryService {
 
         processNextChunk()
       } else {
-        sharedUserDefaults.setBlockerActionState("update_finish")
-        UIApplication.shared.isIdleTimerDisabled = false
         onCompletion(true)
       }
     }
@@ -136,7 +119,6 @@ class CallDirectoryService {
       if success {
         processNextPattern()
       } else {
-        self.cancelAction()
         onCompletion(false)
       }
     }
@@ -147,29 +129,14 @@ class CallDirectoryService {
     onProgress: @escaping () -> Void,
     onCompletion: @escaping (Bool) -> Void
   ) {
-    UIApplication.shared.isIdleTimerDisabled = true
-    sharedUserDefaults.setBlockerActionState("delete")
     sharedUserDefaults.setAction(AppConstants.Actions.resetNumbersList)
-
-    onProgress()
 
     self.reloadExtension { success in
       if success {
-        self.sharedUserDefaults.setBlockerActionState("delete_finish")
-        UIApplication.shared.isIdleTimerDisabled = false
         onCompletion(true)
-        
       } else {
-        self.sharedUserDefaults.clearBlockerActionState()
-        UIApplication.shared.isIdleTimerDisabled = false
         onCompletion(false)
       }
     }
-  }
-
-  func cancelAction() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    sharedUserDefaults.clearBlockerActionState()
-    sharedUserDefaults.clearAction()
   }
 }
