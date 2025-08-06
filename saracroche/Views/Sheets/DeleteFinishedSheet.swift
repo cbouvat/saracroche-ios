@@ -1,0 +1,47 @@
+import SwiftUI
+
+struct DeleteFinishedSheet: View {
+  @ObservedObject var viewModel: BlockerViewModel
+
+  var body: some View {
+    NavigationView {
+      VStack(alignment: .center, spacing: 20) {
+        Spacer()
+
+        Text("Terminé")
+          .font(.title)
+          .fontWeight(.bold)
+          .multilineTextAlignment(.center)
+
+        if #available(iOS 18.0, *) {
+          Image(systemName: "checkmark.circle.fill")
+            .font(.system(size: 100))
+            .symbolEffect(
+              .wiggle.counterClockwise.byLayer,
+              options: .repeat(.periodic(delay: 0.5))
+            )
+            .foregroundColor(Color.green)
+        } else {
+          Image(systemName: "checkmark.circle.fill")
+            .font(.system(size: 100))
+            .foregroundColor(Color.green)
+        }
+
+        Text("La liste de blocage a été supprimée avec succès")
+          .font(.title2)
+          .fontWeight(.bold)
+          .multilineTextAlignment(.center)
+
+        Button("Fermer") {
+          viewModel.clearAction()
+        }
+        .buttonStyle(
+          .fullWidth(background: Color("AppColor"), foreground: .black)
+        )
+
+        Spacer()
+      }
+      .padding()
+    }
+  }
+}

@@ -78,6 +78,7 @@ struct SettingsNavigationView: View {
           }
         }
 
+
         Section(header: Text("Application")) {
           Button {
             if let url = URL(
@@ -130,15 +131,13 @@ struct SettingsNavigationView: View {
               systemImage: "exclamationmark.bubble.fill"
             )
           }
-        }
 
-        HStack {
-          Spacer()
-          Text(
-            "Version de l'application : \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
-          )
-          .font(.footnote)
-          Spacer()
+          HStack {
+            Text(
+              "Version de l'application : \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+            )
+            .font(.footnote)
+          }
         }
       }
       .navigationTitle("Réglages")

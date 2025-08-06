@@ -3,6 +3,7 @@ import Foundation
 enum BlockerActionState {
   case update
   case delete
-  case finish
+  case update_finish
+  case delete_finish
   case nothing
 }
