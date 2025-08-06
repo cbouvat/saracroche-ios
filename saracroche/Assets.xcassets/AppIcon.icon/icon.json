@@ -1,0 +1,69 @@
+{
+  "fill" : {
+    "automatic-gradient" : "display-p3:0.96471,0.78431,0.26667,1.00000"
+  },
+  "groups" : [
+    {
+      "blur-material-specializations" : [
+        {
+          "value" : null
+        },
+        {
+          "appearance" : "dark",
+          "value" : null
+        }
+      ],
+      "hidden" : false,
+      "layers" : [
+        {
+          "blend-mode" : "normal",
+          "glass" : true,
+          "image-name" : "Icone transparent.png",
+          "name" : "Icone transparent"
+        }
+      ],
+      "lighting" : "individual",
+      "shadow-specializations" : [
+        {
+          "value" : {
+            "kind" : "none",
+            "opacity" : 1
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "kind" : "none",
+            "opacity" : 1
+          }
+        },
+        {
+          "appearance" : "tinted",
+          "value" : {
+            "kind" : "neutral",
+            "opacity" : 1
+          }
+        }
+      ],
+      "specular" : false,
+      "translucency-specializations" : [
+        {
+          "value" : {
+            "enabled" : false,
+            "value" : 0.5
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "enabled" : false,
+            "value" : 0.5
+          }
+        }
+      ]
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : "shared"
+  }
+}
