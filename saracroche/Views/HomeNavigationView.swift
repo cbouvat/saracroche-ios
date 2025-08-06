@@ -92,6 +92,19 @@ struct HomeNavigationView: View {
                 .font(.title3)
                 .bold()
                 .multilineTextAlignment(.center)
+
+              Button {
+                viewModel.checkBlockerExtensionStatus()
+              } label: {
+                HStack {
+                  Image(systemName: "arrow.clockwise")
+                  Text("Vérifier le bloqueur")
+                }
+              }
+              .buttonStyle(
+                .fullWidth(background: Color.orange, foreground: .white)
+              )
+              .padding(.top)
             } else if viewModel.blockerExtensionStatus == .error {
               if #available(iOS 18.0, *) {
                 Image(systemName: "xmark.octagon.fill")
@@ -112,6 +125,19 @@ struct HomeNavigationView: View {
               Text("Erreur lors de la vérification")
                 .font(.title3)
                 .bold()
+
+              Button {
+                viewModel.checkBlockerExtensionStatus()
+              } label: {
+                HStack {
+                  Image(systemName: "arrow.clockwise")
+                  Text("Vérifier le bloqueur")
+                }
+              }
+              .buttonStyle(
+                .fullWidth(background: Color.red, foreground: .white)
+              )
+              .padding(.top)
             } else if viewModel.blockerExtensionStatus == .unexpected {
               if #available(iOS 18.0, *) {
                 Image(systemName: "exclamationmark.triangle.fill")
@@ -133,6 +159,19 @@ struct HomeNavigationView: View {
                 .font(.title3)
                 .bold()
                 .multilineTextAlignment(.center)
+
+              Button {
+                viewModel.checkBlockerExtensionStatus()
+              } label: {
+                HStack {
+                  Image(systemName: "arrow.clockwise")
+                  Text("Vérifier le bloqueur")
+                }
+              }
+              .buttonStyle(
+                .fullWidth(background: Color.orange, foreground: .white)
+              )
+              .padding(.top)
             }
           }
           .padding()

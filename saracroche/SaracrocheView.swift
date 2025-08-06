@@ -26,8 +26,20 @@ struct SaracrocheView: View {
         Label("Réglages", systemImage: "gearshape.fill")
       }
     }
-    .sheet(isPresented: $viewModel.showBlockerStatusSheet) {
-      BlockerStatusSheet(viewModel: viewModel)
+    .sheet(isPresented: $viewModel.showUpdateListSheet) {
+      UpdateListSheet(viewModel: viewModel)
+        .interactiveDismissDisabled(true)
+    }
+    .sheet(isPresented: $viewModel.showDeleteBlockerSheet) {
+      DeleteBlockerSheet(viewModel: viewModel)
+        .interactiveDismissDisabled(true)
+    }
+    .sheet(isPresented: $viewModel.showUpdateListFinishedSheet) {
+      UpdateListFinishedSheet(viewModel: viewModel)
+        .interactiveDismissDisabled(true)
+    }
+    .sheet(isPresented: $viewModel.showDeleteFinishedSheet) {
+      DeleteFinishedSheet(viewModel: viewModel)
         .interactiveDismissDisabled(true)
     }
   }

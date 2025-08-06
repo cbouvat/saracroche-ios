@@ -8,7 +8,10 @@ class BlockerViewModel: ObservableObject {
   @Published var blockerPhoneNumberTotal: Int64 = 0
   @Published var blocklistInstalledVersion: String = ""
   @Published var blocklistVersion: String = AppConstants.currentBlocklistVersion
-  @Published var showBlockerStatusSheet: Bool = false
+  @Published var showUpdateListSheet: Bool = false
+  @Published var showDeleteBlockerSheet: Bool = false
+  @Published var showUpdateListFinishedSheet: Bool = false
+  @Published var showDeleteFinishedSheet: Bool = false
 
   private let callDirectoryService = CallDirectoryService.shared
   private let sharedUserDefaults = SharedUserDefaultsService.shared
@@ -35,18 +38,34 @@ class BlockerViewModel: ObservableObject {
     switch blockerActionState {
     case "update":
       self.blockerActionState = .update
+      self.showUpdateListSheet = true
+      self.showDeleteBlockerSheet = false
+      self.showUpdateListFinishedSheet = false
+      self.showDeleteFinishedSheet = false
     case "delete":
       self.blockerActionState = .delete
-    case "finish":
-      self.blockerActionState = .finish
+      self.showDeleteBlockerSheet = true
+      self.showUpdateListSheet = false
+      self.showUpdateListFinishedSheet = false
+      self.showDeleteFinishedSheet = false
+    case "update_finish":
+      self.blockerActionState = .update_finish
+      self.showUpdateListFinishedSheet = true
+      self.showDeleteBlockerSheet = false
+      self.showUpdateListSheet = false
+      self.showDeleteFinishedSheet = false
+    case "delete_finish":
+      self.blockerActionState = .delete_finish
+      self.showDeleteFinishedSheet = true
+      self.showUpdateListSheet = false
+      self.showDeleteBlockerSheet = false
+      self.showUpdateListFinishedSheet = false
     default:
       self.blockerActionState = .nothing
-    }
-    
-    if self.blockerActionState != .nothing {
-      self.showBlockerStatusSheet = true
-    } else {
-      self.showBlockerStatusSheet = false
+      self.showUpdateListSheet = false
+      self.showDeleteBlockerSheet = false
+      self.showUpdateListFinishedSheet = false
+      self.showDeleteFinishedSheet = false
     }
   }
 
@@ -57,12 +76,7 @@ class BlockerViewModel: ObservableObject {
         self?.updateBlockerState()
       },
       onCompletion: { [weak self] success in
-        if !success {
-          self?.blockerExtensionStatus = .error
-          self?.cancelUpdateBlockerAction()
-        } else {
-          self?.checkBlockerExtensionStatus()
-        }
+        self?.updateBlockerState()
       }
     )
   }
@@ -73,26 +87,13 @@ class BlockerViewModel: ObservableObject {
         self?.updateBlockerState()
       },
       onCompletion: { [weak self] success in
-        if !success {
-          self?.blockerExtensionStatus = .error
-        }
-        self?.checkBlockerExtensionStatus()
+        self?.updateBlockerState()
       }
     )
   }
 
-  func cancelUpdateBlockerAction() {
-    callDirectoryService.cancelUpdateAction()
-    self.checkBlockerExtensionStatus()
-  }
-
-  func cancelRemoveBlockerAction() {
-    callDirectoryService.cancelRemoveAction()
-    self.checkBlockerExtensionStatus()
-  }
-
-  func markBlockerActionFinished() {
-    callDirectoryService.markActionFinished()
+  func clearAction() {
+    callDirectoryService.cancelAction()
     self.checkBlockerExtensionStatus()
   }
 

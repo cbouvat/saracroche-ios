@@ -109,12 +109,12 @@ class CallDirectoryService {
             sharedUserDefaults.setAction(AppConstants.Actions.addNumbersList)
             sharedUserDefaults.setNumbersList(chunk)
 
-            reloadExtension { success in
+            self.reloadExtension { success in
               if success {
                 chunkIndex += 1
                 processNextChunk()
               } else {
-                self.cancelUpdateAction()
+                self.cancelAction()
                 onCompletion(false)
               }
             }
@@ -125,18 +125,18 @@ class CallDirectoryService {
 
         processNextChunk()
       } else {
-        sharedUserDefaults.setBlockerActionState("finish")
+        sharedUserDefaults.setBlockerActionState("update_finish")
         UIApplication.shared.isIdleTimerDisabled = false
         onCompletion(true)
       }
     }
 
     sharedUserDefaults.setAction(AppConstants.Actions.resetNumbersList)
-    reloadExtension { success in
+    self.reloadExtension { success in
       if success {
         processNextPattern()
       } else {
-        self.cancelUpdateAction()
+        self.cancelAction()
         onCompletion(false)
       }
     }
@@ -149,34 +149,27 @@ class CallDirectoryService {
   ) {
     UIApplication.shared.isIdleTimerDisabled = true
     sharedUserDefaults.setBlockerActionState("delete")
+    sharedUserDefaults.setAction(AppConstants.Actions.resetNumbersList)
 
     onProgress()
 
-    sharedUserDefaults.setAction(AppConstants.Actions.resetNumbersList)
-    reloadExtension { success in
-      if !success {
+    self.reloadExtension { success in
+      if success {
+        self.sharedUserDefaults.setBlockerActionState("delete_finish")
+        UIApplication.shared.isIdleTimerDisabled = false
+        onCompletion(true)
+        
+      } else {
+        self.sharedUserDefaults.clearBlockerActionState()
+        UIApplication.shared.isIdleTimerDisabled = false
         onCompletion(false)
       }
-      self.sharedUserDefaults.clearBlockerActionState()
-      UIApplication.shared.isIdleTimerDisabled = false
-      onCompletion(success)
     }
   }
 
-  // MARK: - Cancel Actions
-  func cancelUpdateAction() {
+  func cancelAction() {
     UIApplication.shared.isIdleTimerDisabled = false
     sharedUserDefaults.clearBlockerActionState()
     sharedUserDefaults.clearAction()
-  }
-
-  func cancelRemoveAction() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    sharedUserDefaults.clearBlockerActionState()
-  }
-
-  func markActionFinished() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    sharedUserDefaults.clearBlockerActionState()
   }
 }
