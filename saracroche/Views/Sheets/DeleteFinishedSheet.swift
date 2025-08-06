@@ -32,14 +32,14 @@ struct DeleteFinishedSheet: View {
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
 
+        Spacer()
+
         Button("Fermer") {
           viewModel.clearAction()
         }
         .buttonStyle(
           .fullWidth(background: Color("AppColor"), foreground: .black)
         )
-
-        Spacer()
       }
       .padding()
     }

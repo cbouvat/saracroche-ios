@@ -5,5 +5,6 @@ enum BlockerActionState {
   case delete
   case update_finish
   case delete_finish
+  case error
   case nothing
 }

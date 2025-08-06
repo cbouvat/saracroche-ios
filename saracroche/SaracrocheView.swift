@@ -42,6 +42,10 @@ struct SaracrocheView: View {
       DeleteFinishedSheet(viewModel: viewModel)
         .interactiveDismissDisabled(true)
     }
+    .sheet(isPresented: $viewModel.showActionErrorSheet) {
+      ActionErrorSheet(viewModel: viewModel)
+        .interactiveDismissDisabled(true)
+    }
   }
 }
 
