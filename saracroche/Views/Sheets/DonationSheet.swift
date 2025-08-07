@@ -24,14 +24,14 @@ struct DonationSheet: View {
               .fontWeight(.bold)
               .multilineTextAlignment(.center)
           }
-          .padding()
 
-          VStack(alignment: .leading, spacing: 8) {
+          VStack(alignment: .leading, spacing: 16) {
             Text(
-              "Saracroche est développée bénévolement par Camille sur son temps libre. Votre don l'aide à consacrer plus de temps à l'amélioration de l'app et au maintien des listes de blocage."
+              "Saracroche est développée bénévolement par Camille sur son temps libre. " +
+              "Votre don l'aide à consacrer plus de temps à l'amélioration de l'app " +
+              "et au maintien des listes de blocage."
             )
             .font(.body)
-            .padding(.bottom)
 
             Text("Pourquoi donner ?")
               .font(.headline)
@@ -73,7 +73,8 @@ struct DonationSheet: View {
               )
             }
           }
-          .padding()
+
+          Spacer()
 
           VStack(spacing: 16) {
             Button {
@@ -118,8 +119,8 @@ struct DonationSheet: View {
               .fullWidth(background: Color.yellow, foreground: .black)
             )
           }
-          .padding(.horizontal)
         }
+        .padding()
       }
       .navigationBarBackButtonHidden(true)
       .toolbar {

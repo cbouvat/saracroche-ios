@@ -8,8 +8,8 @@ struct HomeNavigationView: View {
   var body: some View {
     NavigationView {
       ScrollView {
-        VStack {
-          VStack(alignment: .center) {
+        VStack(spacing: 16) {
+          VStack(alignment: .center, spacing: 16) {
             if viewModel.blockerExtensionStatus == .enabled {
               if #available(iOS 18.0, *) {
                 Image(systemName: "checkmark.shield.fill")
@@ -19,12 +19,10 @@ struct HomeNavigationView: View {
                     options: .repeat(.periodic(delay: 1.0))
                   )
                   .foregroundColor(.green)
-                  .padding(.bottom)
               } else {
                 Image(systemName: "checkmark.shield.fill")
                   .font(.system(size: 48))
                   .foregroundColor(.green)
-                  .padding(.bottom)
               }
 
               Text("Le bloqueur d'appels est actif")
@@ -40,12 +38,10 @@ struct HomeNavigationView: View {
                     options: .repeat(.periodic(delay: 1.0))
                   )
                   .foregroundColor(.red)
-                  .padding(.bottom)
               } else {
                 Image(systemName: "xmark.circle.fill")
                   .font(.system(size: 48))
                   .foregroundColor(.red)
-                  .padding(.bottom)
               }
 
               Text("Le bloqueur d'appels n'est pas activé")
@@ -54,10 +50,11 @@ struct HomeNavigationView: View {
                 .multilineTextAlignment(.center)
 
               Text(
-                "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
+                "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer " +
+                "Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, " +
+                "il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
               )
               .font(.body)
-              .padding(.vertical)
               .frame(maxWidth: .infinity, alignment: .center)
 
               Button {
@@ -80,12 +77,10 @@ struct HomeNavigationView: View {
                     options: .repeat(.periodic(delay: 1.0))
                   )
                   .foregroundColor(.orange)
-                  .padding(.bottom)
               } else {
                 Image(systemName: "questionmark.circle.fill")
                   .font(.system(size: 48))
                   .foregroundColor(.orange)
-                  .padding(.bottom)
               }
 
               Text("Vérification du statut du bloqueur en cours…")
@@ -104,7 +99,6 @@ struct HomeNavigationView: View {
               .buttonStyle(
                 .fullWidth(background: Color.orange, foreground: .white)
               )
-              .padding(.top)
             } else if viewModel.blockerExtensionStatus == .error {
               if #available(iOS 18.0, *) {
                 Image(systemName: "xmark.octagon.fill")
@@ -119,7 +113,6 @@ struct HomeNavigationView: View {
                 Image(systemName: "xmark.octagon.fill")
                   .font(.system(size: 48))
                   .foregroundColor(.red)
-                  .padding(.bottom)
               }
 
               Text("Erreur lors de la vérification")
@@ -137,7 +130,6 @@ struct HomeNavigationView: View {
               .buttonStyle(
                 .fullWidth(background: Color.red, foreground: .white)
               )
-              .padding(.top)
             } else if viewModel.blockerExtensionStatus == .unexpected {
               if #available(iOS 18.0, *) {
                 Image(systemName: "exclamationmark.triangle.fill")
@@ -147,12 +139,10 @@ struct HomeNavigationView: View {
                     options: .repeat(.periodic(delay: 1.0))
                   )
                   .foregroundColor(.orange)
-                  .padding(.bottom)
               } else {
                 Image(systemName: "exclamationmark.triangle.fill")
                   .font(.system(size: 48))
                   .foregroundColor(.orange)
-                  .padding(.bottom)
               }
 
               Text("Statut inattendu")
@@ -171,7 +161,6 @@ struct HomeNavigationView: View {
               .buttonStyle(
                 .fullWidth(background: Color.orange, foreground: .white)
               )
-              .padding(.top)
             }
           }
           .padding()
@@ -195,7 +184,7 @@ struct HomeNavigationView: View {
           )
 
           if viewModel.blockerExtensionStatus == .enabled {
-            VStack {
+            VStack(alignment: .center, spacing: 16) {
               if viewModel.blockerPhoneNumberBlocked == 0 {
                 Image(
                   systemName: "exclamationmark.triangle.fill"
@@ -206,14 +195,13 @@ struct HomeNavigationView: View {
                 Text("Aucun numéro bloqué")
                   .font(.title3)
                   .fontWeight(.semibold)
-                  .padding(.top)
 
                 Text(
-                  "Pour bloquer les appels indésirables, installez la liste de blocage qui contient les numéros à bloquer."
+                  "Pour bloquer les appels indésirables, installez la liste de blocage " +
+                  "qui contient les numéros à bloquer."
                 )
                 .multilineTextAlignment(.center)
                 .font(.body)
-                .padding(.vertical)
 
                 Button {
                   viewModel.updateBlockerList()
@@ -227,8 +215,7 @@ struct HomeNavigationView: View {
                   .fullWidth(background: Color.blue, foreground: .white)
                 )
               } else if viewModel.blocklistVersion
-                != viewModel.blocklistInstalledVersion
-              {
+                != viewModel.blocklistInstalledVersion {
                 Image(
                   systemName: "arrow.clockwise.circle.fill"
                 )
@@ -238,20 +225,18 @@ struct HomeNavigationView: View {
                 Text("Mise à jour disponible")
                   .font(.title3)
                   .fontWeight(.semibold)
-                  .padding(.top)
 
                 Text(
-                  "Une nouvelle version de la liste de blocage est disponible. Vous pouvez l'installer pour bloquer de nouveaux numéros indésirables."
+                  "Une nouvelle version de la liste de blocage est disponible. " +
+                  "Vous pouvez l'installer pour bloquer de nouveaux numéros indésirables."
                 )
-                .multilineTextAlignment(.center)
                 .font(.body)
-                .padding(.top)
 
                 Text(
-                  "Version installée : \(viewModel.blocklistInstalledVersion), version disponible : \(viewModel.blocklistVersion)"
+                  "Version installée : \(viewModel.blocklistInstalledVersion), " +
+                  "version disponible : \(viewModel.blocklistVersion)"
                 )
                 .font(.footnote)
-                .padding(.vertical)
 
                 Button {
                   viewModel.updateBlockerList()
@@ -265,8 +250,7 @@ struct HomeNavigationView: View {
                   .fullWidth(background: Color.red, foreground: .white)
                 )
               } else if viewModel.blockerPhoneNumberBlocked
-                != viewModel.blockerPhoneNumberTotal
-              {
+                != viewModel.blockerPhoneNumberTotal {
                 Image(
                   systemName: "exclamationmark.triangle.fill"
                 )
@@ -276,13 +260,11 @@ struct HomeNavigationView: View {
                 Text("Liste de blocage partiellement installée")
                   .font(.title3)
                   .fontWeight(.semibold)
-                  .padding(.top)
 
                 Text(
                   "\(viewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(viewModel.blockerPhoneNumberTotal)"
                 )
                 .font(.body)
-                .padding(.vertical)
                 .multilineTextAlignment(.center)
 
                 Button {
@@ -308,13 +290,11 @@ struct HomeNavigationView: View {
                 )
                 .font(.title3)
                 .fontWeight(.semibold)
-                .padding(.top)
 
                 Text(
                   "Version de la liste de blocage : \(viewModel.blocklistVersion)"
                 )
                 .font(.footnote)
-                .padding(.top, 2)
               }
             }
             .padding()
@@ -327,15 +307,13 @@ struct HomeNavigationView: View {
               RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
             )
-            .padding(.top)
 
             if viewModel.blockerPhoneNumberBlocked > 0
               && viewModel.blocklistVersion
                 == viewModel.blocklistInstalledVersion
               && viewModel.blockerPhoneNumberBlocked
-                == viewModel.blockerPhoneNumberTotal
-            {
-              VStack(alignment: .leading, spacing: 12) {
+                == viewModel.blockerPhoneNumberTotal {
+              VStack(alignment: .leading, spacing: 16) {
                 HStack {
                   Image(systemName: "heart.fill")
                     .font(.system(size: 20))
@@ -347,10 +325,10 @@ struct HomeNavigationView: View {
                 }
 
                 Text(
-                  "Saracroche est une application entièrement gratuite et open-source. Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
+                  "Saracroche est une application entièrement gratuite et open-source. " +
+                  "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
                 )
                 .font(.body)
-                .multilineTextAlignment(.leading)
 
                 Button {
                   showDonationSheet = true
@@ -374,7 +352,6 @@ struct HomeNavigationView: View {
                 RoundedRectangle(cornerRadius: 16)
                   .stroke(Color.gray.opacity(0.3), lineWidth: 1)
               )
-              .padding(.top)
             }
           }
         }

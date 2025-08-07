@@ -5,7 +5,7 @@ struct UpdateListFinishedSheet: View {
 
   var body: some View {
     NavigationView {
-      VStack(alignment: .center, spacing: 20) {
+      VStack(alignment: .center, spacing: 16) {
         Spacer()
 
         Text("Terminé")
@@ -31,7 +31,7 @@ struct UpdateListFinishedSheet: View {
           .font(.title2)
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
-        
+
         Spacer()
 
         Button("Fermer") {
