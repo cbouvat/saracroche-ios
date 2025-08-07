@@ -78,7 +78,6 @@ struct SettingsNavigationView: View {
           }
         }
 
-
         Section(header: Text("Application")) {
           Button {
             if let url = URL(

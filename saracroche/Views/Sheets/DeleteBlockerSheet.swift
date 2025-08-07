@@ -5,7 +5,7 @@ struct DeleteBlockerSheet: View {
 
   var body: some View {
     NavigationView {
-      VStack(alignment: .center, spacing: 20) {
+      VStack(alignment: .center, spacing: 16) {
         Spacer()
 
         Text("Gardez l'application ouverte")
