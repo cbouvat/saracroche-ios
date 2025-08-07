@@ -52,15 +52,15 @@ class BlockerViewModel: ObservableObject {
       self.showUpdateListFinishedSheet = false
       self.showDeleteFinishedSheet = false
       self.showActionErrorSheet = false
-    case "update_finish":
-      self.blockerActionState = .update_finish
+    case "updateFinish":
+      self.blockerActionState = .updateFinish
       self.showUpdateListFinishedSheet = true
       self.showDeleteBlockerSheet = false
       self.showUpdateListSheet = false
       self.showDeleteFinishedSheet = false
       self.showActionErrorSheet = false
-    case "delete_finish":
-      self.blockerActionState = .delete_finish
+    case "deleteFinish":
+      self.blockerActionState = .deleteFinish
       self.showDeleteFinishedSheet = true
       self.showUpdateListSheet = false
       self.showDeleteBlockerSheet = false
@@ -108,7 +108,7 @@ class BlockerViewModel: ObservableObject {
 
   func updateBlockerListFinished() {
     UIApplication.shared.isIdleTimerDisabled = false
-    sharedUserDefaults.setBlockerActionState("update_finish")
+    sharedUserDefaults.setBlockerActionState("updateFinish")
     self.updateBlockerState()
   }
 
@@ -133,7 +133,7 @@ class BlockerViewModel: ObservableObject {
 
   func removeBlockerListFinished() {
     UIApplication.shared.isIdleTimerDisabled = false
-    self.sharedUserDefaults.setBlockerActionState("delete_finish")
+    self.sharedUserDefaults.setBlockerActionState("deleteFinish")
     self.updateBlockerState()
   }
 
@@ -153,11 +153,5 @@ class BlockerViewModel: ObservableObject {
 
   func openSettings() {
     callDirectoryService.openSettings()
-  }
-
-  func closeApp() {
-    sharedUserDefaults.clearBlockerActionState()
-    sharedUserDefaults.clearAction()
-    exit(0)
   }
 }
