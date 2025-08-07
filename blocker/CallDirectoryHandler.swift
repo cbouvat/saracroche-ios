@@ -2,51 +2,61 @@ import CallKit
 import Foundation
 
 class CallDirectoryHandler: CXCallDirectoryProvider {
-
-  let sharedUserDefaults = UserDefaults(
-    suiteName: "group.com.cbouvat.saracroche"
-  )
-
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
     context.delegate = self
 
     if context.isIncremental {
-      let action = sharedUserDefaults?.string(forKey: "action") ?? ""
-
-      if action == "resetNumbersList" {
-        handleResetNumbersList(to: context)
-      } else if action == "addNumbersList" {
-        handleAddNumbersList(to: context)
-      } else {
-        print("Unknown action: \(action)")
-      }
+      incrementalUpdate(to: context)
     }
-    
-    sharedUserDefaults?.set("", forKey: "action")
 
     context.completeRequest()
   }
 
-  private func handleResetNumbersList(
+  private func sharedUserDefaults() -> UserDefaults? {
+    UserDefaults(suiteName: "group.com.cbouvat.saracroche")
+  }
+
+  private func incrementalUpdate(
     to context: CXCallDirectoryExtensionContext
   ) {
+
+    let action = sharedUserDefaults()?.string(forKey: "action") ?? ""
+
+    if action == "resetNumbersList" {
+      resetNumbersList(to: context)
+    } else if action == "addNumbersList" {
+      addNumbersList(to: context)
+    } else {
+      print("Unknown action: \(action)")
+    }
+    sharedUserDefaults()?.set("", forKey: "action")
+  }
+
+  private func resetNumbersList(
+    to context: CXCallDirectoryExtensionContext
+  ) {
+
     print("Resetting all numbers list")
-    sharedUserDefaults?.set(0, forKey: "blockedNumbers")
+    sharedUserDefaults()?.set(0, forKey: "blockedNumbers")
 
     context.removeAllBlockingEntries()
     context.removeAllIdentificationEntries()
   }
 
-  private func handleAddNumbersList(to context: CXCallDirectoryExtensionContext)
-  {
+  private func addNumbersList(
+    to context: CXCallDirectoryExtensionContext
+  ) {
+
     var blockedNumbers = Int64(
-      sharedUserDefaults?.integer(forKey: "blockedNumbers") ?? 0
+      sharedUserDefaults()?.integer(forKey: "blockedNumbers") ?? 0
     )
 
     let numbersList =
-      sharedUserDefaults?.stringArray(forKey: "numbersList") ?? []
+      sharedUserDefaults()?.stringArray(forKey: "numbersList") ?? []
 
-    print("Adding numbers : count \(numbersList.count), first \(numbersList.first ?? "")")
+    print(
+      "Adding numbers : count \(numbersList.count), first \(numbersList.first ?? "")"
+    )
 
     for number in numbersList {
       let number = Int64("\(number)") ?? 0
@@ -54,7 +64,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
       blockedNumbers += 1
     }
 
-    sharedUserDefaults?.set(blockedNumbers, forKey: "blockedNumbers")
+    sharedUserDefaults()?.set(blockedNumbers, forKey: "blockedNumbers")
   }
 }
 
