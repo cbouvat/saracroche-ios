@@ -16,10 +16,9 @@ KISS (Keep It Simple, Stupid) principles are followed to ensure clarity and main
 - Use SwiftUI for all UI components
 - SwiftUI exclusively for UI
 - 2 spaces indentation (no tabs)
-- Max 80 characters per line when possible
+- Max 120 characters per line when possible
 - English comments for complex logic
 
 ### Architecture
 - MVVM pattern
 - UserDefaults with suiteName for App Groups data sharing
-
