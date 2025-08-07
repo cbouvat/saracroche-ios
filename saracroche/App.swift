@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct saracrocheApp: App {
+struct SaracrocheApp: App {
   var body: some Scene {
     WindowGroup {
       SaracrocheView()

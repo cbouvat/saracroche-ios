@@ -68,41 +68,47 @@ class NetworkService {
 
     do {
       let (data, response) = try await session.data(for: request)
-
-      if let httpResponse = response as? HTTPURLResponse {
-        switch httpResponse.statusCode {
-        case 200...299:
-          return  // Success, no action needed
-        case 400...499, 500...599:
-          // Try to extract error message from response
-          let errorMessage = extractErrorMessage(from: data)
-          throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
-        default:
-          throw NetworkError.unknown
-        }
-      }
+      try handleHTTPResponse(response, data: data)
     } catch {
-      if error is NetworkError {
-        throw error
-      }
+      try handleNetworkError(error)
+    }
+  }
 
-      let nsError = error as NSError
-      switch nsError.code {
-      case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost:
-        throw NetworkError.networkUnavailable
-      case NSURLErrorTimedOut:
-        throw NetworkError.timeout
-      default:
-        throw NetworkError.unknown
-      }
+  private func handleHTTPResponse(_ response: URLResponse, data: Data) throws {
+    guard let httpResponse = response as? HTTPURLResponse else { return }
+
+    switch httpResponse.statusCode {
+    case 200...299:
+      return  // Success, no action needed
+    case 400...499, 500...599:
+      // Try to extract error message from response
+      let errorMessage = extractErrorMessage(from: data)
+      throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
+    default:
+      throw NetworkError.unknown
+    }
+  }
+
+  private func handleNetworkError(_ error: Error) throws {
+    if error is NetworkError {
+      throw error
+    }
+
+    let nsError = error as NSError
+    switch nsError.code {
+    case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost:
+      throw NetworkError.networkUnavailable
+    case NSURLErrorTimedOut:
+      throw NetworkError.timeout
+    default:
+      throw NetworkError.unknown
     }
   }
 
   private func extractErrorMessage(from data: Data) -> String? {
     // Try to decode JSON error response
     if let json = try? JSONSerialization.jsonObject(with: data)
-      as? [String: Any]
-    {
+      as? [String: Any] {
       // Common error message keys
       if let message = json["message"] as? String {
         return message
