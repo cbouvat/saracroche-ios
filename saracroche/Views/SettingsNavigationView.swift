@@ -130,14 +130,16 @@ struct SettingsNavigationView: View {
               systemImage: "exclamationmark.bubble.fill"
             )
           }
+        }
 
-          HStack {
+        Section(
+          footer:
             Text(
               "Version de l'application : \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
             )
             .font(.footnote)
-          }
-        }
+            .frame(maxWidth: .infinity, alignment: .center)
+        ) { EmptyView() }
       }
       .navigationTitle("Réglages")
     }
