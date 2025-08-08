@@ -143,7 +143,7 @@ class BlockerViewModel: ObservableObject {
     UIApplication.shared.isIdleTimerDisabled = false
     self.blockerActionState = .nothing
     self.sharedUserDefaults.clearAction()
-    self.checkExtensionStatusAction()
+    self.checkBlockerExtensionStatus()
   }
 
   func checkExtensionStatusAction() {
