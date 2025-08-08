@@ -10,20 +10,6 @@ class SharedUserDefaultsService {
     userDefaults = UserDefaults(suiteName: AppConstants.appGroupIdentifier)
   }
 
-  // MARK: - Blocker Action State
-  func setBlockerActionState(_ state: String) {
-    userDefaults?.set(
-      state,
-      forKey: AppConstants.UserDefaultsKeys.blockerActionState
-    )
-  }
-
-  func getBlockerActionState() -> String {
-    return userDefaults?.string(
-      forKey: AppConstants.UserDefaultsKeys.blockerActionState
-    ) ?? ""
-  }
-
   // MARK: - Blocked Numbers Count
   func setBlockedNumbers(_ count: Int) {
     userDefaults?.set(
@@ -80,14 +66,6 @@ class SharedUserDefaultsService {
     userDefaults?.set(
       numbers,
       forKey: AppConstants.UserDefaultsKeys.numbersList
-    )
-  }
-
-  // MARK: - Clear State
-  func clearBlockerActionState() {
-    userDefaults?.set(
-      "",
-      forKey: AppConstants.UserDefaultsKeys.blockerActionState
     )
   }
 }

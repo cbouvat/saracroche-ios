@@ -18,8 +18,8 @@ struct ActionErrorSheet: View {
             .foregroundColor(.red)
         } else {
           Image(systemName: "exclamationmark.triangle.fill")
-          .font(.system(size: 80))
-          .foregroundColor(.red)
+            .font(.system(size: 80))
+            .foregroundColor(.red)
         }
 
         Text("Erreur")
@@ -41,30 +41,37 @@ struct ActionErrorSheet: View {
             HStack(alignment: .top, spacing: 10) {
               Text("•")
                 .fontWeight(.bold)
-              Text("Vérifiez que l'extension de blocage d'appels est activée dans les réglages")
+              Text(
+                "Vérifiez que l'extension de blocage d'appels est activée dans les réglages"
+              )
+              .multilineTextAlignment(.leading)
             }
 
             HStack(alignment: .top, spacing: 10) {
               Text("•")
                 .fontWeight(.bold)
               Text("Redémarrez votre appareil si le problème persiste")
+                .multilineTextAlignment(.leading)
             }
 
             HStack(alignment: .top, spacing: 10) {
               Text("•")
                 .fontWeight(.bold)
               Text("Désinstallez et réinstallez l'application si nécessaire")
+                .multilineTextAlignment(.leading)
             }
 
             HStack(alignment: .top, spacing: 10) {
               Text("•")
                 .fontWeight(.bold)
               Text("Attendez quelques heures avant de réessayer")
+                .multilineTextAlignment(.leading)
             }
           }
           .font(.body)
         }
         .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.systemGray6))
         .cornerRadius(12)
 

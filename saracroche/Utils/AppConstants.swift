@@ -10,7 +10,6 @@ struct AppConstants {
 
   // MARK: - UserDefaults Keys
   struct UserDefaultsKeys {
-    static let blockerActionState = "blockerActionState"
     static let blockedNumbers = "blockedNumbers"
     static let totalBlockedNumbers = "totalBlockedNumbers"
     static let blocklistVersion = "blocklistVersion"

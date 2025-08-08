@@ -89,7 +89,7 @@ struct HomeNavigationView: View {
                 .multilineTextAlignment(.center)
 
               Button {
-                viewModel.checkBlockerExtensionStatus()
+                viewModel.checkExtensionStatusAction()
               } label: {
                 HStack {
                   Image(systemName: "arrow.clockwise")
@@ -120,7 +120,7 @@ struct HomeNavigationView: View {
                 .bold()
 
               Button {
-                viewModel.checkBlockerExtensionStatus()
+                viewModel.checkExtensionStatusAction()
               } label: {
                 HStack {
                   Image(systemName: "arrow.clockwise")
@@ -151,7 +151,7 @@ struct HomeNavigationView: View {
                 .multilineTextAlignment(.center)
 
               Button {
-                viewModel.checkBlockerExtensionStatus()
+                viewModel.checkExtensionStatusAction()
               } label: {
                 HStack {
                   Image(systemName: "arrow.clockwise")

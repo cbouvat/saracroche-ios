@@ -44,3 +44,7 @@ struct DeleteBlockerSheet: View {
     }
   }
 }
+
+#Preview {
+  DeleteBlockerSheet(viewModel: BlockerViewModel())
+}

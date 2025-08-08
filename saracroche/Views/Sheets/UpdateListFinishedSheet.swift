@@ -45,3 +45,7 @@ struct UpdateListFinishedSheet: View {
     }
   }
 }
+
+#Preview {
+  UpdateListFinishedSheet(viewModel: BlockerViewModel())
+}

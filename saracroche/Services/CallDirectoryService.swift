@@ -44,7 +44,7 @@ class CallDirectoryService {
     manager.openSettings { error in
       if let error = error {
         print(
-          "Erreur lors de l'ouverture des réglages: \(error.localizedDescription)"
+          "Error opening settings: \(error.localizedDescription)"
         )
       }
     }
@@ -79,10 +79,6 @@ class CallDirectoryService {
 
         func processNextChunk() {
           onProgress()
-
-          guard sharedUserDefaults.getBlockerActionState() == "update" else {
-            return
-          }
 
           let start = chunkIndex * AppConstants.phoneNumberChunkSize
           let end = min(

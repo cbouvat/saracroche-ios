@@ -28,7 +28,6 @@ class BlockerViewModel: ObservableObject {
   }
 
   func updateBlockerState() {
-    let blockerActionState = sharedUserDefaults.getBlockerActionState()
     let blockedNumbers = sharedUserDefaults.getBlockedNumbers()
     let totalBlockedNumbers = sharedUserDefaults.getTotalBlockedNumbers()
     let blocklistInstalledVersion = sharedUserDefaults.getBlocklistVersion()
@@ -38,43 +37,37 @@ class BlockerViewModel: ObservableObject {
     self.blocklistInstalledVersion = blocklistInstalledVersion
 
     switch blockerActionState {
-    case "update":
-      self.blockerActionState = .update
+    case .update:
       self.showUpdateListSheet = true
       self.showDeleteBlockerSheet = false
       self.showUpdateListFinishedSheet = false
       self.showDeleteFinishedSheet = false
       self.showActionErrorSheet = false
-    case "delete":
-      self.blockerActionState = .delete
+    case .delete:
       self.showDeleteBlockerSheet = true
       self.showUpdateListSheet = false
       self.showUpdateListFinishedSheet = false
       self.showDeleteFinishedSheet = false
       self.showActionErrorSheet = false
-    case "updateFinish":
-      self.blockerActionState = .updateFinish
+    case .updateFinish:
       self.showUpdateListFinishedSheet = true
       self.showDeleteBlockerSheet = false
       self.showUpdateListSheet = false
       self.showDeleteFinishedSheet = false
       self.showActionErrorSheet = false
-    case "deleteFinish":
-      self.blockerActionState = .deleteFinish
+    case .deleteFinish:
       self.showDeleteFinishedSheet = true
       self.showUpdateListSheet = false
       self.showDeleteBlockerSheet = false
       self.showUpdateListFinishedSheet = false
       self.showActionErrorSheet = false
-    case "error":
-      self.blockerActionState = .error
+    case .error:
       self.showActionErrorSheet = true
       self.showUpdateListSheet = false
       self.showDeleteBlockerSheet = false
       self.showUpdateListFinishedSheet = false
       self.showDeleteFinishedSheet = false
     default:
-      self.blockerActionState = .nothing
       self.showUpdateListSheet = false
       self.showDeleteBlockerSheet = false
       self.showUpdateListFinishedSheet = false
@@ -86,10 +79,12 @@ class BlockerViewModel: ObservableObject {
   // MARK: - Actions
   func updateBlockerList() {
     UIApplication.shared.isIdleTimerDisabled = true
-    sharedUserDefaults.setBlockerActionState("update")
-    sharedUserDefaults.setBlocklistVersion(AppConstants.currentBlocklistVersion)
-    sharedUserDefaults.setBlockedNumbers(0)
-    sharedUserDefaults.setTotalBlockedNumbers(phoneNumberService.countAllBlockedNumbers())
+    self.blockerActionState = .update
+    self.sharedUserDefaults.setBlocklistVersion(AppConstants.currentBlocklistVersion)
+    self.sharedUserDefaults.setBlockedNumbers(0)
+    self.sharedUserDefaults.setTotalBlockedNumbers(
+      phoneNumberService.countAllBlockedNumbers()
+    )
     self.updateBlockerState()
 
     callDirectoryService.updateBlockerList(
@@ -108,13 +103,13 @@ class BlockerViewModel: ObservableObject {
 
   func updateBlockerListFinished() {
     UIApplication.shared.isIdleTimerDisabled = false
-    sharedUserDefaults.setBlockerActionState("updateFinish")
+    self.blockerActionState = .updateFinish
     self.updateBlockerState()
   }
 
   func removeBlockerList() {
     UIApplication.shared.isIdleTimerDisabled = true
-    sharedUserDefaults.setBlockerActionState("delete")
+    self.blockerActionState = .delete
     self.updateBlockerState()
 
     callDirectoryService.removeBlockerList(
@@ -133,22 +128,30 @@ class BlockerViewModel: ObservableObject {
 
   func removeBlockerListFinished() {
     UIApplication.shared.isIdleTimerDisabled = false
-    self.sharedUserDefaults.setBlockerActionState("deleteFinish")
+    self.blockerActionState = .deleteFinish
     self.updateBlockerState()
   }
 
   func errorAction() {
     UIApplication.shared.isIdleTimerDisabled = false
-    sharedUserDefaults.setBlockerActionState("error")
-    sharedUserDefaults.clearAction()
+    self.blockerActionState = .error
+    self.sharedUserDefaults.clearAction()
     self.updateBlockerState()
   }
 
   func clearAction() {
     UIApplication.shared.isIdleTimerDisabled = false
-    sharedUserDefaults.clearBlockerActionState()
-    sharedUserDefaults.clearAction()
-    self.checkBlockerExtensionStatus()
+    self.blockerActionState = .nothing
+    self.sharedUserDefaults.clearAction()
+    self.checkExtensionStatusAction()
+  }
+
+  func checkExtensionStatusAction() {
+    self.blockerExtensionStatus = .unknown
+    // Wait 2 seconds to ensure the UI is updated before checking the status
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+      self.checkBlockerExtensionStatus()
+    }
   }
 
   func openSettings() {

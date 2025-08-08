@@ -45,3 +45,7 @@ struct DeleteFinishedSheet: View {
     }
   }
 }
+
+#Preview {
+  DeleteFinishedSheet(viewModel: BlockerViewModel())
+}
