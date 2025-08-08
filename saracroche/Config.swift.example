@@ -1,8 +1,5 @@
 import Foundation
 
 struct Config {
-    // Remplacez par votre URL de serveur
     static let reportServerURL = "https://your-server.example.com/report"
-    
-    // Autres configurations sensibles peuvent être ajoutées ici
 }
