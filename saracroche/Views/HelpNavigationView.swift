@@ -22,7 +22,7 @@ struct HelpNavigationView: View {
                     "ainsi que ceux allant de 09475 à 09479. Ces préfixes sont réservés au démarchage téléphonique. ",
                     "Elle bloque aussi des numéros de téléphone de certains opérateurs comme Manifone, DVS Connect, ",
                     "Ze Telecom, Oxilog, BJT Partners, Ubicentrex, Destiny, Kav El International, ",
-                    "Spartel Services et d'autres."
+                    "Spartel Services et Comunik CRM."
                   ].joined()
                 )
                 .font(.body)
@@ -39,7 +39,6 @@ struct HelpNavigationView: View {
                 .font(.body.weight(.bold))
               }
             )
-
 
             DisclosureGroup(
               content: {
@@ -65,7 +64,6 @@ struct HelpNavigationView: View {
               }
             )
 
-
             DisclosureGroup(
               content: {
                 Text(
@@ -88,7 +86,6 @@ struct HelpNavigationView: View {
                 .font(.body.weight(.bold))
               }
             )
-
 
             DisclosureGroup(
               content: {
@@ -113,7 +110,6 @@ struct HelpNavigationView: View {
                 .font(.body.weight(.bold))
               }
             )
-
 
             DisclosureGroup(
               content: {
@@ -154,7 +150,6 @@ struct HelpNavigationView: View {
               }
             )
 
-
             DisclosureGroup(
               content: {
                 Text(
@@ -178,7 +173,6 @@ struct HelpNavigationView: View {
                 .font(.body.weight(.bold))
               }
             )
-
 
             DisclosureGroup(
               content: {
@@ -215,7 +209,6 @@ struct HelpNavigationView: View {
               }
             )
 
-
             DisclosureGroup(
               content: {
                 Text(
@@ -239,7 +232,6 @@ struct HelpNavigationView: View {
                 .font(.body.weight(.bold))
               }
             )
-
 
             DisclosureGroup(
               content: {
@@ -280,7 +272,6 @@ struct HelpNavigationView: View {
                 .font(.body.weight(.bold))
               }
             )
-
 
             DisclosureGroup(
               content: {
@@ -392,7 +383,6 @@ struct HelpNavigationView: View {
                 .font(.body.weight(.bold))
               }
             )
-
 
             DisclosureGroup(
               content: {

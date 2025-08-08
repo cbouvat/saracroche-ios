@@ -37,9 +37,8 @@ struct UpdateListSheet: View {
           .multilineTextAlignment(.center)
 
         if viewModel.blockerPhoneNumberBlocked == 0 {
-          Text("Démarrage de l'installation de la liste de blocage")
+          Text("Suppression de l'ancienne liste de blocage")
             .font(.body)
-            .padding(.top)
             .multilineTextAlignment(.center)
         } else {
           Text(
@@ -55,21 +54,18 @@ struct UpdateListSheet: View {
         )
         .progressViewStyle(LinearProgressViewStyle(tint: Color("AppColor")))
 
+        Spacer()
+
         Text("Cette action peut prendre plusieurs minutes. Veuillez patienter.")
           .font(.footnote)
           .multilineTextAlignment(.center)
-
-        Spacer()
       }
       .padding()
-      .toolbar {
-        ToolbarItem(placement: .navigationBarTrailing) {
-          Button("Annuler") {
-            viewModel.clearAction()
-          }
-        }
-      }
       .navigationBarTitleDisplayMode(.inline)
     }
   }
+}
+
+#Preview {
+  UpdateListSheet(viewModel: BlockerViewModel())
 }

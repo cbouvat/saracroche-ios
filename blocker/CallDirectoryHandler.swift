@@ -7,6 +7,8 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
     if context.isIncremental {
       incrementalUpdate(to: context)
+    } else {
+      fullUpdate(to: context)
     }
 
     context.completeRequest()
@@ -29,7 +31,15 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     } else {
       print("Unknown action: \(action)")
     }
+
     sharedUserDefaults()?.set("", forKey: "action")
+  }
+
+  private func fullUpdate(
+    to context: CXCallDirectoryExtensionContext
+  ) {
+    // Add fake number to iOS make sure the extension is working
+    context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
   }
 
   private func resetNumbersList(
