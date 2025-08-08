@@ -96,7 +96,7 @@ class ReportViewModel: ObservableObject {
   }
 }
 
-// Extension pour la validation regex
+// Extension for String to match regex
 extension String {
   fileprivate func matches(_ regex: String) -> Bool {
     return self.range(of: regex, options: .regularExpression) != nil
