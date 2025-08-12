@@ -27,55 +27,51 @@ struct ActionErrorSheet: View {
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
 
-        Text("L'opération n'a pas pu être effectuée.")
-          .font(.title2)
-          .multilineTextAlignment(.center)
-          .foregroundColor(.secondary)
+        Spacer()
 
         VStack(alignment: .leading, spacing: 12) {
-          Text("Recommandations :")
-            .font(.headline)
+          Text(
+            "Vérifiez que l'extension de blocage d'appels est activée dans les réglages et attendez quelques minutes avant de réessayer."
+          )
+          .fontWeight(.semibold)
+          .multilineTextAlignment(.leading)
+
+          Text("Si le problème persiste :")
+            .font(.title3)
             .fontWeight(.semibold)
 
-          VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .top, spacing: 10) {
-              Text("•")
-                .fontWeight(.bold)
-              Text(
-                "Vérifiez que l'extension de blocage d'appels est activée dans les réglages"
-              )
+          HStack(alignment: .top, spacing: 10) {
+            Text("1")
+              .fontWeight(.bold)
+            Text("Désactivez Saracroche dans les réglages, si elle apparaît.")
               .multilineTextAlignment(.leading)
-            }
-
-            HStack(alignment: .top, spacing: 10) {
-              Text("•")
-                .fontWeight(.bold)
-              Text("Redémarrez votre appareil si le problème persiste")
-                .multilineTextAlignment(.leading)
-            }
-
-            HStack(alignment: .top, spacing: 10) {
-              Text("•")
-                .fontWeight(.bold)
-              Text("Désinstallez et réinstallez l'application si nécessaire")
-                .multilineTextAlignment(.leading)
-            }
-
-            HStack(alignment: .top, spacing: 10) {
-              Text("•")
-                .fontWeight(.bold)
-              Text("Attendez quelques heures avant de réessayer")
-                .multilineTextAlignment(.leading)
-            }
           }
-          .font(.body)
+
+          HStack(alignment: .top, spacing: 10) {
+            Text("2")
+              .fontWeight(.bold)
+            Text("Désinstallez l'application Saracroche.")
+              .multilineTextAlignment(.leading)
+          }
+
+          HStack(alignment: .top, spacing: 10) {
+            Text("3")
+              .fontWeight(.bold)
+            Text("Redémarrez votre appareil.")
+              .multilineTextAlignment(.leading)
+          }
+
+          HStack(alignment: .top, spacing: 10) {
+            Text("4")
+              .fontWeight(.bold)
+            Text("Réinstallez l'application Saracroche depuis l'App Store.")
+              .multilineTextAlignment(.leading)
+          }
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.systemGray6))
         .cornerRadius(12)
-
-        Spacer()
 
         Button {
           viewModel.openSettings()

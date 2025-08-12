@@ -50,9 +50,9 @@ struct HomeNavigationView: View {
                 .multilineTextAlignment(.center)
 
               Text(
-                "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer " +
-                "Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, " +
-                "il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
+                "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer "
+                  + "Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, "
+                  + "il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
               )
               .font(.body)
               .frame(maxWidth: .infinity, alignment: .center)
@@ -197,8 +197,8 @@ struct HomeNavigationView: View {
                   .fontWeight(.semibold)
 
                 Text(
-                  "Pour bloquer les appels indésirables, installez la liste de blocage " +
-                  "qui contient les numéros à bloquer."
+                  "Pour bloquer les appels indésirables, installez la liste de blocage "
+                    + "qui contient les numéros à bloquer."
                 )
                 .multilineTextAlignment(.center)
                 .font(.body)
@@ -215,7 +215,8 @@ struct HomeNavigationView: View {
                   .fullWidth(background: Color.blue, foreground: .white)
                 )
               } else if viewModel.blocklistVersion
-                != viewModel.blocklistInstalledVersion {
+                != viewModel.blocklistInstalledVersion
+              {
                 Image(
                   systemName: "arrow.clockwise.circle.fill"
                 )
@@ -227,14 +228,14 @@ struct HomeNavigationView: View {
                   .fontWeight(.semibold)
 
                 Text(
-                  "Une nouvelle version de la liste de blocage est disponible. " +
-                  "Vous pouvez l'installer pour bloquer de nouveaux numéros indésirables."
+                  "Une nouvelle version de la liste de blocage est disponible. "
+                    + "Vous pouvez l'installer pour bloquer de nouveaux numéros indésirables."
                 )
                 .font(.body)
 
                 Text(
-                  "Version installée : \(viewModel.blocklistInstalledVersion), " +
-                  "version disponible : \(viewModel.blocklistVersion)"
+                  "Version installée : \(viewModel.blocklistInstalledVersion), "
+                    + "version disponible : \(viewModel.blocklistVersion)"
                 )
                 .font(.footnote)
 
@@ -250,7 +251,8 @@ struct HomeNavigationView: View {
                   .fullWidth(background: Color.red, foreground: .white)
                 )
               } else if viewModel.blockerPhoneNumberBlocked
-                != viewModel.blockerPhoneNumberTotal {
+                != viewModel.blockerPhoneNumberTotal
+              {
                 Image(
                   systemName: "exclamationmark.triangle.fill"
                 )
@@ -312,21 +314,22 @@ struct HomeNavigationView: View {
               && viewModel.blocklistVersion
                 == viewModel.blocklistInstalledVersion
               && viewModel.blockerPhoneNumberBlocked
-                == viewModel.blockerPhoneNumberTotal {
+                == viewModel.blockerPhoneNumberTotal
+            {
               VStack(alignment: .leading, spacing: 16) {
                 HStack {
                   Image(systemName: "heart.fill")
                     .font(.system(size: 20))
                     .foregroundColor(.red)
 
-                  Text("Application gratuite et open-source")
+                  Text("Application gratuite et open source")
                     .font(.headline)
                     .fontWeight(.semibold)
                 }
 
                 Text(
-                  "Saracroche est une application entièrement gratuite et open-source. " +
-                  "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
+                  "Saracroche est une application entièrement gratuite et open source. "
+                    + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
                 )
                 .font(.body)
 

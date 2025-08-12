@@ -6,7 +6,7 @@ struct SettingsNavigationView: View {
   var body: some View {
     NavigationView {
       Form {
-        Section(header: Text("Configuration système")) {
+        Section {
           Button {
             viewModel.openSettings()
           } label: {
@@ -15,7 +15,7 @@ struct SettingsNavigationView: View {
               systemImage: "gearshape.fill"
             )
           }
-
+          
           Button {
             viewModel.updateBlockerList()
           } label: {
@@ -24,7 +24,7 @@ struct SettingsNavigationView: View {
               systemImage: "arrow.clockwise.circle.fill"
             )
           }
-
+          
           Button(role: .destructive) {
             showDeleteConfirmation = true
           } label: {
@@ -45,9 +45,30 @@ struct SettingsNavigationView: View {
           } message: {
             Text("Êtes-vous sûr de vouloir supprimer la liste de blocage ?")
           }
+        } header: {
+          Text("Configuration")
         }
 
-        Section(header: Text("Liens utiles")) {
+        Section {
+          Button {
+            if let url = URL(string: "https://cbouvat.com/saracroche") {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Site officiel", systemImage: "safari.fill")
+          }
+
+          Button {
+            if let url = URL(
+              string:
+                "https://apps.apple.com/app/id6743679292?action=write-review"
+            ) {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Noter l'application", systemImage: "star.fill")
+          }
+
           Button {
             if let url = URL(
               string: "https://github.com/cbouvat/saracroche-ios"
@@ -59,35 +80,6 @@ struct SettingsNavigationView: View {
               "Code source",
               systemImage: "keyboard.fill"
             )
-          }
-
-          Button {
-            if let url = URL(string: "https://cbouvat.com/saracroche") {
-              UIApplication.shared.open(url)
-            }
-          } label: {
-            Label("Site officiel", systemImage: "safari.fill")
-          }
-
-          Button {
-            if let url = URL(string: "https://mastodon.social/@cbouvat") {
-              UIApplication.shared.open(url)
-            }
-          } label: {
-            Label("Mastodon : @cbouvat", systemImage: "person.bubble.fill")
-          }
-        }
-
-        Section(header: Text("Application")) {
-          Button {
-            if let url = URL(
-              string:
-                "https://apps.apple.com/app/id6743679292?action=write-review"
-            ) {
-              UIApplication.shared.open(url)
-            }
-          } label: {
-            Label("Noter l'application", systemImage: "star.fill")
           }
 
           Button {
@@ -106,11 +98,9 @@ struct SettingsNavigationView: View {
               let body = """
                 Bonjour,
 
-                Je souhaite signaler un problème ou faire une suggestion concernant l'application :
+                (Votre message ici)
 
                 \(deviceInfo)
-
-                Bisou 😘
                 """
 
               let encodedBody =
@@ -126,22 +116,37 @@ struct SettingsNavigationView: View {
             }
           } label: {
             Label(
-              "Signaler un bug ou suggérer une amélioration",
+              "Contactez le développeur",
               systemImage: "exclamationmark.bubble.fill"
             )
           }
-        }
 
-        Section(
-          footer:
-            Text(
-              "Version de l'application : \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
-            )
-            .font(.footnote)
-            .frame(maxWidth: .infinity, alignment: .center)
-        ) { EmptyView() }
+          Button {
+            if let url = URL(string: "https://mastodon.social/@cbouvat") {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Mastodon : @cbouvat", systemImage: "person.bubble.fill")
+          }
+        }
+        header: {
+          Text("Liens")
+        }
+        footer: {
+          Text(
+            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+          )
+          .padding(.vertical)
+        }
       }
       .navigationTitle("Réglages")
     }
   }
+}
+
+#Preview {
+  SettingsNavigationView(
+    viewModel: BlockerViewModel(),
+    showDeleteConfirmation: .constant(false)
+  )
 }

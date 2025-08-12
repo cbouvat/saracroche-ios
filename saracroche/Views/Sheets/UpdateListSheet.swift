@@ -8,11 +8,6 @@ struct UpdateListSheet: View {
       VStack(alignment: .center, spacing: 16) {
         Spacer()
 
-        Text("Garder l'application ouverte")
-          .font(.title)
-          .fontWeight(.bold)
-          .multilineTextAlignment(.center)
-
         if #available(iOS 18.0, *) {
           Image(
             systemName: "gearshape.arrow.trianglehead.2.clockwise.rotate.90"
@@ -20,7 +15,7 @@ struct UpdateListSheet: View {
           .font(.system(size: 100))
           .symbolEffect(
             .rotate.clockwise.byLayer,
-            options: .repeat(.periodic(delay: 2.0))
+            options: .repeat(.periodic(delay: 3.0))
           )
           .foregroundColor(.app)
         } else {
@@ -32,7 +27,7 @@ struct UpdateListSheet: View {
         }
 
         Text("Installation de la liste de blocage")
-          .font(.title2)
+          .font(.title)
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
 
@@ -56,7 +51,12 @@ struct UpdateListSheet: View {
 
         Spacer()
 
-        Text("Cette action peut prendre plusieurs minutes. Veuillez patienter.")
+        Text("Gardez l'application ouverte")
+          .font(.title3)
+          .fontWeight(.bold)
+          .multilineTextAlignment(.center)
+
+        Text("Cette action peut prendre plusieurs minutes.\nVeuillez patienter.")
           .font(.footnote)
           .multilineTextAlignment(.center)
       }

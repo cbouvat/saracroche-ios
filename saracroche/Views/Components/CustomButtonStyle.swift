@@ -22,7 +22,7 @@ struct CustomButtonStyle: ButtonStyle {
       }
     }
     .frame(maxWidth: .infinity)
-    .frame(height: 50)
+    .frame(height: 48)
     .background(background)
     .foregroundColor(foreground)
     .font(.body.weight(.bold))

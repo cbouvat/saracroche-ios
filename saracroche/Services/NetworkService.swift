@@ -108,7 +108,8 @@ class NetworkService {
   private func extractErrorMessage(from data: Data) -> String? {
     // Try to decode JSON error response
     if let json = try? JSONSerialization.jsonObject(with: data)
-      as? [String: Any] {
+      as? [String: Any]
+    {
       // Common error message keys
       if let message = json["message"] as? String {
         return message

@@ -8,14 +8,9 @@ struct DeleteBlockerSheet: View {
       VStack(alignment: .center, spacing: 16) {
         Spacer()
 
-        Text("Gardez l'application ouverte")
-          .font(.title)
-          .fontWeight(.bold)
-          .multilineTextAlignment(.center)
-
         if #available(iOS 18.0, *) {
           Image(systemName: "trash.fill")
-            .font(.system(size: 100))
+            .font(.system(size: 80))
             .symbolEffect(
               .wiggle.clockwise.byLayer,
               options: .repeat(.periodic(delay: 1.0))
@@ -23,22 +18,28 @@ struct DeleteBlockerSheet: View {
             .foregroundColor(.red)
         } else {
           Image(systemName: "trash.fill")
-            .font(.system(size: 100))
+            .font(.system(size: 80))
             .foregroundColor(.red)
         }
 
         Text("Suppression de la liste de blocage")
-          .font(.title2)
+          .font(.title)
+          .fontWeight(.bold)
+          .multilineTextAlignment(.center)
+
+        Spacer()
+
+        Text("Gardez l'application ouverte")
+          .font(.title3)
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
 
         Text(
-          "Cette action peut prendre plusieurs secondes. Veuillez patienter."
+          "Cette action peut prendre plusieurs secondes.\nVeuillez patienter."
         )
         .font(.footnote)
         .multilineTextAlignment(.center)
 
-        Spacer()
       }
       .padding()
     }
