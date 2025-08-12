@@ -10,28 +10,31 @@ struct DonationSheet: View {
           VStack(spacing: 16) {
             if #available(iOS 18.0, *) {
               Image(systemName: "heart.fill")
-                .font(.system(size: 48))
+                .font(.system(size: 60))
                 .foregroundColor(.pink)
-                .symbolEffect(.pulse, options: .repeating)
+                .symbolEffect(.breathe.pulse.byLayer, options: .repeat(.continuous))
             } else {
               Image(systemName: "heart.fill")
-                .font(.system(size: 48))
+                .font(.system(size: 60))
                 .foregroundColor(.pink)
             }
 
             Text("Soutenez Saracroche")
-              .font(.title2)
+              .font(.title)
               .fontWeight(.bold)
               .multilineTextAlignment(.center)
           }
 
+          Spacer()
+
           VStack(alignment: .leading, spacing: 16) {
             Text(
-              "Saracroche est développée bénévolement par Camille sur son temps libre. " +
-              "Votre don l'aide à consacrer plus de temps à l'amélioration de l'app " +
-              "et au maintien des listes de blocage."
+              "Saracroche est développée bénévolement par Camille sur son temps libre. "
+                + "Votre don et votre note l'aide à consacrer plus de temps à l'amélioration de l'application "
+                + "et au maintien des listes de blocage."
             )
             .font(.body)
+            .multilineTextAlignment(.leading)
 
             Text("Pourquoi donner ?")
               .font(.headline)
@@ -40,7 +43,7 @@ struct DonationSheet: View {
             VStack(alignment: .leading, spacing: 8) {
               DonationBenefitRow(
                 icon: "curlybraces.square.fill",
-                title: "Projet open-source",
+                title: "Projet open source",
                 description: "Code source ouvert et transparent"
               )
 
@@ -88,7 +91,7 @@ struct DonationSheet: View {
               }
             }
             .buttonStyle(
-              .fullWidth(background: Color.blue, foreground: .white)
+              .fullWidth(background: .blue, foreground: .white)
             )
 
             Button {
@@ -102,7 +105,7 @@ struct DonationSheet: View {
               }
             }
             .buttonStyle(
-              .fullWidth(background: Color.black, foreground: .white)
+              .fullWidth(background: .black, foreground: .white)
             )
 
             Button {
@@ -116,7 +119,21 @@ struct DonationSheet: View {
               }
             }
             .buttonStyle(
-              .fullWidth(background: Color.yellow, foreground: .black)
+              .fullWidth(background: .yellow, foreground: .black)
+            )
+
+            Button {
+              if let url = URL(
+                string:
+                  "https://apps.apple.com/app/id6743679292?action=write-review"
+              ) {
+                UIApplication.shared.open(url)
+              }
+            } label: {
+              Label("Noter l'application", systemImage: "star.fill")
+            }
+            .buttonStyle(
+              .fullWidth(background: .pink, foreground: .white)
             )
           }
         }
@@ -143,7 +160,7 @@ struct DonationBenefitRow: View {
     HStack(alignment: .center, spacing: 12) {
       Image(systemName: icon)
         .font(.system(size: 20))
-        .foregroundColor(.app)
+        .foregroundColor(.accent)
         .frame(width: 24)
 
       VStack(alignment: .leading, spacing: 4) {

@@ -8,11 +8,6 @@ struct DeleteFinishedSheet: View {
       VStack(alignment: .center, spacing: 16) {
         Spacer()
 
-        Text("Terminé")
-          .font(.title)
-          .fontWeight(.bold)
-          .multilineTextAlignment(.center)
-
         if #available(iOS 18.0, *) {
           Image(systemName: "checkmark.circle.fill")
             .font(.system(size: 100))
@@ -27,8 +22,13 @@ struct DeleteFinishedSheet: View {
             .foregroundColor(Color.green)
         }
 
+        Text("Terminé")
+          .font(.title)
+          .fontWeight(.bold)
+          .multilineTextAlignment(.center)
+
         Text("La liste de blocage a été supprimée avec succès")
-          .font(.title2)
+          .font(.title3)
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
 
