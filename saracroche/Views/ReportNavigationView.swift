@@ -72,11 +72,10 @@ struct ReportNavigationView: View {
           .padding(.vertical, 6)
         } header: {
           Text("Signaler un numéro")
-        }
-        footer: {
+        } footer: {
           Text(
             "Signaler un numéro, contribue à améliorer la liste de "
-            + "blocage et à rendre l'application plus efficace."
+              + "blocage et à rendre l'application plus efficace."
           )
         }
       }

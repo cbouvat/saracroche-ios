@@ -12,7 +12,7 @@ struct DonationSheet: View {
               Image(systemName: "heart.fill")
                 .font(.system(size: 60))
                 .foregroundColor(.pink)
-                .symbolEffect(.breathe.pulse.byLayer, options: .repeat(.continuous))
+                .symbolEffect(.bounce.down.byLayer, options: .repeat(.periodic(delay: 0.5)))
             } else {
               Image(systemName: "heart.fill")
                 .font(.system(size: 60))
@@ -25,16 +25,15 @@ struct DonationSheet: View {
               .multilineTextAlignment(.center)
           }
 
-          Spacer()
-
           VStack(alignment: .leading, spacing: 16) {
             Text(
-              "Saracroche est développée bénévolement par Camille sur son temps libre. "
-                + "Votre don et votre note l'aide à consacrer plus de temps à l'amélioration de l'application "
-                + "et au maintien des listes de blocage."
+              "Saracroche est développée bénévolement par Camille sur son temps libre. Vos dons lui permettent d’améliorer l’application et de maintenir les listes de blocage à jour. "
+                + "Une note sur le store, ça fait toujours plaisir et aide beaucoup !"
             )
             .font(.body)
             .multilineTextAlignment(.leading)
+
+            Spacer()
 
             Text("Pourquoi donner ?")
               .font(.headline)
@@ -81,12 +80,26 @@ struct DonationSheet: View {
 
           VStack(spacing: 16) {
             Button {
+              if let url = URL(string: "https://buy.stripe.com/9B6aEXcJ8flofsgfIU2oE01") {
+                UIApplication.shared.open(url)
+              }
+            } label: {
+              HStack {
+                Image(systemName: "creditcard.fill")
+                Text("Carte Bancaire & Apple Pay")
+              }
+            }
+            .buttonStyle(
+              .fullWidth(background: .indigo, foreground: .white)
+            )
+
+            Button {
               if let url = URL(string: "https://paypal.me/cbouvat") {
                 UIApplication.shared.open(url)
               }
             } label: {
               HStack {
-                Image(systemName: "heart.fill")
+                Image(systemName: "wallet.bifold.fill")
                 Text("PayPal")
               }
             }
@@ -94,33 +107,35 @@ struct DonationSheet: View {
               .fullWidth(background: .blue, foreground: .white)
             )
 
-            Button {
-              if let url = URL(string: "https://github.com/sponsors/cbouvat") {
-                UIApplication.shared.open(url)
+            HStack(spacing: 12) {
+              Button {
+                if let url = URL(string: "https://github.com/sponsors/cbouvat") {
+                  UIApplication.shared.open(url)
+                }
+              } label: {
+                HStack {
+                  Text("GitHub")
+                }
               }
-            } label: {
-              HStack {
-                Image(systemName: "heart.fill")
-                Text("GitHub Sponsors")
-              }
-            }
-            .buttonStyle(
-              .fullWidth(background: .black, foreground: .white)
-            )
+              .buttonStyle(
+                .fullWidth(background: .black, foreground: .white)
+              )
 
-            Button {
-              if let url = URL(string: "https://liberapay.com/cbouvat") {
-                UIApplication.shared.open(url)
+              Button {
+                if let url = URL(string: "https://liberapay.com/cbouvat") {
+                  UIApplication.shared.open(url)
+                }
+              } label: {
+                HStack {
+                  Text("Liberapay")
+                }
               }
-            } label: {
-              HStack {
-                Image(systemName: "heart.fill")
-                Text("Liberapay")
-              }
+              .buttonStyle(
+                .fullWidth(background: .yellow, foreground: .black)
+              )
             }
-            .buttonStyle(
-              .fullWidth(background: .yellow, foreground: .black)
-            )
+
+            Spacer()
 
             Button {
               if let url = URL(
@@ -130,7 +145,7 @@ struct DonationSheet: View {
                 UIApplication.shared.open(url)
               }
             } label: {
-              Label("Noter l'application", systemImage: "star.fill")
+              Label("Noter l'application", systemImage: "star.bubble.fill")
             }
             .buttonStyle(
               .fullWidth(background: .pink, foreground: .white)

@@ -15,7 +15,7 @@ struct SettingsNavigationView: View {
               systemImage: "gearshape.fill"
             )
           }
-          
+
           Button {
             viewModel.updateBlockerList()
           } label: {
@@ -24,7 +24,7 @@ struct SettingsNavigationView: View {
               systemImage: "arrow.clockwise.circle.fill"
             )
           }
-          
+
           Button(role: .destructive) {
             showDeleteConfirmation = true
           } label: {
@@ -128,15 +128,15 @@ struct SettingsNavigationView: View {
           } label: {
             Label("Mastodon : @cbouvat", systemImage: "person.bubble.fill")
           }
-        }
-        header: {
+        } header: {
           Text("Liens")
-        }
-        footer: {
+        } footer: {
           Text(
             "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
           )
           .padding(.vertical)
+          .frame(maxWidth: .infinity)
+          .multilineTextAlignment(.center)
         }
       }
       .navigationTitle("Réglages")
