@@ -87,18 +87,6 @@ struct HomeNavigationView: View {
                 .font(.title3)
                 .bold()
                 .multilineTextAlignment(.center)
-
-              Button {
-                viewModel.checkExtensionStatusAction()
-              } label: {
-                HStack {
-                  Image(systemName: "arrow.clockwise")
-                  Text("Vérifier le bloqueur")
-                }
-              }
-              .buttonStyle(
-                .fullWidth(background: Color.orange, foreground: .white)
-              )
             } else if viewModel.blockerExtensionStatus == .error {
               if #available(iOS 18.0, *) {
                 Image(systemName: "xmark.octagon.fill")
@@ -173,15 +161,6 @@ struct HomeNavigationView: View {
                   : Color.red.opacity(0.15)
               )
           )
-          .overlay(
-            RoundedRectangle(cornerRadius: 16)
-              .stroke(
-                viewModel.blockerExtensionStatus == .enabled
-                  ? Color.green.opacity(0.5)
-                  : Color.red.opacity(0.5),
-                lineWidth: 1
-              )
-          )
 
           if viewModel.blockerExtensionStatus == .enabled {
             VStack(alignment: .center, spacing: 16) {
@@ -234,10 +213,10 @@ struct HomeNavigationView: View {
                 .font(.body)
 
                 Text(
-                  "Version installée : \(viewModel.blocklistInstalledVersion), "
-                    + "version disponible : \(viewModel.blocklistVersion)"
+                  "Version \(viewModel.blocklistInstalledVersion) installée, "
+                    + "version \(viewModel.blocklistVersion) disponible."
                 )
-                .font(.footnote)
+                .font(.body)
 
                 Button {
                   viewModel.updateBlockerList()
@@ -294,20 +273,22 @@ struct HomeNavigationView: View {
                 .fontWeight(.semibold)
 
                 Text(
-                  "Version de la liste de blocage : \(viewModel.blocklistVersion)"
+                  "Version \(viewModel.blocklistVersion) de la liste de blocage"
                 )
-                .font(.footnote)
+                .font(.body)
+
+                Text(
+                  "Les appels bloqués apparaîtront dans le journal d'appels indiquant qu'ils ont été bloqués par Saracroche."
+                )
+                .font(.caption2)
+                .multilineTextAlignment(.center)
               }
             }
             .padding()
             .frame(maxWidth: .infinity)
             .background(
               RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.2))
-            )
-            .overlay(
-              RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .fill(Color.gray.opacity(0.1))
             )
 
             if viewModel.blockerPhoneNumberBlocked > 0
@@ -346,14 +327,10 @@ struct HomeNavigationView: View {
                 )
               }
               .padding()
-              .frame(maxWidth: .infinity, alignment: .leading)
+              .frame(maxWidth: .infinity)
               .background(
                 RoundedRectangle(cornerRadius: 16)
                   .fill(Color.gray.opacity(0.1))
-              )
-              .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                  .stroke(Color.gray.opacity(0.3), lineWidth: 1)
               )
             }
           }

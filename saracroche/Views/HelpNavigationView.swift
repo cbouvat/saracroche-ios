@@ -160,7 +160,7 @@ private struct HelpFAQTroubleshootingItem: View {
                 .multilineTextAlignment(.leading)
             }
           }
-          
+
           Text(
             "Si malgré tout le problème perdure, signalez-le."
           )
@@ -429,7 +429,7 @@ private struct SupportItem: View {
   var body: some View {
     VStack(spacing: 16) {
       Text(
-        "En cas de bug ou de problème avec l'application, vous pouvez contacter par :"
+        "Vous avez besoin d'aide ?"
       )
       .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -468,10 +468,10 @@ private struct SupportItem: View {
       } label: {
         HStack {
           Image(systemName: "envelope.fill")
-          Text("Contacter par e-mail")
+          Text("Envoyer un e-mail")
         }
       }
-      .buttonStyle(.fullWidth(background: .red, foreground: .white))
+      .buttonStyle(.fullWidth(background: .app, foreground: .black))
 
       Button {
         if let url = URL(string: "https://github.com/cbouvat/saracroche-ios/issues") {
@@ -480,10 +480,10 @@ private struct SupportItem: View {
       } label: {
         HStack {
           Image(systemName: "exclamationmark.bubble.fill")
-          Text("Une issue sur GitHub")
+          Text("Créer une issue sur GitHub")
         }
       }
-      .buttonStyle(.fullWidth(background: .gray, foreground: .white))
+      .buttonStyle(.fullWidth(background: .black, foreground: .white))
     }
     .padding(.vertical, 6)
   }
