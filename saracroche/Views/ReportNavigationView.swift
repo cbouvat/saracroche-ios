@@ -6,7 +6,7 @@ struct ReportNavigationView: View {
 
   var body: some View {
     NavigationView {
-      Form {
+      List {
         Section {
           VStack(spacing: 16) {
             Text(
@@ -20,11 +20,10 @@ struct ReportNavigationView: View {
               .textInputAutocapitalization(.never)
               .autocorrectionDisabled(true)
               .padding(12)
-              .font(.title3)
               .background(Color(.systemBackground))
-              .cornerRadius(10)
+              .cornerRadius(12)
               .overlay(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 12)
                   .stroke(
                     isPhoneFieldFocused
                       ? Color("AppColor") : Color(.systemGray4),
@@ -67,6 +66,7 @@ struct ReportNavigationView: View {
                 isLoading: viewModel.isLoading
               )
             )
+            .disabled(viewModel.isLoading)
             .accessibilityLabel("Bouton d'envoi du signalement")
           }
           .padding(.vertical, 6)
