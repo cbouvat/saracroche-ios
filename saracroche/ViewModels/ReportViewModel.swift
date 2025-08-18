@@ -4,7 +4,6 @@ import SwiftUI
 @MainActor
 class ReportViewModel: ObservableObject {
   @Published var phoneNumber: String = ""
-  @Published var isLoading: Bool = false
   @Published var showAlert: Bool = false
   @Published var alertMessage: String = ""
   @Published var alertType: AlertType = .info
@@ -24,9 +23,10 @@ class ReportViewModel: ObservableObject {
   private let networkService = NetworkService()
 
   func submitPhoneNumber() async {
-    guard validatePhoneNumber() else { return }
+    // Formater le numéro avant validation
+    phoneNumber = formatPhoneNumber(phoneNumber)
 
-    isLoading = true
+    guard validatePhoneNumber() else { return }
 
     do {
       try await networkService.reportPhoneNumber(phoneNumber)
@@ -34,8 +34,6 @@ class ReportViewModel: ObservableObject {
     } catch {
       handleError(error)
     }
-
-    isLoading = false
   }
 
   private func validatePhoneNumber() -> Bool {

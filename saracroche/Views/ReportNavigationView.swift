@@ -6,7 +6,7 @@ struct ReportNavigationView: View {
 
   var body: some View {
     NavigationView {
-      List {
+      Form {
         Section {
           VStack(spacing: 16) {
             Text(
@@ -31,25 +31,13 @@ struct ReportNavigationView: View {
                   )
               )
               .focused($isPhoneFieldFocused)
-              .disabled(viewModel.isLoading)
-              .onChange(of: viewModel.phoneNumber) { newValue in
-                viewModel.phoneNumber = viewModel.formatPhoneNumber(newValue)
-              }
-              .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                  Spacer()
-                  Button("Terminé") {
-                    isPhoneFieldFocused = false
-                  }
-                  .font(.body.weight(.bold))
-                }
-              }
               .accessibilityLabel("Champ de saisie du numéro de téléphone")
               .accessibilityHint(
                 "Saisissez le numéro au format E.164, par exemple +33612345678"
               )
 
             Button {
+              if isPhoneFieldFocused { isPhoneFieldFocused = false }
               Task {
                 await viewModel.submitPhoneNumber()
               }
@@ -62,11 +50,9 @@ struct ReportNavigationView: View {
             .buttonStyle(
               .fullWidth(
                 background: Color("AppColor"),
-                foreground: .black,
-                isLoading: viewModel.isLoading
+                foreground: .black
               )
             )
-            .disabled(viewModel.isLoading)
             .accessibilityLabel("Bouton d'envoi du signalement")
           }
           .padding(.vertical, 6)
@@ -80,14 +66,21 @@ struct ReportNavigationView: View {
         }
       }
       .navigationTitle("Signaler")
+      .toolbar {
+        ToolbarItemGroup(placement: .keyboard) {
+          Spacer()
+          Button("Terminé") {
+            isPhoneFieldFocused = false
+          }
+          .font(.body.weight(.bold))
+        }
+      }
       .alert(viewModel.alertType.title, isPresented: $viewModel.showAlert) {
         Button("OK", role: .cancel) {}
       } message: {
         Text(viewModel.alertMessage)
       }
-      .onTapGesture {
-        isPhoneFieldFocused = false
-      }
+
     }
   }
 }
