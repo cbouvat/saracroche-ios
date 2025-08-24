@@ -15,9 +15,7 @@ KISS (Keep It Simple, Stupid) principles are followed to ensure clarity and main
 - Target iOS 15 and above
 - Use SwiftUI for all UI components
 - SwiftUI exclusively for UI
-- 2 spaces indentation (no tabs)
-- Max 120 characters per line when possible
-- English comments for complex logic
+- English comments
 
 ### Architecture
 - MVVM pattern
