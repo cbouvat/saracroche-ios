@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SettingsNavigationView: View {
   @ObservedObject var viewModel: BlockerViewModel
-  @Binding var showDeleteConfirmation: Bool
+  @State private var showDeleteConfirmation = false
+  
   var body: some View {
     NavigationView {
       Form {
@@ -11,7 +12,7 @@ struct SettingsNavigationView: View {
             viewModel.openSettings()
           } label: {
             Label(
-              "L’extension de blocage dans Réglages de l'iPhone",
+              "Activer ou désactiver Saracroche dans **Réglages**",
               systemImage: "gearshape.fill"
             )
           }
@@ -51,29 +52,23 @@ struct SettingsNavigationView: View {
 
         Section {
           Button {
-            if let url = URL(
-              string:
-                "https://saracroche.org/fr/help/"
-            ) {
+            if let url = URL(string: "https://cbouvat.com/saracroche/help/") {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Aide et FAQ", systemImage: "questionmark.circle.fill")
+            Label("Aide & FAQ", systemImage: "questionmark.circle.fill")
           }
 
           Button {
-            if let url = URL(
-              string:
-                "https://saracroche.org/fr/privacy/"
-            ) {
+            if let url = URL(string: "https://cbouvat.com/saracroche/privacy/") {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Confidentialité", systemImage: "shield.fill")
+            Label("Confidentialité", systemImage: "lock.shield.fill")
           }
 
           Button {
-            if let url = URL(string: "https://saracroche.org/") {
+            if let url = URL(string: "https://cbouvat.com/saracroche") {
               UIApplication.shared.open(url)
             }
           } label: {
@@ -139,8 +134,8 @@ struct SettingsNavigationView: View {
             }
           } label: {
             Label(
-              "Contacter par e-mail",
-              systemImage: "exclamationmark.bubble.fill"
+              "Signaler un bug ou suggérer une fonctionnalité par e-mail",
+              systemImage: "envelope.fill"
             )
           }
 
@@ -149,13 +144,14 @@ struct SettingsNavigationView: View {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Mastodon", systemImage: "person.bubble.fill")
+            Label("Mastodon @cbouvat", systemImage: "person.bubble.fill")
           }
         } header: {
           Text("Contact")
         } footer: {
           Text(
-            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")\n\nBisou 😘"
+            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+            + "\n\n\nBisou 😘"
           )
           .padding(.vertical)
           .frame(maxWidth: .infinity)
@@ -169,7 +165,6 @@ struct SettingsNavigationView: View {
 
 #Preview {
   SettingsNavigationView(
-    viewModel: BlockerViewModel(),
-    showDeleteConfirmation: .constant(false)
+    viewModel: BlockerViewModel()
   )
 }

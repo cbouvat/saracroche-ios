@@ -29,7 +29,7 @@ struct DeleteBlockerSheet: View {
 
         Spacer()
 
-        Text("Gardez l'application ouverte")
+        Text("Gardez l'application ouverte au premier plan")
           .font(.title3)
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
