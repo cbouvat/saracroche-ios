@@ -2,8 +2,8 @@ import SwiftUI
 
 struct HomeNavigationView: View {
   @ObservedObject var viewModel: BlockerViewModel
-  @Environment(\.scenePhase) private var scenePhase
   @State private var showDonationSheet = false
+  @State private var showHelpSheet = false
 
   var body: some View {
     NavigationView {
@@ -282,6 +282,18 @@ struct HomeNavigationView: View {
                 )
                 .font(.caption2)
                 .multilineTextAlignment(.center)
+
+                Button {
+                  showHelpSheet = true
+                } label: {
+                  HStack {
+                    Image(systemName: "questionmark.circle.fill")
+                    Text("En savoir plus sur le blocage")
+                  }
+                }
+                .buttonStyle(
+                  .fullWidth(background: Color.blue, foreground: .white)
+                )
               }
             }
             .padding()
@@ -341,10 +353,8 @@ struct HomeNavigationView: View {
       .sheet(isPresented: $showDonationSheet) {
         DonationSheet()
       }
-      .onChange(of: scenePhase) { newPhase in
-        if newPhase == .active {
-          viewModel.checkBlockerExtensionStatus()
-        }
+      .sheet(isPresented: $showHelpSheet) {
+        HelpSheet()
       }
     }
   }

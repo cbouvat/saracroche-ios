@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SettingsNavigationView: View {
   @ObservedObject var viewModel: BlockerViewModel
-  @Binding var showDeleteConfirmation: Bool
+  @State private var showDeleteConfirmation = false
+  
   var body: some View {
     NavigationView {
       Form {
@@ -11,7 +12,7 @@ struct SettingsNavigationView: View {
             viewModel.openSettings()
           } label: {
             Label(
-              "L’extension de blocage dans Réglages de l'iPhone",
+              "Activer ou désactiver Saracroche dans **Réglages**",
               systemImage: "gearshape.fill"
             )
           }
@@ -51,6 +52,22 @@ struct SettingsNavigationView: View {
 
         Section {
           Button {
+            if let url = URL(string: "https://cbouvat.com/saracroche/help/") {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Aide & FAQ", systemImage: "questionmark.circle.fill")
+          }
+
+          Button {
+            if let url = URL(string: "https://cbouvat.com/saracroche/privacy/") {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Confidentialité", systemImage: "lock.shield.fill")
+          }
+
+          Button {
             if let url = URL(string: "https://cbouvat.com/saracroche") {
               UIApplication.shared.open(url)
             }
@@ -81,7 +98,11 @@ struct SettingsNavigationView: View {
               systemImage: "keyboard.fill"
             )
           }
+        } header: {
+          Text("Liens")
+        }
 
+        Section {
           Button {
             if let version = Bundle.main.infoDictionary?[
               "CFBundleShortVersionString"
@@ -108,7 +129,7 @@ struct SettingsNavigationView: View {
                   withAllowedCharacters: .urlQueryAllowed
                 ) ?? ""
               let urlString =
-                "mailto:saracroche@cbouvat.com?subject=Contact%20-%20Saracroche%20iOS&body="
+                "mailto:mail@cbouvat.com?subject=Contact%20-%20Saracroche%20iOS&body="
                 + encodedBody
               if let url = URL(string: urlString) {
                 UIApplication.shared.open(url)
@@ -116,8 +137,8 @@ struct SettingsNavigationView: View {
             }
           } label: {
             Label(
-              "Contactez le développeur",
-              systemImage: "exclamationmark.bubble.fill"
+              "Signaler un bug ou suggérer une fonctionnalité par e-mail",
+              systemImage: "envelope.fill"
             )
           }
 
@@ -126,13 +147,14 @@ struct SettingsNavigationView: View {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Mastodon : @cbouvat", systemImage: "person.bubble.fill")
+            Label("Mastodon @cbouvat", systemImage: "person.bubble.fill")
           }
         } header: {
-          Text("Liens")
+          Text("Contact")
         } footer: {
           Text(
             "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+            + "\n\n\nBisou 😘"
           )
           .padding(.vertical)
           .frame(maxWidth: .infinity)
@@ -146,7 +168,6 @@ struct SettingsNavigationView: View {
 
 #Preview {
   SettingsNavigationView(
-    viewModel: BlockerViewModel(),
-    showDeleteConfirmation: .constant(false)
+    viewModel: BlockerViewModel()
   )
 }

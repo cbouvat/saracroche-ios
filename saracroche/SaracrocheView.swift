@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SaracrocheView: View {
   @StateObject private var viewModel = BlockerViewModel()
-  @State private var showDeleteConfirmation = false
+  @Environment(\.scenePhase) private var scenePhase
+  @State private var lastScenePhase: ScenePhase = .active
 
   var body: some View {
     TabView {
@@ -14,17 +15,10 @@ struct SaracrocheView: View {
         .tabItem {
           Label("Signaler", systemImage: "exclamationmark.bubble.fill")
         }
-      HelpNavigationView()
+      SettingsNavigationView(viewModel: viewModel)
         .tabItem {
-          Label("Aide", systemImage: "questionmark.circle.fill")
+          Label("Réglages", systemImage: "gearshape.fill")
         }
-      SettingsNavigationView(
-        viewModel: viewModel,
-        showDeleteConfirmation: $showDeleteConfirmation
-      )
-      .tabItem {
-        Label("Réglages", systemImage: "gearshape.fill")
-      }
     }
     .sheet(isPresented: $viewModel.showUpdateListSheet) {
       UpdateListSheet(viewModel: viewModel)
@@ -45,6 +39,15 @@ struct SaracrocheView: View {
     .sheet(isPresented: $viewModel.showActionErrorSheet) {
       ActionErrorSheet(viewModel: viewModel)
         .interactiveDismissDisabled(true)
+    }
+    .onAppear {
+      viewModel.checkBlockerExtensionStatus()
+    }
+    .onChange(of: scenePhase) { newPhase in
+      if newPhase == .active && (lastScenePhase == .inactive || lastScenePhase == .background) {
+        viewModel.checkBlockerExtensionStatus()
+      }
+      lastScenePhase = newPhase
     }
   }
 }
