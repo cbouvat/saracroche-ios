@@ -54,8 +54,8 @@ class NetworkService {
     request.setValue("application/json", forHTTPHeaderField: "Accept")
 
     let requestData = await ReportRequest(
-      phone: phone,
-      device_id: UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
+      number: phoneNumber,
+      deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
     )
 
     do {
@@ -131,6 +131,6 @@ class NetworkService {
 }
 
 private struct ReportRequest: Codable {
-  let phone: Int64
-  let device_id: String
+  let number: String
+  let deviceId: String
 }
