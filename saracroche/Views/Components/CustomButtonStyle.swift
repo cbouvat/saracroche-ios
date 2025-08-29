@@ -14,7 +14,7 @@ struct CustomButtonStyle: ButtonStyle {
       configuration.label
     }
     .frame(maxWidth: .infinity)
-    .frame(height: 48)
+    .padding(12)
     .background(background)
     .foregroundColor(foreground)
     .font(.body.weight(.bold))
