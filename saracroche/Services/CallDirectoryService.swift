@@ -8,6 +8,7 @@ class CallDirectoryService {
 
   private let manager = CXCallDirectoryManager.sharedInstance
   private let sharedUserDefaults = SharedUserDefaultsService.shared
+  private let userDefaults = UserDefaultsService.shared
   private let phoneNumberService = PhoneNumberService.shared
 
   private init() {}
@@ -52,11 +53,14 @@ class CallDirectoryService {
 
   // MARK: - Reload Extension
   func reloadExtension(completion: @escaping (Bool) -> Void) {
-    manager.reloadExtension(
-      withIdentifier: AppConstants.callDirectoryExtensionIdentifier
-    ) { error in
-      DispatchQueue.main.async {
-        completion(error == nil)
+    // Add a millisecond delay before reloading the extension
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+      self.manager.reloadExtension(
+        withIdentifier: AppConstants.callDirectoryExtensionIdentifier
+      ) { error in
+        DispatchQueue.main.async {
+          completion(error == nil)
+        }
       }
     }
   }
@@ -67,6 +71,10 @@ class CallDirectoryService {
     onCompletion: @escaping (Bool) -> Void
   ) {
     var patternsToProcess = phoneNumberService.loadPhoneNumberPatterns()
+
+    sharedUserDefaults.setBlockedNumbers(0)
+    userDefaults.setBlocklistVersion(AppConstants.currentBlocklistVersion)
+    userDefaults.setTotalBlockedNumbers(phoneNumberService.countAllBlockedNumbers())
 
     func processNextPattern() {
       if !patternsToProcess.isEmpty {

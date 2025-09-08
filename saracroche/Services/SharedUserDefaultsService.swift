@@ -6,66 +6,52 @@ class SharedUserDefaultsService {
 
   private let userDefaults: UserDefaults?
 
+  // MARK: - Constants
+  private struct Keys {
+    static let blockedNumbers = "blockedNumbers"
+    static let action = "action"
+    static let numbersList = "numbersList"
+  }
+
   private init() {
     userDefaults = UserDefaults(suiteName: AppConstants.appGroupIdentifier)
   }
 
   // MARK: - Blocked Numbers Count
   func setBlockedNumbers(_ count: Int) {
-    userDefaults?.set(
-      count,
-      forKey: AppConstants.UserDefaultsKeys.blockedNumbers
-    )
+    userDefaults?.set(count, forKey: Keys.blockedNumbers)
   }
 
   func getBlockedNumbers() -> Int {
-    return userDefaults?.integer(
-      forKey: AppConstants.UserDefaultsKeys.blockedNumbers
-    ) ?? 0
-  }
-
-  // MARK: - Total Blocked Numbers
-  func setTotalBlockedNumbers(_ count: Int64) {
-    userDefaults?.set(
-      count,
-      forKey: AppConstants.UserDefaultsKeys.totalBlockedNumbers
-    )
-  }
-
-  func getTotalBlockedNumbers() -> Int {
-    return userDefaults?.integer(
-      forKey: AppConstants.UserDefaultsKeys.totalBlockedNumbers
-    ) ?? 0
-  }
-
-  // MARK: - Blocklist Version
-  func setBlocklistVersion(_ version: String) {
-    userDefaults?.set(
-      version,
-      forKey: AppConstants.UserDefaultsKeys.blocklistVersion
-    )
-  }
-
-  func getBlocklistVersion() -> String {
-    return userDefaults?.string(
-      forKey: AppConstants.UserDefaultsKeys.blocklistVersion
-    ) ?? ""
+    return userDefaults?.integer(forKey: Keys.blockedNumbers) ?? 0
   }
 
   // MARK: - Action
   func setAction(_ action: String) {
-    userDefaults?.set(action, forKey: AppConstants.UserDefaultsKeys.action)
+    userDefaults?.set(action, forKey: Keys.action)
   }
 
   func clearAction() {
-    userDefaults?.set("", forKey: AppConstants.UserDefaultsKeys.action)
+    userDefaults?.set("", forKey: Keys.action)
+  }
+
+  func getAction() -> String {
+    return userDefaults?.string(forKey: Keys.action) ?? ""
   }
 
   // MARK: - Numbers List
   func setNumbersList(_ numbers: [String]) {
-    userDefaults?.set(
-      numbers,
-      forKey: AppConstants.UserDefaultsKeys.numbersList
-    )
+    userDefaults?.set(numbers, forKey: Keys.numbersList)
+  }
+
+  func getNumbersList() -> [String] {
+    return userDefaults?.stringArray(forKey: Keys.numbersList) ?? []
+  }
+
+  // MARK: - Reset All
+  func resetAllData() {
+    userDefaults?.removeObject(forKey: Keys.blockedNumbers)
+    userDefaults?.removeObject(forKey: Keys.action)
+    userDefaults?.removeObject(forKey: Keys.numbersList)
   }
 }
