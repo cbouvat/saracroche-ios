@@ -6,7 +6,7 @@ struct DonationSheet: View {
   var body: some View {
     NavigationView {
       ScrollView {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
           VStack(spacing: 16) {
             if #available(iOS 18.0, *) {
               Image(systemName: "heart.fill")
@@ -154,7 +154,6 @@ struct DonationSheet: View {
         }
         .padding()
       }
-      .navigationBarBackButtonHidden(true)
       .toolbar {
         ToolbarItem {
           Button("Fermer") {
