@@ -160,10 +160,7 @@ struct HomeNavigationView: View {
       if #available(iOS 18.0, *) {
         Image(systemName: "checkmark.shield.fill")
           .font(.system(size: 60))
-          .symbolEffect(
-            .scale.up.byLayer,
-            options: .repeat(.periodic(delay: 4.0))
-          )
+          .symbolEffect(.bounce.up.byLayer, options: .repeat(.periodic(delay: 2.0)))
           .foregroundColor(.green)
       } else {
         Image(systemName: "checkmark.shield.fill")
