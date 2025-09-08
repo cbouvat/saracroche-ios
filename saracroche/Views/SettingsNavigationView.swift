@@ -2,8 +2,8 @@ import SwiftUI
 
 struct SettingsNavigationView: View {
   @ObservedObject var viewModel: BlockerViewModel
-  @State private var showDeleteConfirmation = false
-  
+  @State private var showingResetAlert = false
+
   var body: some View {
     NavigationView {
       Form {
@@ -18,34 +18,14 @@ struct SettingsNavigationView: View {
           }
 
           Button {
-            viewModel.updateBlockerList()
+            showingResetAlert = true
           } label: {
             Label(
-              "Recharger la liste de blocage",
-              systemImage: "arrow.clockwise.circle.fill"
-            )
-          }
-
-          Button(role: .destructive) {
-            showDeleteConfirmation = true
-          } label: {
-            Label(
-              "Supprimer la liste de blocage",
+              "Réinitialiser l'application",
               systemImage: "trash.fill"
             )
-            .foregroundColor(.red)
           }
-          .confirmationDialog(
-            "Supprimer la liste de blocage",
-            isPresented: $showDeleteConfirmation,
-            titleVisibility: .visible
-          ) {
-            Button("Supprimer", role: .destructive) {
-              viewModel.removeBlockerList()
-            }
-          } message: {
-            Text("Êtes-vous sûr de vouloir supprimer la liste de blocage ?")
-          }
+          .foregroundColor(.red)
         } header: {
           Text("Configuration")
         }
@@ -144,14 +124,14 @@ struct SettingsNavigationView: View {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Mastodon @cbouvat", systemImage: "person.bubble.fill")
+            Label("Mastodon", systemImage: "person.bubble.fill")
           }
         } header: {
           Text("Contact")
         } footer: {
           Text(
             "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
-            + "\n\n\nBisou 😘"
+              + "\n\n\nBisou 😘"
           )
           .padding(.vertical)
           .frame(maxWidth: .infinity)
@@ -159,6 +139,18 @@ struct SettingsNavigationView: View {
         }
       }
       .navigationTitle("Réglages")
+      .confirmationDialog(
+        "Réinitialiser l'application", isPresented: $showingResetAlert, titleVisibility: .visible
+      ) {
+        Button("Réinitialiser", role: .destructive) {
+          viewModel.resetApplication()
+        }
+        Button("Annuler", role: .cancel) {}
+      } message: {
+        Text(
+          "Êtes-vous sûr de vouloir réinitialiser l'application ? Toutes les données seront supprimées et l'application se fermera. Cette action est irréversible."
+        )
+      }
     }
   }
 }
