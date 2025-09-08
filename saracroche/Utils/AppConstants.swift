@@ -8,14 +8,9 @@ struct AppConstants {
   // MARK: - Call Directory Extension
   static let callDirectoryExtensionIdentifier = "com.cbouvat.saracroche.blocker"
 
-  // MARK: - UserDefaults Keys
-  struct UserDefaultsKeys {
-    static let blockedNumbers = "blockedNumbers"
-    static let totalBlockedNumbers = "totalBlockedNumbers"
-    static let blocklistVersion = "blocklistVersion"
-    static let action = "action"
-    static let numbersList = "numbersList"
-  }
+  // MARK: - Background Tasks
+  //static let backgroundUpdateIdentifier = "com.cbouvat.saracroche.background-update"
+  //static let backgroundUpdateInterval: TimeInterval = 4 * 60 * 60  // In seconds
 
   // MARK: - Actions
   struct Actions {
@@ -24,6 +19,6 @@ struct AppConstants {
   }
 
   // MARK: - Processing
-  static let phoneNumberChunkSize = 10_000
-  static let currentBlocklistVersion = "6"
+  static let phoneNumberChunkSize = 20_000
+  static let currentBlocklistVersion = "7"
 }
