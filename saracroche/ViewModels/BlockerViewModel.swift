@@ -1,160 +1,147 @@
+import BackgroundTasks
 import Combine
 import SwiftUI
 
 class BlockerViewModel: ObservableObject {
   @Published var blockerExtensionStatus: BlockerExtensionStatus = .unknown
-  @Published var blockerActionState: BlockerActionState = .nothing
+  @Published var isBackgroundServiceActive: Bool = false
+  @Published var updateState: UpdateState = .idle
+
   @Published var blockerPhoneNumberBlocked: Int64 = 0
   @Published var blockerPhoneNumberTotal: Int64 = 0
   @Published var blocklistInstalledVersion: String = ""
   @Published var blocklistVersion: String = AppConstants.currentBlocklistVersion
-  @Published var showUpdateListSheet: Bool = false
-  @Published var showDeleteBlockerSheet: Bool = false
-  @Published var showUpdateListFinishedSheet: Bool = false
-  @Published var showDeleteFinishedSheet: Bool = false
-  @Published var showActionErrorSheet: Bool = false
+  @Published var lastUpdateCheck: Date? = nil
+  @Published var lastUpdate: Date? = nil
+  @Published var updateStarted: Date? = nil
 
   private let callDirectoryService = CallDirectoryService.shared
+  private let backgroundUpdateService = BackgroundUpdateService.shared
   private let sharedUserDefaults = SharedUserDefaultsService.shared
+  private let userDefaults = UserDefaultsService.shared
   private let phoneNumberService = PhoneNumberService.shared
+  private var statusCheckTimer: Timer?
+
+  deinit {
+    statusCheckTimer?.invalidate()
+  }
+
+  init() {}
+
+  // MARK: - Refresh Management
+  func startPeriodicRefresh() {
+    stopPeriodicRefresh()
+    statusCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+      self?.refreshData()
+    }
+  }
+
+  func stopPeriodicRefresh() {
+    statusCheckTimer?.invalidate()
+    statusCheckTimer = nil
+  }
+
+  func refreshData() {
+    checkUpdateState()
+
+    if updateState.isInProgress {
+      return
+    }
+
+    checkBackgroundServiceStatus()
+    checkBlockerExtensionStatus()
+    checkAndForceUpdateIfNeeded()
+  }
 
   // MARK: - Status Management
   func checkBlockerExtensionStatus() {
     callDirectoryService.checkExtensionStatus { [weak self] status in
-      print("Blocker extension status: \(status)")
       self?.blockerExtensionStatus = status
-      self?.updateBlockerState()
     }
   }
 
-  func updateBlockerState() {
-    let blockedNumbers = sharedUserDefaults.getBlockedNumbers()
-    let totalBlockedNumbers = sharedUserDefaults.getTotalBlockedNumbers()
-    let blocklistInstalledVersion = sharedUserDefaults.getBlocklistVersion()
+  func checkBackgroundServiceStatus() {
+    BGTaskScheduler.shared.getPendingTaskRequests { [weak self] requests in
+      DispatchQueue.main.async {
+        self?.isBackgroundServiceActive = requests.contains {
+          $0.identifier == "com.cbouvat.saracroche.background-update"
+        }
+      }
+    }
+  }
 
-    self.blockerPhoneNumberBlocked = Int64(blockedNumbers)
-    self.blockerPhoneNumberTotal = Int64(totalBlockedNumbers)
-    self.blocklistInstalledVersion = blocklistInstalledVersion
+  func checkUpdateState() {
+    DispatchQueue.main.async { [weak self] in
+      self?.blockerPhoneNumberBlocked = Int64(
+        self?.sharedUserDefaults.getBlockedNumbers() ?? 0
+      )
+      self?.blockerPhoneNumberTotal = Int64(
+        self?.userDefaults.getTotalBlockedNumbers() ?? 0
+      )
+      self?.blocklistInstalledVersion =
+        self?.userDefaults
+        .getBlocklistVersion() ?? ""
+      self?.updateState = self?.userDefaults.getUpdateState() ?? .idle
+      self?.lastUpdateCheck = self?.userDefaults.getLastUpdateCheck()
+      self?.lastUpdate = self?.userDefaults.getLastUpdate()
+      self?.updateStarted = self?.userDefaults.getUpdateStarted()
+    }
+  }
 
-    switch blockerActionState {
-    case .update:
-      self.showUpdateListSheet = true
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .delete:
-      self.showDeleteBlockerSheet = true
-      self.showUpdateListSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .updateFinish:
-      self.showUpdateListFinishedSheet = true
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .deleteFinish:
-      self.showDeleteFinishedSheet = true
-      self.showUpdateListSheet = false
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .error:
-      self.showActionErrorSheet = true
-      self.showUpdateListSheet = false
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-    default:
-      self.showUpdateListSheet = false
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
+  private func checkAndForceUpdateIfNeeded() {
+    DispatchQueue.main.async { [weak self] in
+      guard let self = self else { return }
+
+      // Only proceed if the blocker extension is enabled
+      guard self.blockerExtensionStatus == .enabled else {
+        return
+      }
+
+      // Only proceed if no update is currently in progress
+      guard self.updateState == .idle else {
+        return
+      }
+
+      if blockerPhoneNumberBlocked == 0 || blocklistInstalledVersion != blocklistVersion {
+        self.forceUpdateBlockerList()
+      }
     }
   }
 
   // MARK: - Actions
-  func updateBlockerList() {
-    UIApplication.shared.isIdleTimerDisabled = true
-    self.blockerActionState = .update
-    self.sharedUserDefaults.setBlocklistVersion(AppConstants.currentBlocklistVersion)
-    self.sharedUserDefaults.setBlockedNumbers(0)
-    self.sharedUserDefaults.setTotalBlockedNumbers(
-      phoneNumberService.countAllBlockedNumbers()
-    )
-    self.updateBlockerState()
-
-    callDirectoryService.updateBlockerList(
-      onProgress: { [weak self] in
-        self?.updateBlockerState()
-      },
-      onCompletion: { [weak self] success in
+  func forceUpdateBlockerList() {
+    backgroundUpdateService.forceBackgroundUpdate { success in
+      DispatchQueue.main.async {
         if success {
-          self?.updateBlockerListFinished()
+          self.userDefaults.setUpdateState(.idle)
         } else {
-          self?.errorAction()
+          self.userDefaults.setUpdateState(.error)
         }
       }
-    )
-  }
-
-  func updateBlockerListFinished() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .updateFinish
-    self.updateBlockerState()
-  }
-
-  func removeBlockerList() {
-    UIApplication.shared.isIdleTimerDisabled = true
-    self.blockerActionState = .delete
-    self.updateBlockerState()
-
-    callDirectoryService.removeBlockerList(
-      onProgress: { [weak self] in
-        self?.updateBlockerState()
-      },
-      onCompletion: { [weak self] success in
-        if success {
-          self?.removeBlockerListFinished()
-        } else {
-          self?.errorAction()
-        }
-      }
-    )
-  }
-
-  func removeBlockerListFinished() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .deleteFinish
-    self.updateBlockerState()
-  }
-
-  func errorAction() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .error
-    self.sharedUserDefaults.clearAction()
-    self.updateBlockerState()
-  }
-
-  func clearAction() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .nothing
-    self.sharedUserDefaults.clearAction()
-    self.checkBlockerExtensionStatus()
-  }
-
-  func checkExtensionStatusAction() {
-    self.blockerExtensionStatus = .unknown
-    // Wait 2 seconds to ensure the UI is updated before checking the status
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-      self.checkBlockerExtensionStatus()
     }
   }
 
+  // MARK: - Computed Properties
+  var isUpdateTakingTooLong: Bool {
+    guard let updateStarted = updateStarted else { return false }
+    let minutesAgo = Date().addingTimeInterval(-240)  // 4 minutes = 240 seconds
+    return updateStarted < minutesAgo && updateState.isInProgress
+  }
+
+  // MARK: - Open Settings
   func openSettings() {
     callDirectoryService.openSettings()
+  }
+
+  // MARK: - Reset Application
+  func resetApplication() {
+    // Clear all UserDefaults data
+    userDefaults.resetAllData()
+
+    // Clear all SharedUserDefaults data
+    sharedUserDefaults.resetAllData()
+
+    // Exit the application
+    exit(0)
   }
 }
