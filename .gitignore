@@ -1,5 +1,6 @@
 .DS_Store
 xcuserdata/
+build/
 
 # Configuration files with sensitive data
 saracroche/Config.swift
