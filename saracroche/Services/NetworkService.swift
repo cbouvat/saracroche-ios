@@ -54,9 +54,7 @@ class NetworkService {
 
     let requestData = await ReportRequest(
       number: phoneNumber,
-      deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "unknown",
-      appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"]
-        as? String ?? "unknown"
+      deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
     )
 
     do {
@@ -134,5 +132,4 @@ class NetworkService {
 private struct ReportRequest: Codable {
   let number: String
   let deviceId: String
-  let appVersion: String
 }

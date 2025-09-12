@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SaracrocheView: View {
   @StateObject private var viewModel = BlockerViewModel()
-  @State private var showDeleteConfirmation = false
 
   var body: some View {
     TabView {
@@ -14,37 +13,10 @@ struct SaracrocheView: View {
         .tabItem {
           Label("Signaler", systemImage: "exclamationmark.bubble.fill")
         }
-      HelpNavigationView()
+      SettingsNavigationView(viewModel: viewModel)
         .tabItem {
-          Label("Aide", systemImage: "questionmark.circle.fill")
+          Label("Réglages", systemImage: "gearshape.fill")
         }
-      SettingsNavigationView(
-        viewModel: viewModel,
-        showDeleteConfirmation: $showDeleteConfirmation
-      )
-      .tabItem {
-        Label("Réglages", systemImage: "gearshape.fill")
-      }
-    }
-    .sheet(isPresented: $viewModel.showUpdateListSheet) {
-      UpdateListSheet(viewModel: viewModel)
-        .interactiveDismissDisabled(true)
-    }
-    .sheet(isPresented: $viewModel.showDeleteBlockerSheet) {
-      DeleteBlockerSheet(viewModel: viewModel)
-        .interactiveDismissDisabled(true)
-    }
-    .sheet(isPresented: $viewModel.showUpdateListFinishedSheet) {
-      UpdateListFinishedSheet(viewModel: viewModel)
-        .interactiveDismissDisabled(true)
-    }
-    .sheet(isPresented: $viewModel.showDeleteFinishedSheet) {
-      DeleteFinishedSheet(viewModel: viewModel)
-        .interactiveDismissDisabled(true)
-    }
-    .sheet(isPresented: $viewModel.showActionErrorSheet) {
-      ActionErrorSheet(viewModel: viewModel)
-        .interactiveDismissDisabled(true)
     }
   }
 }

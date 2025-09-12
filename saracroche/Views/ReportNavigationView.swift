@@ -20,11 +20,10 @@ struct ReportNavigationView: View {
               .textInputAutocapitalization(.never)
               .autocorrectionDisabled(true)
               .padding(12)
-              .font(.title3)
               .background(Color(.systemBackground))
-              .cornerRadius(10)
+              .cornerRadius(12)
               .overlay(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 12)
                   .stroke(
                     isPhoneFieldFocused
                       ? Color("AppColor") : Color(.systemGray4),
@@ -32,25 +31,13 @@ struct ReportNavigationView: View {
                   )
               )
               .focused($isPhoneFieldFocused)
-              .disabled(viewModel.isLoading)
-              .onChange(of: viewModel.phoneNumber) { newValue in
-                viewModel.phoneNumber = viewModel.formatPhoneNumber(newValue)
-              }
-              .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                  Spacer()
-                  Button("Terminé") {
-                    isPhoneFieldFocused = false
-                  }
-                  .font(.body.weight(.bold))
-                }
-              }
               .accessibilityLabel("Champ de saisie du numéro de téléphone")
               .accessibilityHint(
                 "Saisissez le numéro au format E.164, par exemple +33612345678"
               )
 
             Button {
+              if isPhoneFieldFocused { isPhoneFieldFocused = false }
               Task {
                 await viewModel.submitPhoneNumber()
               }
@@ -63,8 +50,7 @@ struct ReportNavigationView: View {
             .buttonStyle(
               .fullWidth(
                 background: Color("AppColor"),
-                foreground: .black,
-                isLoading: viewModel.isLoading
+                foreground: .black
               )
             )
             .accessibilityLabel("Bouton d'envoi du signalement")
@@ -72,23 +58,29 @@ struct ReportNavigationView: View {
           .padding(.vertical, 6)
         } header: {
           Text("Signaler un numéro")
-        }
-        footer: {
+        } footer: {
           Text(
             "Signaler un numéro, contribue à améliorer la liste de "
-            + "blocage et à rendre l'application plus efficace."
+              + "blocage et à rendre l'application plus efficace."
           )
         }
       }
       .navigationTitle("Signaler")
+      .toolbar {
+        ToolbarItemGroup(placement: .keyboard) {
+          Spacer()
+          Button("Terminé") {
+            isPhoneFieldFocused = false
+          }
+          .font(.body.weight(.bold))
+        }
+      }
       .alert(viewModel.alertType.title, isPresented: $viewModel.showAlert) {
         Button("OK", role: .cancel) {}
       } message: {
         Text(viewModel.alertMessage)
       }
-      .onTapGesture {
-        isPhoneFieldFocused = false
-      }
+
     }
   }
 }

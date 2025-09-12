@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SettingsNavigationView: View {
   @ObservedObject var viewModel: BlockerViewModel
-  @Binding var showDeleteConfirmation: Bool
+  @State private var showingResetAlert = false
+
   var body: some View {
     NavigationView {
       Form {
@@ -11,45 +12,41 @@ struct SettingsNavigationView: View {
             viewModel.openSettings()
           } label: {
             Label(
-              "L’extension de blocage dans Réglages de l'iPhone",
+              "Activer ou désactiver Saracroche dans **Réglages**",
               systemImage: "gearshape.fill"
             )
           }
-          
+
           Button {
-            viewModel.updateBlockerList()
+            showingResetAlert = true
           } label: {
             Label(
-              "Recharger la liste de blocage",
-              systemImage: "arrow.clockwise.circle.fill"
-            )
-          }
-          
-          Button(role: .destructive) {
-            showDeleteConfirmation = true
-          } label: {
-            Label(
-              "Supprimer la liste de blocage",
+              "Réinitialiser l'application",
               systemImage: "trash.fill"
             )
-            .foregroundColor(.red)
           }
-          .confirmationDialog(
-            "Supprimer la liste de blocage",
-            isPresented: $showDeleteConfirmation,
-            titleVisibility: .visible
-          ) {
-            Button("Supprimer", role: .destructive) {
-              viewModel.removeBlockerList()
-            }
-          } message: {
-            Text("Êtes-vous sûr de vouloir supprimer la liste de blocage ?")
-          }
+          .foregroundColor(.red)
         } header: {
           Text("Configuration")
         }
 
         Section {
+          Button {
+            if let url = URL(string: "https://cbouvat.com/saracroche/help/") {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Aide & FAQ", systemImage: "questionmark.circle.fill")
+          }
+
+          Button {
+            if let url = URL(string: "https://cbouvat.com/saracroche/privacy/") {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Confidentialité", systemImage: "lock.shield.fill")
+          }
+
           Button {
             if let url = URL(string: "https://cbouvat.com/saracroche") {
               UIApplication.shared.open(url)
@@ -81,7 +78,11 @@ struct SettingsNavigationView: View {
               systemImage: "keyboard.fill"
             )
           }
+        } header: {
+          Text("Liens")
+        }
 
+        Section {
           Button {
             if let version = Bundle.main.infoDictionary?[
               "CFBundleShortVersionString"
@@ -108,7 +109,7 @@ struct SettingsNavigationView: View {
                   withAllowedCharacters: .urlQueryAllowed
                 ) ?? ""
               let urlString =
-                "mailto:saracroche@cbouvat.com?subject=Contact%20-%20Saracroche%20iOS&body="
+                "mailto:mail@cbouvat.com?subject=Contact%20-%20Saracroche%20iOS&body="
                 + encodedBody
               if let url = URL(string: urlString) {
                 UIApplication.shared.open(url)
@@ -116,8 +117,8 @@ struct SettingsNavigationView: View {
             }
           } label: {
             Label(
-              "Contactez le développeur",
-              systemImage: "exclamationmark.bubble.fill"
+              "Signaler un bug ou suggérer une fonctionnalité par e-mail",
+              systemImage: "envelope.fill"
             )
           }
 
@@ -126,27 +127,39 @@ struct SettingsNavigationView: View {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Mastodon : @cbouvat", systemImage: "person.bubble.fill")
+            Label("Mastodon", systemImage: "person.bubble.fill")
           }
-        }
-        header: {
-          Text("Liens")
-        }
-        footer: {
+        } header: {
+          Text("Contact")
+        } footer: {
           Text(
             "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+              + "\n\n\nBisou 😘"
           )
           .padding(.vertical)
+          .frame(maxWidth: .infinity)
+          .multilineTextAlignment(.center)
         }
       }
       .navigationTitle("Réglages")
+      .confirmationDialog(
+        "Réinitialiser l'application", isPresented: $showingResetAlert, titleVisibility: .visible
+      ) {
+        Button("Réinitialiser", role: .destructive) {
+          viewModel.resetApplication()
+        }
+        Button("Annuler", role: .cancel) {}
+      } message: {
+        Text(
+          "Êtes-vous sûr de vouloir réinitialiser l'application ? Toutes les données seront supprimées et l'application se fermera. Cette action est irréversible."
+        )
+      }
     }
   }
 }
 
 #Preview {
   SettingsNavigationView(
-    viewModel: BlockerViewModel(),
-    showDeleteConfirmation: .constant(false)
+    viewModel: BlockerViewModel()
   )
 }

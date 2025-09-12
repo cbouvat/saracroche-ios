@@ -50,6 +50,10 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     sharedUserDefaults()?.set(0, forKey: "blockedNumbers")
 
     context.removeAllBlockingEntries()
+
+    // Add fake number to iOS make sure the extension is working
+    context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
+
     context.removeAllIdentificationEntries()
 
     print("Successfully reset all numbers list")

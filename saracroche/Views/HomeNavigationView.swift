@@ -2,373 +2,501 @@ import SwiftUI
 
 struct HomeNavigationView: View {
   @ObservedObject var viewModel: BlockerViewModel
-  @Environment(\.scenePhase) private var scenePhase
   @State private var showDonationSheet = false
+  @State private var showInfoSheet = false
 
   var body: some View {
     NavigationView {
       ScrollView {
         VStack(spacing: 16) {
-          VStack(alignment: .center, spacing: 16) {
-            if viewModel.blockerExtensionStatus == .enabled {
-              if #available(iOS 18.0, *) {
-                Image(systemName: "checkmark.shield.fill")
-                  .font(.system(size: 48))
-                  .symbolEffect(
-                    .bounce.up.byLayer,
-                    options: .repeat(.periodic(delay: 1.0))
-                  )
-                  .foregroundColor(.green)
-              } else {
-                Image(systemName: "checkmark.shield.fill")
-                  .font(.system(size: 48))
-                  .foregroundColor(.green)
-              }
-
-              Text("Le bloqueur d'appels est actif")
-                .font(.title3)
-                .bold()
-                .multilineTextAlignment(.center)
-            } else if viewModel.blockerExtensionStatus == .disabled {
-              if #available(iOS 18.0, *) {
-                Image(systemName: "xmark.circle.fill")
-                  .font(.system(size: 48))
-                  .symbolEffect(
-                    .bounce.up.byLayer,
-                    options: .repeat(.periodic(delay: 1.0))
-                  )
-                  .foregroundColor(.red)
-              } else {
-                Image(systemName: "xmark.circle.fill")
-                  .font(.system(size: 48))
-                  .foregroundColor(.red)
-              }
-
-              Text("Le bloqueur d'appels n'est pas activé")
-                .font(.title3)
-                .bold()
-                .multilineTextAlignment(.center)
-
-              Text(
-                "Pour activer le bloqueur d'appels, il suffit d'utiliser le bouton ci-dessous et d'activer "
-                  + "Saracroche dans les réglages de votre iPhone. Une fois l'activation effectuée, "
-                  + "il sera possible d'installer la liste de blocage afin de filtrer les appels indésirables."
-              )
-              .font(.body)
-              .frame(maxWidth: .infinity, alignment: .center)
-
-              Button {
-                viewModel.openSettings()
-              } label: {
-                HStack {
-                  Image(systemName: "gear")
-                  Text("Activer dans les réglages de l'iPhone")
-                }
-              }
-              .buttonStyle(
-                .fullWidth(background: Color.red, foreground: .white)
-              )
-            } else if viewModel.blockerExtensionStatus == .unknown {
-              if #available(iOS 18.0, *) {
-                Image(systemName: "questionmark.circle.fill")
-                  .font(.system(size: 48))
-                  .symbolEffect(
-                    .bounce.up.byLayer,
-                    options: .repeat(.periodic(delay: 1.0))
-                  )
-                  .foregroundColor(.orange)
-              } else {
-                Image(systemName: "questionmark.circle.fill")
-                  .font(.system(size: 48))
-                  .foregroundColor(.orange)
-              }
-
-              Text("Vérification du statut du bloqueur en cours…")
-                .font(.title3)
-                .bold()
-                .multilineTextAlignment(.center)
-
-              Button {
-                viewModel.checkExtensionStatusAction()
-              } label: {
-                HStack {
-                  Image(systemName: "arrow.clockwise")
-                  Text("Vérifier le bloqueur")
-                }
-              }
-              .buttonStyle(
-                .fullWidth(background: Color.orange, foreground: .white)
-              )
-            } else if viewModel.blockerExtensionStatus == .error {
-              if #available(iOS 18.0, *) {
-                Image(systemName: "xmark.octagon.fill")
-                  .font(.system(size: 48))
-                  .symbolEffect(
-                    .bounce.up.byLayer,
-                    options: .repeat(.periodic(delay: 1.0))
-                  )
-                  .foregroundColor(.red)
-                  .padding(.bottom)
-              } else {
-                Image(systemName: "xmark.octagon.fill")
-                  .font(.system(size: 48))
-                  .foregroundColor(.red)
-              }
-
-              Text("Erreur lors de la vérification")
-                .font(.title3)
-                .bold()
-
-              Button {
-                viewModel.checkExtensionStatusAction()
-              } label: {
-                HStack {
-                  Image(systemName: "arrow.clockwise")
-                  Text("Vérifier le bloqueur")
-                }
-              }
-              .buttonStyle(
-                .fullWidth(background: Color.red, foreground: .white)
-              )
-            } else if viewModel.blockerExtensionStatus == .unexpected {
-              if #available(iOS 18.0, *) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                  .font(.system(size: 48))
-                  .symbolEffect(
-                    .bounce.up.byLayer,
-                    options: .repeat(.periodic(delay: 1.0))
-                  )
-                  .foregroundColor(.orange)
-              } else {
-                Image(systemName: "exclamationmark.triangle.fill")
-                  .font(.system(size: 48))
-                  .foregroundColor(.orange)
-              }
-
-              Text("Statut inattendu")
-                .font(.title3)
-                .bold()
-                .multilineTextAlignment(.center)
-
-              Button {
-                viewModel.checkExtensionStatusAction()
-              } label: {
-                HStack {
-                  Image(systemName: "arrow.clockwise")
-                  Text("Vérifier le bloqueur")
-                }
-              }
-              .buttonStyle(
-                .fullWidth(background: Color.orange, foreground: .white)
-              )
-            }
-          }
-          .padding()
-          .frame(maxWidth: .infinity, alignment: .center)
-          .background(
-            RoundedRectangle(cornerRadius: 16)
-              .fill(
-                viewModel.blockerExtensionStatus == .enabled
-                  ? Color.green.opacity(0.15)
-                  : Color.red.opacity(0.15)
-              )
-          )
-          .overlay(
-            RoundedRectangle(cornerRadius: 16)
-              .stroke(
-                viewModel.blockerExtensionStatus == .enabled
-                  ? Color.green.opacity(0.5)
-                  : Color.red.opacity(0.5),
-                lineWidth: 1
-              )
-          )
-
           if viewModel.blockerExtensionStatus == .enabled {
-            VStack(alignment: .center, spacing: 16) {
-              if viewModel.blockerPhoneNumberBlocked == 0 {
-                Image(
-                  systemName: "exclamationmark.triangle.fill"
-                )
-                .font(.system(size: 48))
-                .foregroundColor(.gray)
-
-                Text("Aucun numéro bloqué")
-                  .font(.title3)
-                  .fontWeight(.semibold)
-
-                Text(
-                  "Pour bloquer les appels indésirables, installez la liste de blocage "
-                    + "qui contient les numéros à bloquer."
-                )
-                .multilineTextAlignment(.center)
-                .font(.body)
-
-                Button {
-                  viewModel.updateBlockerList()
-                } label: {
-                  HStack {
-                    Image(systemName: "arrow.down.square.fill")
-                    Text("Installer la liste de blocage")
-                  }
-                }
-                .buttonStyle(
-                  .fullWidth(background: Color.blue, foreground: .white)
-                )
-              } else if viewModel.blocklistVersion
-                != viewModel.blocklistInstalledVersion
-              {
-                Image(
-                  systemName: "arrow.clockwise.circle.fill"
-                )
-                .font(.system(size: 48))
-                .foregroundColor(.orange)
-
-                Text("Mise à jour disponible")
-                  .font(.title3)
-                  .fontWeight(.semibold)
-
-                Text(
-                  "Une nouvelle version de la liste de blocage est disponible. "
-                    + "Vous pouvez l'installer pour bloquer de nouveaux numéros indésirables."
-                )
-                .font(.body)
-
-                Text(
-                  "Version installée : \(viewModel.blocklistInstalledVersion), "
-                    + "version disponible : \(viewModel.blocklistVersion)"
-                )
-                .font(.footnote)
-
-                Button {
-                  viewModel.updateBlockerList()
-                } label: {
-                  HStack {
-                    Image(systemName: "arrow.counterclockwise.circle.fill")
-                    Text("Mettre à jour la liste de blocage")
-                  }
-                }
-                .buttonStyle(
-                  .fullWidth(background: Color.red, foreground: .white)
-                )
-              } else if viewModel.blockerPhoneNumberBlocked
-                != viewModel.blockerPhoneNumberTotal
-              {
-                Image(
-                  systemName: "exclamationmark.triangle.fill"
-                )
-                .font(.system(size: 48))
-                .foregroundColor(.orange)
-
-                Text("Liste de blocage partiellement installée")
-                  .font(.title3)
-                  .fontWeight(.semibold)
-
-                Text(
-                  "\(viewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(viewModel.blockerPhoneNumberTotal)"
-                )
-                .font(.body)
-                .multilineTextAlignment(.center)
-
-                Button {
-                  viewModel.updateBlockerList()
-                } label: {
-                  HStack {
-                    Image(systemName: "arrow.down.square.fill")
-                    Text("Mettre à jour la liste de blocage")
-                  }
-                }
-                .buttonStyle(
-                  .fullWidth(background: Color.red, foreground: .white)
-                )
-              } else {
-                Image(
-                  systemName: "checklist.checked"
-                )
-                .font(.system(size: 48))
-                .foregroundColor(.green)
-
-                Text(
-                  "\(viewModel.blockerPhoneNumberBlocked) numéros bloqués"
-                )
-                .font(.title3)
-                .fontWeight(.semibold)
-
-                Text(
-                  "Version de la liste de blocage : \(viewModel.blocklistVersion)"
-                )
-                .font(.footnote)
-              }
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(
-              RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.2))
-            )
-            .overlay(
-              RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-            )
-
-            if viewModel.blockerPhoneNumberBlocked > 0
-              && viewModel.blocklistVersion
-                == viewModel.blocklistInstalledVersion
-              && viewModel.blockerPhoneNumberBlocked
-                == viewModel.blockerPhoneNumberTotal
-            {
-              VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                  Image(systemName: "heart.fill")
-                    .font(.system(size: 20))
-                    .foregroundColor(.red)
-
-                  Text("Application gratuite et open source")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                }
-
-                Text(
-                  "Saracroche est une application entièrement gratuite et open source. "
-                    + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
-                )
-                .font(.body)
-
-                Button {
-                  showDonationSheet = true
-                } label: {
-                  HStack {
-                    Image(systemName: "heart.fill")
-                    Text("Soutenez")
-                  }
-                }
-                .buttonStyle(
-                  .fullWidth(background: Color.red, foreground: .white)
-                )
-              }
-              .padding()
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .background(
-                RoundedRectangle(cornerRadius: 16)
-                  .fill(Color.gray.opacity(0.1))
-              )
-              .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                  .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-              )
-            }
+            enabledExtensionContentView
+          } else {
+            disabledExtensionContentView
           }
         }
         .padding()
       }
       .navigationTitle("Saracroche")
+      .onAppear {
+        viewModel.startPeriodicRefresh()
+      }
+      .onDisappear {
+        viewModel.stopPeriodicRefresh()
+      }
       .sheet(isPresented: $showDonationSheet) {
         DonationSheet()
       }
-      .onChange(of: scenePhase) { newPhase in
-        if newPhase == .active {
-          viewModel.checkBlockerExtensionStatus()
+      .sheet(isPresented: $showInfoSheet) {
+        InfoSheet(viewModel: viewModel)
+      }
+    }
+  }
+
+  private var enabledExtensionContentView: some View {
+    VStack(spacing: 16) {
+      if viewModel.updateState == .starting {
+        startingView
+      } else if viewModel.updateState == .installing {
+        installingView
+      } else if viewModel.updateState == .error {
+        errorView
+      } else if viewModel.updateState == .idle {
+        if viewModel.blockerPhoneNumberBlocked == 0 {
+          noBlockedNumbersView
+        } else if viewModel.blocklistInstalledVersion != viewModel.blocklistVersion {
+          updateAvailableView
+        } else {
+          completeInstallationView
+          donationView
         }
       }
+    }
+  }
+
+  private var disabledExtensionContentView: some View {
+    VStack(alignment: .center, spacing: 16) {
+      if viewModel.blockerExtensionStatus == .disabled {
+        if #available(iOS 18.0, *) {
+          Image(systemName: "xmark.circle.fill")
+            .font(.system(size: 60))
+            .symbolEffect(
+              .pulse.byLayer,
+              options: .repeat(.periodic(delay: 2.0))
+            )
+            .foregroundColor(.red)
+        } else {
+          Image(systemName: "xmark.circle.fill")
+            .font(.system(size: 60))
+            .foregroundColor(.red)
+        }
+
+        Text("Le bloqueur n'est pas activé")
+          .font(.title3)
+          .bold()
+          .multilineTextAlignment(.center)
+
+        Text(
+          "Pour activer le bloqueur, il suffit d'utiliser le bouton ci-dessous et d'activer "
+            + "Saracroche dans les réglages. Une fois l'activation effectuée, "
+            + "la liste de blocage sera automatiquement installée."
+        )
+        .font(.body)
+        .frame(maxWidth: .infinity, alignment: .leading)
+
+        Button {
+          viewModel.openSettings()
+        } label: {
+          HStack {
+            Image(systemName: "gear")
+            Text("Activer dans les réglages de l'iPhone")
+          }
+        }
+        .buttonStyle(
+          .fullWidth(background: Color.red, foreground: .white)
+        )
+      } else if viewModel.blockerExtensionStatus == .unknown {
+        if #available(iOS 18.0, *) {
+          Image(systemName: "questionmark.circle.fill")
+            .font(.system(size: 60))
+            .symbolEffect(.wiggle.clockwise.byLayer, options: .repeat(.periodic(delay: 1.0)))
+            .foregroundColor(.orange)
+        } else {
+          Image(systemName: "questionmark.circle.fill")
+            .font(.system(size: 60))
+            .foregroundColor(.orange)
+        }
+
+        Text("Vérification du statut du bloqueur en cours…")
+          .font(.title3)
+          .bold()
+          .multilineTextAlignment(.center)
+      } else if viewModel.blockerExtensionStatus == .error {
+        if #available(iOS 18.0, *) {
+          Image(systemName: "xmark.octagon.fill")
+            .font(.system(size: 60))
+            .symbolEffect(.bounce.up.byLayer, options: .repeat(.periodic(delay: 1.0)))
+            .foregroundColor(.red)
+        } else {
+          Image(systemName: "xmark.octagon.fill")
+            .font(.system(size: 60))
+            .foregroundColor(.red)
+        }
+
+        Text("Erreur lors de la vérification")
+          .font(.title3)
+          .bold()
+      } else if viewModel.blockerExtensionStatus == .unexpected {
+        if #available(iOS 18.0, *) {
+          Image(systemName: "exclamationmark.triangle.fill")
+            .font(.system(size: 60))
+            .symbolEffect(
+              .wiggle.up.byLayer,
+              options: .repeat(.periodic(delay: 2.5))
+            )
+            .foregroundColor(.orange)
+        } else {
+          Image(systemName: "exclamationmark.triangle.fill")
+            .font(.system(size: 60))
+            .foregroundColor(.orange)
+        }
+
+        Text("Statut inattendu")
+          .font(.title3)
+          .bold()
+          .multilineTextAlignment(.center)
+      }
+    }
+    .padding()
+    .frame(maxWidth: .infinity, alignment: .center)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.red.opacity(0.15))
+    )
+  }
+
+  private var completeInstallationView: some View {
+    VStack(alignment: .center, spacing: 16) {
+      if #available(iOS 18.0, *) {
+        Image(systemName: "checkmark.shield.fill")
+          .font(.system(size: 60))
+          .symbolEffect(.bounce.up.byLayer, options: .repeat(.periodic(delay: 2.0)))
+          .foregroundColor(.green)
+      } else {
+        Image(systemName: "checkmark.shield.fill")
+          .font(.system(size: 60))
+          .foregroundColor(.green)
+      }
+
+      Text("Le bloqueur est actif")
+        .font(.title3)
+        .bold()
+        .multilineTextAlignment(.center)
+
+      Text("\(viewModel.blockerPhoneNumberBlocked) numéros bloqués")
+        .font(.title2)
+        .fontWeight(.semibold)
+        .foregroundColor(.green)
+
+      Text("Vous avez la dernière version de la liste de blocage installée.")
+        .font(.body)
+        .multilineTextAlignment(.center)
+
+      Button {
+        showInfoSheet = true
+      } label: {
+        HStack {
+          Image(systemName: "info.circle.fill")
+          Text("En savoir plus")
+        }
+      }
+      .buttonStyle(
+        .fullWidth(background: .green, foreground: .white)
+      )
+    }
+    .padding()
+    .frame(maxWidth: .infinity, alignment: .center)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.green.opacity(0.15))
+    )
+  }
+
+  private var installingView: some View {
+    VStack(alignment: .center, spacing: 16) {
+      if #available(iOS 18.0, *) {
+        Image(systemName: "arrow.clockwise.circle.fill")
+          .font(.system(size: 60))
+          .symbolEffect(
+            .rotate.byLayer,
+            options: .repeat(.periodic(delay: 2.0))
+          )
+          .foregroundColor(.blue)
+      } else {
+        Image(systemName: "arrow.clockwise.circle.fill")
+          .font(.system(size: 60))
+          .foregroundColor(.blue)
+      }
+
+      Text("Installation de la liste")
+        .font(.title3)
+        .fontWeight(.semibold)
+        .multilineTextAlignment(.center)
+
+      Text(
+        "La dernière version de la liste de blocage est en cours d'installation."
+      )
+      .font(.body)
+      .multilineTextAlignment(.center)
+
+      updateProgressView
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.blue.opacity(0.1))
+    )
+  }
+
+  private var errorView: some View {
+    VStack(alignment: .center, spacing: 16) {
+      if #available(iOS 18.0, *) {
+        Image(systemName: "exclamationmark.triangle.fill")
+          .font(.system(size: 60))
+          .symbolEffect(.wiggle.clockwise.byLayer, options: .repeat(.periodic(delay: 1.0)))
+          .foregroundColor(.red)
+      } else {
+        Image(systemName: "exclamationmark.triangle.fill")
+          .font(.system(size: 60))
+          .foregroundColor(.red)
+      }
+
+      Text("Erreur")
+        .font(.title3)
+        .fontWeight(.semibold)
+        .multilineTextAlignment(.center)
+
+      Text(
+        """
+        **L'application n'arrive pas à installer la liste de blocage.** Pour résoudre ce problème, essayez les étapes suivantes :
+
+        - Rechargez votre téléphone au **delà de 80%**.
+        - Désactivez le mode économie d'énergie.
+        - Vérifiez que l'**actualisation en arrière-plan** est activée pour Saracroche dans les réglages.
+        - Puis **réinitialisez l'application** en utilisant le bouton ci-dessous.
+        """
+      )
+      .font(.body)
+      .multilineTextAlignment(.leading)
+      .frame(maxWidth: .infinity, alignment: .leading)
+
+      Button {
+        viewModel.resetApplication()
+      } label: {
+        HStack {
+          Image(systemName: "trash.circle.fill")
+          Text("Réinitialiser l'application")
+        }
+      }
+      .buttonStyle(
+        .fullWidth(background: .red, foreground: .white)
+      )
+
+      Text(
+        """
+        **Si le problème persiste** après avoir essayé ces étapes, voici une procédure plus complète :
+
+        - Désactivez Saracroche dans les réglages, si elle apparaît ou si vous le pouvez.
+        - Désinstallez l'application Saracroche.
+        - Redémarrez votre appareil.
+        - Réinstallez l'application Saracroche depuis l'App Store.
+        """
+      )
+      .font(.body)
+      .multilineTextAlignment(.leading)
+      .frame(maxWidth: .infinity, alignment: .leading)
+
+      Button {
+        viewModel.openSettings()
+      } label: {
+        HStack {
+          Image(systemName: "gearshape.fill")
+          Text("Ouvrir les réglages")
+        }
+      }
+      .buttonStyle(
+        .fullWidth(background: .black, foreground: .white)
+      )
+
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.red.opacity(0.1))
+    )
+  }
+
+  private var startingView: some View {
+    VStack(alignment: .center, spacing: 16) {
+      if #available(iOS 18.0, *) {
+        Image(systemName: "hourglass.circle.fill")
+          .font(.system(size: 60))
+          .symbolEffect(.rotate.byLayer, options: .repeat(.periodic(delay: 1.0)))
+          .foregroundColor(.blue)
+      } else {
+        Image(systemName: "hourglass.circle.fill")
+          .font(.system(size: 60))
+          .foregroundColor(.blue)
+      }
+
+      Text("Démarrage en cours")
+        .font(.title3)
+        .fontWeight(.semibold)
+        .multilineTextAlignment(.center)
+
+      Text(
+        "Préparation de l'installation de la liste de blocage."
+      )
+      .multilineTextAlignment(.center)
+      .font(.body)
+
+      updateProgressView
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.blue.opacity(0.1))
+    )
+  }
+
+  private var noBlockedNumbersView: some View {
+    VStack(alignment: .center, spacing: 16) {
+      if #available(iOS 18.0, *) {
+        Image(systemName: "arrow.down.circle.fill")
+          .font(.system(size: 60))
+          .symbolEffect(.wiggle.down.byLayer, options: .repeat(.periodic(delay: 1.0)))
+          .foregroundColor(.blue)
+      } else {
+        Image(systemName: "arrow.down.circle.fill")
+          .font(.system(size: 60))
+          .foregroundColor(.blue)
+      }
+
+      Text("Aucun numéro bloqué")
+        .font(.title3)
+        .fontWeight(.semibold)
+        .multilineTextAlignment(.center)
+
+      Text(
+        "La liste de blocage va être installée automatiquement, veuillez patienter quelques instants."
+      )
+      .multilineTextAlignment(.center)
+      .font(.body)
+
+      updateProgressView
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.blue.opacity(0.1))
+    )
+  }
+
+  private var updateAvailableView: some View {
+    VStack(alignment: .center, spacing: 16) {
+      if #available(iOS 18.0, *) {
+        Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
+          .font(.system(size: 60))
+          .symbolEffect(.wiggle.clockwise.byLayer, options: .repeat(.periodic(delay: 1.0)))
+          .foregroundColor(.orange)
+      } else {
+        Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
+          .font(.system(size: 60))
+          .foregroundColor(.orange)
+      }
+
+      Text("Lancement de la mise à jour")
+        .font(.title3)
+        .fontWeight(.semibold)
+        .multilineTextAlignment(.center)
+
+      Text(
+        "Une nouvelle version de la liste de blocage est disponible. La mise à jour va être installée automatiquement."
+      )
+      .font(.body)
+      .multilineTextAlignment(.center)
+
+      updateProgressView
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.orange.opacity(0.1))
+    )
+  }
+
+  @ViewBuilder
+  private var updateProgressView: some View {
+    if viewModel.updateState.isInProgress {
+      VStack(spacing: 16) {
+        ProgressView()
+          .scaleEffect(1.5)
+
+        if viewModel.blockerPhoneNumberBlocked > 0 {
+          Text(
+            "\(viewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(viewModel.blockerPhoneNumberTotal)"
+          )
+          .font(.body)
+          .multilineTextAlignment(.center)
+        }
+
+        if viewModel.isUpdateTakingTooLong {
+          Text(
+            "Si le nombre de numéros bloqués n'augmente pas, essayez de relancer la mise à jour."
+          )
+          .font(.body)
+          .fontWeight(.bold)
+          .multilineTextAlignment(.center)
+
+          Button {
+            viewModel.forceUpdateBlockerList()
+          } label: {
+            HStack {
+              Image(systemName: "arrow.clockwise.circle.fill")
+              Text("Relancer la mise à jour")
+            }
+          }
+          .buttonStyle(
+            .fullWidth(background: .blue, foreground: .white)
+          )
+        }
+      }
+    }
+  }
+
+  @ViewBuilder
+  private var donationView: some View {
+    if viewModel.updateState == .idle && viewModel.blockerPhoneNumberBlocked != 0 {
+      VStack(alignment: .leading, spacing: 16) {
+        HStack {
+          Image(systemName: "heart.fill")
+            .font(.system(size: 20))
+            .foregroundColor(.red)
+
+          Text("Application gratuite et open source")
+            .font(.headline)
+            .fontWeight(.semibold)
+        }
+
+        Text(
+          "Saracroche est une application entièrement gratuite et open source. "
+            + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
+        )
+        .font(.body)
+
+        Button {
+          showDonationSheet = true
+        } label: {
+          HStack {
+            Image(systemName: "heart.fill")
+            Text("Soutenez")
+          }
+        }
+        .buttonStyle(
+          .fullWidth(background: Color.red, foreground: .white)
+        )
+      }
+      .padding()
+      .frame(maxWidth: .infinity)
+      .background(
+        RoundedRectangle(cornerRadius: 16)
+          .fill(Color.gray.opacity(0.1))
+      )
     }
   }
 }
