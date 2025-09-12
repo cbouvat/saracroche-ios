@@ -1,8 +1,35 @@
 import IdentityLookup
 import IdentityLookupUI
-import UIKit
+import SwiftUI
 
 class UnwantedCommunicationReportingExtension: ILClassificationUIExtensionViewController {
+  private let viewModel = UnwantedReportViewModel()
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    setupSwiftUIView()
+  }
+
+  private func setupSwiftUIView() {
+    let swiftUIView = UnwantedCommunicationReportingView(viewModel: viewModel)
+    let hostingController = UIHostingController(rootView: swiftUIView)
+
+    addChild(hostingController)
+    view.addSubview(hostingController.view)
+    hostingController.didMove(toParent: self)
+
+    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+      hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+    ])
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+  }
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
@@ -14,7 +41,14 @@ class UnwantedCommunicationReportingExtension: ILClassificationUIExtensionViewCo
 
   // Customize UI based on the classification request before the view is loaded
   override func prepare(for classificationRequest: ILClassificationRequest) {
-    // Configure your views for the classification request
+    switch classificationRequest {
+    case let classificationRequest as ILMessageClassificationRequest:
+      viewModel.phoneNumber = classificationRequest.messageCommunications.first?.sender ?? ""
+    case let classificationRequest as ILCallClassificationRequest:
+      viewModel.phoneNumber = classificationRequest.callCommunications.first?.sender ?? ""
+    default:
+      fatalError("Unknown classification request")
+    }
   }
 
   // Provide a classification response for the classification request
@@ -23,5 +57,4 @@ class UnwantedCommunicationReportingExtension: ILClassificationUIExtensionViewCo
   {
     return ILClassificationResponse(action: .none)
   }
-
 }
