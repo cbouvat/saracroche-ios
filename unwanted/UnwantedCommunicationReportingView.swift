@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import UIKit
 
 class UnwantedReportViewModel: ObservableObject {
   @Published var phoneNumber: String = ""
