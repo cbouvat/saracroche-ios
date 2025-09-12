@@ -407,6 +407,7 @@
 				CODE_SIGN_ENTITLEMENTS = unwanted/unwanted.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = unwanted/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = unwanted;
@@ -437,6 +438,7 @@
 				CODE_SIGN_ENTITLEMENTS = unwanted/unwanted.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = unwanted/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = unwanted;
@@ -467,6 +469,7 @@
 				CODE_SIGN_ENTITLEMENTS = filter/filter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = filter/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = filter;
@@ -497,6 +500,7 @@
 				CODE_SIGN_ENTITLEMENTS = filter/filter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = filter/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = filter;
@@ -728,6 +732,7 @@
 				CODE_SIGN_ENTITLEMENTS = blocker/blocker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = blocker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
@@ -758,6 +763,7 @@
 				CODE_SIGN_ENTITLEMENTS = blocker/blocker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = blocker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
