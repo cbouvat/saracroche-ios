@@ -25,5 +25,5 @@ struct AppConstants {
 
   // MARK: - Processing
   static let phoneNumberChunkSize = 10_000
-  static let currentBlocklistVersion = "5"
+  static let currentBlocklistVersion = "6"
 }
