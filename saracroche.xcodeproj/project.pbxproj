@@ -282,7 +282,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					85330FAB2E43A88900C36ABB = {
 						CreatedOnToolsVersion = 16.4;
@@ -410,7 +410,7 @@
 				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = unwanted/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = unwanted;
+				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -441,7 +441,7 @@
 				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = unwanted/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = unwanted;
+				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -472,7 +472,7 @@
 				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = filter/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = filter;
+				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -503,7 +503,7 @@
 				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = filter/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = filter;
+				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
