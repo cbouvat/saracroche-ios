@@ -33,17 +33,6 @@ You can also try the latest beta version through [TestFlight](https://testflight
 - iOS 15.0+
 - Swift 5.9+
 
-## Configuration
-
-The app requires a configuration file `Config.swift` that contains sensitive information like server URLs. This file is gitignored for security.
-
-1. Copy the example configuration:
-   ```bash
-   cp saracroche/Config.swift.example saracroche/Config.swift
-   ```
-
-2. Edit `Config.swift` with your actual configuration values.
-
 ## Technology Stack
 
 - **Swift** - Primary programming language

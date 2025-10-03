@@ -1,5 +1,0 @@
-import Foundation
-
-struct Config {
-    static let reportServerURL = "https://your-server.example.com/report"
-}
