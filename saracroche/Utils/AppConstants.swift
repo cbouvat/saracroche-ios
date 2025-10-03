@@ -8,6 +8,9 @@ struct AppConstants {
   // MARK: - Call Directory Extension
   static let callDirectoryExtensionIdentifier = "com.cbouvat.saracroche.blocker"
 
+  // MARK: - Server URLs
+  static let reportServerURL = "https://saracroche-server.cbouvat.com/report"
+
   // MARK: - Background Tasks
   //static let backgroundUpdateIdentifier = "com.cbouvat.saracroche.background-update"
   //static let backgroundUpdateInterval: TimeInterval = 4 * 60 * 60  // In seconds
