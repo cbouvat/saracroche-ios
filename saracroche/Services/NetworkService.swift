@@ -43,8 +43,8 @@ class NetworkService {
     self.session = URLSession(configuration: configuration)
   }
 
-  func reportPhoneNumber(_ phone: Int64) async throws {
-    guard let url = URL(string: "https://saracroche.org/api/report") else {
+  func reportPhoneNumber(_ phoneNumber: String) async throws {
+    guard let url = URL(string: AppConstants.reportServerURL) else {
       throw NetworkError.invalidURL
     }
 
