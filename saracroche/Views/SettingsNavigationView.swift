@@ -108,7 +108,7 @@ struct SettingsNavigationView: View {
                   withAllowedCharacters: .urlQueryAllowed
                 ) ?? ""
               let urlString =
-                "mailto:saracroche@cbouvat.com?subject=Contact%20-%20Saracroche%20iOS&body="
+                "mailto:mail@cbouvat.com?subject=Contact%20-%20Saracroche%20iOS&body="
                 + encodedBody
               if let url = URL(string: urlString) {
                 UIApplication.shared.open(url)

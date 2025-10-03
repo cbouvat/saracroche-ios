@@ -459,7 +459,7 @@ private struct SupportItem: View {
               withAllowedCharacters: .urlQueryAllowed
             ) ?? ""
           let urlString =
-            "mailto:saracroche@cbouvat.com?subject=Bug%20-%20Saracroche%20iOS&body="
+            "mailto:mail@cbouvat.com?subject=Bug%20-%20Saracroche%20iOS&body="
             + encodedBody
           if let url = URL(string: urlString) {
             UIApplication.shared.open(url)
