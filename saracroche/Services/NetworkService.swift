@@ -44,7 +44,7 @@ class NetworkService {
   }
 
   func reportPhoneNumber(_ phoneNumber: String) async throws {
-    guard let url = URL(string: Config.reportServerURL) else {
+    guard let url = URL(string: "https://saracroche-server.cbouvat.com/report") else {
       throw NetworkError.invalidURL
     }
 
