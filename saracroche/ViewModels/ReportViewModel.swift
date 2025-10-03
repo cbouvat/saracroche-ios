@@ -55,12 +55,6 @@ class ReportViewModel: ObservableObject {
       return false
     }
 
-    // Validation for French numbers
-    if trimmedNumber.hasPrefix("+33") && trimmedNumber.count != 12 {
-      showError("Les numéros français doivent contenir 12 caractères au total.")
-      return false
-    }
-
     return true
   }
 
