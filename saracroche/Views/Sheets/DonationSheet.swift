@@ -80,7 +80,7 @@ struct DonationSheet: View {
 
           VStack(spacing: 16) {
             Button {
-              if let url = URL(string: "https://buy.stripe.com/9B6aEXcJ8flofsgfIU2oE01") {
+              if let url = URL(string: "https://donate.stripe.com/9B6aEXcJ8flofsgfIU2oE01") {
                 UIApplication.shared.open(url)
               }
             } label: {
