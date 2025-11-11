@@ -51,7 +51,7 @@ struct SettingsNavigationView: View {
 
         Section {
           Button {
-            if let url = URL(string: "https://cbouvat.com/saracroche") {
+            if let url = URL(string: "https://saracroche.org/") {
               UIApplication.shared.open(url)
             }
           } label: {
