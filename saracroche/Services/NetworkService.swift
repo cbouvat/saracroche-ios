@@ -43,8 +43,8 @@ class NetworkService {
     self.session = URLSession(configuration: configuration)
   }
 
-  func reportPhoneNumber(_ phoneNumber: String) async throws {
-    guard let url = URL(string: "https://saracroche-server.cbouvat.com/report") else {
+  func reportPhoneNumber(_ phone: Int64) async throws {
+    guard let url = URL(string: "https://saracroche.org/api/report") else {
       throw NetworkError.invalidURL
     }
 
@@ -53,10 +53,8 @@ class NetworkService {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     let requestData = await ReportRequest(
-      number: phoneNumber,
-      deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "unknown",
-      appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"]
-        as? String ?? "unknown"
+      phone: phone,
+      device_id: UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
     )
 
     do {
@@ -132,7 +130,6 @@ class NetworkService {
 }
 
 private struct ReportRequest: Codable {
-  let number: String
-  let deviceId: String
-  let appVersion: String
+  let phone: Int64
+  let device_id: String
 }
