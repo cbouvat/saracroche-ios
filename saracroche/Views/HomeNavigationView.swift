@@ -431,7 +431,7 @@ struct HomeNavigationView: View {
           Text(
             "\(viewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(viewModel.blockerPhoneNumberTotal)"
           )
-          .font(.body)
+          .font(.body.monospacedDigit())
           .multilineTextAlignment(.center)
         }
 
