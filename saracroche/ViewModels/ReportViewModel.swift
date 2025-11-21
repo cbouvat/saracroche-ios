@@ -29,7 +29,8 @@ class ReportViewModel: ObservableObject {
     guard validatePhoneNumber() else { return }
 
     do {
-      try await networkService.reportPhoneNumber(phoneNumber)
+      let phoneNumberInt64 = convertToInt64(phoneNumber)
+      try await networkService.reportPhoneNumber(phoneNumberInt64)
       handleSuccess()
     } catch {
       handleError(error)
@@ -85,6 +86,11 @@ class ReportViewModel: ObservableObject {
   func formatPhoneNumber(_ input: String) -> String {
     let cleaned = input.replacingOccurrences(of: " ", with: "")
     return cleaned.filter { $0.isNumber || $0 == "+" }
+  }
+
+  private func convertToInt64(_ phoneNumber: String) -> Int64 {
+    let digitsOnly = phoneNumber.filter { $0.isNumber }
+    return Int64(digitsOnly) ?? 0
   }
 }
 
