@@ -32,7 +32,7 @@ struct SettingsNavigationView: View {
 
         Section {
           Button {
-            if let url = URL(string: "https://cbouvat.com/saracroche/help/") {
+            if let url = URL(string: "https://saracroche.org/fr/help") {
               UIApplication.shared.open(url)
             }
           } label: {
@@ -40,7 +40,7 @@ struct SettingsNavigationView: View {
           }
 
           Button {
-            if let url = URL(string: "https://cbouvat.com/saracroche/privacy/") {
+            if let url = URL(string: "https://saracroche.org/fr/privacy") {
               UIApplication.shared.open(url)
             }
           } label: {
@@ -48,7 +48,7 @@ struct SettingsNavigationView: View {
           }
 
           Button {
-            if let url = URL(string: "https://saracroche.org/") {
+            if let url = URL(string: "https://saracroche.org") {
               UIApplication.shared.open(url)
             }
           } label: {
@@ -127,7 +127,7 @@ struct SettingsNavigationView: View {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Mastodon", systemImage: "person.bubble.fill")
+            Label("Mastodon @cbouvat", systemImage: "person.bubble.fill")
           }
         } header: {
           Text("Contact")
