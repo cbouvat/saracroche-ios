@@ -43,7 +43,7 @@ class NetworkService {
     self.session = URLSession(configuration: configuration)
   }
 
-  func reportPhoneNumber(_ phoneNumber: String) async throws {
+  func reportPhoneNumber(_ phone: Int64) async throws {
     guard let url = URL(string: AppConstants.reportServerURL) else {
       throw NetworkError.invalidURL
     }
@@ -51,10 +51,11 @@ class NetworkService {
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
 
     let requestData = await ReportRequest(
-      number: phoneNumber,
-      deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
+      phone: phone,
+      device_id: UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
     )
 
     do {
@@ -130,6 +131,6 @@ class NetworkService {
 }
 
 private struct ReportRequest: Codable {
-  let number: String
-  let deviceId: String
+  let phone: Int64
+  let device_id: String
 }
