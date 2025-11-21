@@ -7,8 +7,6 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
     if context.isIncremental {
       incrementalUpdate(to: context)
-    } else {
-      fullUpdate(to: context)
     }
 
     context.completeRequest()
@@ -21,7 +19,6 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   private func incrementalUpdate(
     to context: CXCallDirectoryExtensionContext
   ) {
-
     let action = sharedUserDefaults()?.string(forKey: "action") ?? ""
 
     if action == "resetNumbersList" {
@@ -31,15 +28,6 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     } else {
       print("Unknown action: \(action)")
     }
-
-    sharedUserDefaults()?.set("", forKey: "action")
-  }
-
-  private func fullUpdate(
-    to context: CXCallDirectoryExtensionContext
-  ) {
-    // Add fake number to iOS make sure the extension is working
-    context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
   }
 
   private func resetNumbersList(
@@ -47,13 +35,10 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   ) {
 
     print("Resetting all numbers list")
+    sharedUserDefaults()?.set("", forKey: "action")
     sharedUserDefaults()?.set(0, forKey: "blockedNumbers")
-
+    
     context.removeAllBlockingEntries()
-
-    // Add fake number to iOS make sure the extension is working
-    context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
-
     context.removeAllIdentificationEntries()
 
     print("Successfully reset all numbers list")
@@ -62,6 +47,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   private func addNumbersList(
     to context: CXCallDirectoryExtensionContext
   ) {
+    sharedUserDefaults()?.set("", forKey: "action")
 
     var blockedNumbers = Int64(
       sharedUserDefaults()?.integer(forKey: "blockedNumbers") ?? 0
