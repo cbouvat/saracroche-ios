@@ -9,7 +9,7 @@ struct AppConstants {
   static let callDirectoryExtensionIdentifier = "com.cbouvat.saracroche.blocker"
 
   // MARK: - Server URLs
-  static let reportServerURL = "https://saracroche-server.cbouvat.com/report"
+  static let reportServerURL = "https://saracroche.org/api/report"
 
   // MARK: - Background Tasks
   //static let backgroundUpdateIdentifier = "com.cbouvat.saracroche.background-update"
@@ -22,6 +22,6 @@ struct AppConstants {
   }
 
   // MARK: - Processing
-  static let phoneNumberChunkSize = 20_000
-  static let currentBlocklistVersion = "7"
+  static let phoneNumberChunkSize = 10_000
+  static let currentBlocklistVersion = "8"
 }
