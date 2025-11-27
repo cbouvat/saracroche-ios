@@ -42,16 +42,7 @@ You can also try the latest beta version through [TestFlight](https://testflight
 
 ## List of prefix numbers
 
-The first list is the one containing numbers reserved for telemarketing by ARCEP : https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/la-numerotation.html
-And other numbers by the community.
-
-### Information about prefixes
-
-All prefixes are communicated by ARCEP : https://www.data.gouv.fr/fr/datasets/ressources-en-numerotation-telephonique/ and https://www.data.gouv.fr/fr/datasets/identifiants-de-communications-electroniques/
-- `MAJNUM.csv` file for the list of prefixes : https://extranet.arcep.fr/uploads/MAJNUM.csv
-- `identifiants_CE.csv` file for the operators of the prefixes : https://extranet.arcep.fr/uploads/identifiants_CE.csv
-
-Tool to identify the operator by prefix : https://www.arcep.fr/mes-demarches-et-services/entreprises/fiches-pratiques/base-numerotation.html
+The list of prefix numbers is in `blocked-patterns.json` file in the repository.
 
 ## Contributing
 
@@ -67,7 +58,7 @@ Contributions are welcome! Here's how you can help:
 
 If you find Saracroche useful, consider sponsoring the project to help with maintenance and new features:
 
-- [GitHub Sponsors](https://github.com/sponsors/cbouvat)
+- [Sponsor and support on Saracroche.org](https://saracroche.org/fr/support)
 
 ## Star the Project ⭐
 
