@@ -9,9 +9,9 @@ class PhoneNumberService {
   // MARK: - Load Patterns
   func loadPhoneNumberPatterns() -> [String] {
     guard
-      let url = Bundle.main.url(forResource: "blocked-prefixes", withExtension: "json")
+      let url = Bundle.main.url(forResource: "blocked-patterns", withExtension: "json")
     else {
-      print("blocked-prefixes.json not found in bundle.")
+      print("blocked-patterns.json not found in bundle.")
       return []
     }
 
@@ -24,7 +24,7 @@ class PhoneNumberService {
         return jsonArray.compactMap { $0["pattern"] }
       }
     } catch {
-      print("Error loading blocked-prefixes.json: \(error.localizedDescription)")
+      print("Error loading blocked-patterns.json: \(error.localizedDescription)")
     }
 
     return []
