@@ -51,6 +51,28 @@ struct SettingsNavigationView: View {
 
         Section {
           Button {
+            if let url = URL(
+              string:
+                "https://saracroche.org/fr/help/"
+            ) {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Aide et FAQ", systemImage: "questionmark.circle.fill")
+          }
+
+          Button {
+            if let url = URL(
+              string:
+                "https://saracroche.org/fr/privacy/"
+            ) {
+              UIApplication.shared.open(url)
+            }
+          } label: {
+            Label("Confidentialité", systemImage: "shield.fill")
+          }
+
+          Button {
             if let url = URL(string: "https://saracroche.org/") {
               UIApplication.shared.open(url)
             }
@@ -81,7 +103,11 @@ struct SettingsNavigationView: View {
               systemImage: "keyboard.fill"
             )
           }
+        } header: {
+          Text("Liens")
+        }
 
+        Section {
           Button {
             if let version = Bundle.main.infoDictionary?[
               "CFBundleShortVersionString"
@@ -96,9 +122,6 @@ struct SettingsNavigationView: View {
                 """
 
               let body = """
-                Bonjour,
-
-                (Votre message ici)
 
                 \(deviceInfo)
                 """
@@ -116,7 +139,7 @@ struct SettingsNavigationView: View {
             }
           } label: {
             Label(
-              "Contactez le développeur",
+              "Contacter par e-mail",
               systemImage: "exclamationmark.bubble.fill"
             )
           }
@@ -126,13 +149,13 @@ struct SettingsNavigationView: View {
               UIApplication.shared.open(url)
             }
           } label: {
-            Label("Mastodon : @cbouvat", systemImage: "person.bubble.fill")
+            Label("Mastodon", systemImage: "person.bubble.fill")
           }
         } header: {
-          Text("Liens")
+          Text("Contact")
         } footer: {
           Text(
-            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")\n\nBisou 😘"
           )
           .padding(.vertical)
           .frame(maxWidth: .infinity)

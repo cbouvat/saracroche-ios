@@ -14,10 +14,6 @@ struct SaracrocheView: View {
         .tabItem {
           Label("Signaler", systemImage: "exclamationmark.bubble.fill")
         }
-      HelpNavigationView()
-        .tabItem {
-          Label("Aide", systemImage: "questionmark.circle.fill")
-        }
       SettingsNavigationView(
         viewModel: viewModel,
         showDeleteConfirmation: $showDeleteConfirmation
