@@ -1,10 +1,4 @@
-default: help ## Default target, shows help
+.PHONY: lint
 
-help: ## Display this help
-	@echo "📖 Project help"
-	@echo "✍️ Usage: make [command]"
-	@echo "👉 Available commands open Makefile to see all commands"
-
-swift-format: ## Format Swift code using swift-format
-	@echo "Formatting Swift code..."
+lint: ## Format Swift code using swift-format
 	swift-format --in-place --recursive .
