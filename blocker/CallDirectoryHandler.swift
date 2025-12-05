@@ -37,7 +37,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     print("Resetting all numbers list")
     sharedUserDefaults()?.set("", forKey: "action")
     sharedUserDefaults()?.set(0, forKey: "blockedNumbers")
-    
+
     context.removeAllBlockingEntries()
     context.removeAllIdentificationEntries()
 
