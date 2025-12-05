@@ -29,56 +29,36 @@ struct InfoSheet: View {
           updateInfoView
 
           VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 16) {
-              Text("Pourquoi les numéros bloqués apparaissent-ils dans l'historique des appels ?")
-                .font(.title3)
-                .fontWeight(.semibold)
+            Text("Besoin d'informations supplémentaires ?")
+              .font(.title3)
+              .fontWeight(.semibold)
 
-              Text(
-                """
-                Depuis iOS 18, les numéros bloqués par les extensions de blocage d'appels sont visibles dans l'historique des appels. Cela permet de garder une trace des appels bloqués, mais ne signifie pas que l'appel a été reçu ou que vous devez y répondre.
-                """
-              )
-              .font(.body)
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-              RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.1))
+            Text(
+              """
+              Si vous avez d'autres questions ou besoin d'aide, n'hésitez pas à vous rendre sur la page web d'aide.
+              Vous y trouverez la foire aux questions (FAQ).
+              """
             )
+            .font(.body)
 
-            VStack(alignment: .leading, spacing: 8) {
-              Text("Besoin d'informations supplémentaires ?")
-                .font(.title3)
-                .fontWeight(.semibold)
-
-              Text(
-                """
-                Si vous avez d'autres questions ou besoin d'aide, n'hésitez pas à vous rendre sur la page web d'aide.
-                """
-              )
-              .font(.body)
-
-              Button {
-                if let url = URL(string: "https://saracroche.org/fr/help") {
-                  UIApplication.shared.open(url)
-                }
-              } label: {
-                Label("Ouvrir la page d'aide", systemImage: "questionmark.circle.fill")
+            Button {
+              if let url = URL(string: "https://saracroche.org/fr/help") {
+                UIApplication.shared.open(url)
               }
-              .buttonStyle(
-                .fullWidth(background: .blue, foreground: .white)
-              )
-
+            } label: {
+              Label("Ouvrir la page d'aide", systemImage: "questionmark.circle.fill")
             }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-              RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.1))
+            .buttonStyle(
+              .fullWidth(background: .blue, foreground: .white)
             )
+
           }
+          .padding()
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .background(
+            RoundedRectangle(cornerRadius: 12)
+              .fill(Color.gray.opacity(0.1))
+          )
         }
         .padding()
       }
