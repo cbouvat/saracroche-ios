@@ -94,7 +94,7 @@ struct DonationSheet: View {
             )
 
             Button {
-              if let url = URL(string: "https://paypal.me/cbouvat") {
+              if let url = URL(string: "https://www.paypal.com/donate/?hosted_button_id=WJYS344L5MMYJ") {
                 UIApplication.shared.open(url)
               }
             } label: {
