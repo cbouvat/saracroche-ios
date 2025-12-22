@@ -14,7 +14,7 @@ The application is built as a modular iOS system with:
 
 ## Do
 
-- **Run `make lint` after making changes to Swift code**
+- **Run `swift-format --in-place --recursive .` after making changes to Swift code**
 - Keep it simple (KISS principle)
 - Use Swift 6
 - Write SwiftUI (iOS 15+)
@@ -32,4 +32,4 @@ The application is built as a modular iOS system with:
 
 ## Commands
 
-- `make lint`: Lint Swift code with SwiftLint
+- `swift-format --in-place --recursive .`: Lint Swift code with SwiftLint
