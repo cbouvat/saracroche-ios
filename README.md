@@ -16,12 +16,15 @@ Saracroche is an iOS app that protects you from unwanted calls by blocking spam 
 ## Installation
 
 ### App Store
+
 Saracroche is available on the [App Store](https://apps.apple.com/app/saracroche/id6743679292).
 
 ### TestFlight
+
 You can also try the latest beta version through [TestFlight](https://testflight.apple.com/join/CFCjF6d2).
 
 ### Building from Source
+
 1. Clone the repository
 2. Copy `saracroche/Config.swift.example` to `Config.swift`
 3. Update the configuration with your server URL
@@ -29,6 +32,7 @@ You can also try the latest beta version through [TestFlight](https://testflight
 5. Build and run the project on your device
 
 **Requirements:**
+
 - Xcode 15.0+
 - iOS 15.0+
 - Swift 5.9+
