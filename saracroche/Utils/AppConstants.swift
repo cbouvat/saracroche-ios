@@ -25,7 +25,6 @@ struct AppConstants {
 
   // MARK: - Processing
   static let phoneNumberChunkSize = 5_000
-  static let currentBlocklistVersion = "8"
   static let blockedPatternsCacheFileName = "blocked-patterns-cache.json"
   static let blockedPatternsDownloadInterval: TimeInterval = 12 * 60 * 60
 }
