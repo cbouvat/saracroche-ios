@@ -14,6 +14,7 @@ class BlockerViewModel: ObservableObject {
   @Published var lastUpdateCheck: Date? = nil
   @Published var lastUpdate: Date? = nil
   @Published var updateStarted: Date? = nil
+  @Published var blockedPatternsLastCheck: Date? = nil
 
   private let callDirectoryService = CallDirectoryService.shared
   private let backgroundUpdateService = BackgroundUpdateService.shared
@@ -44,6 +45,8 @@ class BlockerViewModel: ObservableObject {
   func refreshData() {
     checkUpdateState()
 
+    checkBlockedPatternsForDailyRefresh()
+
     if updateState.isInProgress {
       return
     }
@@ -70,6 +73,17 @@ class BlockerViewModel: ObservableObject {
     }
   }
 
+  private func checkBlockedPatternsForDailyRefresh() {
+    guard BlockedPatternsService.shared.shouldCheckForNewPatterns() else { return }
+    Task {
+      do {
+        try await BlockedPatternsService.shared.ensureLatestPatternsIfNeeded()
+      } catch {
+        print("Blocked patterns refresh failed: \(error.localizedDescription)")
+      }
+    }
+  }
+
   func checkUpdateState() {
     DispatchQueue.main.async { [weak self] in
       self?.blockerPhoneNumberBlocked = Int64(
@@ -85,6 +99,8 @@ class BlockerViewModel: ObservableObject {
       self?.lastUpdateCheck = self?.userDefaults.getLastUpdateCheck()
       self?.lastUpdate = self?.userDefaults.getLastUpdate()
       self?.updateStarted = self?.userDefaults.getUpdateStarted()
+      self?.blockedPatternsLastCheck =
+        self?.userDefaults.getBlockedPatternsLastCheck()
     }
   }
 

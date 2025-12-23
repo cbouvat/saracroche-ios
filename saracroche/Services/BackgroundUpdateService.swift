@@ -6,8 +6,8 @@ class BackgroundUpdateService: ObservableObject {
   static let shared = BackgroundUpdateService()
 
   // MARK: - Constants
-  //private let backgroundUpdateIdentifier = AppConstants.backgroundUpdateIdentifier
-  //private let backgroundUpdateInterval = AppConstants.backgroundUpdateInterval
+  private let backgroundUpdateIdentifier = AppConstants.backgroundUpdateIdentifier
+  private let backgroundUpdateInterval = AppConstants.backgroundUpdateInterval
   private let currentBlocklistVersion = AppConstants.currentBlocklistVersion
 
   // MARK: - Services
@@ -23,13 +23,13 @@ class BackgroundUpdateService: ObservableObject {
   // MARK: - Public Methods
 
   func forceBackgroundUpdate(completion: @escaping (Bool) -> Void) {
-    performBackgroundUpdate(completion: completion)
+    performBackgroundUpdate(forceDownload: true, completion: completion)
   }
 
   // MARK: - Private Methods
   private func setupBackgroundTasks() {
     BGTaskScheduler.shared.register(
-      forTaskWithIdentifier: "com.cbouvat.saracroche.background-update",
+      forTaskWithIdentifier: backgroundUpdateIdentifier,
       using: nil
     ) { task in
       self.handleBackgroundUpdate(task: task as! BGProcessingTask)
@@ -37,17 +37,15 @@ class BackgroundUpdateService: ObservableObject {
   }
 
   private func scheduleBackgroundTask() {
-    let taskRequest = BGProcessingTaskRequest(
-      identifier: "com.cbouvat.saracroche.background-update")
-    taskRequest.earliestBeginDate = Date(timeIntervalSinceNow: 1 * 60 * 60)
+    let taskRequest = BGProcessingTaskRequest(identifier: backgroundUpdateIdentifier)
+    let scheduledDate = Date(timeIntervalSinceNow: backgroundUpdateInterval)
+    taskRequest.earliestBeginDate = scheduledDate
     taskRequest.requiresNetworkConnectivity = false
     taskRequest.requiresExternalPower = false
 
     do {
       try BGTaskScheduler.shared.submit(taskRequest)
-      print(
-        "Background app refresh task scheduled for \(Date(timeIntervalSinceNow: 1 * 60 * 60))"
-      )
+      print("Background app refresh task scheduled for \(scheduledDate)")
     } catch {
       print("Failed to schedule background app refresh: \(error)")
     }
@@ -82,32 +80,60 @@ class BackgroundUpdateService: ObservableObject {
     task.setTaskCompleted(success: true)
   }
 
-  private func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
-    print("Performing background update")
-    self.userDefaults.setUpdateStarted(Date())
-    self.userDefaults.setUpdateState(.starting)
-
-    // Check extension status
-    callDirectoryService.checkExtensionStatus { [weak self] status in
-      guard status == .enabled else {
-        self?.userDefaults.setUpdateState(.error)
-        self?.userDefaults.clearUpdateStarted()
+  private func performBackgroundUpdate(
+    forceDownload: Bool = false,
+    completion: @escaping (Bool) -> Void
+  ) {
+    Task { [weak self] in
+      guard let self else {
         completion(false)
         return
       }
 
-      // Use the service directly for the update
-      self?.callDirectoryService.updateBlockerList(
+      do {
+        try await BlockedPatternsService.shared.ensureLatestPatternsIfNeeded(
+          force: forceDownload
+        )
+      } catch {
+        print(
+          "Blocked patterns download failed: \(error.localizedDescription)"
+        )
+      }
+
+      DispatchQueue.main.async {
+        self.executeUpdateFlow(completion: completion)
+      }
+    }
+  }
+
+  private func executeUpdateFlow(completion: @escaping (Bool) -> Void) {
+    print("Performing background update")
+    self.userDefaults.setUpdateStarted(Date())
+    self.userDefaults.setUpdateState(.starting)
+
+    callDirectoryService.checkExtensionStatus { [weak self] status in
+      guard let self else {
+        completion(false)
+        return
+      }
+
+      guard status == .enabled else {
+        self.userDefaults.setUpdateState(.error)
+        self.userDefaults.clearUpdateStarted()
+        completion(false)
+        return
+      }
+
+      self.callDirectoryService.updateBlockerList(
         onProgress: {
-          self?.userDefaults.setUpdateState(.installing)
+          self.userDefaults.setUpdateState(.installing)
         },
         onCompletion: { success in
           if success {
-
-            self?.userDefaults.setLastUpdate(Date())
-            self?.userDefaults.setUpdateState(.idle)
+            self.userDefaults.setLastUpdate(Date())
+            self.userDefaults.setUpdateState(.idle)
           }
-          self?.userDefaults.clearUpdateStarted()
+          self.userDefaults.clearUpdateStarted()
           completion(success)
         }
       )
@@ -116,7 +142,6 @@ class BackgroundUpdateService: ObservableObject {
 }
 
 // MARK: - App Lifecycle Methods
-
 extension BackgroundUpdateService {
   func applicationDidEnterBackground() {
     scheduleBackgroundTask()

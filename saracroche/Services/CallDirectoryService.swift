@@ -74,14 +74,17 @@ class CallDirectoryService {
 
     sharedUserDefaults.setBlockedNumbers(0)
     userDefaults.setBlocklistVersion(AppConstants.currentBlocklistVersion)
-    userDefaults.setTotalBlockedNumbers(phoneNumberService.countAllBlockedNumbers())
+    userDefaults.setTotalBlockedNumbers(
+      phoneNumberService.countPhoneNumbersRepresentedByAllBlockingPatterns()
+    )
 
     func processNextPattern() {
       if !patternsToProcess.isEmpty {
         let pattern = patternsToProcess.removeFirst()
-        let numbersListForPattern = phoneNumberService.generatePhoneNumbers(
-          pattern: pattern
-        )
+        let numbersListForPattern =
+          phoneNumberService.expandBlockingPatternIntoPhoneNumbers(
+            from: pattern
+          )
 
         var chunkIndex = 0
 

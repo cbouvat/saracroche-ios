@@ -116,6 +116,30 @@ struct InfoSheet: View {
         .padding(.vertical, 4)
       }
 
+      // État de la mise à jour
+      HStack(spacing: 12) {
+        Image(systemName: "arrow.down.circle.fill")
+          .font(.system(size: 20))
+          .foregroundColor(.blue)
+
+        VStack(alignment: .leading, spacing: 2) {
+          Text("Dernier téléchargement")
+            .font(.subheadline)
+            .foregroundColor(.primary)
+          if let downloadDate = viewModel.blockedPatternsLastCheck {
+            Text(formatDate(downloadDate))
+              .font(.caption)
+              .foregroundColor(.secondary)
+          } else {
+            Text("Jamais téléchargé")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
+        Spacer()
+      }
+      .padding(.vertical, 4)
+
       // Dernière mise à jour
       if let lastUpdate = viewModel.lastUpdate {
         HStack(spacing: 12) {

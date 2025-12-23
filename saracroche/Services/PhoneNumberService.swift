@@ -6,32 +6,12 @@ class PhoneNumberService {
 
   private init() {}
 
-  // MARK: - Load Patterns
   func loadPhoneNumberPatterns() -> [String] {
-    guard
-      let url = Bundle.main.url(forResource: "blocked-patterns", withExtension: "json")
-    else {
-      print("blocked-patterns.json not found in bundle.")
-      return []
-    }
-
-    do {
-      let data = try Data(contentsOf: url)
-      if let jsonArray = try JSONSerialization.jsonObject(
-        with: data,
-        options: []
-      ) as? [[String: String]] {
-        return jsonArray.compactMap { $0["pattern"] }
-      }
-    } catch {
-      print("Error loading blocked-patterns.json: \(error.localizedDescription)")
-    }
-
-    return []
+    BlockedPatternsService.shared.patternStrings
   }
 
-  // MARK: - Count All Blocked Numbers
-  func countAllBlockedNumbers() -> Int64 {
+  // MARK: - Count Phone Numbers Represented by All Blocking Patterns
+  func countPhoneNumbersRepresentedByAllBlockingPatterns() -> Int64 {
     var totalCount: Int64 = 0
 
     for pattern in loadPhoneNumberPatterns() {
@@ -42,8 +22,10 @@ class PhoneNumberService {
     return totalCount
   }
 
-  // MARK: - Generate Phone Numbers
-  func generatePhoneNumbers(pattern: String) -> [String] {
+  // MARK: - Expand Blocking Pattern Into Phone Numbers
+  func expandBlockingPatternIntoPhoneNumbers(
+    from pattern: String
+  ) -> [String] {
     if !pattern.contains("#") {
       return [pattern]
     }

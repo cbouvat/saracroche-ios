@@ -20,7 +20,7 @@ class ReportViewModel: ObservableObject {
     }
   }
 
-  private let networkService = NetworkService()
+  private let apiService = APIService()
 
   func submitPhoneNumber() async {
     // Formater le numéro avant validation
@@ -30,7 +30,7 @@ class ReportViewModel: ObservableObject {
 
     do {
       let phoneNumberInt64 = convertToInt64(phoneNumber)
-      try await networkService.reportPhoneNumber(phoneNumberInt64)
+      try await apiService.reportPhoneNumber(phoneNumberInt64)
       handleSuccess()
     } catch {
       handleError(error)
