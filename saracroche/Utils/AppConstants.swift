@@ -11,7 +11,7 @@ struct AppConstants {
   // MARK: - Server URLs
   static let apiBaseURL = "https://saracroche.org/api"
   static let reportServerURL = "\(apiBaseURL)/report"
-  static let blockedPatternsDownloadURL = "\(apiBaseURL)/download/blocked-patterns"
+  static let blockedPatternsDownloadURL = "\(apiBaseURL)/lists/french-list-arcep-operators"
 
   // MARK: - Background Tasks
   static let backgroundUpdateIdentifier = "com.cbouvat.saracroche.background-update"
