@@ -24,6 +24,7 @@ The application is built as a modular iOS system with:
 - Ensure A11Y compliance with VoiceOver
 - Store configuration in `AppConstants.swift`
 - Use App Groups for inter-process communication
+- Write documentation in `docs/` folder
 
 ## Don't
 
