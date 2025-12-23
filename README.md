@@ -46,7 +46,7 @@ You can also try the latest beta version through [TestFlight](https://testflight
 
 ## List of prefix numbers
 
-The list of prefix numbers is in `blocked-patterns.json` file in the repository.
+The prefix numbers are provided by the remote download service and kept current via the app's background updates.
 
 ## Contributing
 
