@@ -33,7 +33,7 @@ enum NetworkError: Error {
   }
 }
 
-class NetworkService {
+class APIService {
   private let session: URLSession
 
   init() {
@@ -70,6 +70,33 @@ class NetworkService {
       try handleHTTPResponse(response, data: data)
     } catch {
       try handleNetworkError(error)
+      throw NetworkError.unknown
+    }
+  }
+
+  func downloadBlockedPatterns(for deviceId: String) async throws -> Data {
+    guard var components = URLComponents(string: AppConstants.blockedPatternsDownloadURL) else {
+      throw NetworkError.invalidURL
+    }
+    components.queryItems = [
+      URLQueryItem(name: "device_id", value: deviceId)
+    ]
+
+    guard let url = components.url else {
+      throw NetworkError.invalidURL
+    }
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+    do {
+      let (data, response) = try await session.data(for: request)
+      try handleHTTPResponse(response, data: data)
+      return data
+    } catch {
+      try handleNetworkError(error)
+      throw NetworkError.unknown
     }
   }
 
@@ -80,7 +107,6 @@ class NetworkService {
     case 200...299:
       return  // Success, no action needed
     case 400...499, 500...599:
-      // Try to extract error message from response
       let errorMessage = extractErrorMessage(from: data)
       throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
     default:
@@ -105,11 +131,9 @@ class NetworkService {
   }
 
   private func extractErrorMessage(from data: Data) -> String? {
-    // Try to decode JSON error response
     if let json = try? JSONSerialization.jsonObject(with: data)
       as? [String: Any]
     {
-      // Common error message keys
       if let message = json["message"] as? String {
         return message
       }
@@ -121,7 +145,6 @@ class NetworkService {
       }
     }
 
-    // Try to decode as plain text
     if let text = String(data: data, encoding: .utf8), !text.isEmpty {
       return text
     }
