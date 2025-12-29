@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeNavigationView: View {
-  @ObservedObject var viewModel: BlockerViewModel
+  @ObservedObject var blockerViewModel: BlockerblockerViewModel
   @State private var showDonationSheet = false
   @State private var showInfoSheet = false
 
@@ -9,7 +9,7 @@ struct HomeNavigationView: View {
     NavigationView {
       ScrollView {
         VStack(spacing: 16) {
-          if viewModel.blockerExtensionStatus == .enabled {
+          if blockerViewModel.blockerExtensionStatus == .enabled {
             enabledExtensionContentView
           } else {
             disabledExtensionContentView
@@ -19,32 +19,32 @@ struct HomeNavigationView: View {
       }
       .navigationTitle("Saracroche")
       .onAppear {
-        viewModel.startPeriodicRefresh()
+        blockerViewModel.startPeriodicRefresh()
       }
       .onDisappear {
-        viewModel.stopPeriodicRefresh()
+        blockerViewModel.stopPeriodicRefresh()
       }
       .sheet(isPresented: $showDonationSheet) {
         DonationSheet()
       }
       .sheet(isPresented: $showInfoSheet) {
-        InfoSheet(viewModel: viewModel)
+        InfoSheet(blockerViewModel: blockerViewModel)
       }
     }
   }
 
   private var enabledExtensionContentView: some View {
     VStack(spacing: 16) {
-      if viewModel.updateState == .starting {
+      if blockerViewModel.updateState == .starting {
         startingView
-      } else if viewModel.updateState == .installing {
+      } else if blockerViewModel.updateState == .installing {
         installingView
-      } else if viewModel.updateState == .error {
+      } else if blockerViewModel.updateState == .error {
         errorView
-      } else if viewModel.updateState == .idle {
-        if viewModel.blockerPhoneNumberBlocked == 0 {
+      } else if blockerViewModel.updateState == .idle {
+        if blockerViewModel.blockerPhoneNumberBlocked == 0 {
           noBlockedNumbersView
-        } else if viewModel.blocklistInstalledVersion != viewModel.blocklistVersion {
+        } else if blockerViewModel.blocklistInstalledVersion != blockerViewModel.blocklistVersion {
           updateAvailableView
         } else {
           completeInstallationView
@@ -56,7 +56,7 @@ struct HomeNavigationView: View {
 
   private var disabledExtensionContentView: some View {
     VStack(alignment: .center, spacing: 16) {
-      if viewModel.blockerExtensionStatus == .disabled {
+      if blockerViewModel.blockerExtensionStatus == .disabled {
         if #available(iOS 18.0, *) {
           Image(systemName: "xmark.circle.fill")
             .font(.system(size: 60))
@@ -85,7 +85,7 @@ struct HomeNavigationView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
 
         Button {
-          viewModel.openSettings()
+          blockerViewModel.openSettings()
         } label: {
           HStack {
             Image(systemName: "gear")
@@ -95,7 +95,7 @@ struct HomeNavigationView: View {
         .buttonStyle(
           .fullWidth(background: Color.red, foreground: .white)
         )
-      } else if viewModel.blockerExtensionStatus == .unknown {
+      } else if blockerViewModel.blockerExtensionStatus == .unknown {
         if #available(iOS 18.0, *) {
           Image(systemName: "questionmark.circle.fill")
             .font(.system(size: 60))
@@ -111,7 +111,7 @@ struct HomeNavigationView: View {
           .font(.title3)
           .bold()
           .multilineTextAlignment(.center)
-      } else if viewModel.blockerExtensionStatus == .error {
+      } else if blockerViewModel.blockerExtensionStatus == .error {
         if #available(iOS 18.0, *) {
           Image(systemName: "xmark.octagon.fill")
             .font(.system(size: 60))
@@ -126,7 +126,7 @@ struct HomeNavigationView: View {
         Text("Erreur lors de la vérification")
           .font(.title3)
           .bold()
-      } else if viewModel.blockerExtensionStatus == .unexpected {
+      } else if blockerViewModel.blockerExtensionStatus == .unexpected {
         if #available(iOS 18.0, *) {
           Image(systemName: "exclamationmark.triangle.fill")
             .font(.system(size: 60))
@@ -173,7 +173,7 @@ struct HomeNavigationView: View {
         .bold()
         .multilineTextAlignment(.center)
 
-      Text("\(viewModel.blockerPhoneNumberBlocked) numéros bloqués")
+      Text("\(blockerViewModel.blockerPhoneNumberBlocked) numéros bloqués")
         .font(.title2)
         .fontWeight(.semibold)
         .foregroundColor(.green)
@@ -272,7 +272,7 @@ struct HomeNavigationView: View {
       .frame(maxWidth: .infinity, alignment: .leading)
 
       Button {
-        viewModel.resetApplication()
+        blockerViewModel.resetApplication()
       } label: {
         HStack {
           Image(systemName: "trash.circle.fill")
@@ -298,7 +298,7 @@ struct HomeNavigationView: View {
       .frame(maxWidth: .infinity, alignment: .leading)
 
       Button {
-        viewModel.openSettings()
+        blockerViewModel.openSettings()
       } label: {
         HStack {
           Image(systemName: "gearshape.fill")
@@ -422,38 +422,17 @@ struct HomeNavigationView: View {
 
   @ViewBuilder
   private var updateProgressView: some View {
-    if viewModel.updateState.isInProgress {
+    if blockerViewModel.updateState.isInProgress {
       VStack(spacing: 16) {
         ProgressView()
           .scaleEffect(1.5)
 
-        if viewModel.blockerPhoneNumberBlocked > 0 {
+        if blockerViewModel.blockerPhoneNumberBlocked > 0 {
           Text(
-            "\(viewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(viewModel.blockerPhoneNumberTotal)"
+            "\(blockerViewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(blockerViewModel.blockerPhoneNumberTotal)"
           )
           .font(.body.monospacedDigit())
           .multilineTextAlignment(.center)
-        }
-
-        if viewModel.isUpdateTakingTooLong {
-          Text(
-            "Si le nombre de numéros bloqués n'augmente pas, essayez de relancer la mise à jour."
-          )
-          .font(.body)
-          .fontWeight(.bold)
-          .multilineTextAlignment(.center)
-
-          Button {
-            viewModel.forceUpdateBlockerList()
-          } label: {
-            HStack {
-              Image(systemName: "arrow.clockwise.circle.fill")
-              Text("Relancer la mise à jour")
-            }
-          }
-          .buttonStyle(
-            .fullWidth(background: .blue, foreground: .white)
-          )
         }
       }
     }
@@ -461,7 +440,7 @@ struct HomeNavigationView: View {
 
   @ViewBuilder
   private var donationView: some View {
-    if viewModel.updateState == .idle && viewModel.blockerPhoneNumberBlocked != 0 {
+    if blockerViewModel.updateState == .idle && blockerViewModel.blockerPhoneNumberBlocked != 0 {
       VStack(alignment: .leading, spacing: 16) {
         HStack {
           Image(systemName: "heart.fill")
