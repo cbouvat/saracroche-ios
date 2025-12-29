@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SettingsNavigationView: View {
-  @ObservedObject var viewModel: BlockerViewModel
+  @ObservedObject var blockerViewModel: BlockerblockerViewModel
   @State private var showingResetAlert = false
 
   var body: some View {
@@ -9,7 +9,7 @@ struct SettingsNavigationView: View {
       Form {
         Section {
           Button {
-            viewModel.openSettings()
+            blockerViewModel.openSettings()
           } label: {
             Label(
               "Activer ou désactiver Saracroche dans **Réglages**",
@@ -143,7 +143,7 @@ struct SettingsNavigationView: View {
         "Réinitialiser l'application", isPresented: $showingResetAlert, titleVisibility: .visible
       ) {
         Button("Réinitialiser", role: .destructive) {
-          viewModel.resetApplication()
+          blockerViewModel.resetApplication()
         }
         Button("Annuler", role: .cancel) {}
       } message: {
@@ -157,6 +157,6 @@ struct SettingsNavigationView: View {
 
 #Preview {
   SettingsNavigationView(
-    viewModel: BlockerViewModel()
+    blockerViewModel: BlockerblockerViewModel()
   )
 }
