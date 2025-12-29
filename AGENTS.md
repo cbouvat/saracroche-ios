@@ -16,10 +16,9 @@ The application is built as a modular iOS system with:
 
 - **Run `swift-format --in-place --recursive .` after making changes to Swift code**
 - Keep it simple (KISS principle)
-- Use Swift 6
-- Write SwiftUI (iOS 15+)
+- Single Responsibility Principle
+- Write for iOS 15 and later versions
 - Follow MVVM architecture
-- Write comments in English
 - Use explicit names for variables and functions
 - Ensure A11Y compliance with VoiceOver
 - Store configuration in `AppConstants.swift`
@@ -28,7 +27,6 @@ The application is built as a modular iOS system with:
 
 ## Don't
 
-- Don't use comments to explain code logic
 - Don't write Objective-C code
 
 ## Commands
