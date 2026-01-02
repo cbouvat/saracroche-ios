@@ -11,12 +11,6 @@ class CallDirectoryService {
   /// The CallKit manager instance for interacting with the Call Directory extension.
   private let manager = CXCallDirectoryManager.sharedInstance
 
-  /// Service for accessing shared user defaults across app extensions.
-  private let sharedUserDefaults = SharedUserDefaultsService.shared
-
-  /// Service for accessing local user defaults.
-  private let userDefaults = UserDefaultsService.shared
-
   /// Private initializer to enforce singleton pattern.
   private init() {}
 
