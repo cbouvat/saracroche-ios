@@ -69,8 +69,25 @@ class UserDefaultsService {
     return userDefaults.object(forKey: Keys.lastUpdate) as? Date
   }
 
+  func setLastUpdateDate(_ date: Date) {
+    userDefaults.set(date, forKey: Keys.lastUpdate)
+  }
+
+  func getLastUpdateDate() -> Date? {
+    return userDefaults.object(forKey: Keys.lastUpdate) as? Date
+  }
+
   func clearLastUpdate() {
     userDefaults.removeObject(forKey: Keys.lastUpdate)
+  }
+
+  func shouldUpdateBlockList() -> Bool {
+    guard let lastUpdate = getLastUpdateDate() else {
+      return true  // Première fois, toujours mettre à jour
+    }
+
+    let twentyFourHours: TimeInterval = 24 * 60 * 60
+    return Date().timeIntervalSince(lastUpdate) > twentyFourHours
   }
 
   // MARK: - Update Started
