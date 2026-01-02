@@ -3,12 +3,14 @@ import Foundation
 enum UpdateState: String, CaseIterable {
   case idle = "idle"
   case starting = "starting"
+  case downloading = "downloading"
+  case converting = "converting"
   case installing = "installing"
   case error = "failed"
 
   var isInProgress: Bool {
     switch self {
-    case .starting, .installing:
+    case .starting, .downloading, .converting, .installing:
       return true
     default:
       return false

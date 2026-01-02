@@ -30,7 +30,7 @@ class ReportViewModel: ObservableObject {
 
     do {
       let phoneNumberInt64 = convertToInt64(phoneNumber)
-      try await apiService.reportPhoneNumber(phoneNumberInt64)
+      try await apiService.report(phoneNumberInt64)
       handleSuccess()
     } catch {
       handleError(error)

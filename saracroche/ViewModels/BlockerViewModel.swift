@@ -10,17 +10,16 @@ class BlockerViewModel: ObservableObject {
   @Published var blockerPhoneNumberBlocked: Int64 = 0
   @Published var blockerPhoneNumberTotal: Int64 = 0
   @Published var blocklistInstalledVersion: String = ""
-  @Published var blocklistVersion: String = AppConstants.currentBlocklistVersion
+  @Published var blocklistVersion: String = ""
   @Published var lastUpdateCheck: Date? = nil
   @Published var lastUpdate: Date? = nil
   @Published var updateStarted: Date? = nil
   @Published var blockedPatternsLastCheck: Date? = nil
 
   private let callDirectoryService = CallDirectoryService.shared
-  private let backgroundUpdateService = BackgroundUpdateService.shared
+  private let BackgroundService = BackgroundService.shared
   private let sharedUserDefaults = SharedUserDefaultsService.shared
   private let userDefaults = UserDefaultsService.shared
-  private let phoneNumberService = PhoneNumberService.shared
   private var statusCheckTimer: Timer?
 
   deinit {
@@ -126,7 +125,7 @@ class BlockerViewModel: ObservableObject {
 
   // MARK: - Actions
   func forceUpdateBlockerList() {
-    backgroundUpdateService.forceBackgroundUpdate { success in
+    BackgroundService.forceBackgroundUpdate { success in
       DispatchQueue.main.async {
         if success {
           self.userDefaults.setUpdateState(.idle)
@@ -135,13 +134,6 @@ class BlockerViewModel: ObservableObject {
         }
       }
     }
-  }
-
-  // MARK: - Computed Properties
-  var isUpdateTakingTooLong: Bool {
-    guard let updateStarted = updateStarted else { return false }
-    let minutesAgo = Date().addingTimeInterval(-240)  // 4 minutes = 240 seconds
-    return updateStarted < minutesAgo && updateState.isInProgress
   }
 
   // MARK: - Open Settings
