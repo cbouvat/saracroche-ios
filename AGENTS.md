@@ -12,23 +12,34 @@ The application is built as a modular iOS system with:
 - **Filter extension** (`filter/`): SMS filtering capabilities
 - **Shared data**: App Groups (`group.com.saracroche`) for data sharing between app and extensions
 
-## Do
+## Guidelines
 
-- **Run `swift-format --in-place --recursive .` after making changes to Swift code**
-- Keep it simple (KISS principle)
-- Single Responsibility Principle
-- Write for iOS 15 and later versions
-- Follow MVVM architecture
-- Use explicit names for variables and functions
-- Ensure A11Y compliance with VoiceOver
-- Store configuration in `AppConstants.swift`
-- Use App Groups for inter-process communication
-- Write documentation in `docs/` folder
+### Do
 
-## Don't
+- **Code Formatting**: Run `swift-format --in-place --recursive .` after making changes to Swift code
+- **Design Principles**: Keep it simple (KISS principle), follow Single Responsibility Principle
+- **Target Platform**: Write for iOS 15 and later versions
+- **Architecture**: Follow MVVM (Model-View-ViewModel) architecture pattern
+- **Naming Conventions**: Use explicit, descriptive names for variables and functions
+- **Accessibility**: Ensure A11Y compliance with VoiceOver support
+- **Configuration**: Store app configuration in `AppConstants.swift`
+- **Data Sharing**: Use App Groups for inter-process communication between app and extensions
+- **Documentation**: Write comprehensive documentation in `docs/` folder
+- **Testing**: Write unit tests for critical components and business logic
+- **Error Handling**: Implement proper error handling and logging
+- **Code Reviews**: Follow pull request template and code review guidelines
 
-- Don't write Objective-C code
+### Don't
 
-## Commands
+- **Legacy Code**: Don't write Objective-C code (Swift-only project)
+- **Complexity**: Avoid over-engineering solutions
+- **Hardcoding**: Don't hardcode configuration values or strings
+- **Global State**: Avoid using global variables or singletons when possible
+- **Force Unwrapping**: Don't use force unwrapping (`!`) - prefer optional binding
 
-- `swift-format --in-place --recursive .`: Lint Swift code with SwiftLint
+## Development Workflow
+
+### Commands
+
+- **Code Formatting**: `swift-format --in-place --recursive .` - Format Swift code according to project standards
+- **Building**: Use `xcodebuild` for building specific schemes
