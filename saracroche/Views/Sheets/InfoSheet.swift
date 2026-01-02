@@ -2,7 +2,7 @@ import SwiftUI
 
 struct InfoSheet: View {
   @Environment(\.dismiss) private var dismiss
-  @ObservedObject var viewModel: BlockerViewModel
+  @ObservedObject var blockerViewModel: BlockerViewModel
 
   var body: some View {
     NavigationView {
@@ -78,17 +78,17 @@ struct InfoSheet: View {
       // État du service background
       HStack(spacing: 12) {
         Image(
-          systemName: viewModel.isBackgroundServiceActive
+          systemName: blockerViewModel.isBackgroundServiceActive
             ? "checkmark.circle.fill" : "xmark.circle.fill"
         )
         .font(.system(size: 20))
-        .foregroundColor(viewModel.isBackgroundServiceActive ? .green : .red)
+        .foregroundColor(blockerViewModel.isBackgroundServiceActive ? .green : .red)
 
         VStack(alignment: .leading, spacing: 2) {
           Text("Service de mise à jour automatique")
             .font(.subheadline)
             .foregroundColor(.primary)
-          Text(viewModel.isBackgroundServiceActive ? "Actif" : "Inactif")
+          Text(blockerViewModel.isBackgroundServiceActive ? "Actif" : "Inactif")
             .font(.caption)
             .foregroundColor(.secondary)
         }
@@ -97,7 +97,7 @@ struct InfoSheet: View {
       .padding(.vertical, 4)
 
       // Dernière vérification
-      if let lastUpdateCheck = viewModel.lastUpdateCheck {
+      if let lastUpdateCheck = blockerViewModel.lastUpdateCheck {
         HStack(spacing: 12) {
           Image(systemName: "magnifyingglass.circle.fill")
             .font(.system(size: 20))
@@ -126,7 +126,7 @@ struct InfoSheet: View {
           Text("Dernier téléchargement")
             .font(.subheadline)
             .foregroundColor(.primary)
-          if let downloadDate = viewModel.blockedPatternsLastCheck {
+          if let downloadDate = blockerViewModel.blockedPatternsLastCheck {
             Text(formatDate(downloadDate))
               .font(.caption)
               .foregroundColor(.secondary)
@@ -141,7 +141,7 @@ struct InfoSheet: View {
       .padding(.vertical, 4)
 
       // Dernière mise à jour
-      if let lastUpdate = viewModel.lastUpdate {
+      if let lastUpdate = blockerViewModel.lastUpdate {
         HStack(spacing: 12) {
           Image(systemName: "arrow.clockwise.circle.fill")
             .font(.system(size: 20))
@@ -178,5 +178,5 @@ struct InfoSheet: View {
 }
 
 #Preview {
-  InfoSheet(viewModel: BlockerViewModel())
+  InfoSheet(blockerViewModel: BlockerViewModel())
 }
