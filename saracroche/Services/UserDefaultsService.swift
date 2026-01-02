@@ -12,7 +12,6 @@ class UserDefaultsService {
     static let lastUpdate = "lastUpdate"
     static let updateStarted = "updateStarted"
     static let updateState = "updateState"
-    static let blockedPatternsLastCheck = "blockedPatternsLastCheck"
   }
 
   private init() {
@@ -95,25 +94,11 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.updateState)
   }
 
-  // MARK: - Blocked Patterns Check
-  func setBlockedPatternsLastCheck(_ date: Date) {
-    userDefaults.set(date, forKey: Keys.blockedPatternsLastCheck)
-  }
-
-  func getBlockedPatternsLastCheck() -> Date? {
-    return userDefaults.object(forKey: Keys.blockedPatternsLastCheck) as? Date
-  }
-
-  func clearBlockedPatternsLastCheck() {
-    userDefaults.removeObject(forKey: Keys.blockedPatternsLastCheck)
-  }
-
   // MARK: - Reset All
   func resetAllData() {
     clearLastUpdateCheck()
     clearLastUpdate()
     clearUpdateStarted()
     clearUpdateState()
-    clearBlockedPatternsLastCheck()
   }
 }
