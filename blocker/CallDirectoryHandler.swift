@@ -1,13 +1,17 @@
 import CallKit
+import CoreData
 import Foundation
 
 /// The Call Directory extension handler that processes blocking requests from CallKit.
 /// This class is responsible for adding, removing, and managing phone numbers to be blocked.
 class CallDirectoryHandler: CXCallDirectoryProvider {
+  /// Core Data service for accessing blocked numbers.
+  private let coreDataService = BlockedNumberCoreDataService.shared
   /// Called by CallKit when a request needs to be processed.
   ///
   /// - Parameter context: The extension context containing information about the request.
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
+    print("CallDirectoryHandler: Starting request processing")
     context.delegate = self
 
     if context.isIncremental {
@@ -32,58 +36,73 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   ) {
     let action = sharedUserDefaults()?.string(forKey: "action") ?? ""
 
-    if action == "resetNumbersList" {
-      resetNumbersList(to: context)
-    } else if action == "addNumbersList" {
-      addNumbersList(to: context)
+    if action == "batch" {
+      processBatch(to: context)
     } else {
       print("Unknown action: \(action)")
     }
   }
 
-  /// Resets all blocking and identification entries in the call directory.
+  /// Processes a batch of phone numbers based on their action in Core Data.
+  /// This method retrieves pending numbers and processes them according to their action:
+  /// - "block": Add the number to the blocking list
+  /// - "remove": Remove the number from the blocking list
+  /// - "identify": Add the number to the identification list
   ///
-  /// - Parameter context: The extension context for removing entries.
-  private func resetNumbersList(
+  /// - Parameter context: The extension context for adding/removing entries.
+  private func processBatch(
     to context: CXCallDirectoryExtensionContext
   ) {
-
-    print("Resetting all numbers list")
-    sharedUserDefaults()?.set("", forKey: "action")
-    sharedUserDefaults()?.set(0, forKey: "blockedNumbers")
-
-    context.removeAllBlockingEntries()
-    context.removeAllIdentificationEntries()
-
-    print("Successfully reset all numbers list")
-  }
-
-  /// Adds a list of phone numbers to be blocked.
-  ///
-  /// - Parameter context: The extension context for adding blocking entries.
-  private func addNumbersList(
-    to context: CXCallDirectoryExtensionContext
-  ) {
+    print("CallDirectoryHandler: Processing batch update")
     sharedUserDefaults()?.set("", forKey: "action")
 
-    var blockedNumbers = Int64(
-      sharedUserDefaults()?.integer(forKey: "blockedNumbers") ?? 0
+    // Get the batch of pending numbers from Core Data
+    let pendingNumbersList = coreDataService.getPendingBlockedNumbersBatch(
+      limit: 10_000
     )
 
-    let numbersList =
-      sharedUserDefaults()?.stringArray(forKey: "numbersList") ?? []
+    print("Processing batch: count \(pendingNumbersList.count)")
 
-    print(
-      "Adding numbers : count \(numbersList.count), first \(numbersList.first ?? "")"
-    )
+    var blockedCount = 0
+    var removedCount = 0
+    var identifiedCount = 0
 
-    for number in numbersList {
-      let number = Int64("\(number)") ?? 0
-      context.addBlockingEntry(withNextSequentialPhoneNumber: number)
-      blockedNumbers += 1
+    for blockedNumber in pendingNumbersList {
+      guard let phoneNumber = blockedNumber.number,
+        let action = blockedNumber.action
+      else {
+        continue
+      }
+
+      let number = Int64(phoneNumber) ?? 0
+
+      switch action {
+      case "block":
+        context.addBlockingEntry(withNextSequentialPhoneNumber: number)
+        blockedCount += 1
+      case "remove":
+        context.removeBlockingEntry(withPhoneNumber: number)
+        removedCount += 1
+      case "identify":
+        if let name = blockedNumber.name {
+          context.addIdentificationEntry(
+            withNextSequentialPhoneNumber: number,
+            label: name
+          )
+          identifiedCount += 1
+        }
+      default:
+        print("Unknown action for number \(phoneNumber): \(action)")
+      }
     }
 
-    sharedUserDefaults()?.set(blockedNumbers, forKey: "blockedNumbers")
+    // Mark these numbers as completed
+    let phoneNumbers = pendingNumbersList.compactMap { $0.number }
+    coreDataService.markBlockedNumbersAsCompleted(phoneNumbers)
+
+    print(
+      "Successfully processed batch: \(blockedCount) blocked, \(removedCount) removed, \(identifiedCount) identified"
+    )
   }
 }
 
