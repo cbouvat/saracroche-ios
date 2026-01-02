@@ -30,10 +30,6 @@ struct AppConstants {
   /// The interval at which background updates should occur (4 hours in seconds).
   static let backgroundUpdateInterval: TimeInterval = 4 * 60 * 60
 
-  /// The size of chunks used when processing phone numbers for efficiency.
-  /// Larger chunks improve performance but use more memory.
-  static let phoneNumberChunkSize = 10_000
-
   /// The name of the file used to store the downloaded blocklist data temporarily before processing.
   static let blockedListTmpFileName = "block-list.tmp.json"
 
