@@ -16,7 +16,7 @@ final class BlockerUpdatePipeline {
   private let callDirectoryService: CallDirectoryService
 
   /// Service for downloading block lists from remote sources.
-  private let blockListService: BlockListService
+  private let blockListService: BlockListAPIService
 
   /// Service for converting block lists to Core Data format.
   private let blockListConverterService: BlockListConverterService
@@ -28,12 +28,12 @@ final class BlockerUpdatePipeline {
   ///
   /// - Parameters:
   ///   - callDirectoryService: The CallDirectoryService instance (defaults to shared).
-  ///   - blockListService: The BlockListService instance (defaults to shared).
+  ///   - blockListService: The BlockListAPIService instance (defaults to shared).
   ///   - blockListConverterService: The BlockListConverterService instance (defaults to shared).
   ///   - userDefaultsService: The UserDefaultsService instance (defaults to shared).
   private init(
     callDirectoryService: CallDirectoryService = .shared,
-    blockListService: BlockListService = .shared,
+    blockListService: BlockListAPIService = .shared,
     blockListConverterService: BlockListConverterService = .shared,
     userDefaultsService: UserDefaultsService = .shared
   ) {
@@ -152,10 +152,10 @@ final class BlockerUpdatePipeline {
 
         print("Successfully updated block list with \(blockList.count) numbers")
         completion(true)
-      } catch BlockListService.DownloadError.unauthorized {
+      } catch BlockListAPIService.DownloadError.unauthorized {
         print("Authentication failed")
         completion(false)
-      } catch BlockListService.DownloadError.networkError(let error) {
+      } catch BlockListAPIService.DownloadError.networkError(let error) {
         print("Network error: \(error)")
         completion(false)
       } catch {
