@@ -76,6 +76,7 @@ struct InfoSheet: View {
   private var updateInfoView: some View {
     VStack(spacing: 16) {
       // État du service background
+      /*
       HStack(spacing: 12) {
         Image(
           systemName: blockerViewModel.isBackgroundServiceActive
@@ -83,7 +84,7 @@ struct InfoSheet: View {
         )
         .font(.system(size: 20))
         .foregroundColor(blockerViewModel.isBackgroundServiceActive ? .green : .red)
-
+      
         VStack(alignment: .leading, spacing: 2) {
           Text("Service de mise à jour automatique")
             .font(.subheadline)
@@ -95,6 +96,7 @@ struct InfoSheet: View {
         Spacer()
       }
       .padding(.vertical, 4)
+       */
 
       // Dernière vérification
       if let lastUpdateCheck = blockerViewModel.lastUpdateCheck {
@@ -116,12 +118,13 @@ struct InfoSheet: View {
         .padding(.vertical, 4)
       }
 
+      /*
       // État de la mise à jour
       HStack(spacing: 12) {
         Image(systemName: "arrow.down.circle.fill")
           .font(.system(size: 20))
           .foregroundColor(.blue)
-
+      
         VStack(alignment: .leading, spacing: 2) {
           Text("Dernier téléchargement")
             .font(.subheadline)
@@ -139,6 +142,7 @@ struct InfoSheet: View {
         Spacer()
       }
       .padding(.vertical, 4)
+       */
 
       // Dernière mise à jour
       if let lastUpdate = blockerViewModel.lastUpdate {
