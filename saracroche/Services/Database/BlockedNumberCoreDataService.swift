@@ -1,7 +1,7 @@
 import CoreData
 
-final class BlocklistCoreDataService {
-  static let shared = BlocklistCoreDataService()
+final class BlockedNumberCoreDataService {
+  static let shared = BlockedNumberCoreDataService()
 
   private let coreDataStack = CoreDataStack.shared
   private var context: NSManagedObjectContext { coreDataStack.context }

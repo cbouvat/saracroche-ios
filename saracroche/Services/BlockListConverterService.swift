@@ -4,7 +4,7 @@ import Foundation
 final class BlockListConverterService {
   static let shared = BlockListConverterService()
 
-  private let coreDataService = BlocklistCoreDataService.shared
+  private let coreDataService = BlockedNumberCoreDataService.shared
 
   private init() {}
 
