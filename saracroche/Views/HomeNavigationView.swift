@@ -42,6 +42,7 @@ struct HomeNavigationView: View {
       } else if blockerViewModel.updateState == .error {
         errorView
       } else if blockerViewModel.updateState == .idle {
+        /*
         if blockerViewModel.blockerPhoneNumberBlocked == 0 {
           noBlockedNumbersView
         } else if blockerViewModel.blocklistInstalledVersion != blockerViewModel.blocklistVersion {
@@ -50,6 +51,7 @@ struct HomeNavigationView: View {
           completeInstallationView
           donationView
         }
+         */
       }
     }
   }
@@ -173,10 +175,12 @@ struct HomeNavigationView: View {
         .bold()
         .multilineTextAlignment(.center)
 
+      /*/
       Text("\(blockerViewModel.blockerPhoneNumberBlocked) numéros bloqués")
         .font(.title2)
         .fontWeight(.semibold)
         .foregroundColor(.green)
+      */
 
       Text("Vous avez la dernière version de la liste de blocage installée.")
         .font(.body)
@@ -426,7 +430,7 @@ struct HomeNavigationView: View {
       VStack(spacing: 16) {
         ProgressView()
           .scaleEffect(1.5)
-
+        /*
         if blockerViewModel.blockerPhoneNumberBlocked > 0 {
           Text(
             "\(blockerViewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(blockerViewModel.blockerPhoneNumberTotal)"
@@ -434,30 +438,32 @@ struct HomeNavigationView: View {
           .font(.body.monospacedDigit())
           .multilineTextAlignment(.center)
         }
+         */
       }
     }
   }
 
   @ViewBuilder
   private var donationView: some View {
+    /*
     if blockerViewModel.updateState == .idle && blockerViewModel.blockerPhoneNumberBlocked != 0 {
       VStack(alignment: .leading, spacing: 16) {
         HStack {
           Image(systemName: "heart.fill")
             .font(.system(size: 20))
             .foregroundColor(.red)
-
+    
           Text("Application gratuite et open source")
             .font(.headline)
             .fontWeight(.semibold)
         }
-
+    
         Text(
           "Saracroche est une application entièrement gratuite et open source. "
             + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
         )
         .font(.body)
-
+    
         Button {
           showDonationSheet = true
         } label: {
@@ -477,5 +483,6 @@ struct HomeNavigationView: View {
           .fill(Color.gray.opacity(0.1))
       )
     }
+     */
   }
 }
