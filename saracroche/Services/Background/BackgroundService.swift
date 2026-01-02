@@ -4,7 +4,8 @@ import Foundation
 /// Background service to handle periodic updates and background tasks
 final class BackgroundService: ObservableObject {
 
-  static let shared = BackgroundService()
+  /// Lazy initialization to avoid circular dependency
+  private static var _shared: BackgroundService?
 
   // MARK: - Constants
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
@@ -13,6 +14,16 @@ final class BackgroundService: ObservableObject {
   private init() {
     setupBackgroundTasks()
     scheduleBackgroundTask()
+  }
+
+  /// Shared instance with lazy initialization to avoid circular dependency
+  static var shared: BackgroundService {
+    if let instance = _shared {
+      return instance
+    }
+    let instance = BackgroundService()
+    _shared = instance
+    return instance
   }
 
   // MARK: - Public Methods

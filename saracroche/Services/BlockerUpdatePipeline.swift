@@ -2,166 +2,107 @@ import CallKit
 import Foundation
 
 /// Orchestrates the complete blocklist update process.
-/// This class coordinates all phases of updating the call blocking database:
-/// 1. Verifies if an update is needed
-/// 2. Checks if the CallKit extension is enabled
-/// 3. Downloads the latest blocklist from the server
-/// 4. Converts the blocklist to Core Data format
-/// 5. Reloads the CallKit extension with the updated data
 final class BlockerUpdatePipeline {
-  /// Shared instance of the BlockerUpdatePipeline for singleton pattern access.
   static let shared = BlockerUpdatePipeline()
 
-  /// Service for managing CallKit extension functionality.
   private let callDirectoryService: CallDirectoryService
-
-  /// Service for downloading block lists from remote sources.
-  private let blockListService: BlockListAPIService
-
-  /// Service for converting block lists to Core Data format.
-  private let blockListConverterService: BlockListConverterService
-
-  /// Service for managing persistent data storage.
   private let userDefaultsService: UserDefaultsService
+  private let blockListDownloadService: BlockListDownloadService
 
-  /// Private initializer with dependency injection for testing.
-  ///
-  /// - Parameters:
-  ///   - callDirectoryService: The CallDirectoryService instance (defaults to shared).
-  ///   - blockListService: The BlockListAPIService instance (defaults to shared).
-  ///   - blockListConverterService: The BlockListConverterService instance (defaults to shared).
-  ///   - userDefaultsService: The UserDefaultsService instance (defaults to shared).
   private init(
     callDirectoryService: CallDirectoryService = .shared,
-    blockListService: BlockListAPIService = .shared,
-    blockListConverterService: BlockListConverterService = .shared,
-    userDefaultsService: UserDefaultsService = .shared
+    userDefaultsService: UserDefaultsService = .shared,
+    blockListDownloadService: BlockListDownloadService = .shared
   ) {
     self.callDirectoryService = callDirectoryService
-    self.blockListService = blockListService
-    self.blockListConverterService = blockListConverterService
     self.userDefaultsService = userDefaultsService
+    self.blockListDownloadService = blockListDownloadService
   }
 
-  /// Performs a background update of the blocklist.
-  ///
-  /// This method is designed to be called from background tasks and doesn't report progress.
-  ///
-  /// - Parameter completion: A closure that receives a boolean indicating success (true) or failure (false).
-  func performBackgroundUpdate(
-    completion: @escaping (Bool) -> Void
-  ) {
-    performUpdate(
-      onProgress: {
-      },
-      completion: { success in
-        completion(success)
-      }
-    )
+  func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
+    print("🔄 [BlockerUpdatePipeline] performBackgroundUpdate called")
+    performUpdate(onProgress: {}, completion: completion)
   }
 
-  /// Performs an update of the blocklist with progress reporting.
-  ///
-  /// This is the main entry point for the update process. It:
-  /// 1. Checks if an update is needed
-  /// 2. Verifies the extension is enabled
-  /// 3. Downloads and converts the blocklist
-  /// 4. Reloads the extension
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called periodically to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
   func performUpdate(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    // Check if update is needed
-    let shouldUpdate = userDefaultsService.shouldUpdateBlockList()
+    print("🔄 [BlockerUpdatePipeline] performUpdate called")
 
-    guard shouldUpdate else {
-      print("Block list is up to date")
-      completion(true)
+    guard userDefaultsService.shouldUpdateBlockList() else {
+      print("✅ [BlockerUpdatePipeline] Block list is up to date")
+      checkAndProcessPendingBatch(
+        onProgress: onProgress,
+        completion: completion
+      )
       return
     }
 
-    // Check if the blocker extension is active
+    print("⬇️ [BlockerUpdatePipeline] Block list needs update, checking extension status")
     checkExtensionStatus(
       onProgress: onProgress,
       completion: completion
     )
   }
 
-  /// Checks the status of the CallKit extension before proceeding with the update.
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
+  private func checkAndProcessPendingBatch(
+    onProgress: @escaping () -> Void,
+    completion: @escaping (Bool) -> Void
+  ) {
+    print("🔍 [BlockerUpdatePipeline] checkAndProcessPendingBatch called")
+    let hasPendingNumbers = blockListDownloadService.hasPendingNumbersToProcess()
+    print("📊 [BlockerUpdatePipeline] Has pending numbers: \(hasPendingNumbers)")
+
+    guard hasPendingNumbers else {
+      print("✅ [BlockerUpdatePipeline] No pending numbers to process")
+      completion(true)
+      return
+    }
+
+    print("⚡ [BlockerUpdatePipeline] Found pending numbers, triggering batch processing")
+    onProgress()
+
+    blockListDownloadService.triggerBatchProcessing(
+      onProgress: onProgress,
+      completion: completion
+    )
+  }
+
   private func checkExtensionStatus(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
+    print("🔍 [BlockerUpdatePipeline] checkExtensionStatus called")
     callDirectoryService.checkExtensionStatus { [weak self] status in
       guard let self = self else {
+        print("❌ [BlockerUpdatePipeline] Self is nil in checkExtensionStatus callback")
         completion(false)
         return
       }
 
-      switch status {
-      case .enabled:
-        // Extension is enabled
+      print("📱 [BlockerUpdatePipeline] Extension status: \(status)")
+      if status == .enabled {
+        print("✅ [BlockerUpdatePipeline] Extension enabled, proceeding with download")
         self.downloadAndConvertBlockList(
           onProgress: onProgress,
           completion: completion
         )
-
-      case .disabled, .unknown:
-        // Extension is disabled or status unknown, cannot proceed
-        completion(false)
-
-      case .error, .unexpected:
-        // Extension encountered an error or unexpected state
+      } else {
+        print("❌ [BlockerUpdatePipeline] Extension not enabled, aborting update")
         completion(false)
       }
     }
   }
 
-  /// Downloads the blocklist from the server and converts it to Core Data format.
-  ///
-  /// This method handles the core update process:
-  /// 1. Downloads the latest blocklist
-  /// 2. Converts it to Core Data for persistent storage
-  /// 3. Reloads the CallKit extension with the new data
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
   private func downloadAndConvertBlockList(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    Task {
-      do {
-        // Download the block list
-        let blockList = try await blockListService.downloadBlockList()
-
-        // Convert to Core Data
-        let _ = try blockListConverterService.convertBlockListToCoreData(blockList: blockList)
-
-        // Update the blocklist in the extension
-        callDirectoryService.reloadExtension()
-
-        print("Successfully updated block list with \(blockList.count) numbers")
-        completion(true)
-      } catch BlockListAPIService.DownloadError.unauthorized {
-        print("Authentication failed")
-        completion(false)
-      } catch BlockListAPIService.DownloadError.networkError(let error) {
-        print("Network error: \(error)")
-        completion(false)
-      } catch {
-        print("Failed to download and convert blocklist: \(error)")
-        completion(false)
-      }
-    }
+    print("⬇️ [BlockerUpdatePipeline] downloadAndConvertBlockList called")
+    blockListDownloadService.performDownloadAndBatchProcessing(
+      onProgress: onProgress,
+      completion: completion
+    )
   }
 }
