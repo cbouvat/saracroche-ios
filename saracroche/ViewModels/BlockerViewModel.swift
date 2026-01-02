@@ -1,4 +1,3 @@
-import BackgroundTasks
 import Combine
 import SwiftUI
 
@@ -8,23 +7,8 @@ class BlockerViewModel: ObservableObject {
   /// The current status of the CallKit extension.
   @Published var blockerExtensionStatus: BlockerExtensionStatus = .unknown
 
-  /// Indicates whether the background service is active.
-  @Published var isBackgroundServiceActive: Bool = false
-
   /// The current state of the block list update process.
   @Published var updateState: UpdateState = .idle
-
-  /// The number of phone numbers currently blocked by the extension.
-  @Published var blockerPhoneNumberBlocked: Int64 = 0
-
-  /// The total number of phone numbers in the block list.
-  @Published var blockerPhoneNumberTotal: Int64 = 0
-
-  /// The version of the block list currently installed.
-  @Published var blocklistInstalledVersion: String = ""
-
-  /// The latest available version of the block list.
-  @Published var blocklistVersion: String = ""
 
   /// The date when the last update check was performed.
   @Published var lastUpdateCheck: Date? = nil
@@ -35,20 +19,17 @@ class BlockerViewModel: ObservableObject {
   /// The date when the current update process started.
   @Published var updateStarted: Date? = nil
 
-  /// The date when blocked patterns were last checked.
-  @Published var blockedPatternsLastCheck: Date? = nil
-
   /// Service for managing CallKit extension functionality.
   private let callDirectoryService = CallDirectoryService.shared
-
-  /// Service for managing background tasks.
-  private let BackgroundService = BackgroundService.shared
 
   /// Service for accessing shared user defaults across app extensions.
   private let sharedUserDefaults = SharedUserDefaultsService.shared
 
   /// Service for accessing local user defaults.
   private let userDefaults = UserDefaultsService.shared
+
+  /// Service for orchestrating blocklist updates.
+  private let blockerUpdatePipeline = BlockerUpdatePipeline.shared
 
   /// Timer for periodic status checks.
   private var statusCheckTimer: Timer?
@@ -59,7 +40,8 @@ class BlockerViewModel: ObservableObject {
   }
 
   /// Initializes the view model.
-  init() {}
+  init() {
+  }
 
   /// MARK: - Refresh Management
   ///
@@ -78,7 +60,7 @@ class BlockerViewModel: ObservableObject {
     statusCheckTimer = nil
   }
 
-  /// Refreshes all data including extension status, background service status, and update state.
+  /// Refreshes all data including extension status and update state.
   func refreshData() {
     checkUpdateState()
 
@@ -86,7 +68,6 @@ class BlockerViewModel: ObservableObject {
       return
     }
 
-    checkBackgroundServiceStatus()
     checkBlockerExtensionStatus()
     checkAndForceUpdateIfNeeded()
   }
@@ -100,35 +81,13 @@ class BlockerViewModel: ObservableObject {
     }
   }
 
-  /// Checks the status of the background service and updates the published property.
-  func checkBackgroundServiceStatus() {
-    BGTaskScheduler.shared.getPendingTaskRequests { [weak self] requests in
-      DispatchQueue.main.async {
-        self?.isBackgroundServiceActive = requests.contains {
-          $0.identifier == "com.cbouvat.saracroche.background-update"
-        }
-      }
-    }
-  }
-
   /// Checks and updates the current state of block list updates and related metrics.
   func checkUpdateState() {
     DispatchQueue.main.async { [weak self] in
-      self?.blockerPhoneNumberBlocked = Int64(
-        self?.sharedUserDefaults.getBlockedNumbers() ?? 0
-      )
-      self?.blockerPhoneNumberTotal = Int64(
-        self?.userDefaults.getTotalBlockedNumbers() ?? 0
-      )
-      self?.blocklistInstalledVersion =
-        self?.userDefaults
-        .getBlocklistVersion() ?? ""
       self?.updateState = self?.userDefaults.getUpdateState() ?? .idle
       self?.lastUpdateCheck = self?.userDefaults.getLastUpdateCheck()
       self?.lastUpdate = self?.userDefaults.getLastUpdate()
       self?.updateStarted = self?.userDefaults.getUpdateStarted()
-      self?.blockedPatternsLastCheck =
-        self?.userDefaults.getBlockedPatternsLastCheck()
     }
   }
 
@@ -153,26 +112,24 @@ class BlockerViewModel: ObservableObject {
         return
       }
 
-      if blockerPhoneNumberBlocked == 0 || blocklistInstalledVersion != blocklistVersion {
-        self.forceUpdateBlockerList()
-      }
+      self.forceUpdateBlockerList()
     }
   }
 
   /// MARK: - Actions
   ///
-  /// Forces an immediate update of the blocker list in the background.
-  /// This bypasses the normal scheduling and triggers an update immediately.
+  /// Forces an immediate update of the blocker list.
+  /// This sets the update state to indicate an update is starting.
   func forceUpdateBlockerList() {
-    BackgroundService.forceBackgroundUpdate { success in
-      DispatchQueue.main.async {
-        if success {
-          self.userDefaults.setUpdateState(.idle)
-        } else {
-          self.userDefaults.setUpdateState(.error)
-        }
+    print("🔄 [BlockerViewModel] forceUpdateBlockerList called")
+    blockerUpdatePipeline.performUpdate(
+      onProgress: { [weak self] in
+        self?.checkUpdateState()
+      },
+      completion: { [weak self] success in
+        self?.checkUpdateState()
       }
-    }
+    )
   }
 
   /// MARK: - Open Settings
