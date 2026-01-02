@@ -8,8 +8,6 @@ class UserDefaultsService {
 
   // MARK: - Constants
   private struct Keys {
-    static let totalBlockedNumbers = "totalBlockedNumbers"
-    static let blocklistVersion = "blocklistVersion"
     static let lastUpdateCheck = "lastUpdateCheck"
     static let lastUpdate = "lastUpdate"
     static let updateStarted = "updateStarted"
@@ -19,32 +17,6 @@ class UserDefaultsService {
 
   private init() {
     userDefaults = UserDefaults.standard
-  }
-
-  // MARK: - Total Blocked Numbers
-  func setTotalBlockedNumbers(_ count: Int64) {
-    userDefaults.set(count, forKey: Keys.totalBlockedNumbers)
-  }
-
-  func getTotalBlockedNumbers() -> Int {
-    return userDefaults.integer(forKey: Keys.totalBlockedNumbers)
-  }
-
-  func clearTotalBlockedNumbers() {
-    userDefaults.removeObject(forKey: Keys.totalBlockedNumbers)
-  }
-
-  // MARK: - Blocklist Version
-  func setBlocklistVersion(_ version: String) {
-    userDefaults.set(version, forKey: Keys.blocklistVersion)
-  }
-
-  func getBlocklistVersion() -> String {
-    return userDefaults.string(forKey: Keys.blocklistVersion) ?? ""
-  }
-
-  func clearBlocklistVersion() {
-    userDefaults.removeObject(forKey: Keys.blocklistVersion)
   }
 
   // MARK: - Last Update Check
@@ -138,8 +110,6 @@ class UserDefaultsService {
 
   // MARK: - Reset All
   func resetAllData() {
-    clearTotalBlockedNumbers()
-    clearBlocklistVersion()
     clearLastUpdateCheck()
     clearLastUpdate()
     clearUpdateStarted()
