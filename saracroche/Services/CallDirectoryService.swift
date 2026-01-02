@@ -1,18 +1,29 @@
 import CallKit
 import Foundation
 
-/// Handles the CallKit extension functionality for blocking phone numbers
+/// A service that manages CallKit extension functionality for blocking phone numbers.
+/// This service provides methods to check extension status, open settings, and reload the extension.
 class CallDirectoryService {
 
+  /// Shared instance of the CallDirectoryService for singleton pattern access.
   static let shared = CallDirectoryService()
 
+  /// The CallKit manager instance for interacting with the Call Directory extension.
   private let manager = CXCallDirectoryManager.sharedInstance
+
+  /// Service for accessing shared user defaults across app extensions.
   private let sharedUserDefaults = SharedUserDefaultsService.shared
+
+  /// Service for accessing local user defaults.
   private let userDefaults = UserDefaultsService.shared
 
+  /// Private initializer to enforce singleton pattern.
   private init() {}
 
-  /// Checks the status of the CallKit extension
+  /// Checks the current status of the CallKit extension.
+  ///
+  /// - Parameter completion: A closure that receives the extension status.
+  ///   The closure is called on the main thread.
   func checkExtensionStatus(
     completion: @escaping (BlockerExtensionStatus) -> Void
   ) {
@@ -39,7 +50,8 @@ class CallDirectoryService {
     }
   }
 
-  /// Open activation panel in the iOS settings
+  /// Opens the activation panel in iOS Settings for the Call Directory extension.
+  /// This allows users to enable or disable the call blocking extension.
   func openSettings() {
     manager.openSettings { error in
       if let error = error {
@@ -50,7 +62,10 @@ class CallDirectoryService {
     }
   }
 
-  /// Reloads the CallKit extension
+  /// Reloads the CallKit extension with a completion handler.
+  ///
+  /// - Parameter completion: A closure that receives a boolean indicating success (true) or failure (false).
+  ///   The closure is called on the main thread.
   func reloadExtension(completion: @escaping (Bool) -> Void) {
     self.manager.reloadExtension(
       withIdentifier: AppConstants.callDirectoryExtensionIdentifier
@@ -61,7 +76,8 @@ class CallDirectoryService {
     }
   }
 
-  /// Reloads the CallKit extension without completion handler
+  /// Reloads the CallKit extension without a completion handler.
+  /// Errors are logged to the console if they occur.
   func reloadExtension() {
     self.manager.reloadExtension(
       withIdentifier: AppConstants.callDirectoryExtensionIdentifier

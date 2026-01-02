@@ -1,7 +1,12 @@
 import CallKit
 import Foundation
 
+/// The Call Directory extension handler that processes blocking requests from CallKit.
+/// This class is responsible for adding, removing, and managing phone numbers to be blocked.
 class CallDirectoryHandler: CXCallDirectoryProvider {
+  /// Called by CallKit when a request needs to be processed.
+  ///
+  /// - Parameter context: The extension context containing information about the request.
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
     context.delegate = self
 
@@ -12,10 +17,16 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     context.completeRequest()
   }
 
+  /// Retrieves the shared UserDefaults instance for accessing data across app extensions.
+  ///
+  /// - Returns: The shared UserDefaults instance, or nil if it couldn't be created.
   private func sharedUserDefaults() -> UserDefaults? {
     UserDefaults(suiteName: "group.com.cbouvat.saracroche")
   }
 
+  /// Processes incremental updates to the call directory.
+  ///
+  /// - Parameter context: The extension context for adding/removing entries.
   private func incrementalUpdate(
     to context: CXCallDirectoryExtensionContext
   ) {
@@ -30,6 +41,9 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     }
   }
 
+  /// Resets all blocking and identification entries in the call directory.
+  ///
+  /// - Parameter context: The extension context for removing entries.
   private func resetNumbersList(
     to context: CXCallDirectoryExtensionContext
   ) {
@@ -44,6 +58,9 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     print("Successfully reset all numbers list")
   }
 
+  /// Adds a list of phone numbers to be blocked.
+  ///
+  /// - Parameter context: The extension context for adding blocking entries.
   private func addNumbersList(
     to context: CXCallDirectoryExtensionContext
   ) {
@@ -70,8 +87,14 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   }
 }
 
+/// Extension to handle request failure notifications from CallKit.
 extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
 
+  /// Called when a request fails with an error.
+  ///
+  /// - Parameters:
+  ///   - extensionContext: The extension context that failed.
+  ///   - error: The error that occurred.
   func requestFailed(
     for extensionContext: CXCallDirectoryExtensionContext,
     withError error: Error
