@@ -17,6 +17,7 @@ class UserDefaultsService {
     static let lastUpdate = "lastUpdate"
     static let updateStarted = "updateStarted"
     static let updateState = "updateState"
+    static let lastDownloadList = "lastDownloadList"
   }
 
   /// Private initializer to enforce singleton pattern.
@@ -143,6 +144,42 @@ class UserDefaultsService {
   /// Clears the update state from storage.
   func clearUpdateState() {
     userDefaults.removeObject(forKey: Keys.updateState)
+  }
+
+  /// MARK: - Last Download List
+  ///
+  /// Sets the date of the last block list download.
+  ///
+  /// - Parameter date: The date to store.
+  func setLastDownloadList(_ date: Date) {
+    userDefaults.set(date, forKey: Keys.lastDownloadList)
+  }
+
+  /// Retrieves the date of the last block list download.
+  ///
+  /// - Returns: The stored date, or nil if not set.
+  func getLastDownloadList() -> Date? {
+    return userDefaults.object(forKey: Keys.lastDownloadList) as? Date
+  }
+
+  /// Clears the last download list date from storage.
+  func clearLastDownloadList() {
+    userDefaults.removeObject(forKey: Keys.lastDownloadList)
+  }
+
+  /// Determines whether the block list should be downloaded.
+  ///
+  /// The block list should be downloaded if:
+  /// - No previous download has been recorded, or
+  /// - More than blockedListDownloadInterval has passed since the last download
+  ///
+  /// - Returns: true if a download is needed, false otherwise.
+  func shouldDownloadBlockList() -> Bool {
+    guard let lastDownload = getLastDownloadList() else {
+      return true  // First time, always download
+    }
+
+    return Date().timeIntervalSince(lastDownload) > AppConstants.blockedListDownloadInterval
   }
 
   /// MARK: - Reset All
