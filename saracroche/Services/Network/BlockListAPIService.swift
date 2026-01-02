@@ -2,9 +2,9 @@ import Foundation
 
 /// A service responsible for downloading and managing block lists from remote sources.
 /// This service handles the retrieval of spam/block numbers and their storage in the application.
-final class BlockListService {
-  /// Shared instance of the BlockListService for singleton pattern access.
-  static let shared = BlockListService()
+final class BlockListAPIService {
+  /// Shared instance of the BlockListAPIService for singleton pattern access.
+  static let shared = BlockListAPIService()
 
   /// API service used to make network requests.
   private let apiService = APIService()
