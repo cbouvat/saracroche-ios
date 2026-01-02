@@ -32,7 +32,6 @@ The application is built as a modular iOS system with:
 ### Don't
 
 - **Legacy Code**: Don't write Objective-C code (Swift-only project)
-- **Complexity**: Avoid over-engineering solutions
 - **Hardcoding**: Don't hardcode configuration values or strings
 - **Global State**: Avoid using global variables or singletons when possible
 - **Force Unwrapping**: Don't use force unwrapping (`!`) - prefer optional binding
