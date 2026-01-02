@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SettingsNavigationView: View {
-  @ObservedObject var blockerViewModel: BlockerblockerViewModel
+  @ObservedObject var blockerViewModel: BlockerViewModel
   @State private var showingResetAlert = false
 
   var body: some View {
@@ -157,6 +157,6 @@ struct SettingsNavigationView: View {
 
 #Preview {
   SettingsNavigationView(
-    blockerViewModel: BlockerblockerViewModel()
+    blockerViewModel: BlockerViewModel()
   )
 }

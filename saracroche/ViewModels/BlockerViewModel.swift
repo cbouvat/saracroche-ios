@@ -82,8 +82,6 @@ class BlockerViewModel: ObservableObject {
   func refreshData() {
     checkUpdateState()
 
-    checkBlockedPatternsForDailyRefresh()
-
     if updateState.isInProgress {
       return
     }
@@ -109,18 +107,6 @@ class BlockerViewModel: ObservableObject {
         self?.isBackgroundServiceActive = requests.contains {
           $0.identifier == "com.cbouvat.saracroche.background-update"
         }
-      }
-    }
-  }
-
-  /// Checks for new blocked patterns on a daily basis and updates them if needed.
-  private func checkBlockedPatternsForDailyRefresh() {
-    guard BlockedPatternsService.shared.shouldCheckForNewPatterns() else { return }
-    Task {
-      do {
-        try await BlockedPatternsService.shared.ensureLatestPatternsIfNeeded()
-      } catch {
-        print("Blocked patterns refresh failed: \(error.localizedDescription)")
       }
     }
   }

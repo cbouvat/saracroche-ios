@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeNavigationView: View {
-  @ObservedObject var blockerViewModel: BlockerblockerViewModel
+  @ObservedObject var blockerViewModel: BlockerViewModel
   @State private var showDonationSheet = false
   @State private var showInfoSheet = false
 
