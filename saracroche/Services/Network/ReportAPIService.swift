@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 
-/// Base service for interacting with the Saracroche API
-class APIService {
+/// Service to handle reporting unwanted calls to the Saracroche API
+class ReportAPIService {
   private let session: URLSession
   private var jsonHeaders: [String: String] {
     [
@@ -22,10 +22,20 @@ class APIService {
     self.session = URLSession(configuration: configuration)
   }
 
-  /// Generic GET request method
-  func get(url: URL) async throws -> Data {
-    let request = makeRequest(url: url, method: .get)
-    return try await performRequest(request)
+  /// Reports a phone number as unwanted
+  /// - Parameter phone: The phone number to report
+  func report(_ phone: Int64) async throws {
+    guard let url = URL(string: AppConstants.apiReportURL) else {
+      throw NetworkError.invalidURL
+    }
+
+    let requestData = ReportRequest(phone: phone, device_id: deviceIdentifier)
+    let jsonData = try JSONEncoder().encode(requestData)
+
+    var request = makeRequest(url: url, method: .post)
+    request.httpBody = jsonData
+
+    _ = try await performRequest(request)
   }
 
   private func makeRequest(url: URL, method: HTTPMethod) -> URLRequest {
@@ -96,4 +106,9 @@ class APIService {
 
     return nil
   }
+}
+
+private struct ReportRequest: Codable {
+  let phone: Int64
+  let device_id: String
 }

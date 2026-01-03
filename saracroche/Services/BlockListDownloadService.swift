@@ -12,7 +12,7 @@ final class BlockListDownloadService {
   static let shared = BlockListDownloadService()
 
   /// Service for downloading block lists from remote sources.
-  private let blockListService: APIService
+  private let blockListService: BlockListAPIService
 
   /// Service for converting block lists to Core Data format.
   private let blockListConverterService: BlockListConverterService
@@ -32,14 +32,14 @@ final class BlockListDownloadService {
   /// Private initializer with dependency injection for testing.
   ///
   /// - Parameters:
-  ///   - blockListService: The APIService instance (defaults to shared).
+  ///   - blockListService: The BlockListAPIService instance (defaults to shared).
   ///   - blockListConverterService: The BlockListConverterService instance (defaults to shared).
   ///   - userDefaultsService: The UserDefaultsService instance (defaults to shared).
   ///   - sharedUserDefaultsService: The SharedUserDefaultsService instance (defaults to shared).
   ///   - coreDataService: The BlockedNumberCoreDataService instance (defaults to shared).
   ///   - callDirectoryService: The CallDirectoryService instance (defaults to shared).
   private init(
-    blockListService: APIService = APIService(),
+    blockListService: BlockListAPIService = BlockListAPIService(),
     blockListConverterService: BlockListConverterService = .shared,
     userDefaultsService: UserDefaultsService = .shared,
     sharedUserDefaultsService: SharedUserDefaultsService = .shared,
