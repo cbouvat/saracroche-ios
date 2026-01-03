@@ -3,32 +3,44 @@ import UIKit
 
 /// Base service for interacting with the Saracroche API
 class APIService {
-  private let session: URLSession
-  private var jsonHeaders: [String: String] {
+  /// URLSession for making network requests
+  let session: URLSession
+
+  /// Common JSON headers for API requests
+  var jsonHeaders: [String: String] {
     [
       "Content-Type": "application/json",
       "Accept": "application/json",
     ]
   }
 
-  private var deviceIdentifier: String {
+  /// Device identifier for API requests
+  var deviceIdentifier: String {
     return UIDevice.current.identifierForVendor?.uuidString ?? "unknown"
   }
 
-  init() {
-    let configuration = URLSessionConfiguration.default
+  /// Initializes the API service with a custom URLSession configuration
+  /// - Parameter configuration: URLSessionConfiguration to use (defaults to default configuration)
+  init(configuration: URLSessionConfiguration = .default) {
     configuration.timeoutIntervalForRequest = 10.0
     configuration.timeoutIntervalForResource = 30.0
     self.session = URLSession(configuration: configuration)
   }
 
   /// Generic GET request method
+  /// - Parameter url: The URL to request
+  /// - Returns: Data from the response
   func get(url: URL) async throws -> Data {
     let request = makeRequest(url: url, method: .get)
     return try await performRequest(request)
   }
 
-  private func makeRequest(url: URL, method: HTTPMethod) -> URLRequest {
+  /// Creates a URLRequest with appropriate headers and method
+  /// - Parameters:
+  ///   - url: The URL for the request
+  ///   - method: The HTTP method
+  /// - Returns: Configured URLRequest
+  func makeRequest(url: URL, method: HTTPMethod) -> URLRequest {
     var request = URLRequest(url: url)
     request.httpMethod = method.rawValue
     jsonHeaders.forEach { field, value in
@@ -37,7 +49,10 @@ class APIService {
     return request
   }
 
-  private func performRequest(_ request: URLRequest) async throws -> Data {
+  /// Performs a network request and returns the data
+  /// - Parameter request: The URLRequest to perform
+  /// - Returns: Data from the response
+  func performRequest(_ request: URLRequest) async throws -> Data {
     do {
       let (data, response) = try await session.data(for: request)
       try handleHTTPResponse(response, data: data)
@@ -47,7 +62,11 @@ class APIService {
     }
   }
 
-  private func handleHTTPResponse(_ response: URLResponse, data: Data) throws {
+  /// Handles HTTP response and validates status code
+  /// - Parameters:
+  ///   - response: The URLResponse
+  ///   - data: The response data
+  func handleHTTPResponse(_ response: URLResponse, data: Data) throws {
     guard let httpResponse = response as? HTTPURLResponse else { return }
 
     switch httpResponse.statusCode {
@@ -61,7 +80,10 @@ class APIService {
     }
   }
 
-  private func mapNetworkError(_ error: Error) -> NetworkError {
+  /// Maps network errors to NetworkError enum
+  /// - Parameter error: The error to map
+  /// - Returns: NetworkError representation
+  func mapNetworkError(_ error: Error) -> NetworkError {
     if let networkError = error as? NetworkError {
       return networkError
     }
@@ -77,7 +99,10 @@ class APIService {
     }
   }
 
-  private func extractErrorMessage(from data: Data) -> String? {
+  /// Extracts error message from response data
+  /// - Parameter data: The response data
+  /// - Returns: Error message if found, nil otherwise
+  func extractErrorMessage(from data: Data) -> String? {
     if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
       if let message = json["message"] as? String {
         return message
