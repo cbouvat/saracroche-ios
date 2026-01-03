@@ -16,7 +16,7 @@ final class BackgroundService: ObservableObject {
     scheduleBackgroundTask()
   }
 
-  /// Shared instance with lazy initialization to avoid circular dependency
+  /// Get shared instance
   static var shared: BackgroundService {
     if let instance = _shared {
       return instance
@@ -28,14 +28,14 @@ final class BackgroundService: ObservableObject {
 
   // MARK: - Public Methods
 
-  /// Triggers an immediate background update.
+  /// Force background update
   func forceBackgroundUpdate(completion: @escaping (Bool) -> Void) {
     performBackgroundUpdate(completion: completion)
   }
 
   // MARK: - Private Methods
 
-  /// Setup background task.
+  /// Setup background tasks
   private func setupBackgroundTasks() {
     BGTaskScheduler.shared.register(
       forTaskWithIdentifier: backgroundServiceIdentifier,
@@ -45,7 +45,7 @@ final class BackgroundService: ObservableObject {
     }
   }
 
-  /// Shedule background task.
+  /// Schedule background task
   private func scheduleBackgroundTask() {
     let taskRequest = BGProcessingTaskRequest(identifier: backgroundServiceIdentifier)
     let scheduledDate = Date(timeIntervalSinceNow: backgroundUpdateInterval)
@@ -61,7 +61,7 @@ final class BackgroundService: ObservableObject {
     }
   }
 
-  /// Handles the system-provided task by kicking off the refresh pipeline and capturing expiration.
+  /// Handle background update
   private func handleBackgroundUpdate(task: BGProcessingTask) {
     print("Handling background app refresh")
 
@@ -77,7 +77,7 @@ final class BackgroundService: ObservableObject {
     }
   }
 
-  /// Delegates the blocklist refresh to the pipeline workflow.
+  /// Perform background update
   private func performBackgroundUpdate(
     completion: @escaping (Bool) -> Void
   ) {
