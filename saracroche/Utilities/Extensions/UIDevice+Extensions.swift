@@ -2,7 +2,7 @@ import UIKit
 
 extension UIDevice {
 
-  /// Returns the device model identifier (e.g., "iPhone15,2")
+  /// Device model identifier
   var modelIdentifier: String {
     var systemInfo = utsname()
     uname(&systemInfo)
