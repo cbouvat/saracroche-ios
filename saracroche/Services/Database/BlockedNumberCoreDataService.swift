@@ -75,10 +75,7 @@ final class BlockedNumberCoreDataService {
     }
   }
 
-  /// Gets all blocked numbers that have not been completed (completedDate is nil).
-  /// These numbers need to be processed in batches.
-  ///
-  /// - Returns: An array of blocked numbers with completedDate = nil.
+  /// Get pending blocked numbers
   func getPendingBlockedNumbers() -> [BlockedNumber] {
     let fetchRequest: NSFetchRequest<BlockedNumber> = BlockedNumber.fetchRequest()
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
@@ -91,10 +88,7 @@ final class BlockedNumberCoreDataService {
     }
   }
 
-  /// Gets a batch of pending blocked numbers for processing.
-  ///
-  /// - Parameter limit: The maximum number of numbers to return.
-  /// - Returns: An array of blocked numbers with completedDate = nil, limited to the specified count.
+  /// Get pending blocked numbers batch
   func getPendingBlockedNumbersBatch(limit: Int) -> [BlockedNumber] {
     let fetchRequest: NSFetchRequest<BlockedNumber> = BlockedNumber.fetchRequest()
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
@@ -108,9 +102,7 @@ final class BlockedNumberCoreDataService {
     }
   }
 
-  /// Marks a blocked number as completed by setting its completedDate.
-  ///
-  /// - Parameter phoneNumber: The phone number to mark as completed.
+  /// Mark blocked number as completed
   func markBlockedNumberAsCompleted(_ phoneNumber: String) {
     if let blockedNumber = getBlockedNumber(by: phoneNumber) {
       blockedNumber.completedDate = Date()
@@ -118,18 +110,14 @@ final class BlockedNumberCoreDataService {
     }
   }
 
-  /// Marks multiple blocked numbers as completed.
-  ///
-  /// - Parameter phoneNumbers: An array of phone numbers to mark as completed.
+  /// Mark multiple blocked numbers as completed
   func markBlockedNumbersAsCompleted(_ phoneNumbers: [String]) {
     for phoneNumber in phoneNumbers {
       markBlockedNumberAsCompleted(phoneNumber)
     }
   }
 
-  /// Gets the count of pending blocked numbers (completedDate = nil).
-  ///
-  /// - Returns: The count of pending blocked numbers.
+  /// Get pending blocked numbers count
   func getPendingBlockedNumbersCount() -> Int {
     let fetchRequest: NSFetchRequest<BlockedNumber> = BlockedNumber.fetchRequest()
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
