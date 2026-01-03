@@ -6,14 +6,12 @@ class ReportAPIService: APIService {
   /// User defaults service for persisting block list metadata.
   private let userDefaultsService = UserDefaultsService.shared
 
-  /// Initializes the ReportAPIService
-  /// - Parameter configuration: URLSessionConfiguration to use (defaults to default configuration)
+  /// Initialize ReportAPIService
   override init(configuration: URLSessionConfiguration = .default) {
     super.init(configuration: configuration)
   }
 
-  /// Reports a phone number as unwanted
-  /// - Parameter phone: The phone number to report
+  /// Report unwanted phone number
   func report(_ phone: Int64) async throws {
     guard let url = URL(string: AppConstants.apiReportURL) else {
       throw NetworkError.invalidURL
