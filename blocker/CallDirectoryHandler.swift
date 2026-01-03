@@ -6,9 +6,7 @@ import Foundation
 class CallDirectoryHandler: CXCallDirectoryProvider {
   /// Core Data service for accessing blocked numbers.
   private let coreDataService = BlockedNumberCoreDataService.shared
-  /// Called by CallKit when a request needs to be processed.
-  ///
-  /// - Parameter context: The extension context containing information about the request.
+  /// Handle CallKit request
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
     print("CallDirectoryHandler: Starting request processing")
     context.delegate = self
@@ -20,16 +18,12 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     context.completeRequest()
   }
 
-  /// Retrieves the shared UserDefaults instance for accessing data across app extensions.
-  ///
-  /// - Returns: The shared UserDefaults instance, or nil if it couldn't be created.
+  /// Get shared UserDefaults
   private func sharedUserDefaults() -> UserDefaults? {
     UserDefaults(suiteName: "group.com.cbouvat.saracroche")
   }
 
-  /// Processes incremental updates to the call directory.
-  ///
-  /// - Parameter context: The extension context for adding/removing entries.
+  /// Process incremental update
   private func incrementalUpdate(
     to context: CXCallDirectoryExtensionContext
   ) {
@@ -42,13 +36,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     }
   }
 
-  /// Processes a batch of phone numbers based on their action in Core Data.
-  /// This method retrieves pending numbers and processes them according to their action:
-  /// - "block": Add the number to the blocking list
-  /// - "remove": Remove the number from the blocking list
-  /// - "identify": Add the number to the identification list
-  ///
-  /// - Parameter context: The extension context for adding/removing entries.
+  /// Process batch of phone numbers
   private func processBatch(
     to context: CXCallDirectoryExtensionContext
   ) {
@@ -107,11 +95,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
 extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
 
-  /// Called when a request fails with an error.
-  ///
-  /// - Parameters:
-  ///   - extensionContext: The extension context that failed.
-  ///   - error: The error that occurred.
+  /// Handle request failure
   func requestFailed(
     for extensionContext: CXCallDirectoryExtensionContext,
     withError error: Error
