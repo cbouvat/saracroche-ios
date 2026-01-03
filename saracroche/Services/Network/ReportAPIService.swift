@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-/// Service to handle reporting unwanted calls to the Saracroche API
+/// Service for reporting unwanted calls
 class ReportAPIService: APIService {
   /// User defaults service for persisting block list metadata.
   private let userDefaultsService = UserDefaultsService.shared
