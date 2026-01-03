@@ -24,7 +24,7 @@ The application is built as a modular iOS system with:
 - **Accessibility**: Ensure A11Y compliance with VoiceOver support
 - **Configuration**: Store app configuration in `AppConstants.swift`
 - **Data Sharing**: Use App Groups for inter-process communication between app and extensions
-- **Documentation**: Write comprehensive documentation in `docs/` folder
+- **Documentation**: Write comprehensive documentation in `docs/` folder and add SwiftDoc comments for all public APIs and complex functions
 - **Testing**: Write unit tests for critical components and business logic
 - **Error Handling**: Implement proper error handling and logging
 - **Code Reviews**: Follow pull request template and code review guidelines
