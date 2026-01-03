@@ -1,8 +1,7 @@
 import CallKit
 import Foundation
 
-/// A service that manages CallKit extension functionality for blocking phone numbers.
-/// This service provides methods to check extension status, open settings, and reload the extension.
+/// Service for CallKit extension functionality
 class CallDirectoryService {
 
   /// Shared instance of the CallDirectoryService for singleton pattern access.
@@ -14,10 +13,7 @@ class CallDirectoryService {
   /// Private initializer to enforce singleton pattern.
   private init() {}
 
-  /// Checks the current status of the CallKit extension.
-  ///
-  /// - Parameter completion: A closure that receives the extension status.
-  ///   The closure is called on the main thread.
+  /// Check CallKit extension status
   func checkExtensionStatus(
     completion: @escaping (BlockerExtensionStatus) -> Void
   ) {
@@ -44,8 +40,7 @@ class CallDirectoryService {
     }
   }
 
-  /// Opens the activation panel in iOS Settings for the Call Directory extension.
-  /// This allows users to enable or disable the call blocking extension.
+  /// Open CallKit settings
   func openSettings() {
     manager.openSettings { error in
       if let error = error {
@@ -56,10 +51,7 @@ class CallDirectoryService {
     }
   }
 
-  /// Reloads the CallKit extension with a completion handler.
-  ///
-  /// - Parameter completion: A closure that receives a boolean indicating success (true) or failure (false).
-  ///   The closure is called on the main thread.
+  /// Reload CallKit extension with completion
   func reloadExtension(completion: @escaping (Bool) -> Void) {
     self.manager.reloadExtension(
       withIdentifier: AppConstants.callDirectoryExtensionIdentifier
@@ -70,8 +62,7 @@ class CallDirectoryService {
     }
   }
 
-  /// Reloads the CallKit extension without a completion handler.
-  /// Errors are logged to the console if they occur.
+  /// Reload CallKit extension
   func reloadExtension() {
     self.manager.reloadExtension(
       withIdentifier: AppConstants.callDirectoryExtensionIdentifier
