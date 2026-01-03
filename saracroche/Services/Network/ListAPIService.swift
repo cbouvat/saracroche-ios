@@ -6,16 +6,12 @@ class ListAPIService: APIService {
   /// User defaults service for persisting block list metadata.
   private let userDefaultsService = UserDefaultsService.shared
 
-  /// Initializes the ListAPIService
-  /// - Parameter configuration: URLSessionConfiguration to use (defaults to default configuration)
+  /// Initialize ListAPIService
   override init(configuration: URLSessionConfiguration = .default) {
     super.init(configuration: configuration)
   }
 
-  /// Downloads and decodes the French block list from the remote API.
-  ///
-  /// - Returns: A dictionary representing the complete JSON response.
-  /// - Throws: DownloadError if the download, decoding, or network operation fails.
+  /// Download French block list
   func downloadFrenchList() async throws -> [String: Any] {
     guard var components = URLComponents(string: AppConstants.apiFrenchListURL) else {
       throw NetworkError.invalidURL
