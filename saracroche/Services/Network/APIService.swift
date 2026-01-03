@@ -39,6 +39,7 @@ class APIService {
     _ = try await performRequest(request)
   }
 
+  /// Downloads the French block list from the remote API.
   func downloadFrenchList() async throws -> Data {
     guard var components = URLComponents(string: AppConstants.apiFrenchListURL) else {
       throw NetworkError.invalidURL
@@ -61,9 +62,6 @@ class APIService {
   }
 
   /// Downloads the block list from the remote API and saves the update timestamp.
-  ///
-  /// - Returns: The raw data containing the block list.
-  /// - Throws: DownloadError if the download or save operation fails.
   func downloadAndSaveBlockList() async throws -> Data {
     do {
       let data = try await downloadFrenchList()
