@@ -39,7 +39,7 @@ class ReportViewModel: ObservableObject {
   }
 
   /// Service for making API requests to report phone numbers.
-  private let apiService = APIService()
+  private let apiService = ReportAPIService()
 
   /// Submits the phone number to be reported to the server.
   ///
