@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-/// Service to download and manage block lists from the Saracroche API
+/// Service for downloading block lists
 class ListAPIService: APIService {
   /// User defaults service for persisting block list metadata.
   private let userDefaultsService = UserDefaultsService.shared
