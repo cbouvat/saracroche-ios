@@ -1,22 +1,22 @@
 import CallKit
 import Foundation
 
-/// Orchestrates the complete blocklist update process.
+/// Orchestrates blocklist update process
 final class BlockerUpdatePipeline {
   static let shared = BlockerUpdatePipeline()
 
   private let callDirectoryService: CallDirectoryService
   private let userDefaultsService: UserDefaultsService
-  private let blockListDownloadService: BlockListDownloadService
+  private let listDownloadService: ListDownloadService
 
   private init(
     callDirectoryService: CallDirectoryService = .shared,
     userDefaultsService: UserDefaultsService = .shared,
-    blockListDownloadService: BlockListDownloadService = .shared
+    listDownloadService: ListDownloadService = .shared
   ) {
     self.callDirectoryService = callDirectoryService
     self.userDefaultsService = userDefaultsService
-    self.blockListDownloadService = blockListDownloadService
+    self.listDownloadService = listDownloadService
   }
 
   func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
@@ -51,7 +51,7 @@ final class BlockerUpdatePipeline {
     completion: @escaping (Bool) -> Void
   ) {
     print("🔍 [BlockerUpdatePipeline] checkAndProcessPendingBatch called")
-    let hasPendingNumbers = blockListDownloadService.hasPendingNumbersToProcess()
+    let hasPendingNumbers = listDownloadService.hasPendingNumbersToProcess()
     print("📊 [BlockerUpdatePipeline] Has pending numbers: \(hasPendingNumbers)")
 
     guard hasPendingNumbers else {
@@ -63,7 +63,7 @@ final class BlockerUpdatePipeline {
     print("⚡ [BlockerUpdatePipeline] Found pending numbers, triggering batch processing")
     onProgress()
 
-    blockListDownloadService.triggerBatchProcessing(
+    listDownloadService.triggerBatchProcessing(
       onProgress: onProgress,
       completion: completion
     )
@@ -100,7 +100,7 @@ final class BlockerUpdatePipeline {
     completion: @escaping (Bool) -> Void
   ) {
     print("⬇️ [BlockerUpdatePipeline] downloadAndConvertBlockList called")
-    blockListDownloadService.performDownloadAndBatchProcessing(
+    listDownloadService.performDownloadAndBatchProcessing(
       onProgress: onProgress,
       completion: completion
     )

@@ -1,8 +1,8 @@
 import CoreData
 import Foundation
 
-final class BlockListConverterService {
-  static let shared = BlockListConverterService()
+final class ListConverterService {
+  static let shared = ListConverterService()
 
   private let coreDataService = BlockedNumberCoreDataService.shared
 
@@ -59,21 +59,9 @@ final class BlockListConverterService {
     return result
   }
 
-  /// Converts a block list to Core Data with incremental updates.
-  /// This method updates existing numbers, adds new ones, and removes old ones.
-  ///
-  /// - Parameters:
-  ///   - blockList: The list of phone numbers to block.
-  ///   - source: The source of the block list.
-  ///   - sourceListName: The name of the source list.
-  ///   - sourceVersion: The version of the source list.
-  /// - Returns: The list of blocked numbers that were added or updated.
-  /// - Throws: An error if the conversion fails.
+  /// Convert block list incrementally
   func convertBlockListIncremental(
-    blockList: [String],
-    source: String,
-    sourceListName: String,
-    sourceVersion: String
+    json
   ) throws -> [BlockedNumber] {
     var result = [BlockedNumber]()
     let blockListSet = Set(blockList)

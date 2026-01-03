@@ -1,70 +1,33 @@
 import CallKit
 import Foundation
 
-/// A service responsible for orchestrating the block list download and batch processing workflow.
-/// This service manages:
-/// 1. Checking if a download is needed based on the last download time
-/// 2. Downloading the block list from the server
-/// 3. Converting the list to Core Data with metadata
-/// 4. Processing pending numbers in batches via CallKit
-final class BlockListDownloadService {
-  /// Shared instance of the BlockListDownloadService for singleton pattern access.
-  static let shared = BlockListDownloadService()
+/// Service for downloading and processing block lists
+final class ListDownloadService {
+  static let shared = ListDownloadService()
 
-  /// Service for downloading block lists from remote sources.
   private let listAPIService: ListAPIService
-
-  /// Service for converting block lists to Core Data format.
-  private let blockListConverterService: BlockListConverterService
-
-  /// Service for managing persistent data storage.
+  private let listConverterService: ListConverterService
   private let userDefaultsService: UserDefaultsService
-
-  /// Service for managing shared UserDefaults across app extensions.
   private let sharedUserDefaultsService: SharedUserDefaultsService
-
-  /// Service for managing Core Data operations.
   private let coreDataService: BlockedNumberCoreDataService
-
-  /// Service for managing CallKit extension functionality.
   private let callDirectoryService: CallDirectoryService
 
-  /// Private initializer with dependency injection for testing.
-  ///
-  /// - Parameters:
-  ///   - blockListService: The BlockListAPIService instance (defaults to shared).
-  ///   - blockListConverterService: The BlockListConverterService instance (defaults to shared).
-  ///   - userDefaultsService: The UserDefaultsService instance (defaults to shared).
-  ///   - sharedUserDefaultsService: The SharedUserDefaultsService instance (defaults to shared).
-  ///   - coreDataService: The BlockedNumberCoreDataService instance (defaults to shared).
-  ///   - callDirectoryService: The CallDirectoryService instance (defaults to shared).
   private init(
     listAPIService: ListAPIService = ListAPIService(),
-    blockListConverterService: BlockListConverterService = .shared,
+    listConverterService: ListConverterService = .shared,
     userDefaultsService: UserDefaultsService = .shared,
     sharedUserDefaultsService: SharedUserDefaultsService = .shared,
     coreDataService: BlockedNumberCoreDataService = .shared,
     callDirectoryService: CallDirectoryService = .shared
   ) {
     self.listAPIService = listAPIService
-    self.blockListConverterService = blockListConverterService
+    self.listConverterService = listConverterService
     self.userDefaultsService = userDefaultsService
     self.sharedUserDefaultsService = sharedUserDefaultsService
     self.coreDataService = coreDataService
     self.callDirectoryService = callDirectoryService
   }
 
-  /// Performs the complete block list download and batch processing workflow.
-  ///
-  /// This method:
-  /// 1. Checks if a download is needed based on the last download time
-  /// 2. Downloads the block list if needed
-  /// 3. Converts the list to Core Data with metadata
-  /// 4. Processes pending numbers in batches
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called periodically to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
   func performDownloadAndBatchProcessing(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
@@ -104,11 +67,6 @@ final class BlockListDownloadService {
     )
   }
 
-  /// Downloads the block list from the server and converts it to Core Data format.
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
   private func downloadAndConvertBlockList(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
@@ -118,21 +76,27 @@ final class BlockListDownloadService {
         onProgress()
 
         // Download the block list
-        let list = try await listAPIService.downloadFrenchList()
+        let jsonResponse = try await listAPIService.downloadFrenchList()
 
-        let _ = try blockListConverterService.convertBlockListIncremental(
-          list: list,
-          source: source,
-          sourceListName: sourceListName,
-          sourceVersion: sourceVersion
-        )
+        // Extract the version from the JSON response
+        guard let version = jsonResponse["version"] as? String else {
+          print("Version not found in JSON response")
+          completion(false)
+          return
+        }
+
+        // Extract the patterns array from the JSON response
+        guard let patterns = jsonResponse["patterns"] as? [String] else {
+          print("Patterns not found in JSON response")
+          completion(false)
+          return
+        }
+
+        let _ = try listConverterService.convertList(jsonResponse)
 
         // Update the last download timestamp
         userDefaultsService.setLastDownloadList(Date())
 
-        print(
-          "Successfully downloaded and converted block list with \(list.count) numbers"
-        )
         completion(true)
       } catch DownloadError.unauthorized {
         print("Authentication failed")
@@ -147,15 +111,6 @@ final class BlockListDownloadService {
     }
   }
 
-  /// Processes pending numbers in batches via CallKit.
-  ///
-  /// This method retrieves numbers with completedDate = nil and processes them
-  /// in batches of 10,000. Each batch is sent to the CallKit extension
-  /// for processing.
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
   private func processPendingNumbersBatches(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
@@ -177,11 +132,6 @@ final class BlockListDownloadService {
     )
   }
 
-  /// Processes the next batch of pending numbers.
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
   private func processNextBatch(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
@@ -212,22 +162,11 @@ final class BlockListDownloadService {
       )
     }
   }
-  /// Checks if there are any pending numbers to process.
-  ///
-  /// - Returns: true if there are numbers with completedDate = nil, false otherwise.
   func hasPendingNumbersToProcess() -> Bool {
     let pendingCount = coreDataService.getPendingBlockedNumbersCount()
     return pendingCount > 0
   }
 
-  /// Triggers batch processing of pending numbers without downloading a new block list.
-  ///
-  /// This method is useful when you want to process pending numbers that were previously
-  /// downloaded but not yet added to the CallKit extension.
-  ///
-  /// - Parameters:
-  ///   - onProgress: A closure called periodically to report progress.
-  ///   - completion: A closure that receives a boolean indicating success (true) or failure (false).
   func triggerBatchProcessing(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
