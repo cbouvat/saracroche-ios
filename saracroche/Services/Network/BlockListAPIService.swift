@@ -36,7 +36,7 @@ class ListAPIService: APIService {
 
     // Parse the JSON data
     guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-      throw DownloadError.invalidResponse
+      throw NetworkError.decodingError
     }
 
     return json
