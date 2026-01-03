@@ -12,7 +12,7 @@ final class BlockListDownloadService {
   static let shared = BlockListDownloadService()
 
   /// Service for downloading block lists from remote sources.
-  private let blockListService: BlockListAPIService
+  private let listAPIService: ListAPIService
 
   /// Service for converting block lists to Core Data format.
   private let blockListConverterService: BlockListConverterService
@@ -39,14 +39,14 @@ final class BlockListDownloadService {
   ///   - coreDataService: The BlockedNumberCoreDataService instance (defaults to shared).
   ///   - callDirectoryService: The CallDirectoryService instance (defaults to shared).
   private init(
-    blockListService: BlockListAPIService = BlockListAPIService(),
+    listAPIService: ListAPIService = ListAPIService(),
     blockListConverterService: BlockListConverterService = .shared,
     userDefaultsService: UserDefaultsService = .shared,
     sharedUserDefaultsService: SharedUserDefaultsService = .shared,
     coreDataService: BlockedNumberCoreDataService = .shared,
     callDirectoryService: CallDirectoryService = .shared
   ) {
-    self.blockListService = blockListService
+    self.listAPIService = listAPIService
     self.blockListConverterService = blockListConverterService
     self.userDefaultsService = userDefaultsService
     self.sharedUserDefaultsService = sharedUserDefaultsService
@@ -118,15 +118,10 @@ final class BlockListDownloadService {
         onProgress()
 
         // Download the block list
-        let blockList = try await blockListService.downloadBlockList()
-
-        // Convert to Core Data with metadata
-        let source = "arcep-operators"
-        let sourceListName = "french-list-arcep-operators"
-        let sourceVersion = UUID().uuidString  // Generate a unique version for this download
+        let list = try await listAPIService.downloadFrenchList()
 
         let _ = try blockListConverterService.convertBlockListIncremental(
-          blockList: blockList,
+          list: list,
           source: source,
           sourceListName: sourceListName,
           sourceVersion: sourceVersion
@@ -136,7 +131,7 @@ final class BlockListDownloadService {
         userDefaultsService.setLastDownloadList(Date())
 
         print(
-          "Successfully downloaded and converted block list with \(blockList.count) numbers"
+          "Successfully downloaded and converted block list with \(list.count) numbers"
         )
         completion(true)
       } catch DownloadError.unauthorized {
