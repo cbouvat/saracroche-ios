@@ -1,8 +1,7 @@
 import Foundation
 import SwiftUI
 
-/// Represents the status of the CallKit blocker extension.
-/// This enum is used to track whether the call blocking extension is enabled, disabled, or in an error state.
+/// Status of CallKit blocker extension
 enum BlockerExtensionStatus {
   case enabled
   case disabled
