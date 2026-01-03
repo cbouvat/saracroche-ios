@@ -83,46 +83,16 @@ class APIService {
   /// - Returns: An array of strings representing phone numbers to block.
   /// - Throws: DownloadError if the download, decoding, or network operation fails.
   func downloadBlockList() async throws -> [String] {
-    do {
-      let data = try await downloadAndSaveBlockList()
+    let data = try await downloadAndSaveBlockList()
 
-      // Decode the JSON data
-      let decoder = JSONDecoder()
-
-      // Try to decode as a dictionary with a "patterns" field
-      if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-        print("API Response as dictionary: \(json)")
-        if let patterns = json["patterns"] as? [[String: Any]] {
-          print("Found \(patterns.count) patterns in 'patterns' field")
-          // Extract pattern strings from the array of dictionaries
-          let patternStrings = patterns.compactMap { $0["pattern"] as? String }
-          print("Extracted \(patternStrings.count) pattern strings")
-          return patternStrings
-        } else if let numbers = json["data"] as? [String] {
-          print("Found \(numbers.count) numbers in 'data' field")
-          return numbers
-        } else if let numbers = json["numbers"] as? [String] {
-          print("Found \(numbers.count) numbers in 'numbers' field")
-          return numbers
-        } else {
-          print("Dictionary found but no 'patterns', 'data' or 'numbers' field. Keys: \(json.keys)")
-        }
-      } else {
-        print("Failed to parse response as dictionary, trying as array")
-      }
-
-      // Fallback: try to decode as a direct array
-      let blockList = try decoder.decode([String].self, from: data)
-
-      return blockList
-    } catch let error as URLError {
-      throw DownloadError.networkError(error)
-    } catch let error as DecodingError {
-      print("Decoding error: \(error)")
-      throw DownloadError.decodingError(error)
-    } catch {
-      throw DownloadError.networkError(error)
+    // Parse the JSON data
+    guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let patterns = json["patterns"] as? [[String: Any]] else {
+      throw DownloadError.invalidResponse
     }
+
+    // Extract pattern strings from the array of dictionaries
+    return patterns.compactMap { $0["pattern"] as? String }
   }
 
   private func makeRequest(url: URL, method: HTTPMethod) -> URLRequest {
