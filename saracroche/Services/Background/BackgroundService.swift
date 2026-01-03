@@ -1,7 +1,7 @@
 import BackgroundTasks
 import Foundation
 
-/// Background service to handle periodic updates and background tasks
+/// Background service for periodic updates
 final class BackgroundService: ObservableObject {
 
   /// Lazy initialization to avoid circular dependency
