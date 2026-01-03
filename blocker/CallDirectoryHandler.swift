@@ -2,8 +2,7 @@ import CallKit
 import CoreData
 import Foundation
 
-/// The Call Directory extension handler that processes blocking requests from CallKit.
-/// This class is responsible for adding, removing, and managing phone numbers to be blocked.
+/// Call Directory extension handler
 class CallDirectoryHandler: CXCallDirectoryProvider {
   /// Core Data service for accessing blocked numbers.
   private let coreDataService = BlockedNumberCoreDataService.shared
@@ -106,7 +105,6 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   }
 }
 
-/// Extension to handle request failure notifications from CallKit.
 extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
 
   /// Called when a request fails with an error.
