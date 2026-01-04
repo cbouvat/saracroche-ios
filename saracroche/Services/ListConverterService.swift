@@ -3,10 +3,10 @@ import Foundation
 
 final class ListConverterService {
 
-  private let numberCoreDataService: NumberCoreDataService
+  private let patternCoreDataService: PatternCoreDataService
 
-  init(numberCoreDataService: NumberCoreDataService = NumberCoreDataService()) {
-    self.numberCoreDataService = numberCoreDataService
+  init(patternCoreDataService: PatternCoreDataService = PatternCoreDataService()) {
+    self.patternCoreDataService = patternCoreDataService
   }
 
   /// Convert list from API JSON to CoreData
@@ -19,29 +19,24 @@ final class ListConverterService {
       let decoder = JSONDecoder()
       let jsonObject = try decoder.decode(APIListResponse.self, from: jsonData)
 
-      // Delete all existing numbers
-      numberCoreDataService.deleteAllNumbers()
+      // Delete all existing patterns
+      patternCoreDataService.deleteAllPatterns()
 
       // Process each pattern from the API response
       for pattern in jsonObject.patterns {
-        print("Converting pattern : \(pattern.pattern)")
-        // Generate phone numbers from the pattern using PhoneNumberHelpers
-        let numbers = PhoneNumberHelpers.expandBlockingPattern(pattern.pattern)
-
-        for number in numbers {
-          // Add each phone number to CoreData with version and list name
-          _ = numberCoreDataService.addNumber(
-            number,
-            action: "block",
-            source: pattern.operatorName,
-            sourceListName: jsonObject.name,
-            sourceVersion: jsonObject.version
-          )
-        }
-        
-        numberCoreDataService.saveContext()
+        print("Storing pattern: \(pattern.pattern)")
+        // Store the pattern directly in CoreData with version and list name
+        _ = patternCoreDataService.addPattern(
+          pattern.pattern,
+          action: "block",
+          source: pattern.operatorName,
+          sourceListName: jsonObject.name,
+          sourceVersion: jsonObject.version
+        )
       }
-      
+
+      patternCoreDataService.saveContext()
+
     } catch {
       print("Error converting list to CoreData: \(error)")
       // Handle the error appropriately, e.g., log it, notify the user, or rethrow it

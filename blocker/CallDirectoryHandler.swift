@@ -1,14 +1,13 @@
 import CallKit
-import CoreData
 import Foundation
 
 /// Call Directory extension handler
 class CallDirectoryHandler: CXCallDirectoryProvider {
-  /// Core Data service for accessing blocked numbers.
-  private let coreDataService: NumberCoreDataService
+  /// Pattern store for accessing blocked patterns.
+  private let patternStore: PatternStore
 
-  init(coreDataService: NumberCoreDataService = NumberCoreDataService()) {
-    self.coreDataService = coreDataService
+  init(patternStore: PatternStore = PatternStore()) {
+    self.patternStore = patternStore
     super.init()
   }
 
@@ -42,56 +41,39 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     }
   }
 
-  /// Process batch of phone numbers
+  /// Process batch of phone patterns
   private func processBatch(
     to context: CXCallDirectoryExtensionContext
   ) {
     print("CallDirectoryHandler: Processing batch update")
     sharedUserDefaults()?.set("", forKey: "action")
 
-    // Get the batch of pending numbers from Core Data
-    let pendingNumbersList = coreDataService.getPendingNumbersBatch(
+    // Get the batch of pending patterns from pattern store
+    let pendingPatternsList = patternStore.getPendingPatternsBatch(
       limit: 10_000
     )
 
-    print("Processing batch: count \(pendingNumbersList.count)")
+    print("Processing batch: count \(pendingPatternsList.count)")
 
     var blockedCount = 0
     var removedCount = 0
     var identifiedCount = 0
 
-    for numberEntity in pendingNumbersList {
-      guard let phoneNumber = numberEntity.number,
-        let action = numberEntity.action
-      else {
-        continue
-      }
+    for pattern in pendingPatternsList {
+      // Expand the pattern to individual phone numbers
+      let numbers = PhoneNumberHelpers.expandBlockingPattern(pattern)
 
-      let number = Int64(phoneNumber) ?? 0
+      for numberString in numbers {
+        // Convert to Int64 for CallKit
+        let number = Int64(numberString) ?? 0
 
-      switch action {
-      case "block":
         context.addBlockingEntry(withNextSequentialPhoneNumber: number)
         blockedCount += 1
-      case "remove":
-        context.removeBlockingEntry(withPhoneNumber: number)
-        removedCount += 1
-      case "identify":
-        if let name = numberEntity.name {
-          context.addIdentificationEntry(
-            withNextSequentialPhoneNumber: number,
-            label: name
-          )
-          identifiedCount += 1
-        }
-      default:
-        print("Unknown action for number \(phoneNumber): \(action)")
       }
     }
 
-    // Mark these numbers as completed
-    let phoneNumbers = pendingNumbersList.compactMap { $0.number }
-    coreDataService.markNumbersAsCompleted(phoneNumbers)
+    // Mark these patterns as completed
+    patternStore.markPatternsAsCompleted(pendingPatternsList)
 
     print(
       "Successfully processed batch: \(blockedCount) blocked, \(removedCount) removed, \(identifiedCount) identified"

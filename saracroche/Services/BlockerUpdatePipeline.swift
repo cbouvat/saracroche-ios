@@ -50,16 +50,16 @@ final class BlockerUpdatePipeline {
     completion: @escaping (Bool) -> Void
   ) {
     print("🔍 [BlockerUpdatePipeline] checkAndProcessPendingBatch called")
-    let hasPendingNumbers = listDownloadService.hasPendingNumbersToProcess()
-    print("📊 [BlockerUpdatePipeline] Has pending numbers: \(hasPendingNumbers)")
+    let hasPendingPatterns = listDownloadService.hasPendingPatternsToProcess()
+    print("📊 [BlockerUpdatePipeline] Has pending patterns: \(hasPendingPatterns)")
 
-    guard hasPendingNumbers else {
-      print("✅ [BlockerUpdatePipeline] No pending numbers to process")
+    guard hasPendingPatterns else {
+      print("✅ [BlockerUpdatePipeline] No pending patterns to process")
       completion(true)
       return
     }
 
-    print("⚡ [BlockerUpdatePipeline] Found pending numbers, triggering batch processing")
+    print("⚡ [BlockerUpdatePipeline] Found pending patterns, triggering batch processing")
     onProgress()
 
     listDownloadService.triggerBatchProcessing(
