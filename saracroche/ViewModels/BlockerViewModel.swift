@@ -42,7 +42,7 @@ class BlockerViewModel: ObservableObject {
     }
 
     checkBlockerExtensionStatus()
-    checkAndForceUpdateIfNeeded()
+    //checkAndForceUpdateIfNeeded()
   }
 
   func checkBlockerExtensionStatus() {
