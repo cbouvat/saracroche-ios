@@ -2,8 +2,6 @@ import Foundation
 
 class SharedUserDefaultsService {
 
-  static let shared = SharedUserDefaultsService()
-
   private let userDefaults: UserDefaults?
 
   // MARK: - Constants
@@ -11,7 +9,7 @@ class SharedUserDefaultsService {
     static let action = "action"
   }
 
-  private init() {
+  init() {
     userDefaults = UserDefaults(suiteName: AppConstants.appGroupIdentifier)
   }
 
