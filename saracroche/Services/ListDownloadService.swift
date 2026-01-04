@@ -8,7 +8,7 @@ final class ListDownloadService {
   private let listConverterService: ListConverterService
   private let userDefaultsService: UserDefaultsService
   private let sharedUserDefaultsService: SharedUserDefaultsService
-  private let coreDataService: BlockedNumberCoreDataService
+  private let coreDataService: NumberCoreDataService
   private let callDirectoryService: CallDirectoryService
 
   init(
@@ -16,7 +16,7 @@ final class ListDownloadService {
     listConverterService: ListConverterService = ListConverterService(),
     userDefaultsService: UserDefaultsService = UserDefaultsService(),
     sharedUserDefaultsService: SharedUserDefaultsService = SharedUserDefaultsService(),
-    coreDataService: BlockedNumberCoreDataService = BlockedNumberCoreDataService(),
+    coreDataService: NumberCoreDataService = NumberCoreDataService(),
     callDirectoryService: CallDirectoryService = CallDirectoryService()
   ) {
     self.listAPIService = listAPIService
@@ -108,7 +108,7 @@ final class ListDownloadService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    let pendingCount = coreDataService.getPendingBlockedNumbersCount()
+    let pendingCount = coreDataService.getPendingNumbersCount()
 
     print("Processing \(pendingCount) pending numbers in batches of 10,000")
 
@@ -129,7 +129,7 @@ final class ListDownloadService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    let pendingNumbers = coreDataService.getPendingBlockedNumbersBatch(limit: 10_000)
+    let pendingNumbers = coreDataService.getPendingNumbersBatch(limit: 10_000)
 
     guard !pendingNumbers.isEmpty else {
       print("All pending numbers have been processed")
@@ -156,7 +156,7 @@ final class ListDownloadService {
     }
   }
   func hasPendingNumbersToProcess() -> Bool {
-    let pendingCount = coreDataService.getPendingBlockedNumbersCount()
+    let pendingCount = coreDataService.getPendingNumbersCount()
     return pendingCount > 0
   }
 

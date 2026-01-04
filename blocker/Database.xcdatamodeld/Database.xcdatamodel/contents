@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25C56" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
-    <entity name="BlockedNumber" representedClassName="BlockedNumber" syncable="YES" codeGenerationType="class">
+    <entity name="Number" representedClassName="Number" syncable="YES" codeGenerationType="class">
+        <attribute name="number" attributeType="String"/>
         <attribute name="action" attributeType="String"/>
         <attribute name="addedDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="completedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="number" attributeType="String"/>
         <attribute name="source" attributeType="String"/>
         <attribute name="sourceListName" optional="YES" attributeType="String"/>
         <attribute name="sourceVersion" optional="YES" attributeType="String"/>
