@@ -7,12 +7,11 @@ final class BackgroundService: ObservableObject {
   // MARK: - Constants
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
   private let backgroundUpdateInterval = AppConstants.backgroundUpdateInterval
-  private let blockerUpdatePipeline: BlockerUpdatePipeline
+  private let blockerService: BlockerService
 
   init() {
-    self.blockerUpdatePipeline = BlockerUpdatePipeline()
+    self.blockerService = BlockerService()
     setupBackgroundTasks()
-    scheduleBackgroundTask()
   }
 
   // MARK: - Public Methods
@@ -71,7 +70,7 @@ final class BackgroundService: ObservableObject {
     completion: @escaping (Bool) -> Void
   ) {
     print("Performing background update")
-    blockerUpdatePipeline.performBackgroundUpdate(completion: completion)
+    blockerService.performBackgroundUpdate(completion: completion)
   }
 }
 

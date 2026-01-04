@@ -1,8 +1,8 @@
 import CallKit
 import Foundation
 
-/// Orchestrates blocklist update process
-final class BlockerUpdatePipeline {
+/// Service for managing blocklist updates
+final class BlockerService {
 
   private let callDirectoryService: CallDirectoryService
   private let userDefaultsService: UserDefaultsService
@@ -18,19 +18,21 @@ final class BlockerUpdatePipeline {
     self.listService = listService
   }
 
+  /// Perform background update
   func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
-    print("🔄 [BlockerUpdatePipeline] performBackgroundUpdate called")
+    print("🔄 [BlockerService] performBackgroundUpdate called")
     performUpdate(onProgress: {}, completion: completion)
   }
 
+  /// Perform update with progress callback
   func performUpdate(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("🔄 [BlockerUpdatePipeline] performUpdate called")
+    print("🔄 [BlockerService] performUpdate called")
 
     guard userDefaultsService.shouldUpdateBlockList() else {
-      print("✅ [BlockerUpdatePipeline] Block list is up to date")
+      print("✅ [BlockerService] Block list is up to date")
       checkAndProcessPendingBatch(
         onProgress: onProgress,
         completion: completion
@@ -38,28 +40,29 @@ final class BlockerUpdatePipeline {
       return
     }
 
-    print("⬇️ [BlockerUpdatePipeline] Block list needs update, checking extension status")
+    print("⬇️ [BlockerService] Block list needs update, checking extension status")
     checkExtensionStatus(
       onProgress: onProgress,
       completion: completion
     )
   }
 
-  private func checkAndProcessPendingBatch(
+  /// Check for pending patterns and process them if found
+  func checkAndProcessPendingBatch(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("🔍 [BlockerUpdatePipeline] checkAndProcessPendingBatch called")
+    print("🔍 [BlockerService] checkAndProcessPendingBatch called")
     let hasPendingPatterns = listService.hasPendingPatternsToProcess()
-    print("📊 [BlockerUpdatePipeline] Has pending patterns: \(hasPendingPatterns)")
+    print("📊 [BlockerService] Has pending patterns: \(hasPendingPatterns)")
 
     guard hasPendingPatterns else {
-      print("✅ [BlockerUpdatePipeline] No pending patterns to process")
+      print("✅ [BlockerService] No pending patterns to process")
       completion(true)
       return
     }
 
-    print("⚡ [BlockerUpdatePipeline] Found pending patterns, triggering batch processing")
+    print("⚡ [BlockerService] Found pending patterns, triggering batch processing")
     onProgress()
 
     listService.triggerBatchProcessing(
@@ -68,37 +71,39 @@ final class BlockerUpdatePipeline {
     )
   }
 
-  private func checkExtensionStatus(
+  /// Check CallKit extension status
+  func checkExtensionStatus(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("🔍 [BlockerUpdatePipeline] checkExtensionStatus called")
+    print("🔍 [BlockerService] checkExtensionStatus called")
     callDirectoryService.checkExtensionStatus { [weak self] status in
       guard let self = self else {
-        print("❌ [BlockerUpdatePipeline] Self is nil in checkExtensionStatus callback")
+        print("❌ [BlockerService] Self is nil in checkExtensionStatus callback")
         completion(false)
         return
       }
 
-      print("📱 [BlockerUpdatePipeline] Extension status: \(status)")
+      print("📱 [BlockerService] Extension status: \(status)")
       if status == .enabled {
-        print("✅ [BlockerUpdatePipeline] Extension enabled, proceeding with download")
+        print("✅ [BlockerService] Extension enabled, proceeding with download")
         self.downloadAndConvertList(
           onProgress: onProgress,
           completion: completion
         )
       } else {
-        print("❌ [BlockerUpdatePipeline] Extension not enabled, aborting update")
+        print("❌ [BlockerService] Extension not enabled, aborting update")
         completion(false)
       }
     }
   }
 
-  private func downloadAndConvertList(
+  /// Download and convert the block list
+  func downloadAndConvertList(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("⬇️ [BlockerUpdatePipeline] downloadAndConvertBlockList called")
+    print("⬇️ [BlockerService] downloadAndConvertBlockList called")
     listService.performDownloadAndBatchProcessing(
       onProgress: onProgress,
       completion: completion
