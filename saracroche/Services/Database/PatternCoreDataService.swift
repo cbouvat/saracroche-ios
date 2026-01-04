@@ -105,17 +105,4 @@ final class PatternCoreDataService {
       coreDataStack.saveContext()
     }
   }
-
-  /// Get pending patterns count
-  func getPendingPatternsCount() -> Int {
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
-
-    do {
-      return try context.count(for: fetchRequest)
-    } catch {
-      print("Failed to count pending patterns: \(error)")
-      return 0
-    }
-  }
 }
