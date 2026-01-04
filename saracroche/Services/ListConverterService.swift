@@ -24,6 +24,7 @@ final class ListConverterService {
 
       // Process each pattern from the API response
       for pattern in jsonObject.patterns {
+        print("Converting pattern : \(pattern.pattern)")
         // Generate phone numbers from the pattern using PhoneNumberHelpers
         let numbers = PhoneNumberHelpers.expandBlockingPattern(pattern.pattern)
 
@@ -37,10 +38,10 @@ final class ListConverterService {
             sourceVersion: jsonObject.version
           )
         }
+        
+        numberCoreDataService.saveContext()
       }
-
-      // Save all changes at once
-      numberCoreDataService.saveContext()
+      
     } catch {
       print("Error converting list to CoreData: \(error)")
       // Handle the error appropriately, e.g., log it, notify the user, or rethrow it
