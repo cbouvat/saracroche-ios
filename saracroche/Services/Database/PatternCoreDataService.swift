@@ -9,21 +9,6 @@ final class PatternCoreDataService {
     self.coreDataStack = coreDataStack
   }
 
-  /// Sync pending patterns to shared UserDefaults for the blocker extension
-  func syncToSharedUserDefaults() {
-    let pendingPatterns = getPendingPatterns()
-    let patterns = pendingPatterns.compactMap { $0.pattern }
-
-    let sharedUserDefaults = UserDefaults(suiteName: AppConstants.appGroupIdentifier)
-    sharedUserDefaults?.set(patterns, forKey: "pendingPatterns")
-  }
-
-  /// Clear pending patterns from shared UserDefaults after processing
-  func clearSharedUserDefaults() {
-    let sharedUserDefaults = UserDefaults(suiteName: AppConstants.appGroupIdentifier)
-    sharedUserDefaults?.removeObject(forKey: "pendingPatterns")
-  }
-
   func addPattern(
     _ pattern: String,
     action: String = "block",
