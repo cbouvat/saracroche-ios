@@ -1,8 +1,6 @@
 import CoreData
 
 final class CoreDataStack {
-  static let shared = CoreDataStack()
-
   lazy var persistentContainer: NSPersistentContainer = {
     let container = NSPersistentContainer(name: "Database")
 

@@ -3,17 +3,17 @@ import Foundation
 
 final class ListConverterService {
 
-  private let coreDataService: BlockedNumberCoreDataService
+  private let coreDataService: NumberCoreDataService
 
-  init(coreDataService: BlockedNumberCoreDataService = BlockedNumberCoreDataService()) {
+  init(coreDataService: NumberCoreDataService = NumberCoreDataService()) {
     self.coreDataService = coreDataService
   }
 
   /// Convert block list from API JSON to CoreData
   /// - Parameter jsonResponse: JSON dictionary containing the API response
-  /// - Returns: Array of BlockedNumber objects
+  /// - Returns: Array of Number objects
   /// - Throws: Error if JSON parsing fails or if there are issues with CoreData operations
-  func convertBlockListToCoreData(jsonResponse: [String: Any]) throws -> [BlockedNumber] {
+  func convertBlockListToCoreData(jsonResponse: [String: Any]) throws -> [Number] {
     // Convert JSON dictionary to Data
     let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse, options: [])
 
@@ -21,10 +21,10 @@ final class ListConverterService {
     let decoder = JSONDecoder()
     let jsonObject = try decoder.decode(APIBlockListResponse.self, from: jsonData)
 
-    // Delete all existing blocked numbers
-    coreDataService.deleteAllBlockedNumbers()
+    // Delete all existing numbers
+    coreDataService.deleteAllNumbers()
 
-    var result = [BlockedNumber]()
+    var result = [Number]()
 
     // Process each pattern from the API response
     for pattern in jsonObject.patterns {
@@ -33,18 +33,18 @@ final class ListConverterService {
 
       for phoneNumber in phoneNumbers {
         // Add each phone number to CoreData
-        let blockedNumber = coreDataService.addBlockedNumber(
+        let number = coreDataService.addNumber(
           phoneNumber,
           action: "block",
           source: pattern.operatorName
         )
 
         // Set additional metadata
-        blockedNumber.sourceVersion = jsonObject.version
-        blockedNumber.sourceListName = jsonObject.name
-        blockedNumber.addedDate = Date()
+        number.sourceVersion = jsonObject.version
+        number.sourceListName = jsonObject.name
+        number.addedDate = Date()
 
-        result.append(blockedNumber)
+        result.append(number)
       }
     }
 

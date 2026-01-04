@@ -5,7 +5,18 @@ import Foundation
 /// Call Directory extension handler
 class CallDirectoryHandler: CXCallDirectoryProvider {
   /// Core Data service for accessing blocked numbers.
-  private let coreDataService = BlockedNumberCoreDataService.shared
+  private let coreDataService: NumberCoreDataService
+
+  init(coreDataService: NumberCoreDataService = NumberCoreDataService()) {
+    self.coreDataService = coreDataService
+    super.init()
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    self.coreDataService = NumberCoreDataService()
+    super.init(coder: aDecoder)
+  }
+
   /// Handle CallKit request
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
     print("CallDirectoryHandler: Starting request processing")
@@ -44,7 +55,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     sharedUserDefaults()?.set("", forKey: "action")
 
     // Get the batch of pending numbers from Core Data
-    let pendingNumbersList = coreDataService.getPendingBlockedNumbersBatch(
+    let pendingNumbersList = coreDataService.getPendingNumbersBatch(
       limit: 10_000
     )
 
@@ -54,9 +65,9 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     var removedCount = 0
     var identifiedCount = 0
 
-    for blockedNumber in pendingNumbersList {
-      guard let phoneNumber = blockedNumber.number,
-        let action = blockedNumber.action
+    for numberEntity in pendingNumbersList {
+      guard let phoneNumber = numberEntity.number,
+        let action = numberEntity.action
       else {
         continue
       }
@@ -71,7 +82,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
         context.removeBlockingEntry(withPhoneNumber: number)
         removedCount += 1
       case "identify":
-        if let name = blockedNumber.name {
+        if let name = numberEntity.name {
           context.addIdentificationEntry(
             withNextSequentialPhoneNumber: number,
             label: name
@@ -85,7 +96,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
     // Mark these numbers as completed
     let phoneNumbers = pendingNumbersList.compactMap { $0.number }
-    coreDataService.markBlockedNumbersAsCompleted(phoneNumbers)
+    coreDataService.markNumbersAsCompleted(phoneNumbers)
 
     print(
       "Successfully processed batch: \(blockedCount) blocked, \(removedCount) removed, \(identifiedCount) identified"
