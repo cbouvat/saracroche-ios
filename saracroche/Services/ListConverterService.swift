@@ -3,13 +3,13 @@ import Foundation
 
 final class ListConverterService {
 
-  private let coreDataService: NumberCoreDataService
+  private let numberCoreDataService: NumberCoreDataService
 
-  init(coreDataService: NumberCoreDataService = NumberCoreDataService()) {
-    self.coreDataService = coreDataService
+  init(numberCoreDataService: NumberCoreDataService = NumberCoreDataService()) {
+    self.numberCoreDataService = numberCoreDataService
   }
 
-  /// Convert block list from API JSON to CoreData
+  /// Convert list from API JSON to CoreData
   func convertBlockListToCoreData(jsonResponse: [String: Any]) throws -> [Number] {
     // Convert JSON dictionary to Data
     let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse, options: [])
@@ -19,7 +19,7 @@ final class ListConverterService {
     let jsonObject = try decoder.decode(APIBlockListResponse.self, from: jsonData)
 
     // Delete all existing numbers
-    coreDataService.deleteAllNumbers()
+    numberCoreDataService.deleteAllNumbers()
 
     var result = [Number]()
 
@@ -30,7 +30,7 @@ final class ListConverterService {
 
       for phoneNumber in phoneNumbers {
         // Add each phone number to CoreData
-        let number = coreDataService.addNumber(
+        let number = numberCoreDataService.addNumber(
           phoneNumber,
           action: "block",
           source: pattern.operatorName
@@ -46,7 +46,7 @@ final class ListConverterService {
     }
 
     // Save all changes at once
-    coreDataService.saveContext()
+    numberCoreDataService.saveContext()
 
     return result
   }
