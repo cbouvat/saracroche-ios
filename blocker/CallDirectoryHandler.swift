@@ -36,7 +36,8 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
     for numberData in numbersData {
       guard let numberString = numberData["number"] as? String,
-            let number = Int64(numberString) else {
+        let number = Int64(numberString)
+      else {
         continue
       }
 
