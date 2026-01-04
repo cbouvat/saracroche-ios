@@ -1,6 +1,6 @@
 import CoreData
 
-final class NumberCoreDataService {
+final class PatternCoreDataService {
 
   private let coreDataStack: CoreDataStack
   private var context: NSManagedObjectContext { coreDataStack.context }
@@ -9,132 +9,147 @@ final class NumberCoreDataService {
     self.coreDataStack = coreDataStack
   }
 
-  func addNumber(
-    _ phoneNumber: String,
+  /// Sync pending patterns to shared UserDefaults for the blocker extension
+  func syncToSharedUserDefaults() {
+    let pendingPatterns = getPendingPatterns()
+    let patterns = pendingPatterns.compactMap { $0.pattern }
+
+    let sharedUserDefaults = UserDefaults(suiteName: AppConstants.appGroupIdentifier)
+    sharedUserDefaults?.set(patterns, forKey: "pendingPatterns")
+  }
+
+  /// Clear pending patterns from shared UserDefaults after processing
+  func clearSharedUserDefaults() {
+    let sharedUserDefaults = UserDefaults(suiteName: AppConstants.appGroupIdentifier)
+    sharedUserDefaults?.removeObject(forKey: "pendingPatterns")
+  }
+
+  func addPattern(
+    _ pattern: String,
     action: String = "block",
     name: String = "",
     source: String = "unknown",
     sourceListName: String = "",
     sourceVersion: String = ""
-  ) -> Number {
-    let number = Number(context: context)
-    number.number = phoneNumber
-    number.action = action
-    number.source = source
-    number.sourceListName = sourceListName
-    number.sourceVersion = sourceVersion
-    number.addedDate = Date()
-    return number
+  ) -> Pattern {
+    let patternObj = Pattern(context: context)
+    patternObj.pattern = pattern
+    patternObj.action = action
+    patternObj.source = source
+    patternObj.sourceListName = sourceListName
+    patternObj.sourceVersion = sourceVersion
+    patternObj.addedDate = Date()
+    return patternObj
   }
 
   func saveContext() {
     coreDataStack.saveContext()
   }
 
-  func getAllNumbers() -> [Number] {
-    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
+  func getAllPatterns() -> [Pattern] {
+    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
 
     do {
       return try context.fetch(fetchRequest)
     } catch {
-      print("Failed to fetch numbers: \(error)")
+      print("Failed to fetch patterns: \(error)")
       return []
     }
   }
 
-  func deleteAllNumbers() {
-    print("Delete all numbers in CoreData")
-    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Number")
+  func deleteAllPatterns() {
+    print("Delete all patterns in CoreData")
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pattern")
     let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
     do {
       try context.execute(deleteRequest)
       coreDataStack.saveContext()
     } catch {
-      print("Failed to delete numbers: \(error)")
+      print("Failed to delete patterns: \(error)")
     }
   }
 
-  func getNumber(by phoneNumber: String) -> Number? {
-    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
-    fetchRequest.predicate = NSPredicate(format: "number == %@", phoneNumber)
+  func getPattern(by pattern: String) -> Pattern? {
+    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+    fetchRequest.predicate = NSPredicate(format: "pattern == %@", pattern)
     fetchRequest.fetchLimit = 1
 
     do {
       return try context.fetch(fetchRequest).first
     } catch {
-      print("Failed to fetch number: \(error)")
+      print("Failed to fetch pattern: \(error)")
       return nil
     }
   }
 
-  func deleteNumber(_ phoneNumber: String) {
-    if let number = getNumber(by: phoneNumber) {
-      context.delete(number)
+  func deletePattern(_ pattern: String) {
+    if let patternObj = getPattern(by: pattern) {
+      context.delete(patternObj)
       coreDataStack.saveContext()
     }
   }
 
-  func updateNumber(_ phoneNumber: String, with newData: [String: Any]) {
-    if let number = getNumber(by: phoneNumber) {
+  func updatePattern(_ pattern: String, with newData: [String: Any]) {
+    if let patternObj = getPattern(by: pattern) {
       for (key, value) in newData {
-        number.setValue(value, forKey: key)
+        patternObj.setValue(value, forKey: key)
       }
       coreDataStack.saveContext()
     }
   }
 
-  /// Get pending numbers
-  func getPendingNumbers() -> [Number] {
-    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
+  /// Get pending patterns
+  func getPendingPatterns() -> [Pattern] {
+    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
 
     do {
       return try context.fetch(fetchRequest)
     } catch {
-      print("Failed to fetch pending numbers: \(error)")
+      print("Failed to fetch pending patterns: \(error)")
       return []
     }
   }
 
-  /// Get pending numbers batch
-  func getPendingNumbersBatch(limit: Int) -> [Number] {
-    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
+  /// Get pending patterns batch
+  func getPendingPatternsBatch(limit: Int) -> [Pattern] {
+    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
     fetchRequest.fetchLimit = limit
 
     do {
       return try context.fetch(fetchRequest)
     } catch {
-      print("Failed to fetch pending numbers batch: \(error)")
+      print("Failed to fetch pending patterns batch: \(error)")
       return []
     }
   }
 
-  /// Mark number as completed
-  func markNumberAsCompleted(_ phoneNumber: String) {
-    if let number = getNumber(by: phoneNumber) {
-      number.completedDate = Date()
+  /// Mark pattern as completed
+  func markPatternAsCompleted(_ pattern: String) {
+    if let patternObj = getPattern(by: pattern) {
+      patternObj.completedDate = Date()
       coreDataStack.saveContext()
     }
   }
 
-  /// Mark multiple numbers as completed
-  func markNumbersAsCompleted(_ phoneNumbers: [String]) {
-    for phoneNumber in phoneNumbers {
-      markNumberAsCompleted(phoneNumber)
+  /// Mark multiple patterns as completed
+  func markPatternsAsCompleted(_ patterns: [String]) {
+    for pattern in patterns {
+      markPatternAsCompleted(pattern)
     }
   }
 
-  /// Get pending numbers count
-  func getPendingNumbersCount() -> Int {
-    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
+  /// Get pending patterns count
+  func getPendingPatternsCount() -> Int {
+    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
 
     do {
       return try context.count(for: fetchRequest)
     } catch {
-      print("Failed to count pending numbers: \(error)")
+      print("Failed to count pending patterns: \(error)")
       return 0
     }
   }

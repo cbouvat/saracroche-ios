@@ -8,7 +8,7 @@ final class ListDownloadService {
   private let listConverterService: ListConverterService
   private let userDefaultsService: UserDefaultsService
   private let sharedUserDefaultsService: SharedUserDefaultsService
-  private let coreDataService: NumberCoreDataService
+  private let patternCoreDataService: PatternCoreDataService
   private let callDirectoryService: CallDirectoryService
 
   init(
@@ -16,14 +16,14 @@ final class ListDownloadService {
     listConverterService: ListConverterService = ListConverterService(),
     userDefaultsService: UserDefaultsService = UserDefaultsService(),
     sharedUserDefaultsService: SharedUserDefaultsService = SharedUserDefaultsService(),
-    coreDataService: NumberCoreDataService = NumberCoreDataService(),
+    patternCoreDataService: PatternCoreDataService = PatternCoreDataService(),
     callDirectoryService: CallDirectoryService = CallDirectoryService()
   ) {
     self.listAPIService = listAPIService
     self.listConverterService = listConverterService
     self.userDefaultsService = userDefaultsService
     self.sharedUserDefaultsService = sharedUserDefaultsService
-    self.coreDataService = coreDataService
+    self.patternCoreDataService = patternCoreDataService
     self.callDirectoryService = callDirectoryService
   }
 
@@ -36,8 +36,8 @@ final class ListDownloadService {
 
     guard shouldDownload else {
       print("Block list is up to date, skipping download")
-      // Still process pending numbers even if no download needed
-      processPendingNumbersBatches(
+      // Still process pending patterns even if no download needed
+      processPendingPatternsBatches(
         onProgress: onProgress,
         completion: completion
       )
@@ -54,8 +54,8 @@ final class ListDownloadService {
         }
 
         if success {
-          // Process pending numbers in batches
-          self.processPendingNumbersBatches(
+          // Process pending patterns in batches
+          self.processPendingPatternsBatches(
             onProgress: onProgress,
             completion: completion
           )
@@ -104,21 +104,24 @@ final class ListDownloadService {
     }
   }
 
-  private func processPendingNumbersBatches(
+  private func processPendingPatternsBatches(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    let pendingCount = coreDataService.getPendingNumbersCount()
+    let pendingCount = patternCoreDataService.getPendingPatternsCount()
 
-    print("Processing \(pendingCount) pending numbers in batches of 10,000")
+    print("Processing \(pendingCount) pending patterns in batches of 10,000")
 
     guard pendingCount > 0 else {
-      print("No pending numbers to process")
+      print("No pending patterns to process")
       completion(true)
       return
     }
 
-    // Process numbers in batches
+    // Sync pending patterns to shared UserDefaults
+    patternCoreDataService.syncToSharedUserDefaults()
+
+    // Process patterns in batches
     processNextBatch(
       onProgress: onProgress,
       completion: completion
@@ -129,10 +132,15 @@ final class ListDownloadService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    let pendingNumbers = coreDataService.getPendingNumbersBatch(limit: 10_000)
+    // Sync the current batch to shared UserDefaults
+    patternCoreDataService.syncToSharedUserDefaults()
 
-    guard !pendingNumbers.isEmpty else {
-      print("All pending numbers have been processed")
+    let pendingCount = patternCoreDataService.getPendingPatternsCount()
+
+    guard pendingCount > 0 else {
+      print("All pending patterns have been processed")
+      // Clear shared UserDefaults when done
+      patternCoreDataService.clearSharedUserDefaults()
       completion(true)
       return
     }
@@ -140,7 +148,7 @@ final class ListDownloadService {
     // Set up shared user defaults for batch processing
     sharedUserDefaultsService.setAction("batch")
 
-    print("Processing batch of \(pendingNumbers.count) numbers")
+    print("Processing batch of \(pendingCount) patterns (first 10,000)")
 
     // Reload the extension to trigger batch processing
     callDirectoryService.reloadExtension()
@@ -155,8 +163,8 @@ final class ListDownloadService {
       )
     }
   }
-  func hasPendingNumbersToProcess() -> Bool {
-    let pendingCount = coreDataService.getPendingNumbersCount()
+  func hasPendingPatternsToProcess() -> Bool {
+    let pendingCount = patternCoreDataService.getPendingPatternsCount()
     return pendingCount > 0
   }
 
@@ -164,7 +172,7 @@ final class ListDownloadService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    processPendingNumbersBatches(
+    processPendingPatternsBatches(
       onProgress: onProgress,
       completion: completion
     )
