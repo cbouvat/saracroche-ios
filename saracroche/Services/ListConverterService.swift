@@ -10,7 +10,7 @@ final class ListConverterService {
   }
 
   /// Convert list from API JSON to CoreData
-  func convertBlockListToCoreData(jsonResponse: [String: Any]) throws -> [Number] {
+  func convertListToCoreData(jsonResponse: [String: Any]) throws -> [Number] {
     // Convert JSON dictionary to Data
     let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse, options: [])
 
