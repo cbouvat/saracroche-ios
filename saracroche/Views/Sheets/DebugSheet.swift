@@ -112,19 +112,17 @@ struct DebugSheet: View {
 
   private func convertBlockList() {
     Task {
-      do {
-        let jsonResponse = try await ListAPIService().downloadFrenchList()
-        ListService().convertListToCoreData(jsonResponse: jsonResponse)
-        DispatchQueue.main.async {
-          alertMessage = "✅ Conversion réussie"
-          showAlert = true
+      ListService().update(
+        onProgress: {
+          // Handle progress if needed
+        },
+        completion: { success in
+          DispatchQueue.main.async {
+            alertMessage = success ? "✅ Conversion réussie" : "❌ Échec de la conversion"
+            showAlert = true
+          }
         }
-      } catch {
-        DispatchQueue.main.async {
-          alertMessage = "❌ Échec de la conversion: \(error.localizedDescription)"
-          showAlert = true
-        }
-      }
+      )
     }
   }
 }
