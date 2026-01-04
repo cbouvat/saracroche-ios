@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DebugSheet: View {
   @Environment(\.dismiss) private var dismiss
-  @StateObject private var backgroundService = BackgroundService.shared
+  @StateObject private var backgroundService = BackgroundService()
   @State private var alertMessage: String?
   @State private var showAlert = false
 
@@ -115,7 +115,7 @@ struct DebugSheet: View {
     Task {
       do {
         let jsonResponse = try await ListAPIService().downloadFrenchList()
-        _ = try ListConverterService.shared.convertBlockListToCoreData(
+        _ = try ListConverterService().convertBlockListToCoreData(
           jsonResponse: jsonResponse)
         DispatchQueue.main.async {
           alertMessage = "✅ Conversion réussie"

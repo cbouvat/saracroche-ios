@@ -3,16 +3,15 @@ import Foundation
 
 /// Orchestrates blocklist update process
 final class BlockerUpdatePipeline {
-  static let shared = BlockerUpdatePipeline()
 
   private let callDirectoryService: CallDirectoryService
   private let userDefaultsService: UserDefaultsService
   private let listDownloadService: ListDownloadService
 
-  private init(
-    callDirectoryService: CallDirectoryService = .shared,
-    userDefaultsService: UserDefaultsService = .shared,
-    listDownloadService: ListDownloadService = .shared
+  init(
+    callDirectoryService: CallDirectoryService = CallDirectoryService(),
+    userDefaultsService: UserDefaultsService = UserDefaultsService(),
+    listDownloadService: ListDownloadService = ListDownloadService()
   ) {
     self.callDirectoryService = callDirectoryService
     self.userDefaultsService = userDefaultsService

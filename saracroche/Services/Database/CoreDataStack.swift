@@ -1,9 +1,8 @@
 import CoreData
 
 final class CoreDataStack {
-  static let shared = CoreDataStack()
 
-  lazy var persistentContainer: NSPersistentContainer = {
+  private lazy var persistentContainer: NSPersistentContainer = {
     let container = NSPersistentContainer(name: "Database")
 
     // Configure the persistent store for App Groups

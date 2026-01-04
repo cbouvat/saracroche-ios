@@ -2,11 +2,12 @@ import CoreData
 import Foundation
 
 final class ListConverterService {
-  static let shared = ListConverterService()
 
-  private let coreDataService = BlockedNumberCoreDataService.shared
+  private let coreDataService: BlockedNumberCoreDataService
 
-  private init() {}
+  init(coreDataService: BlockedNumberCoreDataService = BlockedNumberCoreDataService()) {
+    self.coreDataService = coreDataService
+  }
 
   /// Convert block list from API JSON to CoreData
   /// - Parameter jsonResponse: JSON dictionary containing the API response
@@ -15,7 +16,7 @@ final class ListConverterService {
   func convertBlockListToCoreData(jsonResponse: [String: Any]) throws -> [BlockedNumber] {
     // Convert JSON dictionary to Data
     let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse, options: [])
-    
+
     // Parse the JSON data
     let decoder = JSONDecoder()
     let jsonObject = try decoder.decode(APIBlockListResponse.self, from: jsonData)

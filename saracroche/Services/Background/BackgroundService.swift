@@ -4,26 +4,15 @@ import Foundation
 /// Background service for periodic updates
 final class BackgroundService: ObservableObject {
 
-  /// Lazy initialization to avoid circular dependency
-  private static var _shared: BackgroundService?
-
   // MARK: - Constants
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
   private let backgroundUpdateInterval = AppConstants.backgroundUpdateInterval
+  private let blockerUpdatePipeline: BlockerUpdatePipeline
 
-  private init() {
+  init() {
+    self.blockerUpdatePipeline = BlockerUpdatePipeline()
     setupBackgroundTasks()
     scheduleBackgroundTask()
-  }
-
-  /// Get shared instance
-  static var shared: BackgroundService {
-    if let instance = _shared {
-      return instance
-    }
-    let instance = BackgroundService()
-    _shared = instance
-    return instance
   }
 
   // MARK: - Public Methods
@@ -82,7 +71,7 @@ final class BackgroundService: ObservableObject {
     completion: @escaping (Bool) -> Void
   ) {
     print("Performing background update")
-    BlockerUpdatePipeline.shared.performBackgroundUpdate(completion: completion)
+    blockerUpdatePipeline.performBackgroundUpdate(completion: completion)
   }
 }
 
