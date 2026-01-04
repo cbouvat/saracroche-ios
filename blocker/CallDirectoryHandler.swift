@@ -12,11 +12,6 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
     super.init()
   }
 
-  required init?(coder aDecoder: NSCoder) {
-    self.coreDataService = NumberCoreDataService()
-    super.init(coder: aDecoder)
-  }
-
   /// Handle CallKit request
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
     print("CallDirectoryHandler: Starting request processing")
