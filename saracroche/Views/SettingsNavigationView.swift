@@ -3,6 +3,8 @@ import SwiftUI
 struct SettingsNavigationView: View {
   @ObservedObject var blockerViewModel: BlockerViewModel
   @State private var showingResetAlert = false
+  @State private var bisouTapCount = 0
+  @State private var showingDebugSheet = false
 
   var body: some View {
     NavigationView {
@@ -132,13 +134,29 @@ struct SettingsNavigationView: View {
         } header: {
           Text("Contact")
         } footer: {
-          Text(
-            "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
-              + "\n\n\nBisou 😘"
-          )
-          .padding(.vertical)
-          .frame(maxWidth: .infinity)
-          .multilineTextAlignment(.center)
+          Button {
+            bisouTapCount += 1
+            if bisouTapCount >= 3 {
+              showingDebugSheet = true
+              bisouTapCount = 0
+            }
+          } label: {
+            VStack(spacing: 8) {
+              Text(
+                "Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
+              )
+              .padding(.vertical, 4)
+              .frame(maxWidth: .infinity)
+              .multilineTextAlignment(.center)
+
+              Text("Bisou 😘")
+                .padding(.vertical, 4)
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.center)
+            }
+          }
+          .buttonStyle(.plain)
+          .padding(.vertical, 8)
         }
       }
       .navigationTitle("Réglages")
@@ -153,6 +171,9 @@ struct SettingsNavigationView: View {
         Text(
           "Êtes-vous sûr de vouloir réinitialiser l'application ? Toutes les données seront supprimées et l'application se fermera. Cette action est irréversible."
         )
+      }
+      .sheet(isPresented: $showingDebugSheet) {
+        DebugSheet()
       }
     }
   }
