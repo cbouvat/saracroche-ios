@@ -28,7 +28,6 @@ The application is built as a modular iOS system with:
 - **Documentation**: Write comprehensive documentation in `docs/` folder and add SwiftDoc comments for all public APIs and complex functions
 - **Testing**: Write unit tests for critical components and business logic
 - **Error Handling**: Implement proper error handling and logging
-- **Code Reviews**: Follow pull request template and code review guidelines
 
 ### Don't
 
