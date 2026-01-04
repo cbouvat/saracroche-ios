@@ -114,7 +114,7 @@ struct DebugSheet: View {
     Task {
       do {
         let jsonResponse = try await ListAPIService().downloadFrenchList()
-        _ = try ListConverterService().convertBlockListToCoreData(
+        _ = try ListConverterService().convertListToCoreData(
           jsonResponse: jsonResponse)
         DispatchQueue.main.async {
           alertMessage = "✅ Conversion réussie"
