@@ -49,7 +49,7 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.lastUpdate)
   }
 
-  func shouldUpdateBlockList() -> Bool {
+  func shouldUpdateList() -> Bool {
     guard let lastUpdate = getLastUpdateDate() else {
       return true  // First time, always update
     }
@@ -99,7 +99,7 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.lastDownloadList)
   }
 
-  func shouldDownloadBlockList() -> Bool {
+  func shouldDownloadList() -> Bool {
     guard let lastDownload = getLastDownloadList() else {
       return true  // First time, always download
     }
