@@ -6,16 +6,16 @@ final class BlockerUpdatePipeline {
 
   private let callDirectoryService: CallDirectoryService
   private let userDefaultsService: UserDefaultsService
-  private let listDownloadService: ListDownloadService
+  private let listService: ListService
 
   init(
     callDirectoryService: CallDirectoryService = CallDirectoryService(),
     userDefaultsService: UserDefaultsService = UserDefaultsService(),
-    listDownloadService: ListDownloadService = ListDownloadService()
+    listService: ListService = ListService()
   ) {
     self.callDirectoryService = callDirectoryService
     self.userDefaultsService = userDefaultsService
-    self.listDownloadService = listDownloadService
+    self.listService = listService
   }
 
   func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
@@ -50,7 +50,7 @@ final class BlockerUpdatePipeline {
     completion: @escaping (Bool) -> Void
   ) {
     print("🔍 [BlockerUpdatePipeline] checkAndProcessPendingBatch called")
-    let hasPendingPatterns = listDownloadService.hasPendingPatternsToProcess()
+    let hasPendingPatterns = listService.hasPendingPatternsToProcess()
     print("📊 [BlockerUpdatePipeline] Has pending patterns: \(hasPendingPatterns)")
 
     guard hasPendingPatterns else {
@@ -62,7 +62,7 @@ final class BlockerUpdatePipeline {
     print("⚡ [BlockerUpdatePipeline] Found pending patterns, triggering batch processing")
     onProgress()
 
-    listDownloadService.triggerBatchProcessing(
+    listService.triggerBatchProcessing(
       onProgress: onProgress,
       completion: completion
     )
@@ -99,7 +99,7 @@ final class BlockerUpdatePipeline {
     completion: @escaping (Bool) -> Void
   ) {
     print("⬇️ [BlockerUpdatePipeline] downloadAndConvertBlockList called")
-    listDownloadService.performDownloadAndBatchProcessing(
+    listService.performDownloadAndBatchProcessing(
       onProgress: onProgress,
       completion: completion
     )
