@@ -106,13 +106,6 @@ final class PatternCoreDataService {
     }
   }
 
-  /// Mark multiple patterns as completed
-  func markPatternsAsCompleted(_ patterns: [String]) {
-    for pattern in patterns {
-      markPatternAsCompleted(pattern)
-    }
-  }
-
   /// Get pending patterns count
   func getPendingPatternsCount() -> Int {
     let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
