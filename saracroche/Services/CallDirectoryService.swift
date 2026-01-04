@@ -7,9 +7,6 @@ class CallDirectoryService {
   /// The CallKit manager instance for interacting with the Call Directory extension.
   private let manager = CXCallDirectoryManager.sharedInstance
 
-  /// Public initializer.
-  init() {}
-
   /// Check CallKit extension status
   func checkExtensionStatus(
     completion: @escaping (BlockerExtensionStatus) -> Void
