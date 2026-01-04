@@ -10,6 +10,10 @@
 		85330FB62E43A88900C36ABB /* unwanted.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85330FAC2E43A88900C36ABB /* unwanted.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		85330FC62E43A94F00C36ABB /* filter.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85330FBF2E43A94F00C36ABB /* filter.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		85C9CE9D2D904D8C00584259 /* blocker.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85C9CE962D904D8C00584259 /* blocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		98689FB42EF83CCA00B7F539 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 98689FB32EF83CCA00B7F539 /* Localizable.xcstrings */; };
+		98689FB52EF83CCA00B7F539 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 98689FB32EF83CCA00B7F539 /* Localizable.xcstrings */; };
+		98689FB62EF83CCA00B7F539 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 98689FB32EF83CCA00B7F539 /* Localizable.xcstrings */; };
+		98689FB72EF83CCA00B7F539 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 98689FB32EF83CCA00B7F539 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +61,7 @@
 		85330FBF2E43A94F00C36ABB /* filter.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = filter.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		853F84882D904A1B00279342 /* saracroche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = saracroche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C9CE962D904D8C00584259 /* blocker.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = blocker.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		98689FB32EF83CCA00B7F539 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -160,6 +165,7 @@
 		853F847F2D904A1B00279342 = {
 			isa = PBXGroup;
 			children = (
+				98689FB32EF83CCA00B7F539 /* Localizable.xcstrings */,
 				853F848A2D904A1B00279342 /* saracroche */,
 				85C9CE972D904D8C00584259 /* blocker */,
 				85330FAD2E43A88900C36ABB /* unwanted */,
@@ -304,6 +310,7 @@
 			knownRegions = (
 				Base,
 				fr,
+				en,
 			);
 			mainGroup = 853F847F2D904A1B00279342;
 			minimizedProjectReferenceProxies = 1;
@@ -325,6 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98689FB62EF83CCA00B7F539 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +340,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98689FB72EF83CCA00B7F539 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +348,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98689FB52EF83CCA00B7F539 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,6 +356,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98689FB42EF83CCA00B7F539 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,6 +597,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -644,6 +656,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

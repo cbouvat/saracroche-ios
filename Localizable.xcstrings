@@ -1,0 +1,742 @@
+{
+  "sourceLanguage" : "fr",
+  "strings" : {
+    "**L'application n'arrive pas à installer la liste de blocage.** Pour résoudre ce problème, essayez les étapes suivantes :\n\n- Rechargez votre téléphone au **delà de 80%**.\n- Désactivez le mode économie d'énergie.\n- Vérifiez que l'**actualisation en arrière-plan** est activée pour Saracroche dans les réglages.\n- Puis **réinitialisez l'application** en utilisant le bouton ci-dessous." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**The app is unable to install the block list.** To resolve this issue, try the following steps:\n\n- Charge your phone to **over 80%**.\n- Turn off power saving mode.\n        - Check that **background refresh** is enabled for Saracroche in your settings.\n- Then **reset the app** using the button below."
+          }
+        }
+      }
+    },
+    "**Si le problème persiste** après avoir essayé ces étapes, voici une procédure plus complète :\n\n- Désactivez Saracroche dans les réglages, si elle apparaît ou si vous le pouvez.\n- Désinstallez l'application Saracroche.\n- Redémarrez votre appareil.\n- Réinstallez l'application Saracroche depuis l'App Store." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**If the problem persists** after trying these steps, here is a more comprehensive procedure:\n\n- Disable Saracroche in the settings, if it appears or if you can.\n- Uninstall the Saracroche app.\n- Restart your device.\n- Reinstall the Saracroche app from the App Store."
+          }
+        }
+      }
+    },
+    "%lld numéros bloqués" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld blocked numbers"
+          }
+        }
+      }
+    },
+    "%lld numéros bloqués sur %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld numbers blocked from %2$lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld numéros bloqués sur %2$lld"
+          }
+        }
+      }
+    },
+    "+33612345678" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+33612345678"
+          }
+        }
+      }
+    },
+    "Accueil" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        }
+      }
+    },
+    "Actif" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active"
+          }
+        }
+      }
+    },
+    "Activer dans les réglages de l'iPhone" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable in iPhone settings"
+          }
+        }
+      }
+    },
+    "Activer ou désactiver Saracroche dans **Réglages**" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable or disable Saracroche in **Settings**"
+          }
+        }
+      }
+    },
+    "Aide & FAQ" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help & FAQ"
+          }
+        }
+      }
+    },
+    "Annuler" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "Application gratuite et open source" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free and open source application"
+          }
+        }
+      }
+    },
+    "Aucun numéro bloqué" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No numbers blocked"
+          }
+        }
+      }
+    },
+    "Besoin d'informations supplémentaires ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Need more information?"
+          }
+        }
+      }
+    },
+    "Bientôt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soon"
+          }
+        }
+      }
+    },
+    "Bouton d'envoi du signalement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report button"
+          }
+        }
+      }
+    },
+    "Carte Bancaire & Apple Pay" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credit Card & Apple Pay"
+          }
+        }
+      }
+    },
+    "Champ de saisie du numéro de téléphone" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone number input field"
+          }
+        }
+      }
+    },
+    "Code source" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source code"
+          }
+        }
+      }
+    },
+    "Confidentialité" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy"
+          }
+        }
+      }
+    },
+    "Configuration" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration"
+          }
+        }
+      }
+    },
+    "Contact" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact"
+          }
+        }
+      }
+    },
+    "Démarrage en cours" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starting now"
+          }
+        }
+      }
+    },
+    "Dernière mise à jour" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last update"
+          }
+        }
+      }
+    },
+    "Dernière vérification" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Final check"
+          }
+        }
+      }
+    },
+    "En savoir plus" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn more"
+          }
+        }
+      }
+    },
+    "Envoyer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
+          }
+        }
+      }
+    },
+    "Erreur" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
+    },
+    "Erreur lors de la vérification" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error during verification"
+          }
+        }
+      }
+    },
+    "Êtes-vous sûr de vouloir réinitialiser l'application ? Toutes les données seront supprimées et l'application se fermera. Cette action est irréversible." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to reset the application? All data will be deleted and the application will close. This action cannot be undone."
+          }
+        }
+      }
+    },
+    "Fermer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
+    },
+    "GitHub" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub"
+          }
+        }
+      }
+    },
+    "Inactif" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inactive"
+          }
+        }
+      }
+    },
+    "Informations sur le blocage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Information about blocking"
+          }
+        }
+      }
+    },
+    "Installation de la liste" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installing the list"
+          }
+        }
+      }
+    },
+    "La dernière version de la liste de blocage est en cours d'installation." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The latest version of the block list is currently being installed."
+          }
+        }
+      }
+    },
+    "La fonctionnalité de signalement direct sera bientôt disponible. En attendant, ouvrez l'application Saracroche et saisissez manuellement ce numéro pour le signaler." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The direct reporting feature will be available soon. In the meantime, open the Saracroche app and manually enter this number to report it."
+          }
+        }
+      }
+    },
+    "La liste de blocage va être installée automatiquement, veuillez patienter quelques instants." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The block list will be installed automatically. Please wait a few moments."
+          }
+        }
+      }
+    },
+    "Lancement de la mise à jour" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
+          }
+        }
+      }
+    },
+    "Le bloqueur est actif" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The blocker is active"
+          }
+        }
+      }
+    },
+    "Le bloqueur n'est pas activé" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The blocker is not enabled"
+          }
+        }
+      }
+    },
+    "Liberapay" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liberapay"
+          }
+        }
+      }
+    },
+    "Liens" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
+          }
+        }
+      }
+    },
+    "Mastodon @cbouvat" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastodon @cbouvat"
+          }
+        }
+      }
+    },
+    "Noter l'application" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate the app"
+          }
+        }
+      }
+    },
+    "Numéro à signaler" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number to report"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "Ouvrir la page d'aide" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the help page"
+          }
+        }
+      }
+    },
+    "Ouvrir les réglages" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open settings"
+          }
+        }
+      }
+    },
+    "PayPal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PayPal"
+          }
+        }
+      }
+    },
+    "Pourquoi donner ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Why donate?"
+          }
+        }
+      }
+    },
+    "Préparation de l'installation de la liste de blocage." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing to install the block list."
+          }
+        }
+      }
+    },
+    "Réglages" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "Réinitialiser" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
+          }
+        }
+      }
+    },
+    "Réinitialiser l'application" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset the application"
+          }
+        }
+      }
+    },
+    "Relancer la mise à jour" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart the update"
+          }
+        }
+      }
+    },
+    "Saisissez le numéro au format E.164, par exemple +33612345678" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the number in E.164 format, for example +33612345678"
+          }
+        }
+      }
+    },
+    "Saisissez le numéro de téléphone au format international, par exemple +33612345678 pour la France." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the phone number in international format, for example +33612345678 for France."
+          }
+        }
+      }
+    },
+    "Saracroche" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saracroche"
+          }
+        }
+      }
+    },
+    "Service de mise à jour automatique" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic update service"
+          }
+        }
+      }
+    },
+    "Si le nombre de numéros bloqués n'augmente pas, essayez de relancer la mise à jour." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If the number of blocked numbers does not increase, try restarting the update."
+          }
+        }
+      }
+    },
+    "Si vous avez d'autres questions ou besoin d'aide, n'hésitez pas à vous rendre sur la page web d'aide.\nVous y trouverez la foire aux questions (FAQ)." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you have any further questions or need assistance, please visit the help page.\nThere you will find frequently asked questions (FAQs)."
+          }
+        }
+      }
+    },
+    "Signaler" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report"
+          }
+        }
+      }
+    },
+    "Signaler un bug ou suggérer une fonctionnalité par e-mail" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report a bug or suggest a feature by email"
+          }
+        }
+      }
+    },
+    "Signaler un numéro" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report a number"
+          }
+        }
+      }
+    },
+    "Site officiel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Official website"
+          }
+        }
+      }
+    },
+    "Soutenez" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support"
+          }
+        }
+      }
+    },
+    "Soutenez Saracroche" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support Saracroche"
+          }
+        }
+      }
+    },
+    "Statut inattendu" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unexpected status"
+          }
+        }
+      }
+    },
+    "Terminé" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finished"
+          }
+        }
+      }
+    },
+    "Une nouvelle version de la liste de blocage est disponible. La mise à jour va être installée automatiquement." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A new version of the block list is available. The update will be installed automatically."
+          }
+        }
+      }
+    },
+    "Vérification du statut du bloqueur en cours…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking blocker status..."
+          }
+        }
+      }
+    },
+    "Vous avez la dernière version de la liste de blocage installée." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have the latest version of the block list installed."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}
