@@ -3,14 +3,6 @@ import Foundation
 
 /// Call Directory extension handler
 class CallDirectoryHandler: CXCallDirectoryProvider {
-  /// Pattern store for accessing blocked patterns.
-  private let patternStore: PatternStore
-
-  init(patternStore: PatternStore = PatternStore()) {
-    self.patternStore = patternStore
-    super.init()
-  }
-
   /// Handle CallKit request
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
     print("CallDirectoryHandler: Starting request processing")
@@ -32,57 +24,50 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
   private func incrementalUpdate(
     to context: CXCallDirectoryExtensionContext
   ) {
-    let action = sharedUserDefaults()?.string(forKey: "action") ?? ""
-
-    if action == "batch" {
-      processBatch(to: context)
-    } else {
-      print("Unknown action: \(action)")
+    guard let sharedDefaults = sharedUserDefaults() else {
+      print("CallDirectoryHandler: Could not access shared UserDefaults")
+      return
     }
-  }
 
-  /// Process batch of phone patterns
-  private func processBatch(
-    to context: CXCallDirectoryExtensionContext
-  ) {
-    print("CallDirectoryHandler: Processing batch update")
-    sharedUserDefaults()?.set("", forKey: "action")
+    let action = sharedDefaults.string(forKey: "action") ?? ""
+    let numbersData = sharedDefaults.array(forKey: "numbers") as? [[String: Any]] ?? []
 
-    // Get the batch of pending patterns from pattern store
-    let pendingPatternsList = patternStore.getPendingPatternsBatch(
-      limit: 10_000
-    )
+    print("CallDirectoryHandler: Processing action \(action) with \(numbersData.count) numbers")
 
-    print("Processing batch: count \(pendingPatternsList.count)")
+    for numberData in numbersData {
+      guard let numberString = numberData["number"] as? String,
+            let number = Int64(numberString) else {
+        continue
+      }
 
-    var blockedCount = 0
-    var removedCount = 0
-    var identifiedCount = 0
+      let name = numberData["name"] as? String
 
-    for pattern in pendingPatternsList {
-      // Expand the pattern to individual phone numbers
-      let numbers = PhoneNumberHelpers.expandBlockingPattern(pattern)
-
-      for numberString in numbers {
-        // Convert to Int64 for CallKit
-        let number = Int64(numberString) ?? 0
-
+      switch action {
+      case "block":
         context.addBlockingEntry(withNextSequentialPhoneNumber: number)
-        blockedCount += 1
+        print("Blocked number: \(numberString) - \(name ?? "")")
+      case "identify":
+        context.addIdentificationEntry(withNextSequentialPhoneNumber: number, label: name ?? "")
+        print("Identified number: \(numberString) - \(name ?? "")")
+      case "remove":
+        context.removeBlockingEntry(withPhoneNumber: number)
+        print("Removed number: \(numberString)")
+      case "":
+        // No action specified, do nothing
+        print("No action specified")
+        break
+      default:
+        print("Unknown action: \(action)")
       }
     }
 
-    // Mark these patterns as completed
-    patternStore.markPatternsAsCompleted(pendingPatternsList)
-
-    print(
-      "Successfully processed batch: \(blockedCount) blocked, \(removedCount) removed, \(identifiedCount) identified"
-    )
+    // Clear the action after processing
+    sharedDefaults.set("", forKey: "action")
+    sharedDefaults.set([], forKey: "numbers")
   }
 }
 
 extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
-
   /// Handle request failure
   func requestFailed(
     for extensionContext: CXCallDirectoryExtensionContext,
@@ -90,5 +75,4 @@ extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
   ) {
     print("Request failed with error: \(error.localizedDescription)")
   }
-
 }
