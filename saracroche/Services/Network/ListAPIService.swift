@@ -38,4 +38,3 @@ class ListAPIService: APIService {
     return json
   }
 }
-
