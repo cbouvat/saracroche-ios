@@ -2,7 +2,6 @@ import SwiftUI
 
 struct DebugSheet: View {
   @Environment(\.dismiss) private var dismiss
-  @StateObject private var backgroundService = BackgroundService()
   @State private var alertMessage: String?
   @State private var showAlert = false
 
@@ -103,7 +102,7 @@ struct DebugSheet: View {
   }
 
   private func reloadBackgroundService() {
-    backgroundService.forceBackgroundUpdate { success in
+    BackgroundService().forceBackgroundUpdate { success in
       DispatchQueue.main.async {
         alertMessage = success ? "✅ Service rechargé" : "❌ Échec du rechargement"
         showAlert = true
