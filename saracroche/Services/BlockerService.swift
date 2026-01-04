@@ -1,4 +1,3 @@
-import CallKit
 import Foundation
 
 /// Service for managing blocklist updates
@@ -20,7 +19,7 @@ final class BlockerService {
 
   /// Perform background update
   func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
-    print("🔄 [BlockerService] performBackgroundUpdate called")
+    print("[BlockerService] performBackgroundUpdate called")
     performUpdate(onProgress: {}, completion: completion)
   }
 
@@ -29,43 +28,15 @@ final class BlockerService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("🔄 [BlockerService] performUpdate called")
+    print("[BlockerService] performUpdate called")
 
     guard userDefaultsService.shouldUpdateBlockList() else {
-      print("✅ [BlockerService] Block list is up to date")
-      checkAndProcessPendingBatch(
-        onProgress: onProgress,
-        completion: completion
-      )
+      print("[BlockerService] Block list is up to date")
       return
     }
 
-    print("⬇️ [BlockerService] Block list needs update, checking extension status")
+    print("[BlockerService] Block list needs update, checking extension status")
     checkExtensionStatus(
-      onProgress: onProgress,
-      completion: completion
-    )
-  }
-
-  /// Check for pending patterns and process them if found
-  func checkAndProcessPendingBatch(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
-    print("🔍 [BlockerService] checkAndProcessPendingBatch called")
-    let hasPendingPatterns = listService.hasPendingPatternsToProcess()
-    print("📊 [BlockerService] Has pending patterns: \(hasPendingPatterns)")
-
-    guard hasPendingPatterns else {
-      print("✅ [BlockerService] No pending patterns to process")
-      completion(true)
-      return
-    }
-
-    print("⚡ [BlockerService] Found pending patterns, triggering batch processing")
-    onProgress()
-
-    listService.triggerBatchProcessing(
       onProgress: onProgress,
       completion: completion
     )
@@ -76,7 +47,7 @@ final class BlockerService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("🔍 [BlockerService] checkExtensionStatus called")
+    print("[BlockerService] checkExtensionStatus called")
     callDirectoryService.checkExtensionStatus { [weak self] status in
       guard let self = self else {
         print("❌ [BlockerService] Self is nil in checkExtensionStatus callback")
@@ -84,7 +55,7 @@ final class BlockerService {
         return
       }
 
-      print("📱 [BlockerService] Extension status: \(status)")
+      print("[BlockerService] Extension status: \(status)")
       if status == .enabled {
         print("✅ [BlockerService] Extension enabled, proceeding with download")
         self.downloadAndConvertList(
@@ -92,7 +63,7 @@ final class BlockerService {
           completion: completion
         )
       } else {
-        print("❌ [BlockerService] Extension not enabled, aborting update")
+        print("[BlockerService] Extension not enabled, aborting update")
         completion(false)
       }
     }
@@ -104,7 +75,7 @@ final class BlockerService {
     completion: @escaping (Bool) -> Void
   ) {
     print("⬇️ [BlockerService] downloadAndConvertBlockList called")
-    listService.performDownloadAndBatchProcessing(
+    listService.update(
       onProgress: onProgress,
       completion: completion
     )
