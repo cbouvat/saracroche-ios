@@ -10,9 +10,6 @@ final class ListConverterService {
   }
 
   /// Convert block list from API JSON to CoreData
-  /// - Parameter jsonResponse: JSON dictionary containing the API response
-  /// - Returns: Array of Number objects
-  /// - Throws: Error if JSON parsing fails or if there are issues with CoreData operations
   func convertBlockListToCoreData(jsonResponse: [String: Any]) throws -> [Number] {
     // Convert JSON dictionary to Data
     let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse, options: [])
