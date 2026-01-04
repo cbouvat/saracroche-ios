@@ -102,7 +102,7 @@ final class ListService {
   /// Check if there are pending patterns to process
   func hasPendingPatternsToProcess() -> Bool {
     // Implementation would be here
-    // This is called from BlockerUpdatePipeline
+    // This is called from BlockerService
     return false
   }
 
@@ -112,7 +112,7 @@ final class ListService {
     completion: @escaping (Bool) -> Void
   ) {
     // Implementation would be here
-    // This is called from BlockerUpdatePipeline
+    // This is called from BlockerService
     completion(true)
   }
 
