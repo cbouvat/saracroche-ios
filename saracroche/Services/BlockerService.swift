@@ -30,54 +30,5 @@ final class BlockerService {
   ) {
     print("[BlockerService] performUpdate called")
 
-    guard userDefaultsService.shouldUpdateList() else {
-      print("[BlockerService] Block list is up to date")
-      return
-    }
-
-    print("[BlockerService] Block list needs update, checking extension status")
-    checkExtensionStatus(
-      onProgress: onProgress,
-      completion: completion
-    )
-  }
-
-  /// Check CallKit extension status
-  func checkExtensionStatus(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
-    print("[BlockerService] checkExtensionStatus called")
-    callDirectoryService.checkExtensionStatus { [weak self] status in
-      guard let self = self else {
-        print("❌ [BlockerService] Self is nil in checkExtensionStatus callback")
-        completion(false)
-        return
-      }
-
-      print("[BlockerService] Extension status: \(status)")
-      if status == .enabled {
-        print("✅ [BlockerService] Extension enabled, proceeding with download")
-        self.downloadAndConvertList(
-          onProgress: onProgress,
-          completion: completion
-        )
-      } else {
-        print("[BlockerService] Extension not enabled, aborting update")
-        completion(false)
-      }
-    }
-  }
-
-  /// Download and convert the block list
-  func downloadAndConvertList(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
-    print("⬇️ [BlockerService] downloadAndConvertList called")
-    listService.update(
-      onProgress: onProgress,
-      completion: completion
-    )
   }
 }
