@@ -10,52 +10,48 @@ final class ListConverterService {
   }
 
   /// Convert list from API JSON to CoreData
-  func convertListToCoreData(jsonResponse: [String: Any]) throws -> [Number] {
-    // Convert JSON dictionary to Data
-    let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse, options: [])
+  func convertListToCoreData(jsonResponse: [String: Any]) {
+    do {
+      // Convert JSON dictionary to Data
+      let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse)
 
-    // Parse the JSON data
-    let decoder = JSONDecoder()
-    let jsonObject = try decoder.decode(APIBlockListResponse.self, from: jsonData)
+      // Parse the JSON data
+      let decoder = JSONDecoder()
+      let jsonObject = try decoder.decode(APIListResponse.self, from: jsonData)
 
-    // Delete all existing numbers
-    numberCoreDataService.deleteAllNumbers()
+      // Delete all existing numbers
+      numberCoreDataService.deleteAllNumbers()
 
-    var result = [Number]()
+      // Process each pattern from the API response
+      for pattern in jsonObject.patterns {
+        // Generate phone numbers from the pattern using PhoneNumberHelpers
+        let numbers = PhoneNumberHelpers.expandBlockingPattern(pattern.pattern)
 
-    // Process each pattern from the API response
-    for pattern in jsonObject.patterns {
-      // Generate phone numbers from the pattern using PhoneNumberHelpers
-      let phoneNumbers = PhoneNumberHelpers.expandBlockingPattern(pattern.pattern)
-
-      for phoneNumber in phoneNumbers {
-        // Add each phone number to CoreData
-        let number = numberCoreDataService.addNumber(
-          phoneNumber,
-          action: "block",
-          source: pattern.operatorName
-        )
-
-        // Set additional metadata
-        number.sourceVersion = jsonObject.version
-        number.sourceListName = jsonObject.name
-        number.addedDate = Date()
-
-        result.append(number)
+        for number in numbers {
+          // Add each phone number to CoreData with version and list name
+          _ = numberCoreDataService.addNumber(
+            number,
+            action: "block",
+            source: pattern.operatorName,
+            sourceListName: jsonObject.name,
+            sourceVersion: jsonObject.version
+          )
+        }
       }
+
+      // Save all changes at once
+      numberCoreDataService.saveContext()
+    } catch {
+      print("Error converting list to CoreData: \(error)")
+      // Handle the error appropriately, e.g., log it, notify the user, or rethrow it
     }
-
-    // Save all changes at once
-    numberCoreDataService.saveContext()
-
-    return result
   }
 
 }
 
 // MARK: - API Response Models
 
-struct APIBlockListResponse: Codable {
+struct APIListResponse: Codable {
   let version: String
   let name: String
   let description: String
