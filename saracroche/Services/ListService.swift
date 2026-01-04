@@ -66,6 +66,9 @@ final class ListService {
       do {
         onProgress()
 
+        // Update the last download timestamp
+        userDefaultsService.setLastDownloadList(Date())
+
         // Download the block list
         let jsonResponse = try await listAPIService.downloadFrenchList()
 
@@ -78,9 +81,6 @@ final class ListService {
 
         // Update
         updateCoreData(jsonResponse: jsonResponse)
-
-        // Update the last download timestamp
-        userDefaultsService.setLastDownloadList(Date())
 
         completion(true)
       } catch NetworkError.serverError(let code, _) where code == 401 {
