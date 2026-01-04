@@ -85,7 +85,7 @@ final class ListDownloadService {
         }
 
         // Convert JSON response using the converter service
-        _ = try listConverterService.convertListToCoreData(jsonResponse: jsonResponse)
+        listConverterService.convertListToCoreData(jsonResponse: jsonResponse)
 
         // Update the last download timestamp
         userDefaultsService.setLastDownloadList(Date())
