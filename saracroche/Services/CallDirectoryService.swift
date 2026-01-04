@@ -4,14 +4,11 @@ import Foundation
 /// Service for CallKit extension functionality
 class CallDirectoryService {
 
-  /// Shared instance of the CallDirectoryService for singleton pattern access.
-  static let shared = CallDirectoryService()
-
   /// The CallKit manager instance for interacting with the Call Directory extension.
   private let manager = CXCallDirectoryManager.sharedInstance
 
-  /// Private initializer to enforce singleton pattern.
-  private init() {}
+  /// Public initializer.
+  init() {}
 
   /// Check CallKit extension status
   func checkExtensionStatus(

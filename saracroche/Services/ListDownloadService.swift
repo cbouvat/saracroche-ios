@@ -3,7 +3,6 @@ import Foundation
 
 /// Service for downloading and processing block lists
 final class ListDownloadService {
-  static let shared = ListDownloadService()
 
   private let listAPIService: ListAPIService
   private let listConverterService: ListConverterService
@@ -12,13 +11,13 @@ final class ListDownloadService {
   private let coreDataService: BlockedNumberCoreDataService
   private let callDirectoryService: CallDirectoryService
 
-  private init(
+  init(
     listAPIService: ListAPIService = ListAPIService(),
-    listConverterService: ListConverterService = .shared,
-    userDefaultsService: UserDefaultsService = .shared,
-    sharedUserDefaultsService: SharedUserDefaultsService = .shared,
-    coreDataService: BlockedNumberCoreDataService = .shared,
-    callDirectoryService: CallDirectoryService = .shared
+    listConverterService: ListConverterService = ListConverterService(),
+    userDefaultsService: UserDefaultsService = UserDefaultsService(),
+    sharedUserDefaultsService: SharedUserDefaultsService = SharedUserDefaultsService(),
+    coreDataService: BlockedNumberCoreDataService = BlockedNumberCoreDataService(),
+    callDirectoryService: CallDirectoryService = CallDirectoryService()
   ) {
     self.listAPIService = listAPIService
     self.listConverterService = listConverterService
@@ -86,7 +85,7 @@ final class ListDownloadService {
         }
 
         // Convert JSON response using the converter service
-        let _ = try listConverterService.convertBlockListToCoreData(jsonResponse: jsonResponse)
+        _ = try listConverterService.convertBlockListToCoreData(jsonResponse: jsonResponse)
 
         // Update the last download timestamp
         userDefaultsService.setLastDownloadList(Date())

@@ -1,10 +1,13 @@
 import CoreData
 
 final class BlockedNumberCoreDataService {
-  static let shared = BlockedNumberCoreDataService()
 
-  private let coreDataStack = CoreDataStack.shared
+  private let coreDataStack: CoreDataStack
   private var context: NSManagedObjectContext { coreDataStack.context }
+
+  init(coreDataStack: CoreDataStack = CoreDataStack()) {
+    self.coreDataStack = coreDataStack
+  }
 
   func addBlockedNumber(
     _ phoneNumber: String,
