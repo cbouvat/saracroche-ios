@@ -24,10 +24,15 @@ final class PatternService {
     return pendingPatterns.first
   }
 
+  /// Check if there are any patterns in the database
+  /// - Returns: True if there are patterns, false otherwise
+  func hasPatterns() -> Bool {
+    return !patternCoreDataService.getAllPatterns().isEmpty
+  }
 
-  /// Get the count of patterns waiting to be processed
-  /// - Returns: Number of pending patterns
-  func getPendingPatternCount() -> Int {
-    return patternCoreDataService.getPendingPatternsCount()
+  /// Mark a pattern as completed
+  /// - Parameter pattern: The pattern string to mark as completed
+  func markPatternAsCompleted(_ pattern: String) {
+    patternCoreDataService.markPatternAsCompleted(pattern)
   }
 }
