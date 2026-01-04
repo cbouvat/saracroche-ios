@@ -35,6 +35,7 @@ The application is built as a modular iOS system with:
 - **Hardcoding**: Don't hardcode configuration values or strings
 - **Global State**: Avoid using global variables or singletons when possible
 - **Force Unwrapping**: Don't use force unwrapping (`!`) - prefer optional binding
+- **Committing**: Don't commit directly
 
 ## Development Workflow
 
