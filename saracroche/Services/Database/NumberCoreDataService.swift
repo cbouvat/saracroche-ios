@@ -32,7 +32,7 @@ final class NumberCoreDataService {
   }
 
   func getAllNumbers() -> [Number] {
-    let fetchRequest: NSFetchRequest<Number> = Number.fetchRequest()
+    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
 
     do {
       return try context.fetch(fetchRequest)
@@ -44,7 +44,7 @@ final class NumberCoreDataService {
 
   func deleteAllNumbers() {
     print("Delete all numbers in CoreData")
-    let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Number.fetchRequest()
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Number")
     let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
     do {
@@ -56,7 +56,7 @@ final class NumberCoreDataService {
   }
 
   func getNumber(by phoneNumber: String) -> Number? {
-    let fetchRequest: NSFetchRequest<Number> = Number.fetchRequest()
+    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
     fetchRequest.predicate = NSPredicate(format: "number == %@", phoneNumber)
     fetchRequest.fetchLimit = 1
 
@@ -86,7 +86,7 @@ final class NumberCoreDataService {
 
   /// Get pending numbers
   func getPendingNumbers() -> [Number] {
-    let fetchRequest: NSFetchRequest<Number> = Number.fetchRequest()
+    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
 
     do {
@@ -99,7 +99,7 @@ final class NumberCoreDataService {
 
   /// Get pending numbers batch
   func getPendingNumbersBatch(limit: Int) -> [Number] {
-    let fetchRequest: NSFetchRequest<Number> = Number.fetchRequest()
+    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
     fetchRequest.fetchLimit = limit
 
@@ -128,7 +128,7 @@ final class NumberCoreDataService {
 
   /// Get pending numbers count
   func getPendingNumbersCount() -> Int {
-    let fetchRequest: NSFetchRequest<Number> = Number.fetchRequest()
+    let fetchRequest = NSFetchRequest<Number>(entityName: "Number")
     fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
 
     do {
