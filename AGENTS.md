@@ -10,6 +10,7 @@ The application is built as a modular iOS system with:
 - **Call Directory extension** (`blocker/`): Manages call blocking using CallKit
 - **Unwanted extension** (`unwanted/`): Handles reporting of unwanted calls
 - **Filter extension** (`filter/`): SMS filtering capabilities
+- **Helpers** (`saracroche/Utilities/`): Helper functions and extensions
 - **Shared data**: App Groups (`group.com.saracroche`) for data sharing between app and extensions
 
 ## Guidelines
