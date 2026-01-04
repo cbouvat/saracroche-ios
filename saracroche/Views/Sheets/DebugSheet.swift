@@ -2,6 +2,9 @@ import SwiftUI
 
 struct DebugSheet: View {
   @Environment(\.dismiss) private var dismiss
+  @StateObject private var backgroundService = BackgroundService.shared
+  @State private var alertMessage: String?
+  @State private var showAlert = false
 
   var body: some View {
     NavigationView {
@@ -28,21 +31,36 @@ struct DebugSheet: View {
           VStack(alignment: .leading, spacing: 16) {
             // Avertissement
             VStack(spacing: 8) {
-              Text("Ces outils sont réservés aux tests et peuvent causer des instabilités dans l'application.")
+              Text(
+                "Ces outils sont réservés aux tests et peuvent causer des instabilités dans l'application."
+              )
               .font(.body)
               .multilineTextAlignment(.leading)
             }
-        
+
             DebugButton(
-              action: { /* Debug action */ },
-              title: "1. performBackgroundUpdate",
+              action: {
+                downloadBlockList()
+              },
+              title: "Télécharger la liste",
               background: .blue,
               foreground: .white
             )
 
             DebugButton(
-              action: { /* Debug action */ },
-              title: "2. performUpdate",
+              action: {
+                reloadBackgroundService()
+              },
+              title: "Recharger le service d'arrière-plan",
+              background: .blue,
+              foreground: .white
+            )
+
+            DebugButton(
+              action: {
+                convertBlockList()
+              },
+              title: "Convertir la liste",
               background: .blue,
               foreground: .white
             )
@@ -56,6 +74,57 @@ struct DebugSheet: View {
       ToolbarItem {
         Button("Fermer") {
           dismiss()
+        }
+      }
+    }
+    .alert("Résultat de l'opération", isPresented: $showAlert) {
+      Button("OK") {}
+    } message: {
+      Text(alertMessage ?? "Opération terminée")
+    }
+  }
+
+  private func downloadBlockList() {
+    Task {
+      do {
+        let jsonResponse = try await ListAPIService().downloadFrenchList()
+        DispatchQueue.main.async {
+          alertMessage =
+            "✅ Téléchargement réussi: version \(jsonResponse["version"] as? String ?? "inconnue")"
+          showAlert = true
+        }
+      } catch {
+        DispatchQueue.main.async {
+          alertMessage = "❌ Échec du téléchargement: \(error.localizedDescription)"
+          showAlert = true
+        }
+      }
+    }
+  }
+
+  private func reloadBackgroundService() {
+    backgroundService.forceBackgroundUpdate { success in
+      DispatchQueue.main.async {
+        alertMessage = success ? "✅ Service rechargé" : "❌ Échec du rechargement"
+        showAlert = true
+      }
+    }
+  }
+
+  private func convertBlockList() {
+    Task {
+      do {
+        let jsonResponse = try await ListAPIService().downloadFrenchList()
+        _ = try ListConverterService.shared.convertBlockListToCoreData(
+          jsonResponse: jsonResponse)
+        DispatchQueue.main.async {
+          alertMessage = "✅ Conversion réussie"
+          showAlert = true
+        }
+      } catch {
+        DispatchQueue.main.async {
+          alertMessage = "❌ Échec de la conversion: \(error.localizedDescription)"
+          showAlert = true
         }
       }
     }
