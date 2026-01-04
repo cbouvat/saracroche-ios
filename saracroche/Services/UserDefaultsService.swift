@@ -3,8 +3,6 @@ import Foundation
 /// Service for managing persistent data storage
 class UserDefaultsService {
 
-  static let shared = UserDefaultsService()
-
   private let userDefaults: UserDefaults
 
   private struct Keys {
@@ -15,7 +13,7 @@ class UserDefaultsService {
     static let lastDownloadList = "lastDownloadList"
   }
 
-  private init() {
+  init() {
     userDefaults = UserDefaults.standard
   }
 

@@ -4,10 +4,11 @@ import UIKit
 /// Service for reporting unwanted calls
 class ReportAPIService: APIService {
   /// User defaults service for persisting block list metadata.
-  private let userDefaultsService = UserDefaultsService.shared
+  private let userDefaultsService: UserDefaultsService
 
   /// Initialize ReportAPIService
   override init(configuration: URLSessionConfiguration = .default) {
+    self.userDefaultsService = UserDefaultsService()
     super.init(configuration: configuration)
   }
 
