@@ -17,11 +17,18 @@ final class CoreDataStack {
     let description = NSPersistentStoreDescription(url: storeURL)
     container.persistentStoreDescriptions = [description]
 
-    container.loadPersistentStores { _, error in
+    // Load the model first
+    container.loadPersistentStores { storeDescription, error in
       if let error = error as NSError? {
         fatalError("Unresolved error: \(error)")
       }
     }
+
+    // Verify the model is loaded
+    if container.persistentStoreCoordinator.managedObjectModel.entities.isEmpty {
+      fatalError("No entities found in the Core Data model!")
+    }
+
     return container
   }()
 
