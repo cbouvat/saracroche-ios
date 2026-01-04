@@ -52,7 +52,7 @@ struct APIListResponse: Codable {
   let name: String
   let description: String
   let blockedNumbersCount: Int
-  let patterns: [Pattern]
+  let patterns: [APIPattern]
 
   enum CodingKeys: String, CodingKey {
     case version
@@ -63,7 +63,7 @@ struct APIListResponse: Codable {
   }
 }
 
-struct Pattern: Codable {
+struct APIPattern: Codable {
   let operatorName: String
   let pattern: String
 
