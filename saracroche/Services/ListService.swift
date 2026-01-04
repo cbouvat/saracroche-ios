@@ -57,69 +57,8 @@ final class ListService {
     self.callDirectoryService = callDirectoryService
   }
 
-  // MARK: - Public Methods
-
-  /// Perform complete download and batch processing of block lists
-  func performDownloadAndBatchProcessing(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
-    // Check if download is needed
-    let shouldDownload = userDefaultsService.shouldDownloadBlockList()
-
-    guard shouldDownload else {
-      print("Block list is up to date, skipping download")
-      // Still process pending patterns even if no download needed
-      processPendingPatternsBatches(
-        onProgress: onProgress,
-        completion: completion
-      )
-      return
-    }
-
-    // Download and convert the block list
-    downloadAndConvertBlockList(
-      onProgress: onProgress,
-      completion: { [weak self] success in
-        guard let self = self else {
-          completion(false)
-          return
-        }
-
-        if success {
-          // Process pending patterns in batches
-          self.processPendingPatternsBatches(
-            onProgress: onProgress,
-            completion: completion
-          )
-        } else {
-          completion(false)
-        }
-      }
-    )
-  }
-
-  /// Check if there are pending patterns to process
-  func hasPendingPatternsToProcess() -> Bool {
-    // Implementation would be here
-    // This is called from BlockerService
-    return false
-  }
-
-  /// Trigger batch processing of pending patterns
-  func triggerBatchProcessing(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
-    // Implementation would be here
-    // This is called from BlockerService
-    completion(true)
-  }
-
-  // MARK: - Private Methods
-
-  /// Download the block list from API and convert to CoreData
-  private func downloadAndConvertBlockList(
+  /// Download the list from API and convert to CoreData
+  func update(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
@@ -137,8 +76,8 @@ final class ListService {
           return
         }
 
-        // Convert JSON response to CoreData
-        convertListToCoreData(jsonResponse: jsonResponse)
+        // Update
+        updateCoreData(jsonResponse: jsonResponse)
 
         // Update the last download timestamp
         userDefaultsService.setLastDownloadList(Date())
@@ -158,7 +97,7 @@ final class ListService {
   }
 
   /// Convert list from API JSON to CoreData
-  func convertListToCoreData(jsonResponse: [String: Any]) {
+  private func updateCoreData(jsonResponse: [String: Any]) {
     do {
       // Convert JSON dictionary to Data
       let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse)
@@ -167,20 +106,61 @@ final class ListService {
       let decoder = JSONDecoder()
       let jsonObject = try decoder.decode(APIListResponse.self, from: jsonData)
 
-      // Delete all existing patterns
-      patternCoreDataService.deleteAllPatterns()
+      // Get patterns from API response
+      let newPatterns = jsonObject.patterns
+      let newPatternStrings = Set(newPatterns.map { $0.pattern })
 
-      // Process each pattern from the API response
-      for pattern in jsonObject.patterns {
-        print("Storing pattern: \(pattern.pattern)")
-        // Store the pattern directly in CoreData with version and list name
-        _ = patternCoreDataService.addPattern(
-          pattern.pattern,
-          action: "block",
-          source: pattern.operatorName,
-          sourceListName: jsonObject.name,
-          sourceVersion: jsonObject.version
-        )
+      // Get all existing patterns from CoreData
+      let existingPatterns = patternCoreDataService.getAllPatterns()
+
+      // Process existing patterns - check which ones are no longer in the new list
+      for existingPattern in existingPatterns {
+        guard let patternString = existingPattern.pattern else { continue }
+
+        // If pattern doesn't exist in new list, mark it for removal
+        if !newPatternStrings.contains(patternString) {
+          print("Pattern disappeared: \(patternString)")
+          // Change action to "remove" and set completedDate to nil
+          patternCoreDataService.updatePattern(
+            patternString,
+            with: [
+              "action": "remove",
+              "completedDate": nil,
+            ])
+        }
+      }
+
+      // Process new patterns - add or update
+      for newPattern in newPatterns {
+        print("Processing pattern: \(newPattern.pattern)")
+
+        // Check if pattern already exists
+        let existingPattern = patternCoreDataService.getPattern(by: newPattern.pattern)
+
+        if let existingPattern = existingPattern {
+          // Pattern exists, update it
+          print("Updating existing pattern: \(newPattern.pattern)")
+          patternCoreDataService.updatePattern(
+            newPattern.pattern,
+            with: [
+              "action": "block",
+              "name": newPattern.operatorName,
+              "source": "api",
+              "sourceListName": jsonObject.name,
+              "sourceVersion": jsonObject.version,
+            ])
+        } else {
+          // Pattern doesn't exist, add it
+          print("Adding new pattern: \(newPattern.pattern)")
+          _ = patternCoreDataService.addPattern(
+            newPattern.pattern,
+            action: "block",
+            name: newPattern.operatorName,
+            source: "api",
+            sourceListName: jsonObject.name,
+            sourceVersion: jsonObject.version
+          )
+        }
       }
 
       patternCoreDataService.saveContext()
@@ -189,15 +169,5 @@ final class ListService {
       print("Error converting list to CoreData: \(error)")
       // Handle the error appropriately, e.g., log it, notify the user, or rethrow it
     }
-  }
-
-  /// Process pending patterns in batches
-  private func processPendingPatternsBatches(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
-    // Implementation would be here
-    // This handles batch processing after download
-    completion(true)
   }
 }
