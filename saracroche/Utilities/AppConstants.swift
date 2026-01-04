@@ -19,7 +19,5 @@ struct AppConstants {
 
   static let backgroundUpdateInterval: TimeInterval = 4 * 60 * 60
 
-  static let blockedListTmpFileName = "block-list.tmp.json"
-
-  static let blockedListDownloadInterval: TimeInterval = 12 * 60 * 60
+  static let listDownloadInterval: TimeInterval = 12 * 60 * 60
 }

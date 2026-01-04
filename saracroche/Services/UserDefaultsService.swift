@@ -104,7 +104,7 @@ class UserDefaultsService {
       return true  // First time, always download
     }
 
-    return Date().timeIntervalSince(lastDownload) > AppConstants.blockedListDownloadInterval
+    return Date().timeIntervalSince(lastDownload) > AppConstants.listDownloadInterval
   }
 
   func resetAllData() {
