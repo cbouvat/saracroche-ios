@@ -79,7 +79,7 @@ final class ListDownloadService {
         let jsonResponse = try await listAPIService.downloadFrenchList()
 
         // Extract the version from the JSON response
-        guard let version = jsonResponse["version"] as? String else {
+        guard jsonResponse["version"] is String else {
           print("Version not found in JSON response")
           completion(false)
           return
