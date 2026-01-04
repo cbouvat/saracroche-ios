@@ -97,19 +97,6 @@ final class PatternCoreDataService {
     }
   }
 
-  /// Get pending patterns batch
-  func getPendingPatternsBatch(limit: Int) -> [Pattern] {
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
-    fetchRequest.fetchLimit = limit
-
-    do {
-      return try context.fetch(fetchRequest)
-    } catch {
-      print("Failed to fetch pending patterns batch: \(error)")
-      return []
-    }
-  }
 
   /// Mark pattern as completed
   func markPatternAsCompleted(_ pattern: String) {
