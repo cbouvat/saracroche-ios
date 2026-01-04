@@ -8,99 +8,40 @@ final class ListConverterService {
 
   private init() {}
 
-  func convertBlockListToCoreData(blockList: [String]) throws -> [BlockedNumber] {
-    // Supprimer les anciens numéros
-    coreDataService.deleteAllBlockedNumbers()
+  /// Convert block list from API JSON to CoreData
+  /// - Parameter jsonResponse: JSON dictionary containing the API response
+  /// - Returns: Array of BlockedNumber objects
+  /// - Throws: Error if JSON parsing fails or if there are issues with CoreData operations
+  func convertBlockListToCoreData(jsonResponse: [String: Any]) throws -> [BlockedNumber] {
+    // Convert JSON dictionary to Data
+    let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse, options: [])
+    
+    // Parse the JSON data
+    let decoder = JSONDecoder()
+    let jsonObject = try decoder.decode(APIBlockListResponse.self, from: jsonData)
 
-    // Ajouter les nouveaux numéros
-    var result = [BlockedNumber]()
-
-    for phoneNumber in blockList {
-      // Valider le numéro de téléphone
-      let blockedNumber = coreDataService.addBlockedNumber(
-        phoneNumber,
-        action: "block",
-        source: "unknown"
-      )
-      result.append(blockedNumber)
-    }
-
-    // Save all changes at once
-    coreDataService.saveContext()
-
-    return result
-  }
-
-  func convertBlockListWithMetadata(
-    blockList: [String],
-    source: String,
-    version: String
-  ) throws -> [BlockedNumber] {
+    // Delete all existing blocked numbers
     coreDataService.deleteAllBlockedNumbers()
 
     var result = [BlockedNumber]()
 
-    for phoneNumber in blockList {
-      let blockedNumber = coreDataService.addBlockedNumber(
-        phoneNumber,
-        action: "block",
-        source: source
-      )
-      // Ajouter des métadonnées
-      blockedNumber.sourceVersion = version
-      blockedNumber.addedDate = Date()
+    // Process each pattern from the API response
+    for pattern in jsonObject.patterns {
+      // Generate phone numbers from the pattern using PhoneNumberHelpers
+      let phoneNumbers = PhoneNumberHelpers.expandBlockingPattern(pattern.pattern)
 
-      result.append(blockedNumber)
-    }
-
-    // Save all changes at once
-    coreDataService.saveContext()
-
-    return result
-  }
-
-  /// Convert block list incrementally
-  func convertBlockListIncremental(
-    json
-  ) throws -> [BlockedNumber] {
-    var result = [BlockedNumber]()
-    let blockListSet = Set(blockList)
-
-    // Get all existing numbers
-    let existingNumbers = coreDataService.getAllBlockedNumbers()
-    var existingNumbersSet = Set<String>()
-
-    // Update existing numbers and track them
-    for blockedNumber in existingNumbers {
-      existingNumbersSet.insert(blockedNumber.number ?? "")
-
-      if blockListSet.contains(blockedNumber.number ?? "") {
-        // Update existing number with new metadata
-        blockedNumber.source = source
-        blockedNumber.sourceListName = sourceListName
-        blockedNumber.sourceVersion = sourceVersion
-        blockedNumber.addedDate = Date()
-        blockedNumber.completedDate = nil  // Reset completion status for reprocessing
-        blockedNumber.action = "block"  // Set action to block
-        result.append(blockedNumber)
-      } else {
-        // Delete number that is no longer in the block list
-        coreDataService.deleteBlockedNumber(blockedNumber.number ?? "")
-      }
-    }
-
-    // Add new numbers
-    for phoneNumber in blockList {
-      if !existingNumbersSet.contains(phoneNumber) {
+      for phoneNumber in phoneNumbers {
+        // Add each phone number to CoreData
         let blockedNumber = coreDataService.addBlockedNumber(
           phoneNumber,
           action: "block",
-          source: source
+          source: pattern.operatorName
         )
-        blockedNumber.sourceListName = sourceListName
-        blockedNumber.sourceVersion = sourceVersion
+
+        // Set additional metadata
+        blockedNumber.sourceVersion = jsonObject.version
+        blockedNumber.sourceListName = jsonObject.name
         blockedNumber.addedDate = Date()
-        blockedNumber.completedDate = nil  // Set to nil for batch processing
 
         result.append(blockedNumber)
       }
@@ -110,5 +51,34 @@ final class ListConverterService {
     coreDataService.saveContext()
 
     return result
+  }
+
+}
+
+// MARK: - API Response Models
+
+struct APIBlockListResponse: Codable {
+  let version: String
+  let name: String
+  let description: String
+  let blockedNumbersCount: Int
+  let patterns: [Pattern]
+
+  enum CodingKeys: String, CodingKey {
+    case version
+    case name
+    case description
+    case blockedNumbersCount = "blocked_numbers_count"
+    case patterns
+  }
+}
+
+struct Pattern: Codable {
+  let operatorName: String
+  let pattern: String
+
+  enum CodingKeys: String, CodingKey {
+    case operatorName = "operator"
+    case pattern
   }
 }

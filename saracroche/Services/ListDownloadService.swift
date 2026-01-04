@@ -85,23 +85,17 @@ final class ListDownloadService {
           return
         }
 
-        // Extract the patterns array from the JSON response
-        guard let patterns = jsonResponse["patterns"] as? [String] else {
-          print("Patterns not found in JSON response")
-          completion(false)
-          return
-        }
-
-        let _ = try listConverterService.convertList(jsonResponse)
+        // Convert JSON response using the converter service
+        let _ = try listConverterService.convertBlockListToCoreData(jsonResponse: jsonResponse)
 
         // Update the last download timestamp
         userDefaultsService.setLastDownloadList(Date())
 
         completion(true)
-      } catch DownloadError.unauthorized {
-        print("Authentication failed")
+      } catch NetworkError.serverError(let code, _) where code == 401 {
+        print("Authentication failed (401)")
         completion(false)
-      } catch DownloadError.networkError(let error) {
+      } catch let error as NetworkError {
         print("Network error: \(error)")
         completion(false)
       } catch {
