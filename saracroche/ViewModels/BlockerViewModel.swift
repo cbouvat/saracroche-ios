@@ -11,7 +11,7 @@ class BlockerViewModel: ObservableObject {
 
   private let callDirectoryService = CallDirectoryService.shared
   private let sharedUserDefaults = SharedUserDefaultsService.shared
-  private let userDefaults = UserDefaultsService.shared
+  private let userDefaults: UserDefaultsService
   private let blockerUpdatePipeline = BlockerUpdatePipeline.shared
   private var statusCheckTimer: Timer?
 
@@ -20,6 +20,7 @@ class BlockerViewModel: ObservableObject {
   }
 
   init() {
+    self.userDefaults = UserDefaultsService()
   }
 
   func startPeriodicRefresh() {
