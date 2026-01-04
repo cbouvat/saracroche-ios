@@ -12,12 +12,17 @@ final class NumberCoreDataService {
   func addNumber(
     _ phoneNumber: String,
     action: String = "block",
-    source: String = "unknown"
+    name: String = "",
+    source: String = "unknown",
+    sourceListName: String = "",
+    sourceVersion: String = ""
   ) -> Number {
     let number = Number(context: context)
     number.number = phoneNumber
     number.action = action
     number.source = source
+    number.sourceListName = sourceListName
+    number.sourceVersion = sourceVersion
     number.addedDate = Date()
     return number
   }
@@ -38,6 +43,7 @@ final class NumberCoreDataService {
   }
 
   func deleteAllNumbers() {
+    print("Delete all numbers in CoreData")
     let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Number.fetchRequest()
     let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
