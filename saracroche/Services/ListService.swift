@@ -137,7 +137,7 @@ final class ListService {
         // Check if pattern already exists
         let existingPattern = patternCoreDataService.getPattern(by: newPattern.pattern)
 
-        if let existingPattern = existingPattern {
+        if existingPattern != nil {
           // Pattern exists, update it
           print("Updating existing pattern: \(newPattern.pattern)")
           patternCoreDataService.updatePattern(
