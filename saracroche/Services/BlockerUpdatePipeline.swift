@@ -83,7 +83,7 @@ final class BlockerUpdatePipeline {
       print("📱 [BlockerUpdatePipeline] Extension status: \(status)")
       if status == .enabled {
         print("✅ [BlockerUpdatePipeline] Extension enabled, proceeding with download")
-        self.downloadAndConvertBlockList(
+        self.downloadAndConvertList(
           onProgress: onProgress,
           completion: completion
         )
@@ -94,7 +94,7 @@ final class BlockerUpdatePipeline {
     }
   }
 
-  private func downloadAndConvertBlockList(
+  private func downloadAndConvertList(
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
