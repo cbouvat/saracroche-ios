@@ -97,7 +97,6 @@ final class PatternCoreDataService {
     }
   }
 
-
   /// Mark pattern as completed
   func markPatternAsCompleted(_ pattern: String) {
     if let patternObj = getPattern(by: pattern) {
