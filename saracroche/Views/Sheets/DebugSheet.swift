@@ -39,7 +39,7 @@ struct DebugSheet: View {
 
             DebugButton(
               action: {
-                downloadBlockList()
+                downloadList()
               },
               title: "Télécharger la liste",
               background: .blue,
@@ -57,7 +57,7 @@ struct DebugSheet: View {
 
             DebugButton(
               action: {
-                convertBlockList()
+                convertList()
               },
               title: "Convertir la liste",
               background: .blue,
@@ -83,7 +83,7 @@ struct DebugSheet: View {
     }
   }
 
-  private func downloadBlockList() {
+  private func downloadList() {
     Task {
       do {
         let jsonResponse = try await ListAPIService().downloadFrenchList()
@@ -110,7 +110,7 @@ struct DebugSheet: View {
     }
   }
 
-  private func convertBlockList() {
+  private func convertList() {
     Task {
       ListService().update(
         onProgress: {

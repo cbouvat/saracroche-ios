@@ -30,7 +30,7 @@ final class BlockerService {
   ) {
     print("[BlockerService] performUpdate called")
 
-    guard userDefaultsService.shouldUpdateBlockList() else {
+    guard userDefaultsService.shouldUpdateList() else {
       print("[BlockerService] Block list is up to date")
       return
     }
@@ -74,7 +74,7 @@ final class BlockerService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("⬇️ [BlockerService] downloadAndConvertBlockList called")
+    print("⬇️ [BlockerService] downloadAndConvertList called")
     listService.update(
       onProgress: onProgress,
       completion: completion
