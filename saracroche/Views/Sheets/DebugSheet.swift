@@ -69,7 +69,7 @@ struct DebugSheet: View {
       }
       .padding()
       .toolbar {
-        ToolbarItem() {
+        ToolbarItem {
           Button("Close") {
             dismiss()
           }
