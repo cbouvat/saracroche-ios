@@ -1,0 +1,108 @@
+{
+    "version": "2026.01.08.17.28",
+    "name": "Préfixes ARCEP démarchage avec les opérateurs en supplément",
+    "description": "Préfixes ARCEP et les opérateurs suivants : LNCT, KAVE, VAST, SPAR, YAAT, SNXS, CLTE, PNAT, INOX, OXIL, DVSC, COCR, MEFR, LGC, EONE, UBIC, FNTX, IAGI, SPCV, PLUG, OPHO, STER, TLKC, CYDS, GETG, MKTO, QWLK, ONOF, EOLY, DGIS, DLPL, LPUP, AMSO, TLCZ, TWIL, GHNT, W3TE, M2AS, AIRC, MOVS, DIAB",
+    "blocked_numbers_count": 14892001,
+    "patterns": [
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33162######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33163######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33270######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33271######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33377######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33378######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33424######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33425######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33568######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33569######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33948######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "33949######"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "339475#####"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "339476#####"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "339477#####"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "339478#####"
+        },
+        {
+            "name": "Préfixe démarchage ARCEP",
+            "action": "block",
+            "pattern": "339479#####"
+        },
+        {
+            "name": "Digital integration",
+            "action": "block",
+            "pattern": "33159070###"
+        },
+        {
+            "name": "Digital integration",
+            "action": "block",
+            "pattern": "33159077###"
+        },
+        {
+            "name": "Digital integration",
+            "action": "block",
+            "pattern": "33159079###"
+        }
+    ]
+}
