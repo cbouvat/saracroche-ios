@@ -1,7 +1,8 @@
 import CoreData
+import OSLog
 
 final class PatternCoreDataService {
-
+  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "PatternCoreDataService")
   private let coreDataStack: CoreDataStack
   private var context: NSManagedObjectContext { coreDataStack.context }
 
@@ -37,13 +38,13 @@ final class PatternCoreDataService {
     do {
       return try context.fetch(fetchRequest)
     } catch {
-      print("Failed to fetch patterns: \(error)")
+      logger.error("Failed to fetch patterns: \(error)")
       return []
     }
   }
 
   func deleteAllPatterns() {
-    print("Delete all patterns in CoreData")
+    logger.debug("Delete all patterns in CoreData")
     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pattern")
     let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
@@ -51,7 +52,7 @@ final class PatternCoreDataService {
       try context.execute(deleteRequest)
       coreDataStack.saveContext()
     } catch {
-      print("Failed to delete patterns: \(error)")
+      logger.error("Failed to delete patterns: \(error)")
     }
   }
 
@@ -63,7 +64,7 @@ final class PatternCoreDataService {
     do {
       return try context.fetch(fetchRequest).first
     } catch {
-      print("Failed to fetch pattern: \(error)")
+      logger.error("Failed to fetch pattern: \(error)")
       return nil
     }
   }
@@ -92,7 +93,7 @@ final class PatternCoreDataService {
     do {
       return try context.fetch(fetchRequest)
     } catch {
-      print("Failed to fetch pending patterns: \(error)")
+      logger.error("Failed to fetch pending patterns: \(error)")
       return []
     }
   }
