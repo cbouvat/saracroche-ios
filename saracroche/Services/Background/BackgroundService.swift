@@ -1,8 +1,10 @@
 import BackgroundTasks
 import Foundation
+import OSLog
 
 /// Background service for periodic updates
 final class BackgroundService: ObservableObject {
+  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BackgroundService")
 
   // MARK: - Constants
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
@@ -43,20 +45,20 @@ final class BackgroundService: ObservableObject {
 
     do {
       try BGTaskScheduler.shared.submit(taskRequest)
-      print("Background app refresh task scheduled for \(scheduledDate)")
+      logger.info("Background app refresh task scheduled for \(scheduledDate)")
     } catch {
-      print("Failed to schedule background app refresh: \(error)")
+      logger.error("Failed to schedule background app refresh: \(error)")
     }
   }
 
   /// Handle background update
   private func handleBackgroundUpdate(task: BGProcessingTask) {
-    print("Handling background app refresh")
+    logger.info("Handling background app refresh")
 
     scheduleBackgroundTask()
 
     task.expirationHandler = {
-      print("Background app refresh task expired")
+      self.logger.warning("Background app refresh task expired")
       task.setTaskCompleted(success: false)
     }
 
@@ -69,7 +71,7 @@ final class BackgroundService: ObservableObject {
   private func performBackgroundUpdate(
     completion: @escaping (Bool) -> Void
   ) {
-    print("Performing background update")
+    logger.debug("Performing background update")
     blockerService.performBackgroundUpdate(completion: completion)
   }
 }
