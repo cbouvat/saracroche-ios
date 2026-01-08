@@ -1,9 +1,10 @@
 import CallKit
 import Foundation
+import OSLog
 
 /// Service for CallKit extension functionality
 class CallDirectoryService {
-
+  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "CallDirectoryService")
   /// The CallKit manager instance for interacting with the Call Directory extension.
   private let manager = CXCallDirectoryManager.sharedInstance
 
@@ -38,7 +39,7 @@ class CallDirectoryService {
   func openSettings() {
     manager.openSettings { error in
       if let error = error {
-        print(
+        self.logger.error(
           "Error opening settings: \(error.localizedDescription)"
         )
       }
@@ -62,7 +63,7 @@ class CallDirectoryService {
       withIdentifier: AppConstants.callDirectoryExtensionIdentifier
     ) { error in
       if let error = error {
-        print("Error reloading extension: \(error.localizedDescription)")
+        self.logger.error("Error reloading extension: \(error.localizedDescription)")
       }
     }
   }
