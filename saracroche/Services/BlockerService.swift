@@ -1,8 +1,9 @@
 import Foundation
+import OSLog
 
 /// Service for managing blocklist updates
 final class BlockerService {
-
+  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerService")
   private let callDirectoryService: CallDirectoryService
   private let userDefaultsService: UserDefaultsService
   private let listService: ListService
@@ -25,7 +26,7 @@ final class BlockerService {
 
   /// Perform background update
   func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
-    print("[BlockerService] performBackgroundUpdate called")
+    logger.debug("performBackgroundUpdate called")
     performUpdate(onProgress: {}, completion: completion)
   }
 
@@ -34,12 +35,12 @@ final class BlockerService {
     onProgress: @escaping () -> Void,
     completion: @escaping (Bool) -> Void
   ) {
-    print("[BlockerService] performUpdate called")
+    logger.debug("performUpdate called")
 
     // 1. Check if there are blocked numbers
     if !patternService.hasPatterns() {
       // No patterns, launch update
-      print("[BlockerService] No patterns found, launching update")
+      logger.debug("No patterns found, launching update")
       listService.update(onProgress: onProgress) { [weak self] success in
         if success {
           self?.processPendingPatterns(completion: completion)
@@ -50,7 +51,7 @@ final class BlockerService {
     } else {
       // Patterns exist, check if update is needed
       if userDefaultsService.shouldUpdateList() {
-        print("[BlockerService] Update needed based on date")
+        logger.debug("Update needed based on date")
         listService.update(onProgress: onProgress) { [weak self] success in
           if success {
             self?.processPendingPatterns(completion: completion)
@@ -59,7 +60,7 @@ final class BlockerService {
           }
         }
       } else {
-        print("[BlockerService] No update needed")
+        logger.debug("No update needed")
         processPendingPatterns(completion: completion)
       }
     }
@@ -70,12 +71,12 @@ final class BlockerService {
     guard let pattern = patternService.retrievePatternForProcessing(),
       let patternString = pattern.pattern
     else {
-      print("[BlockerService] No more pending patterns")
+      logger.debug("No more pending patterns")
       completion(true)
       return
     }
 
-    print("[BlockerService] Processing pattern: \(patternString)")
+    logger.debug("Processing pattern: \(patternString)")
 
     // Expand pattern
     let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
@@ -117,7 +118,7 @@ final class BlockerService {
       if success {
         self?.processChunks(remainingChunks, for: pattern, completion: completion)
       } else {
-        print("[BlockerService] Failed to reload extension for chunk")
+        self?.logger.error("Failed to reload extension for chunk")
         completion(false)
       }
     }
