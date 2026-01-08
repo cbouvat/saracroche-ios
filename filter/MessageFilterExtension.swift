@@ -1,4 +1,8 @@
 import IdentityLookup
+import OSLog
+
+private let logger = Logger(
+  subsystem: "com.cbouvat.saracroche.filter", category: "MessageFilterExtension")
 
 final class MessageFilterExtension: ILMessageFilterExtension {}
 
@@ -47,7 +51,7 @@ extension MessageFilterExtension: ILMessageFilterQueryHandling,
           // If we received a network response, parse it to determine an action to return in our response.
           (response.action, response.subAction) = self.networkAction(for: networkResponse)
         } else {
-          NSLog("Error deferring query request to network: \(String(describing: error))")
+          logger.error("Error deferring query request to network: \(String(describing: error))")
         }
 
         completion(response)
