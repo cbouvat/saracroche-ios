@@ -2,7 +2,8 @@ import CoreData
 import OSLog
 
 final class PatternCoreDataService {
-  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "PatternCoreDataService")
+  private let logger = Logger(
+    subsystem: "com.cbouvat.saracroche", category: "PatternCoreDataService")
   private let coreDataStack: CoreDataStack
   private var context: NSManagedObjectContext { coreDataStack.context }
 
@@ -28,8 +29,8 @@ final class PatternCoreDataService {
     return patternObj
   }
 
-  func saveContext() {
-    coreDataStack.saveContext()
+  func saveContext() throws {
+    try coreDataStack.saveContext()
   }
 
   func getAllPatterns() -> [Pattern] {
@@ -50,7 +51,7 @@ final class PatternCoreDataService {
 
     do {
       try context.execute(deleteRequest)
-      coreDataStack.saveContext()
+      try coreDataStack.saveContext()
     } catch {
       logger.error("Failed to delete patterns: \(error)")
     }
@@ -72,7 +73,11 @@ final class PatternCoreDataService {
   func deletePattern(_ pattern: String) {
     if let patternObj = getPattern(by: pattern) {
       context.delete(patternObj)
-      coreDataStack.saveContext()
+      do {
+        try coreDataStack.saveContext()
+      } catch {
+        logger.error("Failed to save after deleting pattern: \(error)")
+      }
     }
   }
 
@@ -81,7 +86,11 @@ final class PatternCoreDataService {
       for (key, value) in newData {
         patternObj.setValue(value, forKey: key)
       }
-      coreDataStack.saveContext()
+      do {
+        try coreDataStack.saveContext()
+      } catch {
+        logger.error("Failed to save after updating pattern: \(error)")
+      }
     }
   }
 
@@ -102,7 +111,11 @@ final class PatternCoreDataService {
   func markPatternAsCompleted(_ pattern: String) {
     if let patternObj = getPattern(by: pattern) {
       patternObj.completedDate = Date()
-      coreDataStack.saveContext()
+      do {
+        try coreDataStack.saveContext()
+      } catch {
+        logger.error("Failed to save after marking pattern as completed: \(error)")
+      }
     }
   }
 }

@@ -137,6 +137,10 @@ final class ListService {
       "updateCoreData completed - Added: \(addedCount), Updated: \(updatedCount), Removed: \(removedCount)"
     )
 
-    patternCoreDataService.saveContext()
+    do {
+      try patternCoreDataService.saveContext()
+    } catch {
+      logger.error("Failed to save Core Data context: \(error)")
+    }
   }
 }
