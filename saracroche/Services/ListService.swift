@@ -1,33 +1,28 @@
 import CallKit
 import CoreData
 import Foundation
+import OSLog
+
+private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "ListService")
 
 // MARK: - API Response Models
 
 struct APIListResponse: Codable {
   let version: String
   let name: String
-  let description: String
-  let blockedNumbersCount: Int
   let patterns: [APIPattern]
 
   enum CodingKeys: String, CodingKey {
     case version
     case name
-    case description
-    case blockedNumbersCount = "blocked_numbers_count"
     case patterns
   }
 }
 
 struct APIPattern: Codable {
-  let operatorName: String
+  let name: String
+  let action: String
   let pattern: String
-
-  enum CodingKeys: String, CodingKey {
-    case operatorName = "operator"
-    case pattern
-  }
 }
 
 /// Service for managing block lists - downloading, converting, and processing
@@ -63,111 +58,85 @@ final class ListService {
     completion: @escaping (Bool) -> Void
   ) {
     Task {
+      onProgress()
+      userDefaultsService.setLastDownloadList(Date())
+
       do {
-        onProgress()
-
-        // Update the last download timestamp
-        userDefaultsService.setLastDownloadList(Date())
-
-        // Download the block list
         let jsonResponse = try await listAPIService.downloadFrenchList()
-
-        // Extract the version from the JSON response
-        guard jsonResponse["version"] is String else {
-          print("Version not found in JSON response")
-          completion(false)
-          return
-        }
-
-        // Update
-        updateCoreData(jsonResponse: jsonResponse)
-
+        let apiResponse = try decodeListResponse(jsonResponse)
+        updateCoreData(apiResponse)
         completion(true)
-      } catch NetworkError.serverError(let code, _) where code == 401 {
-        print("Authentication failed (401)")
-        completion(false)
-      } catch let error as NetworkError {
-        print("Network error: \(error)")
-        completion(false)
       } catch {
-        print("Failed to download and convert blocklist: \(error)")
+        logger.error("Failed to download blocklist: \(error)")
         completion(false)
       }
     }
   }
 
-  /// Convert list from API JSON to CoreData
-  private func updateCoreData(jsonResponse: [String: Any]) {
-    do {
-      // Convert JSON dictionary to Data
-      let jsonData = try JSONSerialization.data(withJSONObject: jsonResponse)
+  private func decodeListResponse(_ json: [String: Any]) throws -> APIListResponse {
+    let jsonData = try JSONSerialization.data(withJSONObject: json)
+    return try JSONDecoder().decode(APIListResponse.self, from: jsonData)
+  }
 
-      // Parse the JSON data
-      let decoder = JSONDecoder()
-      let jsonObject = try decoder.decode(APIListResponse.self, from: jsonData)
+  /// Convert list from API response to CoreData
+  private func updateCoreData(_ apiResponse: APIListResponse) {
+    let newPatternStrings: Set<String> = Set(apiResponse.patterns.map { $0.pattern })
+    let existingPatterns = patternCoreDataService.getAllPatterns()
 
-      // Get patterns from API response
-      let newPatterns = jsonObject.patterns
-      let newPatternStrings = Set(newPatterns.map { $0.pattern })
+    logger.info(
+      "Starting updateCoreData - Found \(apiResponse.patterns.count) patterns in API response")
+    logger.info("Existing patterns in CoreData: \(existingPatterns.count)")
 
-      // Get all existing patterns from CoreData
-      let existingPatterns = patternCoreDataService.getAllPatterns()
+    var removedCount = 0
+    var updatedCount = 0
+    var addedCount = 0
 
-      // Process existing patterns - check which ones are no longer in the new list
-      for existingPattern in existingPatterns {
-        guard let patternString = existingPattern.pattern else { continue }
-
-        // If pattern doesn't exist in new list, mark it for removal
-        if !newPatternStrings.contains(patternString) {
-          print("Pattern disappeared: \(patternString)")
-          // Change action to "remove" and set completedDate to nil
-          patternCoreDataService.updatePattern(
-            patternString,
-            with: [
-              "action": "remove",
-              "completedDate": nil,
-            ])
-        }
-      }
-
-      // Process new patterns - add or update
-      for newPattern in newPatterns {
-        print("Processing pattern: \(newPattern.pattern)")
-
-        // Check if pattern already exists
-        let existingPattern = patternCoreDataService.getPattern(by: newPattern.pattern)
-
-        if existingPattern != nil {
-          // Pattern exists, update it
-          print("Updating existing pattern: \(newPattern.pattern)")
-          patternCoreDataService.updatePattern(
-            newPattern.pattern,
-            with: [
-              "action": "block",
-              "name": newPattern.operatorName,
-              "source": "api",
-              "sourceListName": jsonObject.name,
-              "sourceVersion": jsonObject.version,
-            ])
-        } else {
-          // Pattern doesn't exist, add it
-          print("Adding new pattern: \(newPattern.pattern)")
-          _ = patternCoreDataService.addPattern(
-            newPattern.pattern,
-            action: "block",
-            name: newPattern.operatorName,
-            source: "api",
-            sourceListName: jsonObject.name,
-            sourceVersion: jsonObject.version
-          )
-        }
-      }
-
-      patternCoreDataService.saveContext()
-
-    } catch {
-      print("Error converting list to CoreData: \(error)")
-      // Handle the error appropriately, e.g., log it, notify the user, or rethrow it
+    // Find patterns to remove (those no longer in the new list)
+    let patternsToRemove = existingPatterns.compactMap { pattern -> String? in
+      guard let patternString = pattern.pattern else { return nil }
+      return !newPatternStrings.contains(patternString) ? patternString : nil
     }
+
+    // Mark patterns that are no longer in the new list for removal
+    for patternString in patternsToRemove {
+      patternCoreDataService.updatePattern(
+        patternString,
+        with: ["action": "remove", "completedDate": nil]
+      )
+      removedCount += 1
+    }
+
+    // Add or update patterns from the API response
+    for newPattern in apiResponse.patterns {
+      if patternCoreDataService.getPattern(by: newPattern.pattern) != nil {
+        patternCoreDataService.updatePattern(
+          newPattern.pattern,
+          with: [
+            "action": newPattern.action,
+            "name": newPattern.name,
+            "source": "api",
+            "sourceListName": apiResponse.name,
+            "sourceVersion": apiResponse.version,
+          ]
+        )
+        updatedCount += 1
+      } else {
+        patternCoreDataService.addPattern(
+          newPattern.pattern,
+          action: newPattern.action,
+          name: newPattern.name,
+          source: "api",
+          sourceListName: apiResponse.name,
+          sourceVersion: apiResponse.version
+        )
+        addedCount += 1
+      }
+    }
+
+    logger.info(
+      "updateCoreData completed - Added: \(addedCount), Updated: \(updatedCount), Removed: \(removedCount)"
+    )
+
+    patternCoreDataService.saveContext()
   }
 }
