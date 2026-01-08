@@ -7,6 +7,8 @@ struct AppConstants {
 
   static let callDirectoryExtensionIdentifier = "com.cbouvat.saracroche.blocker"
 
+  static let coreDataModelName = "Database"
+
   static let apiBaseURL = "https://saracroche.org/api"
 
   static let apiReportURL = "\(apiBaseURL)/report"
