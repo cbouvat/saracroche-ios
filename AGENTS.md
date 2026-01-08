@@ -30,4 +30,3 @@ The application is built as a modular iOS system with:
 ## Commands
 
 - **Code Formatting**: `swift-format --in-place --recursive .` - Format Swift code according to project standards
-- **Building**: Use `xcodebuild` for building specific schemes
