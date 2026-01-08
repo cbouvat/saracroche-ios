@@ -28,10 +28,10 @@ struct DebugSheet: View {
           }
 
           VStack(alignment: .leading, spacing: 16) {
-            // Avertissement
+            // Warning
             VStack(spacing: 8) {
               Text(
-                "Ces outils sont réservés aux tests et peuvent causer des instabilités dans l'application."
+                "These tools are reserved for testing and may cause instabilities in the application."
               )
               .font(.body)
               .multilineTextAlignment(.leading)
@@ -39,18 +39,18 @@ struct DebugSheet: View {
 
             DebugButton(
               action: {
-                downloadList()
+                reloadBackgroundService()
               },
-              title: "Télécharger la liste",
+              title: "Reload background service",
               background: .blue,
               foreground: .white
             )
 
             DebugButton(
               action: {
-                reloadBackgroundService()
+                downloadList()
               },
-              title: "Recharger le service d'arrière-plan",
+              title: "Download list",
               background: .blue,
               foreground: .white
             )
@@ -59,7 +59,7 @@ struct DebugSheet: View {
               action: {
                 convertList()
               },
-              title: "Convertir la liste",
+              title: "Update list",
               background: .blue,
               foreground: .white
             )
@@ -68,18 +68,18 @@ struct DebugSheet: View {
         .padding()
       }
       .padding()
-    }
-    .toolbar {
-      ToolbarItem {
-        Button("Fermer") {
-          dismiss()
+      .toolbar {
+        ToolbarItem() {
+          Button("Close") {
+            dismiss()
+          }
         }
       }
     }
-    .alert("Résultat de l'opération", isPresented: $showAlert) {
+    .alert("Operation Result", isPresented: $showAlert) {
       Button("OK") {}
     } message: {
-      Text(alertMessage ?? "Opération terminée")
+      Text(alertMessage ?? "Operation completed")
     }
   }
 
@@ -89,12 +89,12 @@ struct DebugSheet: View {
         let jsonResponse = try await ListAPIService().downloadFrenchList()
         DispatchQueue.main.async {
           alertMessage =
-            "✅ Téléchargement réussi: version \(jsonResponse["version"] as? String ?? "inconnue")"
+            "✅ Download successful: version \(jsonResponse["version"] as? String ?? "unknown")"
           showAlert = true
         }
       } catch {
         DispatchQueue.main.async {
-          alertMessage = "❌ Échec du téléchargement: \(error.localizedDescription)"
+          alertMessage = "❌ Download failed: \(error.localizedDescription)"
           showAlert = true
         }
       }
@@ -104,7 +104,7 @@ struct DebugSheet: View {
   private func reloadBackgroundService() {
     BackgroundService().forceBackgroundUpdate { success in
       DispatchQueue.main.async {
-        alertMessage = success ? "✅ Service rechargé" : "❌ Échec du rechargement"
+        alertMessage = success ? "✅ Service reloaded" : "❌ Reload failed"
         showAlert = true
       }
     }
@@ -118,7 +118,7 @@ struct DebugSheet: View {
         },
         completion: { success in
           DispatchQueue.main.async {
-            alertMessage = success ? "✅ Conversion réussie" : "❌ Échec de la conversion"
+            alertMessage = success ? "✅ Conversion successful" : "❌ Conversion failed"
             showAlert = true
           }
         }
