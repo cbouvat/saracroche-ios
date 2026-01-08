@@ -1,6 +1,6 @@
 {
-    "version": "2026.01.08.17.28",
-    "name": "Préfixes ARCEP démarchage avec les opérateurs en supplément",
+    "version": "2026.01.01.01.01",
+    "name": "Exemple : Préfixes ARCEP démarchage avec les opérateurs en supplément",
     "description": "Préfixes ARCEP et les opérateurs suivants : LNCT, KAVE, VAST, SPAR, YAAT, SNXS, CLTE, PNAT, INOX, OXIL, DVSC, COCR, MEFR, LGC, EONE, UBIC, FNTX, IAGI, SPCV, PLUG, OPHO, STER, TLKC, CYDS, GETG, MKTO, QWLK, ONOF, EOLY, DGIS, DLPL, LPUP, AMSO, TLCZ, TWIL, GHNT, W3TE, M2AS, AIRC, MOVS, DIAB",
     "blocked_numbers_count": 14892001,
     "patterns": [
