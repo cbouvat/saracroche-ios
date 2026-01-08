@@ -63,7 +63,7 @@ struct InfoSheet: View {
         .padding()
       }
       .toolbar {
-        ToolbarItem() {
+        ToolbarItem {
           Button("Fermer") {
             dismiss()
           }
@@ -84,7 +84,7 @@ struct InfoSheet: View {
         )
         .font(.system(size: 20))
         .foregroundColor(blockerViewModel.isBackgroundServiceActive ? .green : .red)
-
+      
         VStack(alignment: .leading, spacing: 2) {
           Text("Service de mise à jour automatique")
             .font(.subheadline)
@@ -124,7 +124,7 @@ struct InfoSheet: View {
         Image(systemName: "arrow.down.circle.fill")
           .font(.system(size: 20))
           .foregroundColor(.blue)
-
+      
         VStack(alignment: .leading, spacing: 2) {
           Text("Dernier téléchargement")
             .font(.subheadline)
