@@ -1,5 +1,8 @@
 import Combine
+import OSLog
 import SwiftUI
+
+private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerViewModel")
 
 /// View model for call blocker functionality
 class BlockerViewModel: ObservableObject {
@@ -83,7 +86,7 @@ class BlockerViewModel: ObservableObject {
   }
 
   func forceUpdateBlockerList() {
-    print("🔄 [BlockerViewModel] forceUpdateBlockerList called")
+    logger.debug("forceUpdateBlockerList called")
     blockerService.performUpdate(
       onProgress: { [weak self] in
         self?.checkUpdateState()
