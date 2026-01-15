@@ -322,6 +322,19 @@ class PatternService {
 
   /// Saves changes to the CoreData context
   private func save() {
-    dataStack.save()
+    let context = dataStack.persistentContainer.viewContext
+
+    guard context.hasChanges else { return }
+
+    do {
+      try context.save()
+    } catch {
+      os_log(
+        "Failed to save context: %{public}@",
+        log: self.logger,
+        type: .error,
+        error.localizedDescription
+      )
+    }
   }
 }
