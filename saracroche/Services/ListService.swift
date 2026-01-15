@@ -32,8 +32,8 @@ final class ListService {
 
   private let listAPIService: ListAPIService
   private let userDefaultsService: UserDefaultsService
+  private let patternService: PatternService
   private let sharedUserDefaultsService: SharedUserDefaultsService
-  private let patternCoreDataService: PatternCoreDataService
   private let callDirectoryService: CallDirectoryService
 
   // MARK: - Initialization
@@ -41,14 +41,14 @@ final class ListService {
   init(
     listAPIService: ListAPIService = ListAPIService(),
     userDefaultsService: UserDefaultsService = UserDefaultsService(),
+    patternService: PatternService = PatternService(),
     sharedUserDefaultsService: SharedUserDefaultsService = SharedUserDefaultsService(),
-    patternCoreDataService: PatternCoreDataService = PatternCoreDataService(),
     callDirectoryService: CallDirectoryService = CallDirectoryService()
   ) {
     self.listAPIService = listAPIService
     self.userDefaultsService = userDefaultsService
+    self.patternService = patternService
     self.sharedUserDefaultsService = sharedUserDefaultsService
-    self.patternCoreDataService = patternCoreDataService
     self.callDirectoryService = callDirectoryService
   }
 
@@ -80,7 +80,7 @@ final class ListService {
   /// Convert list from API response to CoreData
   private func updateCoreData(_ apiResponse: APIListResponse) {
     let newPatternStrings: Set<String> = Set(apiResponse.patterns.map { $0.pattern })
-    let existingPatterns = patternCoreDataService.getAllPatterns()
+    let existingPatterns = patternService.getAllPatterns()
 
     logger.info(
       "Starting updateCoreData - Found \(apiResponse.patterns.count) patterns in API response")
@@ -92,11 +92,12 @@ final class ListService {
 
     // Create a dictionary of existing patterns for efficient lookup
     // This avoids calling getPattern(by:) during enumeration which can cause conflicts
-    let existingPatternsDict = Dictionary<String, Pattern>(uniqueKeysWithValues:
-      existingPatterns.compactMap { pattern in
-        guard let patternString = pattern.pattern else { return nil }
-        return (patternString, pattern)
-      }
+    let existingPatternsDict = [String: Pattern](
+      uniqueKeysWithValues:
+        existingPatterns.compactMap { pattern in
+          guard let patternString = pattern.pattern else { return nil }
+          return (patternString, pattern)
+        }
     )
 
     // Find patterns to remove (those no longer in the new list)
@@ -104,30 +105,29 @@ final class ListService {
 
     // Mark patterns that are no longer in the new list for removal
     for patternString in patternsToRemove {
-      patternCoreDataService.updatePattern(
-        patternString,
-        with: ["action": "remove", "completedDate": nil]
-      )
-      removedCount += 1
+      if let pattern = existingPatternsDict[patternString] {
+        patternService.updatePattern(
+          pattern,
+          action: "remove"
+        )
+        removedCount += 1
+      }
     }
 
     // Add or update patterns from the API response
     for newPattern in apiResponse.patterns {
-      if existingPatternsDict[newPattern.pattern] != nil {
-        patternCoreDataService.updatePattern(
-          newPattern.pattern,
-          with: [
-            "action": newPattern.action,
-            "name": newPattern.name,
-            "source": "api",
-            "sourceListName": apiResponse.name,
-            "sourceVersion": apiResponse.version,
-          ]
+      if let existingPattern = existingPatternsDict[newPattern.pattern] {
+        patternService.updatePattern(
+          existingPattern,
+          action: newPattern.action,
+          name: newPattern.name,
+          sourceListName: apiResponse.name,
+          sourceVersion: apiResponse.version
         )
         updatedCount += 1
       } else {
-        patternCoreDataService.addPattern(
-          newPattern.pattern,
+        _ = patternService.createPattern(
+          patternString: newPattern.pattern,
           action: newPattern.action,
           name: newPattern.name,
           source: "api",
@@ -141,12 +141,5 @@ final class ListService {
     logger.info(
       "updateCoreData completed - Added: \(addedCount), Updated: \(updatedCount), Removed: \(removedCount)"
     )
-
-    // Save context after all modifications to avoid "collection was mutated while being enumerated" error
-    do {
-      try patternCoreDataService.saveContext()
-    } catch {
-      logger.error("Failed to save Core Data context: \(error)")
-    }
   }
 }
