@@ -52,11 +52,10 @@ final class ListService {
     self.callDirectoryService = callDirectoryService
   }
 
-  /// Download the list from API and convert to CoreData
-  func update(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
+  // MARK: - Public API
+
+  /// Download and update the French block list
+  func update(onProgress: @escaping () -> Void = {}, completion: @escaping (Bool) -> Void) {
     Task {
       onProgress()
       userDefaultsService.setLastDownloadList(Date())
@@ -91,11 +90,17 @@ final class ListService {
     var updatedCount = 0
     var addedCount = 0
 
+    // Create a dictionary of existing patterns for efficient lookup
+    // This avoids calling getPattern(by:) during enumeration which can cause conflicts
+    let existingPatternsDict = Dictionary<String, Pattern>(uniqueKeysWithValues:
+      existingPatterns.compactMap { pattern in
+        guard let patternString = pattern.pattern else { return nil }
+        return (patternString, pattern)
+      }
+    )
+
     // Find patterns to remove (those no longer in the new list)
-    let patternsToRemove = existingPatterns.compactMap { pattern -> String? in
-      guard let patternString = pattern.pattern else { return nil }
-      return !newPatternStrings.contains(patternString) ? patternString : nil
-    }
+    let patternsToRemove = existingPatternsDict.keys.filter { !newPatternStrings.contains($0) }
 
     // Mark patterns that are no longer in the new list for removal
     for patternString in patternsToRemove {
@@ -108,7 +113,7 @@ final class ListService {
 
     // Add or update patterns from the API response
     for newPattern in apiResponse.patterns {
-      if patternCoreDataService.getPattern(by: newPattern.pattern) != nil {
+      if existingPatternsDict[newPattern.pattern] != nil {
         patternCoreDataService.updatePattern(
           newPattern.pattern,
           with: [
@@ -137,6 +142,7 @@ final class ListService {
       "updateCoreData completed - Added: \(addedCount), Updated: \(updatedCount), Removed: \(removedCount)"
     )
 
+    // Save context after all modifications to avoid "collection was mutated while being enumerated" error
     do {
       try patternCoreDataService.saveContext()
     } catch {
