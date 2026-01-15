@@ -4,7 +4,7 @@ struct PatternRow: View {
   let pattern: Pattern
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 4) {
+    VStack(alignment: .leading) {
       // Pattern string with icon
       HStack(spacing: 6) {
         Image(systemName: actionIcon)
@@ -26,7 +26,6 @@ struct PatternRow: View {
           .lineLimit(1)
       }
     }
-    .padding(.vertical, 2)
     .accessibilityLabel(
       "Préfixe \(pattern.pattern ?? ""), action: \(actionLabel), \(calculateBlockedCount(pattern)) numéros bloqués"
     )
