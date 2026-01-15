@@ -186,9 +186,9 @@ struct HomeNavigationView: View {
       HStack {
         Image(systemName: "chart.bar.fill")
           .font(.system(size: 20))
-          .foregroundColor(.blue)
+          .foregroundColor(.gray)
 
-        Text("Statistiques de blocage")
+        Text("Statistiques")
           .font(.headline)
           .fontWeight(.semibold)
       }
@@ -201,15 +201,15 @@ struct HomeNavigationView: View {
             icon: "shield.fill",
             value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
             label: "Numéros bloqués",
-            color: .green
+            color: .gray
           )
 
           // Statistique 2: Patterns actifs
           statisticCard(
             icon: "checkmark.circle.fill",
             value: "\(blockerViewModel.completedPatternsCount)",
-            label: "Patterns actifs",
-            color: .blue
+            label: "Préfixes actifs",
+            color: .gray
           )
         }
 
@@ -219,7 +219,7 @@ struct HomeNavigationView: View {
             icon: "clock.fill",
             value: "\(blockerViewModel.pendingPatternsCount)",
             label: "En attente",
-            color: .orange
+            color: .gray
           )
 
           // Statistique 4: Dernière mise à jour
@@ -227,7 +227,7 @@ struct HomeNavigationView: View {
             icon: "calendar",
             value: lastUpdateText,
             label: "Dernière mise à jour",
-            color: .purple
+            color: .gray
           )
         }
       }
@@ -236,7 +236,7 @@ struct HomeNavigationView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(
       RoundedRectangle(cornerRadius: 16)
-        .fill(Color.blue.opacity(0.1))
+        .fill(Color.gray.opacity(0.15))
     )
   }
 
@@ -279,7 +279,7 @@ struct HomeNavigationView: View {
     .padding()
     .background(
       RoundedRectangle(cornerRadius: 12)
-        .fill(color.opacity(0.1))
+        .fill(Color.gray.opacity(0.08))
     )
   }
 
