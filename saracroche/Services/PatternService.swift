@@ -186,6 +186,55 @@ class PatternService {
     return pendingPatterns.first
   }
 
+  /// Fetches all patterns that have been completed
+  /// - Returns: Array of Pattern entities where completedDate is not nil
+  func getCompletedPatterns() -> [Pattern] {
+    let context = dataStack.persistentContainer.viewContext
+    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+    fetchRequest.predicate = NSPredicate(format: "completedDate != nil")
+
+    do {
+      return try context.fetch(fetchRequest)
+    } catch {
+      os_log(
+        "Failed to fetch completed patterns: %{public}@",
+        log: self.logger,
+        type: .error,
+        error.localizedDescription
+      )
+      return []
+    }
+  }
+
+  /// Counts the total number of phone numbers represented by completed patterns
+  /// - Returns: Total count of phone numbers
+  func getCompletedPhoneNumbersCount() -> Int64 {
+    let completedPatterns = getCompletedPatterns()
+    return completedPatterns.reduce(0) { total, pattern in
+      guard let patternString = pattern.pattern else { return total }
+      return total + Int64(PhoneNumberHelpers.countPhoneNumbers(for: patternString))
+    }
+  }
+
+  /// Gets the most recent completion date from all completed patterns
+  /// - Returns: The most recent completedDate, or nil if no patterns are completed
+  func getLastCompletionDate() -> Date? {
+    let completedPatterns = getCompletedPatterns()
+    return completedPatterns.compactMap { $0.completedDate }.max()
+  }
+
+  /// Counts the number of completed patterns
+  /// - Returns: Count of patterns with completedDate != nil
+  func getCompletedPatternsCount() -> Int {
+    return getCompletedPatterns().count
+  }
+
+  /// Counts the number of pending patterns
+  /// - Returns: Count of patterns with completedDate == nil
+  func getPendingPatternsCount() -> Int {
+    return getPendingPatterns().count
+  }
+
   // MARK: - Update Operations
 
   /// Updates an existing pattern
