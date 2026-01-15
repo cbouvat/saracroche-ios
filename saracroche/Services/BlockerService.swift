@@ -87,7 +87,7 @@ final class BlockerService {
 
     processChunks(chunks, for: pattern) { [weak self] success in
       if success {
-        self?.patternService.markPatternAsCompleted(patternString)
+        self?.patternService.markPatternAsCompleted(pattern)
         self?.processPendingPatterns(completion: completion)
       } else {
         completion(false)
