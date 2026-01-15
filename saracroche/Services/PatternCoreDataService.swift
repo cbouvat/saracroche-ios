@@ -86,11 +86,8 @@ final class PatternCoreDataService {
       for (key, value) in newData {
         patternObj.setValue(value, forKey: key)
       }
-      do {
-        try coreDataStack.saveContext()
-      } catch {
-        logger.error("Failed to save after updating pattern: \(error)")
-      }
+      // Note: Context is not saved here to allow batch updates
+      // Caller should call saveContext() after all modifications
     }
   }
 
@@ -111,11 +108,8 @@ final class PatternCoreDataService {
   func markPatternAsCompleted(_ pattern: String) {
     if let patternObj = getPattern(by: pattern) {
       patternObj.completedDate = Date()
-      do {
-        try coreDataStack.saveContext()
-      } catch {
-        logger.error("Failed to save after marking pattern as completed: \(error)")
-      }
+      // Note: Context is not saved here to allow batch updates
+      // Caller should call saveContext() after all modifications
     }
   }
 }
