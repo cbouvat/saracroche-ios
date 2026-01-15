@@ -12,10 +12,17 @@ class BlockerViewModel: ObservableObject {
   @Published var lastUpdate: Date? = nil
   @Published var updateStarted: Date? = nil
 
+  // Statistics for blocked numbers
+  @Published var completedPhoneNumbersCount: Int64 = 0
+  @Published var completedPatternsCount: Int = 0
+  @Published var pendingPatternsCount: Int = 0
+  @Published var lastCompletionDate: Date? = nil
+
   private let callDirectoryService: CallDirectoryService
   private let sharedUserDefaults: SharedUserDefaultsService
   private let userDefaults: UserDefaultsService
   private let blockerService: BlockerService
+  private let patternService: PatternService
   private var statusCheckTimer: Timer?
 
   deinit {
@@ -27,6 +34,7 @@ class BlockerViewModel: ObservableObject {
     self.userDefaults = UserDefaultsService()
     self.sharedUserDefaults = SharedUserDefaultsService()
     self.blockerService = BlockerService()
+    self.patternService = PatternService()
   }
 
   func startPeriodicRefresh() {
@@ -49,7 +57,7 @@ class BlockerViewModel: ObservableObject {
     }
 
     checkBlockerExtensionStatus()
-    //checkAndForceUpdateIfNeeded()
+    loadPatternStatistics()
   }
 
   func checkBlockerExtensionStatus() {
@@ -67,34 +75,14 @@ class BlockerViewModel: ObservableObject {
     }
   }
 
-  private func checkAndForceUpdateIfNeeded() {
+  /// Loads statistics about patterns and phone numbers from CoreData
+  private func loadPatternStatistics() {
     DispatchQueue.main.async { [weak self] in
-      guard let self = self else { return }
-
-      // Only proceed if the blocker extension is enabled
-      guard self.blockerExtensionStatus == .enabled else {
-        return
-      }
-
-      // Only proceed if no update is currently in progress
-      guard self.updateState == .idle else {
-        return
-      }
-
-      self.forceUpdateBlockerList()
+      self?.completedPhoneNumbersCount = self?.patternService.getCompletedPhoneNumbersCount() ?? 0
+      self?.completedPatternsCount = self?.patternService.getCompletedPatternsCount() ?? 0
+      self?.pendingPatternsCount = self?.patternService.getPendingPatternsCount() ?? 0
+      self?.lastCompletionDate = self?.patternService.getLastCompletionDate()
     }
-  }
-
-  func forceUpdateBlockerList() {
-    logger.debug("forceUpdateBlockerList called")
-    blockerService.performUpdate(
-      onProgress: { [weak self] in
-        self?.checkUpdateState()
-      },
-      completion: { [weak self] success in
-        self?.checkUpdateState()
-      }
-    )
   }
 
   func openSettings() {
