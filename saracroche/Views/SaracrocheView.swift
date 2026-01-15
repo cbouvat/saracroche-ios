@@ -13,6 +13,10 @@ struct SaracrocheView: View {
         .tabItem {
           Label("Signaler", systemImage: "exclamationmark.bubble.fill")
         }
+      ListsNavigationView()
+        .tabItem {
+          Label("Listes", systemImage: "list.bullet.circle.fill")
+        }
       SettingsNavigationView(blockerViewModel: blockerViewModel)
         .tabItem {
           Label("Réglages", systemImage: "gearshape.fill")
