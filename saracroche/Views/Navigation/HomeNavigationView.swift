@@ -35,24 +35,9 @@ struct HomeNavigationView: View {
 
   private var enabledExtensionContentView: some View {
     VStack(spacing: 16) {
-      if blockerViewModel.updateState == .starting {
-        startingView
-      } else if blockerViewModel.updateState == .installing {
-        installingView
-      } else if blockerViewModel.updateState == .error {
-        errorView
-      } else if blockerViewModel.updateState == .idle {
-        /*
-        if blockerViewModel.blockerPhoneNumberBlocked == 0 {
-          noBlockedNumbersView
-        } else if blockerViewModel.blocklistInstalledVersion != blockerViewModel.blocklistVersion {
-          updateAvailableView
-        } else {
-          completeInstallationView
-          donationView
-        }
-         */
-      }
+      completeInstallationView
+      statisticsView
+      donationView
     }
   }
 
@@ -175,17 +160,6 @@ struct HomeNavigationView: View {
         .bold()
         .multilineTextAlignment(.center)
 
-      /*/
-      Text("\(blockerViewModel.blockerPhoneNumberBlocked) numéros bloqués")
-        .font(.title2)
-        .fontWeight(.semibold)
-        .foregroundColor(.green)
-      */
-
-      Text("Vous avez la dernière version de la liste de blocage installée.")
-        .font(.body)
-        .multilineTextAlignment(.center)
-
       Button {
         showInfoSheet = true
       } label: {
@@ -206,283 +180,144 @@ struct HomeNavigationView: View {
     )
   }
 
-  private var installingView: some View {
-    VStack(alignment: .center, spacing: 16) {
-      if #available(iOS 18.0, *) {
-        Image(systemName: "arrow.clockwise.circle.fill")
-          .font(.system(size: 60))
-          .symbolEffect(
-            .rotate.byLayer,
-            options: .repeat(.periodic(delay: 2.0))
+  private var statisticsView: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      // Header avec icône
+      HStack {
+        Image(systemName: "chart.bar.fill")
+          .font(.system(size: 20))
+          .foregroundColor(.blue)
+
+        Text("Statistiques de blocage")
+          .font(.headline)
+          .fontWeight(.semibold)
+      }
+
+      // Grille de statistiques (2x2)
+      VStack(spacing: 12) {
+        HStack(spacing: 12) {
+          // Statistique 1: Numéros bloqués
+          statisticCard(
+            icon: "shield.fill",
+            value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
+            label: "Numéros bloqués",
+            color: .green
           )
-          .foregroundColor(.blue)
-      } else {
-        Image(systemName: "arrow.clockwise.circle.fill")
-          .font(.system(size: 60))
-          .foregroundColor(.blue)
-      }
 
-      Text("Installation de la liste")
-        .font(.title3)
-        .fontWeight(.semibold)
-        .multilineTextAlignment(.center)
-
-      Text(
-        "La dernière version de la liste de blocage est en cours d'installation."
-      )
-      .font(.body)
-      .multilineTextAlignment(.center)
-
-      updateProgressView
-    }
-    .padding()
-    .frame(maxWidth: .infinity)
-    .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color.blue.opacity(0.1))
-    )
-  }
-
-  private var errorView: some View {
-    VStack(alignment: .center, spacing: 16) {
-      if #available(iOS 18.0, *) {
-        Image(systemName: "exclamationmark.triangle.fill")
-          .font(.system(size: 60))
-          .symbolEffect(.wiggle.clockwise.byLayer, options: .repeat(.periodic(delay: 1.0)))
-          .foregroundColor(.red)
-      } else {
-        Image(systemName: "exclamationmark.triangle.fill")
-          .font(.system(size: 60))
-          .foregroundColor(.red)
-      }
-
-      Text("Erreur")
-        .font(.title3)
-        .fontWeight(.semibold)
-        .multilineTextAlignment(.center)
-
-      Text(
-        """
-        **L'application n'arrive pas à installer la liste de blocage.** Pour résoudre ce problème, essayez les étapes suivantes :
-
-        - Rechargez votre téléphone au **delà de 80%**.
-        - Désactivez le mode économie d'énergie.
-        - Vérifiez que l'**actualisation en arrière-plan** est activée pour Saracroche dans les réglages.
-        - Puis **réinitialisez l'application** en utilisant le bouton ci-dessous.
-        """
-      )
-      .font(.body)
-      .multilineTextAlignment(.leading)
-      .frame(maxWidth: .infinity, alignment: .leading)
-
-      Button {
-        blockerViewModel.resetApplication()
-      } label: {
-        HStack {
-          Image(systemName: "trash.circle.fill")
-          Text("Réinitialiser l'application")
-        }
-      }
-      .buttonStyle(
-        .fullWidth(background: .red, foreground: .white)
-      )
-
-      Text(
-        """
-        **Si le problème persiste** après avoir essayé ces étapes, voici une procédure plus complète :
-
-        - Désactivez Saracroche dans les réglages, si elle apparaît ou si vous le pouvez.
-        - Désinstallez l'application Saracroche.
-        - Redémarrez votre appareil.
-        - Réinstallez l'application Saracroche depuis l'App Store.
-        """
-      )
-      .font(.body)
-      .multilineTextAlignment(.leading)
-      .frame(maxWidth: .infinity, alignment: .leading)
-
-      Button {
-        blockerViewModel.openSettings()
-      } label: {
-        HStack {
-          Image(systemName: "gearshape.fill")
-          Text("Ouvrir les réglages")
-        }
-      }
-      .buttonStyle(
-        .fullWidth(background: .black, foreground: .white)
-      )
-
-    }
-    .padding()
-    .frame(maxWidth: .infinity)
-    .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color.red.opacity(0.1))
-    )
-  }
-
-  private var startingView: some View {
-    VStack(alignment: .center, spacing: 16) {
-      if #available(iOS 18.0, *) {
-        Image(systemName: "hourglass.circle.fill")
-          .font(.system(size: 60))
-          .symbolEffect(.rotate.byLayer, options: .repeat(.periodic(delay: 1.0)))
-          .foregroundColor(.blue)
-      } else {
-        Image(systemName: "hourglass.circle.fill")
-          .font(.system(size: 60))
-          .foregroundColor(.blue)
-      }
-
-      Text("Démarrage en cours")
-        .font(.title3)
-        .fontWeight(.semibold)
-        .multilineTextAlignment(.center)
-
-      Text(
-        "Préparation de l'installation de la liste de blocage."
-      )
-      .multilineTextAlignment(.center)
-      .font(.body)
-
-      updateProgressView
-    }
-    .padding()
-    .frame(maxWidth: .infinity)
-    .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color.blue.opacity(0.1))
-    )
-  }
-
-  private var noBlockedNumbersView: some View {
-    VStack(alignment: .center, spacing: 16) {
-      if #available(iOS 18.0, *) {
-        Image(systemName: "arrow.down.circle.fill")
-          .font(.system(size: 60))
-          .symbolEffect(.wiggle.down.byLayer, options: .repeat(.periodic(delay: 1.0)))
-          .foregroundColor(.blue)
-      } else {
-        Image(systemName: "arrow.down.circle.fill")
-          .font(.system(size: 60))
-          .foregroundColor(.blue)
-      }
-
-      Text("Aucun numéro bloqué")
-        .font(.title3)
-        .fontWeight(.semibold)
-        .multilineTextAlignment(.center)
-
-      Text(
-        "La liste de blocage va être installée automatiquement, veuillez patienter quelques instants."
-      )
-      .multilineTextAlignment(.center)
-      .font(.body)
-
-      updateProgressView
-    }
-    .padding()
-    .frame(maxWidth: .infinity)
-    .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color.blue.opacity(0.1))
-    )
-  }
-
-  private var updateAvailableView: some View {
-    VStack(alignment: .center, spacing: 16) {
-      if #available(iOS 18.0, *) {
-        Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
-          .font(.system(size: 60))
-          .symbolEffect(.wiggle.clockwise.byLayer, options: .repeat(.periodic(delay: 1.0)))
-          .foregroundColor(.orange)
-      } else {
-        Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
-          .font(.system(size: 60))
-          .foregroundColor(.orange)
-      }
-
-      Text("Lancement de la mise à jour")
-        .font(.title3)
-        .fontWeight(.semibold)
-        .multilineTextAlignment(.center)
-
-      Text(
-        "Une nouvelle version de la liste de blocage est disponible. La mise à jour va être installée automatiquement."
-      )
-      .font(.body)
-      .multilineTextAlignment(.center)
-
-      updateProgressView
-    }
-    .padding()
-    .frame(maxWidth: .infinity)
-    .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color.orange.opacity(0.1))
-    )
-  }
-
-  @ViewBuilder
-  private var updateProgressView: some View {
-    if blockerViewModel.updateState.isInProgress {
-      VStack(spacing: 16) {
-        ProgressView()
-          .scaleEffect(1.5)
-        /*
-        if blockerViewModel.blockerPhoneNumberBlocked > 0 {
-          Text(
-            "\(blockerViewModel.blockerPhoneNumberBlocked) numéros bloqués sur \(blockerViewModel.blockerPhoneNumberTotal)"
+          // Statistique 2: Patterns actifs
+          statisticCard(
+            icon: "checkmark.circle.fill",
+            value: "\(blockerViewModel.completedPatternsCount)",
+            label: "Patterns actifs",
+            color: .blue
           )
-          .font(.body.monospacedDigit())
-          .multilineTextAlignment(.center)
         }
-         */
+
+        HStack(spacing: 12) {
+          // Statistique 3: Patterns en attente
+          statisticCard(
+            icon: "clock.fill",
+            value: "\(blockerViewModel.pendingPatternsCount)",
+            label: "En attente",
+            color: .orange
+          )
+
+          // Statistique 4: Dernière mise à jour
+          statisticCard(
+            icon: "calendar",
+            value: lastUpdateText,
+            label: "Dernière mise à jour",
+            color: .purple
+          )
+        }
       }
     }
+    .padding()
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.blue.opacity(0.1))
+    )
   }
 
+  // Helper pour formater la date de dernière mise à jour
+  private var lastUpdateText: String {
+    guard let date = blockerViewModel.lastCompletionDate else {
+      return "Jamais"
+    }
+
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .short
+    formatter.locale = Locale(identifier: "fr_FR")
+    return formatter.localizedString(for: date, relativeTo: Date())
+  }
+
+  // Helper pour créer une carte de statistique
   @ViewBuilder
+  private func statisticCard(
+    icon: String,
+    value: String,
+    label: String,
+    color: Color
+  ) -> some View {
+    VStack(spacing: 8) {
+      Image(systemName: icon)
+        .font(.system(size: 24))
+        .foregroundColor(color)
+
+      Text(value)
+        .font(.title2)
+        .fontWeight(.bold)
+        .foregroundColor(color)
+
+      Text(label)
+        .font(.caption)
+        .foregroundColor(.secondary)
+        .multilineTextAlignment(.center)
+    }
+    .frame(maxWidth: .infinity)
+    .padding()
+    .background(
+      RoundedRectangle(cornerRadius: 12)
+        .fill(color.opacity(0.1))
+    )
+  }
+
   private var donationView: some View {
-    /*
-    if blockerViewModel.updateState == .idle && blockerViewModel.blockerPhoneNumberBlocked != 0 {
-      VStack(alignment: .leading, spacing: 16) {
+    VStack(alignment: .leading, spacing: 16) {
+      HStack {
+        Image(systemName: "heart.fill")
+          .font(.system(size: 20))
+          .foregroundColor(.red)
+
+        Text("Application gratuite et open source")
+          .font(.headline)
+          .fontWeight(.semibold)
+      }
+
+      Text(
+        "Saracroche est une application entièrement gratuite et open source. "
+          + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
+      )
+      .font(.body)
+
+      Button {
+        showDonationSheet = true
+      } label: {
         HStack {
           Image(systemName: "heart.fill")
-            .font(.system(size: 20))
-            .foregroundColor(.red)
-    
-          Text("Application gratuite et open source")
-            .font(.headline)
-            .fontWeight(.semibold)
+          Text("Soutenez")
         }
-    
-        Text(
-          "Saracroche est une application entièrement gratuite et open source. "
-            + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
-        )
-        .font(.body)
-    
-        Button {
-          showDonationSheet = true
-        } label: {
-          HStack {
-            Image(systemName: "heart.fill")
-            Text("Soutenez")
-          }
-        }
-        .buttonStyle(
-          .fullWidth(background: Color.red, foreground: .white)
-        )
       }
-      .padding()
-      .frame(maxWidth: .infinity)
-      .background(
-        RoundedRectangle(cornerRadius: 16)
-          .fill(Color.gray.opacity(0.1))
+      .buttonStyle(
+        .fullWidth(background: Color.red, foreground: .white)
       )
     }
-     */
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.gray.opacity(0.1))
+    )
   }
 }
