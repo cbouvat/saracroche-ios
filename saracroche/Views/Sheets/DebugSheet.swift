@@ -63,6 +63,15 @@ struct DebugSheet: View {
               background: .blue,
               foreground: .white
             )
+
+            DebugButton(
+              action: {
+                clearCoreData()
+              },
+              title: "Clear CoreData",
+              background: .red,
+              foreground: .white
+            )
           }
         }
         .padding()
@@ -124,6 +133,13 @@ struct DebugSheet: View {
         }
       )
     }
+  }
+
+  private func clearCoreData() {
+    let patternService = PatternService()
+    patternService.deleteAllPatterns()
+    alertMessage = "✅ CoreData cleared - All patterns deleted"
+    showAlert = true
   }
 }
 
