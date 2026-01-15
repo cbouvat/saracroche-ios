@@ -159,18 +159,6 @@ struct HomeNavigationView: View {
         .font(.title3)
         .bold()
         .multilineTextAlignment(.center)
-
-      Button {
-        showInfoSheet = true
-      } label: {
-        HStack {
-          Image(systemName: "info.circle.fill")
-          Text("En savoir plus")
-        }
-      }
-      .buttonStyle(
-        .fullWidth(background: .green, foreground: .white)
-      )
     }
     .padding()
     .frame(maxWidth: .infinity, alignment: .center)
@@ -231,6 +219,19 @@ struct HomeNavigationView: View {
           )
         }
       }
+
+      // Bouton "En savoir plus"
+      Button {
+        showInfoSheet = true
+      } label: {
+        HStack {
+          Image(systemName: "info.circle.fill")
+          Text("En savoir plus")
+        }
+      }
+      .buttonStyle(
+        .fullWidth(background: .green, foreground: .white)
+      )
     }
     .padding()
     .frame(maxWidth: .infinity, alignment: .leading)
