@@ -68,7 +68,7 @@ struct AddPatternSheet: View {
                 action: action,
                 name: name
               )
-              if viewModel.alertType == .success {
+              if !viewModel.showAlert {
                 isPresented = false
               }
             }

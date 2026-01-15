@@ -71,7 +71,7 @@ struct EditPatternSheet: View {
                 action: action,
                 name: name
               )
-              if viewModel.alertType == .success {
+              if !viewModel.showAlert {
                 isPresented = nil
               }
             }
