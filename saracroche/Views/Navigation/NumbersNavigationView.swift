@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct ListsNavigationView: View {
-  @StateObject private var viewModel = ListsViewModel()
+struct NumbersNavigationView: View {
+  @StateObject private var viewModel = NumbersViewModel()
   @State private var showAddPatternSheet = false
   @State private var editingPattern: Pattern?
 
@@ -113,7 +113,7 @@ struct ListsNavigationView: View {
           )
         }
       }
-      .navigationTitle("Listes")
+      .navigationTitle("Numéros")
       .sheet(isPresented: $showAddPatternSheet) {
         AddPatternSheet(viewModel: viewModel, isPresented: $showAddPatternSheet)
       }
@@ -132,5 +132,5 @@ struct ListsNavigationView: View {
 }
 
 #Preview {
-  ListsNavigationView()
+  NumbersNavigationView()
 }

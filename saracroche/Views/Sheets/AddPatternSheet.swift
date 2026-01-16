@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AddPatternSheet: View {
   @Environment(\.dismiss) private var dismiss
-  @ObservedObject var viewModel: ListsViewModel
+  @ObservedObject var viewModel: NumbersViewModel
   @Binding var isPresented: Bool
 
   @State private var patternString: String = ""
@@ -104,6 +104,6 @@ struct AddPatternSheet: View {
 
 #Preview {
   AddPatternSheet(
-    viewModel: ListsViewModel(), isPresented: .constant(true)
+    viewModel: NumbersViewModel(), isPresented: .constant(true)
   )
 }
