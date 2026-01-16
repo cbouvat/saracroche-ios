@@ -291,14 +291,14 @@ struct HomeNavigationView: View {
           .font(.system(size: 20))
           .foregroundColor(.red)
 
-        Text("Application gratuite et open source")
+        Text("Soutenez Saracroche")
           .font(.headline)
           .fontWeight(.semibold)
       }
 
       Text(
-        "Saracroche est une application entièrement gratuite et open source. "
-          + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer et rester sans publicité."
+        "Saracroche est une application entièrement gratuite, open source et sans publicité."
+          + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer."
       )
       .font(.body)
 
