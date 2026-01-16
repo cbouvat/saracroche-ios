@@ -265,7 +265,7 @@ struct HomeNavigationView: View {
       }
 
       Text(
-        "Saracroche est une application entièrement gratuite, open source et sans publicité."
+        "Saracroche est une application entièrement gratuite, open source et sans publicité. "
           + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer."
       )
       .font(.body)
