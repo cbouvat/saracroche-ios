@@ -181,43 +181,23 @@ struct HomeNavigationView: View {
           .fontWeight(.semibold)
       }
 
-      // Grille de statistiques (2x2)
-      VStack(spacing: 12) {
-        HStack(spacing: 12) {
-          // Statistique 1: Numéros bloqués
-          statisticCard(
-            icon: "shield.fill",
-            value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
-            label: "Numéros bloqués",
-            color: .gray
-          )
+      // Grille de statistiques (2x1)
+      HStack(spacing: 12) {
+        // Statistique 1: Numéros bloqués
+        statisticCard(
+          icon: "shield.fill",
+          value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
+          label: "Numéros bloqués",
+          color: .gray
+        )
 
-          // Statistique 2: Patterns actifs
-          statisticCard(
-            icon: "checkmark.circle.fill",
-            value: "\(blockerViewModel.completedPatternsCount)",
-            label: "Préfixes actifs",
-            color: .gray
-          )
-        }
-
-        HStack(spacing: 12) {
-          // Statistique 3: Patterns en attente
-          statisticCard(
-            icon: "clock.fill",
-            value: "\(blockerViewModel.pendingPatternsCount)",
-            label: "En attente",
-            color: .gray
-          )
-
-          // Statistique 4: Dernière mise à jour
-          statisticCard(
-            icon: "calendar",
-            value: lastUpdateText,
-            label: "Dernière mise à jour",
-            color: .gray
-          )
-        }
+        // Statistique 2: Patterns actifs
+        statisticCard(
+          icon: "checkmark.circle.fill",
+          value: "\(blockerViewModel.completedPatternsCount)",
+          label: "Préfixes actifs",
+          color: .gray
+        )
       }
 
       // Bouton "En savoir plus"
@@ -239,18 +219,6 @@ struct HomeNavigationView: View {
       RoundedRectangle(cornerRadius: 16)
         .fill(Color.gray.opacity(0.15))
     )
-  }
-
-  // Helper pour formater la date de dernière mise à jour
-  private var lastUpdateText: String {
-    guard let date = blockerViewModel.lastCompletionDate else {
-      return "Jamais"
-    }
-
-    let formatter = RelativeDateTimeFormatter()
-    formatter.unitsStyle = .short
-    formatter.locale = Locale(identifier: "fr_FR")
-    return formatter.localizedString(for: date, relativeTo: Date())
   }
 
   // Helper pour créer une carte de statistique
