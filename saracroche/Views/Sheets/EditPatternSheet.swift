@@ -2,7 +2,7 @@ import SwiftUI
 
 struct EditPatternSheet: View {
   @Environment(\.dismiss) private var dismiss
-  @ObservedObject var viewModel: ListsViewModel
+  @ObservedObject var viewModel: NumbersViewModel
   @Binding var isPresented: Pattern?
 
   let pattern: Pattern
@@ -112,7 +112,7 @@ struct EditPatternSheet: View {
 
 #Preview {
   EditPatternSheet(
-    viewModel: ListsViewModel(),
+    viewModel: NumbersViewModel(),
     isPresented: .constant(nil),
     pattern: Pattern()
   )

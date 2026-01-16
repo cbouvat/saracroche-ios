@@ -3,7 +3,7 @@ import Foundation
 import OSLog
 
 @MainActor
-class ListsViewModel: ObservableObject {
+class NumbersViewModel: ObservableObject {
   // MARK: - Published Properties
 
   // French list metadata
@@ -25,7 +25,7 @@ class ListsViewModel: ObservableObject {
 
   private let patternService: PatternService
   private let blockerService: BlockerService
-  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "ListsViewModel")
+  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "NumbersViewModel")
 
   // MARK: - Initialization
 
@@ -212,14 +212,14 @@ class ListsViewModel: ObservableObject {
   private func triggerPatternProcessing() async {
     // Call BlockerService to process pending patterns
     await withCheckedContinuation { continuation in
-      blockerService.performUpdate(onProgress: {}) { success in
+      blockerService.performUpdate(onProgress: {}, completion: { success in
         if !success {
           self.logger.error("Failed to process patterns")
         } else {
           self.logger.info("Pattern processing completed successfully")
         }
         continuation.resume()
-      }
+      })
     }
   }
 
