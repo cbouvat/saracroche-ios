@@ -11,5 +11,10 @@
 		<string>processing</string>
 		<string>fetch</string>
 	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIImageName</key>
+		<string>LaunchIcon</string>
+	</dict>
 </dict>
 </plist>
