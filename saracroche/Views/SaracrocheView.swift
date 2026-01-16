@@ -11,7 +11,7 @@ struct SaracrocheView: View {
         }
       ReportNavigationView()
         .tabItem {
-          Label("Signaler", systemImage: "exclamationmark.bubble.fill")
+          Label("Signaler", systemImage: "megaphone.fill")
         }
       NumbersNavigationView()
         .tabItem {
