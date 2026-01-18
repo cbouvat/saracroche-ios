@@ -210,18 +210,11 @@ class NumbersViewModel: ObservableObject {
   // MARK: - Pattern Processing
 
   private func triggerPatternProcessing() async {
-    // Call BlockerService to process pending patterns
-    await withCheckedContinuation { continuation in
-      blockerService.performUpdate(
-        onProgress: {},
-        completion: { success in
-          if !success {
-            self.logger.error("Failed to process patterns")
-          } else {
-            self.logger.info("Pattern processing completed successfully")
-          }
-          continuation.resume()
-        })
+    do {
+      try await blockerService.performUpdate()
+      logger.info("Pattern processing completed successfully")
+    } catch {
+      logger.error("Failed to process patterns: \(error)")
     }
   }
 

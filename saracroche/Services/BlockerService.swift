@@ -1,6 +1,25 @@
 import Foundation
 import OSLog
 
+// MARK: - Error Types
+
+enum BlockerServiceError: LocalizedError {
+  case listUpdateFailed(Error)
+  case patternProcessingFailed(Error)
+  case extensionReloadFailed(Error)
+
+  var errorDescription: String? {
+    switch self {
+    case .listUpdateFailed(let error):
+      return "List update failed: \(error.localizedDescription)"
+    case .patternProcessingFailed(let error):
+      return "Pattern processing failed: \(error.localizedDescription)"
+    case .extensionReloadFailed(let error):
+      return "Extension reload failed: \(error.localizedDescription)"
+    }
+  }
+}
+
 /// Service for managing blocklist updates
 final class BlockerService {
   private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerService")
@@ -25,101 +44,77 @@ final class BlockerService {
   }
 
   /// Perform background update
-  func performBackgroundUpdate(completion: @escaping (Bool) -> Void) {
+  func performBackgroundUpdate() async throws {
     logger.debug("performBackgroundUpdate called")
-    performUpdate(onProgress: {}, completion: completion)
+    try await performUpdate()
   }
 
-  /// Perform update with progress callback
-  func performUpdate(
-    onProgress: @escaping () -> Void,
-    completion: @escaping (Bool) -> Void
-  ) {
+  /// Perform update
+  func performUpdate() async throws {
     logger.debug("performUpdate called")
 
-    // 1. Check if there are blocked numbers
+    // Check if update is needed
     if !patternService.hasPatterns() {
-      // No patterns, launch update
       logger.debug("No patterns found, launching update")
-      listService.update(onProgress: onProgress) { [weak self] success in
-        if success {
-          self?.processPendingPatterns(completion: completion)
-        } else {
-          completion(false)
-        }
+      do {
+        try await listService.update()
+      } catch {
+        throw BlockerServiceError.listUpdateFailed(error)
+      }
+    } else if userDefaultsService.shouldUpdateList() {
+      logger.debug("Update needed based on date")
+      do {
+        try await listService.update()
+      } catch {
+        throw BlockerServiceError.listUpdateFailed(error)
       }
     } else {
-      // Patterns exist, check if update is needed
-      if userDefaultsService.shouldUpdateList() {
-        logger.debug("Update needed based on date")
-        listService.update(onProgress: onProgress) { [weak self] success in
-          if success {
-            self?.processPendingPatterns(completion: completion)
-          } else {
-            completion(false)
-          }
-        }
-      } else {
-        logger.debug("No update needed")
-        processPendingPatterns(completion: completion)
-      }
+      logger.debug("No update needed")
     }
+
+    // Process pending patterns
+    try await processPendingPatterns()
   }
 
-  /// Process pending patterns recursively
-  private func processPendingPatterns(completion: @escaping (Bool) -> Void) {
-    guard let pattern = patternService.retrievePatternForProcessing(),
+  /// Process pending patterns iteratively
+  private func processPendingPatterns() async throws {
+    while let pattern = patternService.retrievePatternForProcessing(),
       let patternString = pattern.pattern
-    else {
-      logger.debug("No more pending patterns")
-      completion(true)
-      return
-    }
+    {
 
-    logger.debug("Processing pattern: \(patternString)")
+      logger.debug("Processing pattern: \(patternString)")
 
-    // Expand pattern
-    let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
-    let chunkSize = AppConstants.numberChunkSize
-    let chunks = stride(from: 0, to: numbers.count, by: chunkSize).map {
-      Array(numbers[$0..<min($0 + chunkSize, numbers.count)])
-    }
+      let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
+      let chunkSize = AppConstants.numberChunkSize
+      let chunks = stride(from: 0, to: numbers.count, by: chunkSize).map {
+        Array(numbers[$0..<min($0 + chunkSize, numbers.count)])
+      }
 
-    processChunks(chunks, for: pattern) { [weak self] success in
-      if success {
-        self?.patternService.markPatternAsCompleted(pattern)
-        self?.processPendingPatterns(completion: completion)
-      } else {
-        completion(false)
+      do {
+        try await processChunks(chunks, for: pattern)
+        patternService.markPatternAsCompleted(pattern)
+      } catch {
+        logger.error("Failed to process pattern \(patternString): \(error)")
+        throw BlockerServiceError.patternProcessingFailed(error)
       }
     }
+
+    logger.debug("No more pending patterns")
   }
 
-  /// Process chunks recursively
-  private func processChunks(
-    _ chunks: [[String]],
-    for pattern: Pattern,
-    completion: @escaping (Bool) -> Void
-  ) {
-    var remainingChunks = chunks
-    guard let chunk = remainingChunks.first else {
-      completion(true)
-      return
-    }
+  /// Process chunks iteratively
+  private func processChunks(_ chunks: [[String]], for pattern: Pattern) async throws {
+    for chunk in chunks {
+      let numbersData = chunk.map { ["number": $0, "name": pattern.name ?? ""] }
 
-    remainingChunks.removeFirst()
+      sharedUserDefaultsService.setAction(pattern.action ?? "block")
+      sharedUserDefaultsService.setNumbers(numbersData)
 
-    let numbersData = chunk.map { ["number": $0, "name": pattern.name ?? ""] }
-
-    sharedUserDefaultsService.setAction(pattern.action ?? "block")
-    sharedUserDefaultsService.setNumbers(numbersData)
-
-    callDirectoryService.reloadExtension { [weak self] success in
-      if success {
-        self?.processChunks(remainingChunks, for: pattern, completion: completion)
-      } else {
-        self?.logger.error("Failed to reload extension for chunk")
-        completion(false)
+      do {
+        try await callDirectoryService.reloadExtension()
+      } catch {
+        logger.error("Failed to reload extension for chunk: \(error)")
+        throw BlockerServiceError.extensionReloadFailed(error)
       }
     }
   }

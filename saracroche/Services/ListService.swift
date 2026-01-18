@@ -5,6 +5,22 @@ import OSLog
 
 private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "ListService")
 
+// MARK: - Error Types
+
+enum ListServiceError: LocalizedError {
+  case downloadFailed(Error)
+  case decodingFailed(Error)
+
+  var errorDescription: String? {
+    switch self {
+    case .downloadFailed(let error):
+      return "Failed to download blocklist: \(error.localizedDescription)"
+    case .decodingFailed(let error):
+      return "Failed to decode blocklist: \(error.localizedDescription)"
+    }
+  }
+}
+
 // MARK: - API Response Models
 
 struct APIListResponse: Codable {
@@ -55,20 +71,18 @@ final class ListService {
   // MARK: - Public API
 
   /// Download and update the French block list
-  func update(onProgress: @escaping () -> Void = {}, completion: @escaping (Bool) -> Void) {
-    Task {
-      onProgress()
-      userDefaultsService.setLastDownloadList(Date())
+  func update() async throws {
+    logger.debug("Starting list update")
+    userDefaultsService.setLastDownloadList(Date())
 
-      do {
-        let jsonResponse = try await listAPIService.downloadFrenchList()
-        let apiResponse = try decodeListResponse(jsonResponse)
-        updateCoreData(apiResponse)
-        completion(true)
-      } catch {
-        logger.error("Failed to download blocklist: \(error)")
-        completion(false)
-      }
+    do {
+      let jsonResponse = try await listAPIService.downloadFrenchList()
+      let apiResponse = try decodeListResponse(jsonResponse)
+      updateCoreData(apiResponse)
+      logger.info("List update completed successfully")
+    } catch {
+      logger.error("Failed to download blocklist: \(error)")
+      throw ListServiceError.downloadFailed(error)
     }
   }
 

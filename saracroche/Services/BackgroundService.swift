@@ -19,8 +19,8 @@ final class BackgroundService: ObservableObject {
   // MARK: - Public Methods
 
   /// Force background update
-  func forceBackgroundUpdate(completion: @escaping (Bool) -> Void) {
-    performBackgroundUpdate(completion: completion)
+  func forceBackgroundUpdate() async throws {
+    try await blockerService.performBackgroundUpdate()
   }
 
   // MARK: - Private Methods
@@ -62,17 +62,16 @@ final class BackgroundService: ObservableObject {
       task.setTaskCompleted(success: false)
     }
 
-    self.performBackgroundUpdate { success in
-      task.setTaskCompleted(success: success)
+    // Use Task to bridge sync context to async
+    Task {
+      do {
+        try await blockerService.performBackgroundUpdate()
+        task.setTaskCompleted(success: true)
+      } catch {
+        logger.error("Background update failed: \(error)")
+        task.setTaskCompleted(success: false)
+      }
     }
-  }
-
-  /// Perform background update
-  private func performBackgroundUpdate(
-    completion: @escaping (Bool) -> Void
-  ) {
-    logger.debug("Performing background update")
-    blockerService.performBackgroundUpdate(completion: completion)
   }
 }
 

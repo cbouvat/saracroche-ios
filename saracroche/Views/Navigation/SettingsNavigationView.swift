@@ -11,7 +11,9 @@ struct SettingsNavigationView: View {
       Form {
         Section {
           Button {
-            blockerViewModel.openSettings()
+            Task {
+              await blockerViewModel.openSettings()
+            }
           } label: {
             Label(
               "Activer ou désactiver Saracroche dans **Réglages**",

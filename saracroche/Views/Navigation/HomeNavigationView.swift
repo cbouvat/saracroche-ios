@@ -72,7 +72,9 @@ struct HomeNavigationView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
 
         Button {
-          blockerViewModel.openSettings()
+          Task {
+            await blockerViewModel.openSettings()
+          }
         } label: {
           HStack {
             Image(systemName: "gear")
