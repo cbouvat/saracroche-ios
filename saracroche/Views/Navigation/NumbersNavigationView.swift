@@ -127,6 +127,9 @@ struct NumbersNavigationView: View {
       } message: {
         Text(viewModel.alertMessage)
       }
+      .onAppear {
+        viewModel.loadData()
+      }
     }
   }
 }
