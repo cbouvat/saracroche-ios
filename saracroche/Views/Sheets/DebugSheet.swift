@@ -111,27 +111,36 @@ struct DebugSheet: View {
   }
 
   private func reloadBackgroundService() {
-    BackgroundService().forceBackgroundUpdate { success in
-      DispatchQueue.main.async {
-        alertMessage = success ? "✅ Service reloaded" : "❌ Reload failed"
-        showAlert = true
+    Task {
+      do {
+        try await BackgroundService().forceBackgroundUpdate()
+        DispatchQueue.main.async {
+          alertMessage = "✅ Service reloaded"
+          showAlert = true
+        }
+      } catch {
+        DispatchQueue.main.async {
+          alertMessage = "❌ Reload failed: \(error.localizedDescription)"
+          showAlert = true
+        }
       }
     }
   }
 
   private func convertList() {
     Task {
-      ListService().update(
-        onProgress: {
-          // Handle progress if needed
-        },
-        completion: { success in
-          DispatchQueue.main.async {
-            alertMessage = success ? "✅ Conversion successful" : "❌ Conversion failed"
-            showAlert = true
-          }
+      do {
+        try await ListService().update()
+        DispatchQueue.main.async {
+          alertMessage = "✅ Conversion successful"
+          showAlert = true
         }
-      )
+      } catch {
+        DispatchQueue.main.async {
+          alertMessage = "❌ Conversion failed: \(error.localizedDescription)"
+          showAlert = true
+        }
+      }
     }
   }
 

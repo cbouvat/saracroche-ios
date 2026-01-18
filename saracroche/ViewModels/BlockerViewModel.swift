@@ -5,6 +5,7 @@ import SwiftUI
 private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerViewModel")
 
 /// View model for call blocker functionality
+@MainActor
 class BlockerViewModel: ObservableObject {
   @Published var blockerExtensionStatus: BlockerExtensionStatus = .unknown
   @Published var updateState: UpdateState = .idle
@@ -17,6 +18,10 @@ class BlockerViewModel: ObservableObject {
   @Published var completedPatternsCount: Int = 0
   @Published var pendingPatternsCount: Int = 0
   @Published var lastCompletionDate: Date? = nil
+
+  // Update state
+  @Published var isUpdating: Bool = false
+  @Published var updateError: String?
 
   private let callDirectoryService: CallDirectoryService
   private let sharedUserDefaults: SharedUserDefaultsService
@@ -56,37 +61,59 @@ class BlockerViewModel: ObservableObject {
       return
     }
 
-    checkBlockerExtensionStatus()
+    Task {
+      await checkBlockerExtensionStatus()
+    }
     loadPatternStatistics()
   }
 
-  func checkBlockerExtensionStatus() {
-    callDirectoryService.checkExtensionStatus { [weak self] status in
-      self?.blockerExtensionStatus = status
+  func checkBlockerExtensionStatus() async {
+    do {
+      blockerExtensionStatus = try await callDirectoryService.checkExtensionStatus()
+    } catch {
+      logger.error("Failed to check extension status: \(error)")
+      blockerExtensionStatus = .error
     }
   }
 
   func checkUpdateState() {
-    DispatchQueue.main.async { [weak self] in
-      self?.updateState = self?.userDefaults.getUpdateState() ?? .idle
-      self?.lastUpdateCheck = self?.userDefaults.getLastUpdateCheck()
-      self?.lastUpdate = self?.userDefaults.getLastUpdate()
-      self?.updateStarted = self?.userDefaults.getUpdateStarted()
-    }
+    updateState = userDefaults.getUpdateState() ?? .idle
+    lastUpdateCheck = userDefaults.getLastUpdateCheck()
+    lastUpdate = userDefaults.getLastUpdate()
+    updateStarted = userDefaults.getUpdateStarted()
   }
 
   /// Loads statistics about patterns and phone numbers from CoreData
   private func loadPatternStatistics() {
-    DispatchQueue.main.async { [weak self] in
-      self?.completedPhoneNumbersCount = self?.patternService.getCompletedPhoneNumbersCount() ?? 0
-      self?.completedPatternsCount = self?.patternService.getCompletedPatternsCount() ?? 0
-      self?.pendingPatternsCount = self?.patternService.getPendingPatternsCount() ?? 0
-      self?.lastCompletionDate = self?.patternService.getLastCompletionDate()
+    completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount() ?? 0
+    completedPatternsCount = patternService.getCompletedPatternsCount() ?? 0
+    pendingPatternsCount = patternService.getPendingPatternsCount() ?? 0
+    lastCompletionDate = patternService.getLastCompletionDate()
+  }
+
+  func openSettings() async {
+    do {
+      try await callDirectoryService.openSettings()
+    } catch {
+      logger.error("Failed to open settings: \(error)")
     }
   }
 
-  func openSettings() {
-    callDirectoryService.openSettings()
+  /// Perform manual update
+  func performUpdate() async {
+    isUpdating = true
+    updateError = nil
+
+    do {
+      try await blockerService.performUpdate()
+      logger.info("Update completed successfully")
+      refreshData()
+    } catch {
+      updateError = error.localizedDescription
+      logger.error("Update failed: \(error)")
+    }
+
+    isUpdating = false
   }
 
   func resetApplication() {
