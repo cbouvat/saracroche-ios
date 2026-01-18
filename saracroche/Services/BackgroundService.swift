@@ -10,6 +10,11 @@ final class BackgroundService: ObservableObject {
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
   private let backgroundUpdateInterval = AppConstants.backgroundUpdateInterval
 
+  // MARK: - Initialization
+  init() {
+    setupBackgroundTasks()
+  }
+
   /// Setup background tasks
   private func setupBackgroundTasks() {
     BGTaskScheduler.shared.register(
