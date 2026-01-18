@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 /// Service for downloading block lists
 class ListAPIService: APIService {
