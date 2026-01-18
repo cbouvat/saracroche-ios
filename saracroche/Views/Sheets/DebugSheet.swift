@@ -39,9 +39,9 @@ struct DebugSheet: View {
 
             DebugButton(
               action: {
-                reloadBackgroundService()
+                forceUpdate()
               },
-              title: "Reload background service",
+              title: "Force block update",
               background: .blue,
               foreground: .white
             )
@@ -110,10 +110,10 @@ struct DebugSheet: View {
     }
   }
 
-  private func reloadBackgroundService() {
+  private func forceUpdate() {
     Task {
       do {
-        try await BackgroundService().forceBackgroundUpdate()
+        try await BlockerService().performUpdate()
         DispatchQueue.main.async {
           alertMessage = "✅ Service reloaded"
           showAlert = true

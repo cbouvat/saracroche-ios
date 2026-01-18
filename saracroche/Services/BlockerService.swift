@@ -43,12 +43,6 @@ final class BlockerService {
     self.sharedUserDefaultsService = sharedUserDefaultsService
   }
 
-  /// Perform background update
-  func performBackgroundUpdate() async throws {
-    logger.debug("performBackgroundUpdate called")
-    try await performUpdate()
-  }
-
   /// Perform update
   func performUpdate() async throws {
     logger.debug("performUpdate called")

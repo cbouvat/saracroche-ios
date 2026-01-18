@@ -13,17 +13,7 @@ final class BackgroundService: ObservableObject {
 
   init() {
     self.blockerService = BlockerService()
-    setupBackgroundTasks()
   }
-
-  // MARK: - Public Methods
-
-  /// Force background update
-  func forceBackgroundUpdate() async throws {
-    try await blockerService.performBackgroundUpdate()
-  }
-
-  // MARK: - Private Methods
 
   /// Setup background tasks
   private func setupBackgroundTasks() {
@@ -65,7 +55,7 @@ final class BackgroundService: ObservableObject {
     // Use Task to bridge sync context to async
     Task {
       do {
-        try await blockerService.performBackgroundUpdate()
+        try await blockerService.performUpdate()
         task.setTaskCompleted(success: true)
       } catch {
         logger.error("Background update failed: \(error)")
