@@ -9,11 +9,6 @@ final class BackgroundService: ObservableObject {
   // MARK: - Constants
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
   private let backgroundUpdateInterval = AppConstants.backgroundUpdateInterval
-  private let blockerService: BlockerService
-
-  init() {
-    self.blockerService = BlockerService()
-  }
 
   /// Setup background tasks
   private func setupBackgroundTasks() {
@@ -55,7 +50,7 @@ final class BackgroundService: ObservableObject {
     // Use Task to bridge sync context to async
     Task {
       do {
-        try await blockerService.performUpdate()
+        try await BlockerService().performUpdate()
         task.setTaskCompleted(success: true)
       } catch {
         logger.error("Background update failed: \(error)")
