@@ -17,6 +17,7 @@ The application is built as a modular iOS system with:
 - **Design Principles**: Keep it simple (KISS principle), follow Single Responsibility Principle
 - **Target Platform**: Write for iOS 15 and later versions
 - **Architecture**: Follow MVVM (Model-View-ViewModel) architecture pattern
+- **Concurrency**: Use async/await for all asynchronous operations
 - **Naming Conventions**: Use explicit, descriptive names for variables and functions
 - **Accessibility**: Ensure A11Y compliance with VoiceOver support
 - **Configuration**: Store app configuration in `AppConstants.swift`
