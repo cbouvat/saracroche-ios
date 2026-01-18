@@ -1,4 +1,3 @@
-import CallKit
 import CoreData
 import Foundation
 import OSLog
@@ -49,23 +48,17 @@ final class ListService {
   private let listAPIService: ListAPIService
   private let userDefaultsService: UserDefaultsService
   private let patternService: PatternService
-  private let sharedUserDefaultsService: SharedUserDefaultsService
-  private let callDirectoryService: CallDirectoryService
 
   // MARK: - Initialization
 
   init(
     listAPIService: ListAPIService = ListAPIService(),
     userDefaultsService: UserDefaultsService = UserDefaultsService(),
-    patternService: PatternService = PatternService(),
-    sharedUserDefaultsService: SharedUserDefaultsService = SharedUserDefaultsService(),
-    callDirectoryService: CallDirectoryService = CallDirectoryService()
+    patternService: PatternService = PatternService()
   ) {
     self.listAPIService = listAPIService
     self.userDefaultsService = userDefaultsService
     self.patternService = patternService
-    self.sharedUserDefaultsService = sharedUserDefaultsService
-    self.callDirectoryService = callDirectoryService
   }
 
   // MARK: - Public API
