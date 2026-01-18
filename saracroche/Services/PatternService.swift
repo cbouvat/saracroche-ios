@@ -7,8 +7,6 @@ class PatternService {
   private let dataStack = CoreDataStack.shared
   private let logger = OSLog(subsystem: "com.saracroche", category: "PatternService")
 
-  init() {}
-
   // MARK: - Create Operations
 
   /// Creates and saves a new pattern to CoreData
