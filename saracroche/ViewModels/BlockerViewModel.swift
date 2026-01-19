@@ -1,6 +1,7 @@
 import Combine
 import OSLog
 import SwiftUI
+import UIKit
 
 private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerViewModel")
 
@@ -22,6 +23,7 @@ class BlockerViewModel: ObservableObject {
   // Update state
   @Published var isUpdating: Bool = false
   @Published var updateError: String?
+  @Published var isBackgroundRefreshEnabled: Bool = false
 
   private let callDirectoryService: CallDirectoryService
   private let sharedUserDefaults: SharedUserDefaultsService
@@ -56,6 +58,7 @@ class BlockerViewModel: ObservableObject {
 
   func refreshData() {
     checkUpdateState()
+    checkBackgroundServiceStatus()
 
     if updateState.isInProgress {
       return
@@ -81,6 +84,10 @@ class BlockerViewModel: ObservableObject {
     lastUpdateCheck = userDefaults.getLastUpdateCheck()
     lastUpdate = userDefaults.getLastUpdate()
     updateStarted = userDefaults.getUpdateStarted()
+  }
+
+  func checkBackgroundServiceStatus() {
+    isBackgroundRefreshEnabled = UIApplication.shared.backgroundRefreshStatus == .available
   }
 
   /// Loads statistics about patterns and phone numbers from CoreData

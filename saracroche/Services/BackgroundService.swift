@@ -1,6 +1,7 @@
 import BackgroundTasks
 import Foundation
 import OSLog
+import UIKit
 
 /// Background service for periodic updates
 final class BackgroundService: ObservableObject {
@@ -12,11 +13,23 @@ final class BackgroundService: ObservableObject {
 
   // MARK: - Initialization
   init() {
-    setupBackgroundTasks()
+    registerBackgroundTasks()
   }
 
-  /// Setup background tasks
-  private func setupBackgroundTasks() {
+  // MARK: - Properties
+  var backgroundRefreshStatus: UIBackgroundRefreshStatus {
+    UIApplication.shared.backgroundRefreshStatus
+  }
+
+  var isBackgroundRefreshEnabled: Bool {
+    UIApplication.shared.backgroundRefreshStatus == .available
+  }
+
+  // MARK: - Setup
+
+  /// Register background tasks
+  private func registerBackgroundTasks() {
+    logger.info("Register background tasks")
     BGTaskScheduler.shared.register(
       forTaskWithIdentifier: backgroundServiceIdentifier,
       using: nil

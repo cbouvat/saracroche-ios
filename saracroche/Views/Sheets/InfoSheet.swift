@@ -153,6 +153,24 @@ struct InfoSheet: View {
         }
         .padding(.vertical, 4)
 
+        // État du service en arrière-plan
+        HStack(spacing: 12) {
+          Image(systemName: backgroundServiceIcon)
+            .font(.system(size: 20))
+            .foregroundColor(backgroundServiceColor)
+
+          VStack(alignment: .leading, spacing: 2) {
+            Text("Service en arrière-plan")
+              .font(.subheadline)
+              .foregroundColor(.primary)
+            Text(backgroundServiceText)
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+          Spacer()
+        }
+        .padding(.vertical, 4)
+
         // État de la mise à jour (si applicable)
         if blockerViewModel.updateState != .idle {
           HStack(spacing: 12) {
@@ -375,6 +393,21 @@ struct InfoSheet: View {
     case .error:
       return "Erreur"
     }
+  }
+
+  private var backgroundServiceIcon: String {
+    blockerViewModel.isBackgroundRefreshEnabled
+      ? "arrow.clockwise.circle.fill" : "xmark.circle.fill"
+  }
+
+  private var backgroundServiceColor: Color {
+    blockerViewModel.isBackgroundRefreshEnabled ? .green : .red
+  }
+
+  private var backgroundServiceText: String {
+    blockerViewModel.isBackgroundRefreshEnabled
+      ? "Actif - mises à jour automatiques toutes les 4h"
+      : "Désactivé - activer dans Réglages > Général > Actualisation en arrière-plan"
   }
 
   private var lastCompletionDateFormatted: String {
