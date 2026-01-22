@@ -16,15 +16,6 @@ final class BackgroundService: ObservableObject {
     registerBackgroundTasks()
   }
 
-  // MARK: - Properties
-  var backgroundRefreshStatus: UIBackgroundRefreshStatus {
-    UIApplication.shared.backgroundRefreshStatus
-  }
-
-  var isBackgroundRefreshEnabled: Bool {
-    UIApplication.shared.backgroundRefreshStatus == .available
-  }
-
   // MARK: - Setup
 
   /// Register background tasks
