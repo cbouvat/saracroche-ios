@@ -80,7 +80,7 @@ class BlockerViewModel: ObservableObject {
   }
 
   func checkUpdateState() {
-    updateState = userDefaults.getUpdateState() ?? .idle
+    updateState = userDefaults.getUpdateState()
     lastUpdateCheck = userDefaults.getLastUpdateCheck()
     lastUpdate = userDefaults.getLastUpdate()
     updateStarted = userDefaults.getUpdateStarted()
@@ -92,9 +92,9 @@ class BlockerViewModel: ObservableObject {
 
   /// Loads statistics about patterns and phone numbers from CoreData
   private func loadPatternStatistics() {
-    completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount() ?? 0
-    completedPatternsCount = patternService.getCompletedPatternsCount() ?? 0
-    pendingPatternsCount = patternService.getPendingPatternsCount() ?? 0
+    completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount()
+    completedPatternsCount = patternService.getCompletedPatternsCount()
+    pendingPatternsCount = patternService.getPendingPatternsCount()
     lastCompletionDate = patternService.getLastCompletionDate()
   }
 
