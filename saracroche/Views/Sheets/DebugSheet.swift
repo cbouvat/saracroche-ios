@@ -41,7 +41,7 @@ struct DebugSheet: View {
               action: {
                 forceUpdate()
               },
-              title: "Force block update",
+              title: "Force update",
               background: .blue,
               foreground: .white
             )
@@ -115,12 +115,12 @@ struct DebugSheet: View {
       do {
         try await BlockerService().performUpdate()
         DispatchQueue.main.async {
-          alertMessage = "✅ Service reloaded"
+          alertMessage = "✅ Update forced"
           showAlert = true
         }
       } catch {
         DispatchQueue.main.async {
-          alertMessage = "❌ Reload failed: \(error.localizedDescription)"
+          alertMessage = "❌ Update failed: \(error.localizedDescription)"
           showAlert = true
         }
       }
@@ -147,7 +147,7 @@ struct DebugSheet: View {
   private func clearCoreData() {
     let patternService = PatternService()
     patternService.deleteAllPatterns()
-    alertMessage = "✅ CoreData cleared - All patterns deleted"
+    alertMessage = "✅ CoreData cleared"
     showAlert = true
   }
 }
