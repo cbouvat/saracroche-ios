@@ -183,6 +183,9 @@ struct HomeNavigationView: View {
           .fontWeight(.semibold)
       }
 
+      // Bandeau d'état de mise à jour
+      updateStateBanner
+
       // Grille de statistiques (2x1)
       HStack(spacing: 12) {
         // Statistique 1: Numéros bloqués
@@ -219,7 +222,7 @@ struct HomeNavigationView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(
       RoundedRectangle(cornerRadius: 16)
-        .fill(Color.gray.opacity(0.15))
+        .fill(Color.gray.opacity(0.1))
     )
   }
 
@@ -250,8 +253,101 @@ struct HomeNavigationView: View {
     .padding()
     .background(
       RoundedRectangle(cornerRadius: 12)
-        .fill(Color.gray.opacity(0.08))
+        .fill(Color.gray.opacity(0.1))
     )
+  }
+
+  // MARK: - Update State Helpers
+
+  private var updateStateIcon: String {
+    switch blockerViewModel.updateState {
+    case .idle:
+      return "checkmark.circle"
+    case .starting:
+      return "arrow.down.circle"
+    case .downloading:
+      return "arrow.down.circle.fill"
+    case .converting:
+      return "gearshape.2.fill"
+    case .installing:
+      return "checkmark.circle.fill"
+    case .error:
+      return "exclamationmark.triangle.fill"
+    }
+  }
+
+  private var updateStateColor: Color {
+    switch blockerViewModel.updateState {
+    case .idle:
+      return .gray
+    case .starting, .downloading:
+      return .blue
+    case .converting:
+      return .orange
+    case .installing:
+      return .green
+    case .error:
+      return .red
+    }
+  }
+
+  private var updateStateText: String {
+    switch blockerViewModel.updateState {
+    case .idle:
+      return "Aucune mise à jour en cours"
+    case .starting:
+      return "Démarrage en cours"
+    case .downloading:
+      return "Téléchargement en cours"
+    case .converting:
+      return "Conversion en cours"
+    case .installing:
+      return "Installation en cours"
+    case .error:
+      return "Erreur lors de la mise à jour"
+    }
+  }
+
+  @ViewBuilder
+  private var updateStateBanner: some View {
+    HStack(spacing: 12) {
+      // Icône avec animation conditionnelle pour iOS 18+
+      if #available(iOS 18.0, *) {
+        Image(systemName: updateStateIcon)
+          .font(.system(size: 20))
+          .foregroundColor(updateStateColor)
+          .symbolEffect(
+            .pulse,
+            options: .repeating,
+            isActive: blockerViewModel.updateState.isInProgress
+          )
+      } else {
+        Image(systemName: updateStateIcon)
+          .font(.system(size: 20))
+          .foregroundColor(updateStateColor)
+      }
+
+      VStack(alignment: .leading, spacing: 2) {
+        Text("État de la mise à jour")
+          .font(.subheadline)
+          .fontWeight(.medium)
+          .foregroundColor(.primary)
+
+        Text(updateStateText)
+          .font(.caption)
+          .foregroundColor(.secondary)
+      }
+
+      Spacer()
+    }
+    .padding(.horizontal, 16)
+    .padding(.vertical, 12)
+    .background(
+      RoundedRectangle(cornerRadius: 12)
+        .fill(updateStateColor.opacity(0.1))
+    )
+    .accessibilityElement(children: .combine)
+    .accessibilityLabel("État de la mise à jour: \(updateStateText)")
   }
 
   private var donationView: some View {
