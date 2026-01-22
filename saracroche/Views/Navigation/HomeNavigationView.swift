@@ -172,17 +172,6 @@ struct HomeNavigationView: View {
 
   private var statisticsView: some View {
     VStack(alignment: .leading, spacing: 16) {
-      // Header avec icône
-      HStack {
-        Image(systemName: "chart.bar.fill")
-          .font(.system(size: 20))
-          .foregroundColor(.gray)
-
-        Text("Statistiques")
-          .font(.headline)
-          .fontWeight(.semibold)
-      }
-
       // Bandeau d'état de mise à jour
       updateStateBanner
 
