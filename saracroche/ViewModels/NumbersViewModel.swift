@@ -95,10 +95,6 @@ class NumbersViewModel: ObservableObject {
       source: "user"
     ) != nil {
       logger.info("Prefix created: \(patternString)")
-
-      // Trigger blocker update
-      await triggerPatternProcessing()
-
       // Reload data
       loadData()
     } else {
@@ -205,17 +201,6 @@ class NumbersViewModel: ObservableObject {
     }
 
     return true
-  }
-
-  // MARK: - Pattern Processing
-
-  private func triggerPatternProcessing() async {
-    do {
-      try await blockerService.performUpdate()
-      logger.info("Pattern processing completed successfully")
-    } catch {
-      logger.error("Failed to process patterns: \(error)")
-    }
   }
 
   // MARK: - Alert Helpers
