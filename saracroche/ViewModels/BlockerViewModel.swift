@@ -106,23 +106,6 @@ class BlockerViewModel: ObservableObject {
     }
   }
 
-  /// Perform manual update
-  func performUpdate() async {
-    isUpdating = true
-    updateError = nil
-
-    do {
-      try await blockerService.performUpdate()
-      logger.info("Update completed successfully")
-      refreshData()
-    } catch {
-      updateError = error.localizedDescription
-      logger.error("Update failed: \(error)")
-    }
-
-    isUpdating = false
-  }
-
   func resetApplication() {
     // Clear all UserDefaults data
     userDefaults.resetAllData()
