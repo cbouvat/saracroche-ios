@@ -47,7 +47,21 @@ final class BlockerService {
   func performUpdate() async throws {
     logger.debug("performUpdate called")
 
-    // Check if update is needed
+    // 1. Check if pending patterns exist
+    let pendingCount = patternService.getPendingPatternsCount()
+
+    // 2. If pending patterns exist → process ONE pattern and return
+    if pendingCount > 0 {
+      logger.debug("Pending patterns found, processing one pattern")
+      do {
+        try await processSinglePattern()
+      } catch {
+        throw BlockerServiceError.patternProcessingFailed(error)
+      }
+      return
+    }
+
+    // 3. If no pending patterns → check if update is needed
     if !patternService.hasPatterns() {
       logger.debug("No patterns found, launching update")
       do {
@@ -55,19 +69,21 @@ final class BlockerService {
       } catch {
         throw BlockerServiceError.listUpdateFailed(error)
       }
-    } else if userDefaultsService.shouldUpdateList() {
+      return
+    }
+
+    if userDefaultsService.shouldUpdateList() {
       logger.debug("Update needed based on date")
       do {
         try await listService.update()
       } catch {
         throw BlockerServiceError.listUpdateFailed(error)
       }
-    } else {
-      logger.debug("No update needed")
+      return
     }
 
-    // Process ONE pending pattern (if any)
-    try await processSinglePattern()
+    // 4. No update needed, all patterns are completed
+    logger.debug("No update needed, all patterns are completed")
   }
 
   /// Process a single pending pattern
