@@ -86,6 +86,7 @@ final class BlockerService {
 
       do {
         try await processChunks(chunks, for: pattern)
+        logger.debug("Completed pattern: \(patternString)")
         patternService.markPatternAsCompleted(pattern)
       } catch {
         logger.error("Failed to process pattern \(patternString): \(error)")
