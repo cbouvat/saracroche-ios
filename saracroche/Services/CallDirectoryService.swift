@@ -23,14 +23,14 @@ enum CallDirectoryError: LocalizedError {
 
 /// Service for CallKit extension functionality
 class CallDirectoryService {
-  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "CallDirectoryService")
+  private static let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "CallDirectoryService")
   /// The CallKit manager instance for interacting with the Call Directory extension.
-  private let manager = CXCallDirectoryManager.sharedInstance
+  
 
   /// Check CallKit extension status
   func checkExtensionStatus() async throws -> BlockerExtensionStatus {
     try await withCheckedThrowingContinuation { continuation in
-      manager.getEnabledStatusForExtension(
+      CXCallDirectoryManager.sharedInstance.getEnabledStatusForExtension(
         withIdentifier: AppConstants.callDirectoryExtensionIdentifier
       ) { status, error in
         if let error = error {
@@ -58,9 +58,9 @@ class CallDirectoryService {
   /// Open CallKit settings
   func openSettings() async throws {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-      manager.openSettings { error in
+      CXCallDirectoryManager.sharedInstance.openSettings { error in
         if let error = error {
-          self.logger.error("Error opening settings: \(error.localizedDescription)")
+          Self.logger.error("Error opening settings: \(error.localizedDescription)")
           continuation.resume(throwing: CallDirectoryError.settingsOpenFailed(error))
         } else {
           continuation.resume()
@@ -72,7 +72,7 @@ class CallDirectoryService {
   /// Reload CallKit extension
   func reloadExtension() async throws {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-      self.manager.reloadExtension(
+      CXCallDirectoryManager.sharedInstance.reloadExtension(
         withIdentifier: AppConstants.callDirectoryExtensionIdentifier
       ) { error in
         if let error = error {
