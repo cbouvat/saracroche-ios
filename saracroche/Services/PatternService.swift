@@ -177,11 +177,11 @@ class PatternService {
     }
   }
 
-  /// Retrieves the first pending pattern for processing
-  /// - Returns: The first Pattern entity where completedDate is nil, or nil if none exist
+  /// Retrieves a random pending pattern for processing
+  /// - Returns: A random Pattern entity where completedDate is nil, or nil if none exist
   func retrievePatternForProcessing() -> Pattern? {
     let pendingPatterns = getPendingPatterns()
-    return pendingPatterns.first
+    return pendingPatterns.randomElement()
   }
 
   /// Fetches all patterns that have been completed
