@@ -66,35 +66,35 @@ final class BlockerService {
       logger.debug("No update needed")
     }
 
-    // Process pending patterns
-    try await processPendingPatterns()
+    // Process ONE pending pattern (if any)
+    try await processSinglePattern()
   }
 
-  /// Process pending patterns iteratively
-  private func processPendingPatterns() async throws {
-    while let pattern = patternService.retrievePatternForProcessing(),
+  /// Process a single pending pattern
+  private func processSinglePattern() async throws {
+    guard let pattern = patternService.retrievePatternForProcessing(),
       let patternString = pattern.pattern
-    {
-
-      logger.debug("Processing pattern: \(patternString)")
-
-      let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
-      let chunkSize = AppConstants.numberChunkSize
-      let chunks = stride(from: 0, to: numbers.count, by: chunkSize).map {
-        Array(numbers[$0..<min($0 + chunkSize, numbers.count)])
-      }
-
-      do {
-        try await processChunks(chunks, for: pattern)
-        logger.debug("Completed pattern: \(patternString)")
-        patternService.markPatternAsCompleted(pattern)
-      } catch {
-        logger.error("Failed to process pattern \(patternString): \(error)")
-        throw BlockerServiceError.patternProcessingFailed(error)
-      }
+    else {
+      logger.debug("No pending patterns")
+      return
     }
 
-    logger.debug("No more pending patterns")
+    logger.debug("Processing pattern: \(patternString)")
+
+    let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
+    let chunkSize = AppConstants.numberChunkSize
+    let chunks = stride(from: 0, to: numbers.count, by: chunkSize).map {
+      Array(numbers[$0..<min($0 + chunkSize, numbers.count)])
+    }
+
+    do {
+      try await processChunks(chunks, for: pattern)
+      logger.debug("Completed pattern: \(patternString)")
+      patternService.markPatternAsCompleted(pattern)
+    } catch {
+      logger.error("Failed to process pattern \(patternString): \(error)")
+      throw BlockerServiceError.patternProcessingFailed(error)
+    }
   }
 
   /// Process chunks iteratively
