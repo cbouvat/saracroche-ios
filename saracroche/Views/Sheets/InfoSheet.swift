@@ -273,7 +273,7 @@ struct InfoSheet: View {
         }
 
         // Dernière finalisation
-        if let lastCompletionDate = blockerViewModel.lastCompletionDate {
+        if blockerViewModel.lastCompletionDate != nil {
           HStack(spacing: 12) {
             Image(systemName: "checkmark.circle.fill")
               .font(.system(size: 20))
