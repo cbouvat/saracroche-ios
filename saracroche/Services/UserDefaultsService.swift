@@ -9,7 +9,6 @@ class UserDefaultsService {
     static let lastUpdateCheck = "lastUpdateCheck"
     static let lastUpdate = "lastUpdate"
     static let updateStarted = "updateStarted"
-    static let updateState = "updateState"
     static let lastDownloadList = "lastDownloadList"
   }
 
@@ -70,23 +69,6 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.updateStarted)
   }
 
-  func setUpdateState(_ state: UpdateState) {
-    userDefaults.set(state.rawValue, forKey: Keys.updateState)
-  }
-
-  func getUpdateState() -> UpdateState {
-    guard let stateString = userDefaults.string(forKey: Keys.updateState),
-      let state = UpdateState(rawValue: stateString)
-    else {
-      return .idle
-    }
-    return state
-  }
-
-  func clearUpdateState() {
-    userDefaults.removeObject(forKey: Keys.updateState)
-  }
-
   func setLastDownloadList(_ date: Date) {
     userDefaults.set(date, forKey: Keys.lastDownloadList)
   }
@@ -111,6 +93,5 @@ class UserDefaultsService {
     clearLastUpdateCheck()
     clearLastUpdate()
     clearUpdateStarted()
-    clearUpdateState()
   }
 }
