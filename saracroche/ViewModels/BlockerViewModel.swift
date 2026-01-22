@@ -119,4 +119,3 @@ class BlockerViewModel: ObservableObject {
     exit(0)
   }
 }
-
