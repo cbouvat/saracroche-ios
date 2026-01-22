@@ -47,7 +47,9 @@ class BlockerViewModel: ObservableObject {
   func startPeriodicRefresh() {
     stopPeriodicRefresh()
     statusCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-      self?.refreshData()
+      Task { @MainActor [weak self] in
+        self?.refreshData()
+      }
     }
   }
 
@@ -117,3 +119,4 @@ class BlockerViewModel: ObservableObject {
     exit(0)
   }
 }
+
