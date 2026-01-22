@@ -23,9 +23,9 @@ enum CallDirectoryError: LocalizedError {
 
 /// Service for CallKit extension functionality
 class CallDirectoryService {
-  private static let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "CallDirectoryService")
+  private static let logger = Logger(
+    subsystem: "com.cbouvat.saracroche", category: "CallDirectoryService")
   /// The CallKit manager instance for interacting with the Call Directory extension.
-  
 
   /// Check CallKit extension status
   func checkExtensionStatus() async throws -> BlockerExtensionStatus {
