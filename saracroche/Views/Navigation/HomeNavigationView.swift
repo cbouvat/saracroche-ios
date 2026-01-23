@@ -19,6 +19,10 @@ struct HomeNavigationView: View {
       }
       .navigationTitle("Saracroche")
       .onAppear {
+        Task {
+          await blockerViewModel.checkBlockerExtensionStatus()
+        }
+
         blockerViewModel.startAutoRefresh()
       }
       .onDisappear {
