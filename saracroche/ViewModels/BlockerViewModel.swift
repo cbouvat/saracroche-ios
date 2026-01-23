@@ -61,9 +61,9 @@ class BlockerViewModel: ObservableObject {
   }
 
   func loadData() {
-    lastUpdateCheck = userDefaults.getLastUpdateCheck()
-    lastUpdate = userDefaults.getLastUpdate()
-    updateStarted = userDefaults.getUpdateStarted()
+    lastUpdateCheck = userDefaults.getLastBlockListUpdateCheckAt()
+    lastUpdate = userDefaults.getLastBlockListUpdateAt()
+    updateStarted = userDefaults.getBlockListUpdateStartedAt()
 
     completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount()
     completedPatternsCount = patternService.getCompletedPatternsCount()
@@ -91,7 +91,7 @@ class BlockerViewModel: ObservableObject {
   private func performUpdateWithStateManagement() async {
     // Set starting state
     updateState = .starting
-    userDefaults.setUpdateStarted(Date())
+    userDefaults.setBlockListUpdateStartedAt(Date())
 
     do {
       // Perform the update
@@ -99,14 +99,14 @@ class BlockerViewModel: ObservableObject {
 
       // Success - set idle state
       updateState = .idle
-      userDefaults.setLastUpdate(Date())
-      userDefaults.clearUpdateStarted()
+      userDefaults.setLastBlockListUpdateAt(Date())
+      userDefaults.clearBlockListUpdateStartedAt()
 
     } catch {
       // Error - set error state
       logger.error("Update failed: \(error)")
       updateState = .error
-      userDefaults.clearUpdateStarted()
+      userDefaults.clearBlockListUpdateStartedAt()
     }
   }
 
