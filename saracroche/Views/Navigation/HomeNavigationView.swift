@@ -270,7 +270,7 @@ struct HomeNavigationView: View {
       }
 
       VStack(alignment: .leading, spacing: 2) {
-        Text("État de la mise à jour")
+        Text("État de la liste blocage")
           .font(.subheadline)
           .fontWeight(.medium)
           .foregroundColor(.primary)
@@ -289,7 +289,7 @@ struct HomeNavigationView: View {
         .fill(blockerViewModel.updateState.color.opacity(0.1))
     )
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("État de la mise à jour: \\$blockerViewModel.updateState.description")
+    .accessibilityLabel("État de la liste blocage : \\$blockerViewModel.updateState.description")
   }
 
   private var donationView: some View {
