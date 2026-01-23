@@ -212,46 +212,6 @@ struct InfoSheet: View {
           Spacer()
         }
 
-        // Dernière vérification
-        if let lastUpdateCheck = blockerViewModel.lastUpdateCheck {
-          HStack(spacing: 12) {
-            Image(systemName: "magnifyingglass.circle.fill")
-              .font(.system(size: 20))
-              .foregroundColor(.green)
-
-            VStack(alignment: .leading, spacing: 2) {
-              Text("Dernière vérification")
-                .font(.subheadline)
-                .foregroundColor(.primary)
-              Text(formatDate(lastUpdateCheck))
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            Spacer()
-          }
-          .padding(.vertical, 4)
-        }
-
-        // Dernière mise à jour (installation)
-        if let lastUpdate = blockerViewModel.lastUpdate {
-          HStack(spacing: 12) {
-            Image(systemName: "arrow.clockwise.circle.fill")
-              .font(.system(size: 20))
-              .foregroundColor(.blue)
-
-            VStack(alignment: .leading, spacing: 2) {
-              Text("Dernière mise à jour")
-                .font(.subheadline)
-                .foregroundColor(.primary)
-              Text(formatDate(lastUpdate))
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            Spacer()
-          }
-          .padding(.vertical, 4)
-        }
-
         // Dernière téléchargement de la liste
         if let lastListDownloadAt = blockerViewModel.lastListDownloadAt {
           HStack(spacing: 12) {
@@ -260,10 +220,30 @@ struct InfoSheet: View {
               .foregroundColor(.blue)
 
             VStack(alignment: .leading, spacing: 2) {
-              Text("Dernière téléchargement de la liste")
+              Text("Dernier téléchargement de la liste")
                 .font(.subheadline)
                 .foregroundColor(.primary)
               Text(formatDate(lastListDownloadAt))
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+            Spacer()
+          }
+          .padding(.vertical, 4)
+        }
+
+        // Dernière mise à jour réussie
+        if let lastSuccessfulUpdateAt = blockerViewModel.lastSuccessfulUpdateAt {
+          HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill")
+              .font(.system(size: 20))
+              .foregroundColor(.green)
+
+            VStack(alignment: .leading, spacing: 2) {
+              Text("Dernière mise à jour réussie")
+                .font(.subheadline)
+                .foregroundColor(.primary)
+              Text(formatDate(lastSuccessfulUpdateAt))
                 .font(.caption)
                 .foregroundColor(.secondary)
             }

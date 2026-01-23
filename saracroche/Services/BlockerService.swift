@@ -45,9 +45,6 @@ final class BlockerService {
   func performUpdate() async throws {
     Logger.debug("performUpdate called", category: .blockerService)
 
-    // Set starting state
-    userDefaultsService.setBlockListUpdateStartedAt(Date())
-
     // 1. Check if pending patterns exist
     let pendingCount = await patternService.getPendingPatternsCount()
 
@@ -57,10 +54,8 @@ final class BlockerService {
       do {
         try await processSinglePattern()
         // Success - set last update timestamp
-        userDefaultsService.setLastBlockListUpdateAt(Date())
+        userDefaultsService.setLastSuccessfulUpdateAt(Date())
       } catch {
-        // Clear started timestamp on error
-        userDefaultsService.clearBlockListUpdateStartedAt()
         throw BlockerServiceError.patternProcessingFailed(error)
       }
       return
@@ -73,10 +68,8 @@ final class BlockerService {
       do {
         try await listService.update()
         // Success - set last update timestamp
-        userDefaultsService.setLastBlockListUpdateAt(Date())
+        userDefaultsService.setLastSuccessfulUpdateAt(Date())
       } catch {
-        // Clear started timestamp on error
-        userDefaultsService.clearBlockListUpdateStartedAt()
         throw BlockerServiceError.listUpdateFailed(error)
       }
       return
@@ -87,10 +80,8 @@ final class BlockerService {
       do {
         try await listService.update()
         // Success - set last update timestamp
-        userDefaultsService.setLastBlockListUpdateAt(Date())
+        userDefaultsService.setLastSuccessfulUpdateAt(Date())
       } catch {
-        // Clear started timestamp on error
-        userDefaultsService.clearBlockListUpdateStartedAt()
         throw BlockerServiceError.listUpdateFailed(error)
       }
       return
@@ -98,8 +89,6 @@ final class BlockerService {
 
     // 4. No update needed, all patterns are completed
     Logger.debug("No update needed, all patterns are completed", category: .blockerService)
-    // Clear started timestamp since no update was performed
-    userDefaultsService.clearBlockListUpdateStartedAt()
   }
 
   /// Process a single pending pattern
