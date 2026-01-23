@@ -1,5 +1,4 @@
 import Foundation
-import OSLog
 
 // MARK: - Error Types
 
@@ -22,7 +21,6 @@ enum BlockerServiceError: LocalizedError {
 
 /// Service for managing blocklist updates
 final class BlockerService {
-  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerService")
   private let callDirectoryService: CallDirectoryService
   private let userDefaultsService: UserDefaultsService
   private let listService: ListService
@@ -45,17 +43,17 @@ final class BlockerService {
 
   /// Perform update
   func performUpdate() async throws {
-    logger.debug("performUpdate called")
+    Logger.debug("performUpdate called", category: .blockerService)
 
     // Set starting state
     userDefaultsService.setBlockListUpdateStartedAt(Date())
 
     // 1. Check if pending patterns exist
-    let pendingCount = patternService.getPendingPatternsCount()
+    let pendingCount = await patternService.getPendingPatternsCount()
 
     // 2. If pending patterns exist → process ONE pattern and return
     if pendingCount > 0 {
-      logger.debug("Pending patterns found, processing one pattern")
+      Logger.debug("Pending patterns found, processing one pattern", category: .blockerService)
       do {
         try await processSinglePattern()
         // Success - set last update timestamp
@@ -69,8 +67,9 @@ final class BlockerService {
     }
 
     // 3. If no pending patterns → check if update is needed
-    if !patternService.hasPatterns() {
-      logger.debug("No patterns found, launching update")
+    let hasPatterns = await patternService.hasPatterns()
+    if !hasPatterns {
+      Logger.debug("No patterns found, launching update", category: .blockerService)
       do {
         try await listService.update()
         // Success - set last update timestamp
@@ -84,7 +83,7 @@ final class BlockerService {
     }
 
     if userDefaultsService.shouldUpdateList() {
-      logger.debug("Update needed based on date")
+      Logger.debug("Update needed based on date", category: .blockerService)
       do {
         try await listService.update()
         // Success - set last update timestamp
@@ -98,21 +97,21 @@ final class BlockerService {
     }
 
     // 4. No update needed, all patterns are completed
-    logger.debug("No update needed, all patterns are completed")
+    Logger.debug("No update needed, all patterns are completed", category: .blockerService)
     // Clear started timestamp since no update was performed
     userDefaultsService.clearBlockListUpdateStartedAt()
   }
 
   /// Process a single pending pattern
   private func processSinglePattern() async throws {
-    guard let pattern = patternService.retrievePatternForProcessing(),
+    guard let pattern = await patternService.retrievePatternForProcessing(),
       let patternString = pattern.pattern
     else {
-      logger.debug("No pending patterns")
+      Logger.debug("No pending patterns", category: .blockerService)
       return
     }
 
-    logger.debug("Processing pattern: \(patternString)")
+    Logger.debug("Processing pattern: \(patternString)", category: .blockerService)
 
     let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
     let chunkSize = AppConstants.numberChunkSize
@@ -122,10 +121,11 @@ final class BlockerService {
 
     do {
       try await processChunks(chunks, for: pattern)
-      logger.debug("Completed pattern: \(patternString)")
-      patternService.markPatternAsCompleted(pattern)
+      Logger.debug("Completed pattern: \(patternString)", category: .blockerService)
+      await patternService.markPatternAsCompleted(pattern)
     } catch {
-      logger.error("Failed to process pattern \(patternString): \(error)")
+      Logger.error(
+        "Failed to process pattern \(patternString)", category: .blockerService, error: error)
       throw BlockerServiceError.patternProcessingFailed(error)
     }
   }
@@ -141,7 +141,8 @@ final class BlockerService {
       do {
         try await callDirectoryService.reloadExtension()
       } catch {
-        logger.error("Failed to reload extension for chunk: \(error)")
+        Logger.error(
+          "Failed to reload extension for chunk", category: .blockerService, error: error)
         throw BlockerServiceError.extensionReloadFailed(error)
       }
     }

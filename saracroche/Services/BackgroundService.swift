@@ -1,11 +1,9 @@
 import BackgroundTasks
 import Foundation
-import OSLog
 import UIKit
 
 /// Background service for periodic updates
 final class BackgroundService: ObservableObject {
-  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BackgroundService")
 
   // MARK: - Constants
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
@@ -20,7 +18,7 @@ final class BackgroundService: ObservableObject {
 
   /// Register background tasks
   private func registerBackgroundTasks() {
-    logger.info("Register background tasks")
+    Logger.info("Register background tasks", category: .backgroundService)
     BGTaskScheduler.shared.register(
       forTaskWithIdentifier: backgroundServiceIdentifier,
       using: nil
@@ -39,20 +37,22 @@ final class BackgroundService: ObservableObject {
 
     do {
       try BGTaskScheduler.shared.submit(taskRequest)
-      logger.info("Background app refresh task scheduled for \(scheduledDate)")
+      Logger.info(
+        "Background app refresh task scheduled for \(scheduledDate)", category: .backgroundService)
     } catch {
-      logger.error("Failed to schedule background app refresh: \(error)")
+      Logger.error(
+        "Failed to schedule background app refresh", category: .backgroundService, error: error)
     }
   }
 
   /// Handle background update
   private func handleBackgroundUpdate(task: BGProcessingTask) {
-    logger.info("Handling background app refresh")
+    Logger.info("Handling background app refresh", category: .backgroundService)
 
     scheduleBackgroundTask()
 
     task.expirationHandler = {
-      self.logger.warning("Background app refresh task expired")
+      Logger.info("Background app refresh task expired", category: .backgroundService)
       task.setTaskCompleted(success: false)
     }
 
@@ -62,7 +62,7 @@ final class BackgroundService: ObservableObject {
         try await BlockerService().performUpdate()
         task.setTaskCompleted(success: true)
       } catch {
-        logger.error("Background update failed: \(error)")
+        Logger.error("Background update failed", category: .backgroundService, error: error)
         task.setTaskCompleted(success: false)
       }
     }

@@ -19,9 +19,8 @@ struct HomeNavigationView: View {
       }
       .navigationTitle("Saracroche")
       .onAppear {
-        blockerViewModel.loadData()
-        
         Task {
+          await blockerViewModel.loadData()
           await blockerViewModel.checkBlockerExtensionStatus()
           await blockerViewModel.checkBackgroundStatus()
           await blockerViewModel.performUpdateWithStateManagement()

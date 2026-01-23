@@ -166,7 +166,9 @@ struct SettingsNavigationView: View {
         "Réinitialiser l'application", isPresented: $showingResetAlert, titleVisibility: .visible
       ) {
         Button("Réinitialiser", role: .destructive) {
-          blockerViewModel.resetApplication()
+          Task {
+            await blockerViewModel.resetApplication()
+          }
         }
         Button("Annuler", role: .cancel) {}
       } message: {

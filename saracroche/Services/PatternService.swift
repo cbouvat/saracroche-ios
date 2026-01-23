@@ -1,11 +1,9 @@
 import CoreData
 import Foundation
-import OSLog
 
 /// Service for managing Pattern entities in CoreData
 class PatternService {
   private let dataStack = CoreDataStack.shared
-  private let logger = OSLog(subsystem: "com.saracroche", category: "PatternService")
 
   // MARK: - Create Operations
 
@@ -25,189 +23,229 @@ class PatternService {
     source: String,
     sourceListName: String? = nil,
     sourceVersion: String? = nil
-  ) -> Pattern? {
+  ) async -> Pattern? {
     let context = dataStack.persistentContainer.viewContext
 
-    guard let entityDescription = NSEntityDescription.entity(forEntityName: "Pattern", in: context)
-    else {
-      os_log("Failed to get Pattern entity description", log: self.logger, type: .error)
-      return nil
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        guard
+          let entityDescription = NSEntityDescription.entity(forEntityName: "Pattern", in: context)
+        else {
+          Logger.error(
+            "Failed to get Pattern entity description", category: .patternService,
+            error: NSError(
+              domain: "PatternService", code: 1,
+              userInfo: [NSLocalizedDescriptionKey: "Failed to get Pattern entity description"]))
+          continuation.resume(returning: nil)
+          return
+        }
+
+        let pattern = NSManagedObject(entity: entityDescription, insertInto: context) as! Pattern
+        pattern.pattern = patternString
+        pattern.action = action
+        pattern.name = name
+        pattern.source = source
+        pattern.sourceListName = sourceListName
+        pattern.sourceVersion = sourceVersion
+        pattern.addedDate = Date()
+
+        Self.save(context: context)
+        continuation.resume(returning: pattern)
+      }
     }
-
-    let pattern = NSManagedObject(entity: entityDescription, insertInto: context) as! Pattern
-    pattern.pattern = patternString
-    pattern.action = action
-    pattern.name = name
-    pattern.source = source
-    pattern.sourceListName = sourceListName
-    pattern.sourceVersion = sourceVersion
-    pattern.addedDate = Date()
-
-    save()
-    return pattern
   }
 
   // MARK: - Read Operations
 
   /// Fetches all patterns from CoreData
   /// - Returns: Array of all Pattern entities
-  func getAllPatterns() -> [Pattern] {
+  func getAllPatterns() async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
 
-    do {
-      return try context.fetch(fetchRequest)
-    } catch {
-      os_log(
-        "Failed to fetch all patterns: %{public}@",
-        log: self.logger,
-        type: .error,
-        error.localizedDescription
-      )
-      return []
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          continuation.resume(returning: patterns)
+        } catch {
+          Logger.error(
+            "Failed to fetch all patterns: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: [])
+        }
+      }
     }
   }
 
   /// Fetches a pattern by its pattern string
   /// - Parameter pattern: The pattern string to search for
   /// - Returns: The matching Pattern entity, or nil if not found
-  func getPattern(byPatternString pattern: String) -> Pattern? {
+  func getPattern(byPatternString pattern: String) async -> Pattern? {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "pattern == %@", pattern)
 
-    do {
-      let results = try context.fetch(fetchRequest)
-      return results.first
-    } catch {
-      os_log(
-        "Failed to fetch pattern %{public}@: %{public}@",
-        log: self.logger,
-        type: .error,
-        pattern,
-        error.localizedDescription
-      )
-      return nil
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.predicate = NSPredicate(format: "pattern == %@", pattern)
+
+        do {
+          let results = try context.fetch(fetchRequest)
+          continuation.resume(returning: results.first)
+        } catch {
+          Logger.error(
+            "Failed to fetch pattern %{public}@: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: nil)
+        }
+      }
     }
   }
 
   /// Fetches all patterns that have not been completed yet
   /// - Returns: Array of Pattern entities where completedDate is nil
-  func getPendingPatterns() -> [Pattern] {
+  func getPendingPatterns() async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
 
-    do {
-      return try context.fetch(fetchRequest)
-    } catch {
-      os_log(
-        "Failed to fetch pending patterns: %{public}@",
-        log: self.logger,
-        type: .error,
-        error.localizedDescription
-      )
-      return []
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.predicate = NSPredicate(format: "completedDate == nil")
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          continuation.resume(returning: patterns)
+        } catch {
+          Logger.error(
+            "Failed to fetch pending patterns: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: [])
+        }
+      }
     }
   }
 
   /// Fetches patterns by source
   /// - Parameter source: The source to filter by ("api" or "user")
   /// - Returns: Array of Pattern entities matching the source
-  func getPatterns(bySource source: String) -> [Pattern] {
+  func getPatterns(bySource source: String) async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "source == %@", source)
 
-    do {
-      return try context.fetch(fetchRequest)
-    } catch {
-      os_log(
-        "Failed to fetch patterns by source %{public}@: %{public}@",
-        log: self.logger,
-        type: .error,
-        source,
-        error.localizedDescription
-      )
-      return []
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.predicate = NSPredicate(format: "source == %@", source)
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          continuation.resume(returning: patterns)
+        } catch {
+          Logger.error(
+            "Failed to fetch patterns by source %{public}@: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: [])
+        }
+      }
     }
   }
 
   /// Fetches patterns by action
   /// - Parameter action: The action to filter by ("block", "identify", or "remove")
   /// - Returns: Array of Pattern entities matching the action
-  func getPatterns(byAction action: String) -> [Pattern] {
+  func getPatterns(byAction action: String) async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "action == %@", action)
 
-    do {
-      return try context.fetch(fetchRequest)
-    } catch {
-      os_log(
-        "Failed to fetch patterns by action %{public}@: %{public}@",
-        log: self.logger,
-        type: .error,
-        action,
-        error.localizedDescription
-      )
-      return []
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.predicate = NSPredicate(format: "action == %@", action)
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          continuation.resume(returning: patterns)
+        } catch {
+          Logger.error(
+            "Failed to fetch patterns by action %{public}@: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: [])
+        }
+      }
     }
   }
 
   /// Checks if any patterns exist in the database
   /// - Returns: true if at least one pattern exists, false otherwise
-  func hasPatterns() -> Bool {
+  func hasPatterns() async -> Bool {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.returnsObjectsAsFaults = true
-    fetchRequest.resultType = .countResultType
 
-    do {
-      let count = try context.count(for: fetchRequest)
-      return count > 0
-    } catch {
-      os_log(
-        "Failed to count patterns: %{public}@",
-        log: self.logger,
-        type: .error,
-        error.localizedDescription
-      )
-      return false
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.returnsObjectsAsFaults = true
+        fetchRequest.resultType = .countResultType
+
+        do {
+          let count = try context.count(for: fetchRequest)
+          continuation.resume(returning: count > 0)
+        } catch {
+          Logger.error(
+            "Failed to count patterns: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: false)
+        }
+      }
     }
   }
 
   /// Retrieves a random pending pattern for processing
   /// - Returns: A random Pattern entity where completedDate is nil, or nil if none exist
-  func retrievePatternForProcessing() -> Pattern? {
-    let pendingPatterns = getPendingPatterns()
+  func retrievePatternForProcessing() async -> Pattern? {
+    let pendingPatterns = await getPendingPatterns()
     return pendingPatterns.randomElement()
   }
 
   /// Fetches all patterns that have been completed
   /// - Returns: Array of Pattern entities where completedDate is not nil
-  func getCompletedPatterns() -> [Pattern] {
+  func getCompletedPatterns() async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "completedDate != nil")
 
-    do {
-      return try context.fetch(fetchRequest)
-    } catch {
-      os_log(
-        "Failed to fetch completed patterns: %{public}@",
-        log: self.logger,
-        type: .error,
-        error.localizedDescription
-      )
-      return []
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.predicate = NSPredicate(format: "completedDate != nil")
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          continuation.resume(returning: patterns)
+        } catch {
+          Logger.error(
+            "Failed to fetch completed patterns: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: [])
+        }
+      }
     }
   }
 
   /// Counts the total number of phone numbers represented by completed patterns
   /// - Returns: Total count of phone numbers
-  func getCompletedPhoneNumbersCount() -> Int64 {
-    let completedPatterns = getCompletedPatterns()
+  func getCompletedPhoneNumbersCount() async -> Int64 {
+    let completedPatterns = await getCompletedPatterns()
     return completedPatterns.reduce(0) { total, pattern in
       guard let patternString = pattern.pattern else { return total }
       return total + Int64(PhoneNumberHelpers.countPhoneNumbers(for: patternString))
@@ -216,21 +254,21 @@ class PatternService {
 
   /// Gets the most recent completion date from all completed patterns
   /// - Returns: The most recent completedDate, or nil if no patterns are completed
-  func getLastCompletionDate() -> Date? {
-    let completedPatterns = getCompletedPatterns()
+  func getLastCompletionDate() async -> Date? {
+    let completedPatterns = await getCompletedPatterns()
     return completedPatterns.compactMap { $0.completedDate }.max()
   }
 
   /// Counts the number of completed patterns
   /// - Returns: Count of patterns with completedDate != nil
-  func getCompletedPatternsCount() -> Int {
-    return getCompletedPatterns().count
+  func getCompletedPatternsCount() async -> Int {
+    return await getCompletedPatterns().count
   }
 
   /// Counts the number of pending patterns
   /// - Returns: Count of patterns with completedDate == nil
-  func getPendingPatternsCount() -> Int {
-    return getPendingPatterns().count
+  func getPendingPatternsCount() async -> Int {
+    return await getPendingPatterns().count
   }
 
   // MARK: - Update Operations
@@ -248,82 +286,119 @@ class PatternService {
     name: String? = nil,
     sourceListName: String? = nil,
     sourceVersion: String? = nil
-  ) {
-    if let action = action {
-      pattern.action = action
-    }
-    if let name = name {
-      pattern.name = name
-    }
-    if let sourceListName = sourceListName {
-      pattern.sourceListName = sourceListName
-    }
-    if let sourceVersion = sourceVersion {
-      pattern.sourceVersion = sourceVersion
-    }
+  ) async {
+    let context = dataStack.persistentContainer.viewContext
+    let objectID = pattern.objectID
 
-    save()
+    await withCheckedContinuation { continuation in
+      context.perform {
+        let patternInContext = context.object(with: objectID) as! Pattern
+        if let action = action {
+          patternInContext.action = action
+        }
+        if let name = name {
+          patternInContext.name = name
+        }
+        if let sourceListName = sourceListName {
+          patternInContext.sourceListName = sourceListName
+        }
+        if let sourceVersion = sourceVersion {
+          patternInContext.sourceVersion = sourceVersion
+        }
+
+        Self.save(context: context)
+        continuation.resume()
+      }
+    }
   }
 
   /// Marks a pattern as completed
   /// - Parameter pattern: The Pattern entity to mark as completed
-  func markPatternAsCompleted(_ pattern: Pattern) {
-    pattern.completedDate = Date()
-    save()
+  func markPatternAsCompleted(_ pattern: Pattern) async {
+    let context = dataStack.persistentContainer.viewContext
+    let objectID = pattern.objectID
+
+    await withCheckedContinuation { continuation in
+      context.perform {
+        let patternInContext = context.object(with: objectID) as! Pattern
+        patternInContext.completedDate = Date()
+        Self.save(context: context)
+        continuation.resume()
+      }
+    }
   }
 
   // MARK: - Delete Operations
 
   /// Deletes a pattern from CoreData
   /// - Parameter pattern: The Pattern entity to delete
-  func deletePattern(_ pattern: Pattern) {
+  func deletePattern(_ pattern: Pattern) async {
     let context = dataStack.persistentContainer.viewContext
-    context.delete(pattern)
-    save()
+    let objectID = pattern.objectID
+
+    await withCheckedContinuation { continuation in
+      context.perform {
+        let patternInContext = context.object(with: objectID) as! Pattern
+        context.delete(patternInContext)
+        Self.save(context: context)
+        continuation.resume()
+      }
+    }
   }
 
   /// Deletes all patterns
-  func deleteAllPatterns() {
+  func deleteAllPatterns() async {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
 
-    do {
-      let patterns = try context.fetch(fetchRequest)
-      for pattern in patterns {
-        context.delete(pattern)
+    await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          for pattern in patterns {
+            context.delete(pattern)
+          }
+          Self.save(context: context)
+          continuation.resume()
+        } catch {
+          Logger.error(
+            "Failed to delete all patterns: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume()
+        }
       }
-      save()
-    } catch {
-      os_log(
-        "Failed to delete all patterns: %{public}@",
-        log: self.logger,
-        type: .error,
-        error.localizedDescription
-      )
     }
   }
 
   /// Deletes all patterns from a specific source
   /// - Parameter source: The source to filter by ("api" or "user")
-  func deletePatterns(bySource source: String) {
+  func deletePatterns(bySource source: String) async {
     let context = dataStack.persistentContainer.viewContext
-    let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(format: "source == %@", source)
 
-    do {
-      let patterns = try context.fetch(fetchRequest)
-      for pattern in patterns {
-        context.delete(pattern)
+    await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.predicate = NSPredicate(format: "source == %@", source)
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          for pattern in patterns {
+            context.delete(pattern)
+          }
+          Self.save(context: context)
+          continuation.resume()
+        } catch {
+          Logger.error(
+            "Failed to delete patterns by source %{public}@: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume()
+        }
       }
-      save()
-    } catch {
-      os_log(
-        "Failed to delete patterns by source %{public}@: %{public}@",
-        log: self.logger,
-        type: .error,
-        source,
-        error.localizedDescription
-      )
     }
   }
 
@@ -337,11 +412,11 @@ class PatternService {
       patternString: String, action: String, name: String?, source: String, sourceListName: String?,
       sourceVersion: String?
     )]
-  ) -> [Pattern] {
+  ) async -> [Pattern] {
     var createdPatterns: [Pattern] = []
 
     for data in patternsData {
-      if let pattern = createPattern(
+      if let pattern = await createPattern(
         patternString: data.patternString,
         action: data.action,
         name: data.name,
@@ -358,30 +433,38 @@ class PatternService {
 
   /// Marks multiple patterns as completed
   /// - Parameter patterns: Array of Pattern entities to mark as completed
-  func markPatternsAsCompleted(_ patterns: [Pattern]) {
-    for pattern in patterns {
-      pattern.completedDate = Date()
+  func markPatternsAsCompleted(_ patterns: [Pattern]) async {
+    let context = dataStack.persistentContainer.viewContext
+    let objectIDs = patterns.map { $0.objectID }
+
+    await withCheckedContinuation { continuation in
+      context.perform {
+        let now = Date()
+        for objectID in objectIDs {
+          let pattern = context.object(with: objectID) as! Pattern
+          pattern.completedDate = now
+        }
+        Self.save(context: context)
+        continuation.resume()
+      }
     }
-    save()
   }
 
   // MARK: - Private Methods
 
   /// Saves changes to the CoreData context
-  private func save() {
-    let context = dataStack.persistentContainer.viewContext
-
+  private static func save(context: NSManagedObjectContext) {
     guard context.hasChanges else { return }
 
     do {
       try context.save()
     } catch {
-      os_log(
+      Logger.error(
         "Failed to save context: %{public}@",
-        log: self.logger,
-        type: .error,
-        error.localizedDescription
+        category: .patternService,
+        error: error
       )
     }
   }
 }
+

@@ -1,6 +1,5 @@
 import CallKit
 import Foundation
-import OSLog
 
 // MARK: - Error Types
 
@@ -23,8 +22,6 @@ enum CallDirectoryError: LocalizedError {
 
 /// Service for CallKit extension functionality
 class CallDirectoryService {
-  private static let logger = Logger(
-    subsystem: "com.cbouvat.saracroche", category: "CallDirectoryService")
   /// The CallKit manager instance for interacting with the Call Directory extension.
 
   /// Check CallKit extension status
@@ -60,7 +57,9 @@ class CallDirectoryService {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
       CXCallDirectoryManager.sharedInstance.openSettings { error in
         if let error = error {
-          Self.logger.error("Error opening settings: \(error.localizedDescription)")
+          Logger.error(
+            "Error opening settings: $error.localizedDescription", category: .callDirectoryService,
+            error: error)
           continuation.resume(throwing: CallDirectoryError.settingsOpenFailed(error))
         } else {
           continuation.resume()
