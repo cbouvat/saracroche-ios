@@ -66,7 +66,7 @@ final class ListService {
   /// Download and update the French block list
   func update() async throws {
     logger.debug("Starting list update")
-    userDefaultsService.setLastDownloadList(Date())
+    userDefaultsService.setLastListDownloadAt(Date())
 
     do {
       let jsonResponse = try await listAPIService.downloadFrenchList()

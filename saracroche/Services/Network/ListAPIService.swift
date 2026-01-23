@@ -28,7 +28,7 @@ class ListAPIService: APIService {
     let data = try await performRequest(request)
 
     // Save the update timestamp
-    userDefaultsService.setLastUpdateDate(Date())
+    userDefaultsService.setLastBlockListUpdateAt(Date())
 
     // Parse the JSON data
     guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
