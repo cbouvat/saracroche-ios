@@ -1,7 +1,6 @@
 import Combine
 import OSLog
 import SwiftUI
-import UIKit
 
 private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerViewModel")
 
@@ -30,10 +29,10 @@ class BlockerViewModel: ObservableObject {
   private let userDefaults: UserDefaultsService
   private let blockerService: BlockerService
   private let patternService: PatternService
-  private var statusCheckTimer: Timer?
+  private var refreshTask: Task<Void, Never>?
 
   deinit {
-    statusCheckTimer?.invalidate()
+    refreshTask?.cancel()
   }
 
   init() {
@@ -44,23 +43,34 @@ class BlockerViewModel: ObservableObject {
     self.patternService = PatternService()
   }
 
-  func startPeriodicRefresh() {
-    stopPeriodicRefresh()
-    statusCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-      Task { @MainActor [weak self] in
-        self?.refreshData()
+  func startAutoRefresh() {
+    stopAutoRefresh()
+
+    refreshTask = Task { @MainActor [weak self] in
+      while !Task.isCancelled {
+        self?.loadData()
+
+        try? await Task.sleep(nanoseconds: 2_000_000_000)
       }
     }
   }
 
-  func stopPeriodicRefresh() {
-    statusCheckTimer?.invalidate()
-    statusCheckTimer = nil
+  func stopAutoRefresh() {
+    refreshTask?.cancel()
+    refreshTask = nil
   }
 
-  func refreshData() {
-    checkUpdateState()
-    checkBackgroundServiceStatus()
+  func loadData() {
+    lastUpdateCheck = userDefaults.getLastUpdateCheck()
+    lastUpdate = userDefaults.getLastUpdate()
+    updateStarted = userDefaults.getUpdateStarted()
+
+    completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount()
+    completedPatternsCount = patternService.getCompletedPatternsCount()
+    pendingPatternsCount = patternService.getPendingPatternsCount()
+    lastCompletionDate = patternService.getLastCompletionDate()
+
+    isBackgroundRefreshEnabled = UIApplication.shared.backgroundRefreshStatus == .available
 
     if updateState.isInProgress {
       return
@@ -69,7 +79,39 @@ class BlockerViewModel: ObservableObject {
     Task {
       await checkBlockerExtensionStatus()
     }
-    loadPatternStatistics()
+
+    // Check if there's work to do
+    let hasPendingPatterns = pendingPatternsCount > 0
+    let needsUpdate = userDefaults.shouldUpdateList()
+
+    if hasPendingPatterns || needsUpdate {
+      Task {
+        await performUpdateWithStateManagement()
+      }
+    }
+  }
+
+  /// Performs update with state management
+  private func performUpdateWithStateManagement() async {
+    // Set starting state
+    updateState = .starting
+    userDefaults.setUpdateStarted(Date())
+
+    do {
+      // Perform the update
+      try await blockerService.performUpdate()
+
+      // Success - set idle state
+      updateState = .idle
+      userDefaults.setLastUpdate(Date())
+      userDefaults.clearUpdateStarted()
+
+    } catch {
+      // Error - set error state
+      logger.error("Update failed: \(error)")
+      updateState = .error
+      userDefaults.clearUpdateStarted()
+    }
   }
 
   func checkBlockerExtensionStatus() async {
@@ -81,25 +123,6 @@ class BlockerViewModel: ObservableObject {
     }
   }
 
-  func checkUpdateState() {
-    updateState = userDefaults.getUpdateState()
-    lastUpdateCheck = userDefaults.getLastUpdateCheck()
-    lastUpdate = userDefaults.getLastUpdate()
-    updateStarted = userDefaults.getUpdateStarted()
-  }
-
-  func checkBackgroundServiceStatus() {
-    isBackgroundRefreshEnabled = UIApplication.shared.backgroundRefreshStatus == .available
-  }
-
-  /// Loads statistics about patterns and phone numbers from CoreData
-  private func loadPatternStatistics() {
-    completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount()
-    completedPatternsCount = patternService.getCompletedPatternsCount()
-    pendingPatternsCount = patternService.getPendingPatternsCount()
-    lastCompletionDate = patternService.getLastCompletionDate()
-  }
-
   func openSettings() async {
     do {
       try await callDirectoryService.openSettings()
@@ -109,6 +132,9 @@ class BlockerViewModel: ObservableObject {
   }
 
   func resetApplication() {
+    // Clear all CoreData patterns
+    patternService.deleteAllPatterns()
+
     // Clear all UserDefaults data
     userDefaults.resetAllData()
 
