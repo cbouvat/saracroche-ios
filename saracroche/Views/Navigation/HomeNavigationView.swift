@@ -18,13 +18,11 @@ struct HomeNavigationView: View {
         .padding()
       }
       .navigationTitle("Saracroche")
-      .onAppear {
-        Task {
-          await blockerViewModel.loadData()
-          await blockerViewModel.checkBlockerExtensionStatus()
-          await blockerViewModel.checkBackgroundStatus()
-          await blockerViewModel.performUpdateWithStateManagement()
-        }
+      .task {
+        await blockerViewModel.loadData()
+        await blockerViewModel.checkBlockerExtensionStatus()
+        await blockerViewModel.checkBackgroundStatus()
+        await blockerViewModel.performUpdateWithStateManagement()
       }
       .sheet(isPresented: $showDonationSheet) {
         DonationSheet()

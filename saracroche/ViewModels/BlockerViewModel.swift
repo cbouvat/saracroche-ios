@@ -56,17 +56,43 @@ class BlockerViewModel: ObservableObject {
 
     // Loop while there are pending patterns OR the list is empty
     while pendingPatternsCount > 0 || completedPatternsCount == 0 {
+      // Check for cancellation at the beginning of each iteration
+      if Task.isCancelled {
+        Logger.debug("Update task cancelled", category: .blockerViewModel)
+        updateState = .ok
+        return
+      }
+
       do {
         // Perform the update
         try await blockerService.performUpdate()
+
+        // Check for cancellation after update
+        if Task.isCancelled {
+          Logger.debug("Update task cancelled after performUpdate", category: .blockerViewModel)
+          updateState = .ok
+          return
+        }
 
         // Refresh counts after each update
         completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
         completedPatternsCount = await patternService.getCompletedPatternsCount()
         pendingPatternsCount = await patternService.getPendingPatternsCount()
 
+        // Check for cancellation after count refresh
+        if Task.isCancelled {
+          Logger.debug("Update task cancelled after count refresh", category: .blockerViewModel)
+          updateState = .ok
+          return
+        }
+
         // Reset retry counter on success
         retryCount = 0
+      } catch is CancellationError {
+        // Task was cancelled - set ok state and return
+        Logger.debug("Update task cancelled", category: .blockerViewModel)
+        updateState = .ok
+        return
       } catch {
         retryCount += 1
 
@@ -83,7 +109,16 @@ class BlockerViewModel: ObservableObject {
           )
 
           // Wait before retrying
-          try? await Task.sleep(nanoseconds: UInt64(delaySeconds) * 1_000_000_000)
+          do {
+            try await Task.sleep(nanoseconds: UInt64(delaySeconds) * 1_000_000_000)
+          } catch is CancellationError {
+            // Task was cancelled during sleep
+            Logger.debug("Update task cancelled during retry sleep", category: .blockerViewModel)
+            updateState = .ok
+            return
+          } catch {
+            // Ignore other errors (shouldn't happen with Task.sleep)
+          }
 
           // Continue to retry
           continue
