@@ -19,10 +19,10 @@ struct HomeNavigationView: View {
       }
       .navigationTitle("Saracroche")
       .onAppear {
-        blockerViewModel.startPeriodicRefresh()
+        blockerViewModel.startAutoRefresh()
       }
       .onDisappear {
-        blockerViewModel.stopPeriodicRefresh()
+        blockerViewModel.stopAutoRefresh()
       }
       .sheet(isPresented: $showDonationSheet) {
         DonationSheet()
