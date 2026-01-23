@@ -76,10 +76,6 @@ class BlockerViewModel: ObservableObject {
       return
     }
 
-    Task {
-      await checkBlockerExtensionStatus()
-    }
-
     // Check if there's work to do
     let hasPendingPatterns = pendingPatternsCount > 0
     let needsUpdate = userDefaults.shouldUpdateList()
