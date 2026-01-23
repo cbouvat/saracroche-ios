@@ -48,11 +48,11 @@ final class BlockerService {
     // 1. Check if pending patterns exist
     let pendingCount = await patternService.getPendingPatternsCount()
 
-    // 2. If pending patterns exist → process ONE pattern and return
+    // 2. If pending patterns exist → process patterns up to limit
     if pendingCount > 0 {
       Logger.debug("Pending patterns found", category: .blockerService)
       do {
-        try await processSinglePattern()
+        try await processPatternsUpToLimit()
         // Success - set last update timestamp
         userDefaultsService.setLastSuccessfulUpdateAt(Date())
       } catch {
@@ -91,31 +91,57 @@ final class BlockerService {
     Logger.debug("No update needed, all patterns are completed", category: .blockerService)
   }
 
-  /// Process a single pending pattern
-  private func processSinglePattern() async throws {
-    guard let pattern = await patternService.retrievePatternForProcessing(),
-      let patternString = pattern.pattern
-    else {
-      Logger.debug("No pending patterns", category: .blockerService)
-      return
-    }
+  /// Process multiple pending patterns up to a limit of 250,000 numbers
+  private func processPatternsUpToLimit() async throws {
+    var totalProcessedNumbers: Int64 = 0
+    let maxNumbers = AppConstants.maxNumbersPerBatch
+    var isFirstPattern = true
 
-    Logger.debug("Processing pattern: \(patternString)", category: .blockerService)
+    while true {
+      // Get next pending pattern
+      guard let pattern = await patternService.retrievePatternForProcessing(),
+        let patternString = pattern.pattern
+      else {
+        // No more patterns to process
+        Logger.debug("No more pending patterns", category: .blockerService)
+        return
+      }
 
-    let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
-    let chunkSize = AppConstants.numberChunkSize
-    let chunks = stride(from: 0, to: numbers.count, by: chunkSize).map {
-      Array(numbers[$0..<min($0 + chunkSize, numbers.count)])
-    }
+      // Check if this pattern would exceed the limit (except for first pattern)
+      let patternNumberCount = PhoneNumberHelpers.countPhoneNumbers(for: patternString)
+      if !isFirstPattern && (totalProcessedNumbers + patternNumberCount > maxNumbers) {
+        Logger.debug(
+          "Pattern \(patternString) would exceed \(maxNumbers) limit. Stopping processing.",
+          category: .blockerService
+        )
+        return
+      }
 
-    do {
-      try await processChunks(chunks, for: pattern)
-      Logger.debug("Completed pattern: \(patternString)", category: .blockerService)
-      await patternService.markPatternAsCompleted(pattern)
-    } catch {
-      Logger.error(
-        "Failed to process pattern \(patternString)", category: .blockerService, error: error)
-      throw BlockerServiceError.patternProcessingFailed(error)
+      Logger.debug("Processing pattern: \(patternString)", category: .blockerService)
+
+      // Process the pattern
+      let numbers = PhoneNumberHelpers.expandBlockingPattern(patternString)
+      let chunkSize = AppConstants.numberChunkSize
+      let chunks = stride(from: 0, to: numbers.count, by: chunkSize).map {
+        Array(numbers[$0..<min($0 + chunkSize, numbers.count)])
+      }
+
+      do {
+        try await processChunks(chunks, for: pattern)
+        Logger.debug("Completed pattern: \(patternString)", category: .blockerService)
+        await patternService.markPatternAsCompleted(pattern)
+
+        // Update cumulative count and first pattern flag
+        totalProcessedNumbers += patternNumberCount
+        isFirstPattern = false
+      } catch {
+        Logger.error(
+          "Failed to process pattern \(patternString)",
+          category: .blockerService,
+          error: error
+        )
+        throw BlockerServiceError.patternProcessingFailed(error)
+      }
     }
   }
 
@@ -131,7 +157,10 @@ final class BlockerService {
         try await callDirectoryService.reloadExtension()
       } catch {
         Logger.error(
-          "Failed to reload extension for chunk", category: .blockerService, error: error)
+          "Failed to reload extension for chunk",
+          category: .blockerService,
+          error: error
+        )
         throw BlockerServiceError.extensionReloadFailed(error)
       }
     }
