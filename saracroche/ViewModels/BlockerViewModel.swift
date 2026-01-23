@@ -6,9 +6,7 @@ import SwiftUI
 class BlockerViewModel: ObservableObject {
   @Published var blockerExtensionStatus: BlockerExtensionStatus = .unknown
   @Published var updateState: BlockerUpdateStatus = .ok
-  @Published var lastUpdateCheck: Date? = nil
-  @Published var lastUpdate: Date? = nil
-  @Published var updateStarted: Date? = nil
+  @Published var lastSuccessfulUpdateAt: Date? = nil
 
   // Statistics for blocked numbers
   @Published var completedPhoneNumbersCount: Int64 = 0
@@ -38,9 +36,7 @@ class BlockerViewModel: ObservableObject {
   }
 
   func loadData() async {
-    lastUpdateCheck = userDefaults.getLastBlockListUpdateCheckAt()
-    lastUpdate = userDefaults.getLastBlockListUpdateAt()
-    updateStarted = userDefaults.getBlockListUpdateStartedAt()
+    lastSuccessfulUpdateAt = userDefaults.getLastSuccessfulUpdateAt()
     lastListDownloadAt = userDefaults.getLastListDownloadAt()
     lastBackgroundLaunchAt = userDefaults.getLastBackgroundLaunchAt()
 

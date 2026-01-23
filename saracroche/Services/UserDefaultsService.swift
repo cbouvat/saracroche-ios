@@ -6,60 +6,34 @@ class UserDefaultsService {
   private let userDefaults: UserDefaults
 
   private struct Keys {
-    static let lastBlockListUpdateCheckAt = "lastBlockListUpdateCheckAt"
-    static let lastBlockListUpdateAt = "lastBlockListUpdateAt"
-    static let blockListUpdateStartedAt = "blockListUpdateStartedAt"
     static let lastListDownloadAt = "lastListDownloadAt"
     static let lastBackgroundLaunchAt = "lastBackgroundLaunchAt"
+    static let lastSuccessfulUpdateAt = "lastSuccessfulUpdateAt"
   }
 
   init() {
     userDefaults = UserDefaults.standard
   }
 
-  func setLastBlockListUpdateCheckAt(_ date: Date) {
-    userDefaults.set(date, forKey: Keys.lastBlockListUpdateCheckAt)
+  func setLastSuccessfulUpdateAt(_ date: Date) {
+    userDefaults.set(date, forKey: Keys.lastSuccessfulUpdateAt)
   }
 
-  func getLastBlockListUpdateCheckAt() -> Date? {
-    return userDefaults.object(forKey: Keys.lastBlockListUpdateCheckAt) as? Date
+  func getLastSuccessfulUpdateAt() -> Date? {
+    return userDefaults.object(forKey: Keys.lastSuccessfulUpdateAt) as? Date
   }
 
-  func clearLastBlockListUpdateCheckAt() {
-    userDefaults.removeObject(forKey: Keys.lastBlockListUpdateCheckAt)
-  }
-
-  func setLastBlockListUpdateAt(_ date: Date) {
-    userDefaults.set(date, forKey: Keys.lastBlockListUpdateAt)
-  }
-
-  func getLastBlockListUpdateAt() -> Date? {
-    return userDefaults.object(forKey: Keys.lastBlockListUpdateAt) as? Date
-  }
-
-  func clearLastBlockListUpdateAt() {
-    userDefaults.removeObject(forKey: Keys.lastBlockListUpdateAt)
+  func clearLastSuccessfulUpdateAt() {
+    userDefaults.removeObject(forKey: Keys.lastSuccessfulUpdateAt)
   }
 
   func shouldUpdateList() -> Bool {
-    guard let lastUpdate = getLastBlockListUpdateAt() else {
+    guard let lastUpdate = getLastListDownloadAt() else {
       return true  // First time, always update
     }
 
     let twentyFourHours: TimeInterval = 24 * 60 * 60
     return Date().timeIntervalSince(lastUpdate) > twentyFourHours
-  }
-
-  func setBlockListUpdateStartedAt(_ date: Date) {
-    userDefaults.set(date, forKey: Keys.blockListUpdateStartedAt)
-  }
-
-  func getBlockListUpdateStartedAt() -> Date? {
-    return userDefaults.object(forKey: Keys.blockListUpdateStartedAt) as? Date
-  }
-
-  func clearBlockListUpdateStartedAt() {
-    userDefaults.removeObject(forKey: Keys.blockListUpdateStartedAt)
   }
 
   func setLastListDownloadAt(_ date: Date) {
@@ -95,10 +69,8 @@ class UserDefaultsService {
   }
 
   func resetAllData() {
-    clearLastBlockListUpdateCheckAt()
-    clearLastBlockListUpdateAt()
-    clearBlockListUpdateStartedAt()
     clearLastListDownloadAt()
     clearLastBackgroundLaunchAt()
+    clearLastSuccessfulUpdateAt()
   }
 }
