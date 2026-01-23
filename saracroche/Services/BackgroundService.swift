@@ -9,8 +9,12 @@ final class BackgroundService: ObservableObject {
   private let backgroundServiceIdentifier = AppConstants.backgroundServiceIdentifier
   private let backgroundUpdateInterval = AppConstants.backgroundUpdateInterval
 
+  // MARK: - Properties
+  private let userDefaults: UserDefaultsService
+
   // MARK: - Initialization
   init() {
+    self.userDefaults = UserDefaultsService()
     registerBackgroundTasks()
   }
 
@@ -48,6 +52,9 @@ final class BackgroundService: ObservableObject {
   /// Handle background update
   private func handleBackgroundUpdate(task: BGProcessingTask) {
     Logger.info("Handling background app refresh", category: .backgroundService)
+
+    // Record the background launch time
+    userDefaults.setLastBackgroundLaunchAt(Date())
 
     scheduleBackgroundTask()
 

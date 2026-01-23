@@ -10,6 +10,7 @@ class UserDefaultsService {
     static let lastBlockListUpdateAt = "lastBlockListUpdateAt"
     static let blockListUpdateStartedAt = "blockListUpdateStartedAt"
     static let lastListDownloadAt = "lastListDownloadAt"
+    static let lastBackgroundLaunchAt = "lastBackgroundLaunchAt"
   }
 
   init() {
@@ -73,6 +74,18 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.lastListDownloadAt)
   }
 
+  func setLastBackgroundLaunchAt(_ date: Date) {
+    userDefaults.set(date, forKey: Keys.lastBackgroundLaunchAt)
+  }
+
+  func getLastBackgroundLaunchAt() -> Date? {
+    return userDefaults.object(forKey: Keys.lastBackgroundLaunchAt) as? Date
+  }
+
+  func clearLastBackgroundLaunchAt() {
+    userDefaults.removeObject(forKey: Keys.lastBackgroundLaunchAt)
+  }
+
   func shouldDownloadList() -> Bool {
     guard let lastDownload = getLastListDownloadAt() else {
       return true  // First time, always download
@@ -85,5 +98,7 @@ class UserDefaultsService {
     clearLastBlockListUpdateCheckAt()
     clearLastBlockListUpdateAt()
     clearBlockListUpdateStartedAt()
+    clearLastListDownloadAt()
+    clearLastBackgroundLaunchAt()
   }
 }

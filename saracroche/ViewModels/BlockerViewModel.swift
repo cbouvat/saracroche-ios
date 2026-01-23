@@ -15,6 +15,8 @@ class BlockerViewModel: ObservableObject {
   @Published var completedPatternsCount: Int = 0
   @Published var pendingPatternsCount: Int = 0
   @Published var lastCompletionDate: Date? = nil
+  @Published var lastListDownloadAt: Date? = nil
+  @Published var lastBackgroundLaunchAt: Date? = nil
 
   // Update state
   @Published var isUpdating: Bool = false
@@ -39,6 +41,8 @@ class BlockerViewModel: ObservableObject {
     lastUpdateCheck = userDefaults.getLastBlockListUpdateCheckAt()
     lastUpdate = userDefaults.getLastBlockListUpdateAt()
     updateStarted = userDefaults.getBlockListUpdateStartedAt()
+    lastListDownloadAt = userDefaults.getLastListDownloadAt()
+    lastBackgroundLaunchAt = userDefaults.getLastBackgroundLaunchAt()
 
     completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
     completedPatternsCount = await patternService.getCompletedPatternsCount()

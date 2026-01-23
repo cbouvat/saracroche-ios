@@ -252,18 +252,18 @@ struct InfoSheet: View {
           .padding(.vertical, 4)
         }
 
-        // Mise à jour en cours depuis
-        if let updateStarted = blockerViewModel.updateStarted {
+        // Dernière téléchargement de la liste
+        if let lastListDownloadAt = blockerViewModel.lastListDownloadAt {
           HStack(spacing: 12) {
-            Image(systemName: "hourglass.circle.fill")
+            Image(systemName: "arrow.down.circle.fill")
               .font(.system(size: 20))
-              .foregroundColor(.orange)
+              .foregroundColor(.blue)
 
             VStack(alignment: .leading, spacing: 2) {
-              Text("Mise à jour en cours depuis")
+              Text("Dernière téléchargement de la liste")
                 .font(.subheadline)
                 .foregroundColor(.primary)
-              Text(formatDate(updateStarted))
+              Text(formatDate(lastListDownloadAt))
                 .font(.caption)
                 .foregroundColor(.secondary)
             }
@@ -272,18 +272,18 @@ struct InfoSheet: View {
           .padding(.vertical, 4)
         }
 
-        // Dernière finalisation
-        if blockerViewModel.lastCompletionDate != nil {
+        // Dernier lancement en arrière-plan
+        if let lastBackgroundLaunchAt = blockerViewModel.lastBackgroundLaunchAt {
           HStack(spacing: 12) {
-            Image(systemName: "checkmark.circle.fill")
+            Image(systemName: "clock.arrow.circlepath")
               .font(.system(size: 20))
-              .foregroundColor(.green)
+              .foregroundColor(.purple)
 
             VStack(alignment: .leading, spacing: 2) {
-              Text("Dernière finalisation")
+              Text("Dernier lancement en arrière-plan")
                 .font(.subheadline)
                 .foregroundColor(.primary)
-              Text(lastCompletionDateFormatted)
+              Text(formatDate(lastBackgroundLaunchAt))
                 .font(.caption)
                 .foregroundColor(.secondary)
             }
