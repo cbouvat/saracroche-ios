@@ -289,7 +289,7 @@ struct HomeNavigationView: View {
         .fill(blockerViewModel.updateState.color.opacity(0.1))
     )
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("État de la liste blocage : \\$blockerViewModel.updateState.description")
+    .accessibilityLabel("État de la liste blocage : \(blockerViewModel.updateState.description)")
   }
 
   private var donationView: some View {
