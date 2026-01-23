@@ -19,9 +19,9 @@ struct AppConstants {
 
   static let backgroundServiceIdentifier = "com.cbouvat.saracroche.background-update"
 
-  static let backgroundUpdateInterval: TimeInterval = 4 * 60 * 60
+  static let backgroundUpdateInterval: TimeInterval = 6 * 60 * 60
 
-  static let listDownloadInterval: TimeInterval = 12 * 60 * 60
+  static let listDownloadInterval: TimeInterval = 24 * 60 * 60
 
   static let numberChunkSize = 10_000
 }
