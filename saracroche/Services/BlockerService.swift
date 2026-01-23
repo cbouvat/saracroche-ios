@@ -47,6 +47,9 @@ final class BlockerService {
   func performUpdate() async throws {
     logger.debug("performUpdate called")
 
+    // Set starting state
+    userDefaultsService.setBlockListUpdateStartedAt(Date())
+
     // 1. Check if pending patterns exist
     let pendingCount = patternService.getPendingPatternsCount()
 
@@ -55,7 +58,11 @@ final class BlockerService {
       logger.debug("Pending patterns found, processing one pattern")
       do {
         try await processSinglePattern()
+        // Success - set last update timestamp
+        userDefaultsService.setLastBlockListUpdateAt(Date())
       } catch {
+        // Clear started timestamp on error
+        userDefaultsService.clearBlockListUpdateStartedAt()
         throw BlockerServiceError.patternProcessingFailed(error)
       }
       return
@@ -66,7 +73,11 @@ final class BlockerService {
       logger.debug("No patterns found, launching update")
       do {
         try await listService.update()
+        // Success - set last update timestamp
+        userDefaultsService.setLastBlockListUpdateAt(Date())
       } catch {
+        // Clear started timestamp on error
+        userDefaultsService.clearBlockListUpdateStartedAt()
         throw BlockerServiceError.listUpdateFailed(error)
       }
       return
@@ -76,7 +87,11 @@ final class BlockerService {
       logger.debug("Update needed based on date")
       do {
         try await listService.update()
+        // Success - set last update timestamp
+        userDefaultsService.setLastBlockListUpdateAt(Date())
       } catch {
+        // Clear started timestamp on error
+        userDefaultsService.clearBlockListUpdateStartedAt()
         throw BlockerServiceError.listUpdateFailed(error)
       }
       return
@@ -84,6 +99,8 @@ final class BlockerService {
 
     // 4. No update needed, all patterns are completed
     logger.debug("No update needed, all patterns are completed")
+    // Clear started timestamp since no update was performed
+    userDefaultsService.clearBlockListUpdateStartedAt()
   }
 
   /// Process a single pending pattern
