@@ -250,78 +250,23 @@ struct HomeNavigationView: View {
 
   // MARK: - Update State Helpers
 
-  private var updateStateIcon: String {
-    switch blockerViewModel.updateState {
-    case .idle:
-      return "checkmark.circle"
-    case .starting:
-      return "arrow.down.circle"
-    case .downloading:
-      return "arrow.down.circle.fill"
-    case .converting:
-      return "gearshape.2.fill"
-    case .installing:
-      return "checkmark.circle.fill"
-    case .retrying:
-      return "arrow.clockwise"
-    case .error:
-      return "exclamationmark.triangle.fill"
-    }
-  }
-
-  private var updateStateColor: Color {
-    switch blockerViewModel.updateState {
-    case .idle:
-      return .gray
-    case .starting, .downloading:
-      return .blue
-    case .converting:
-      return .orange
-    case .installing:
-      return .green
-    case .retrying:
-      return .orange
-    case .error:
-      return .red
-    }
-  }
-
-  private var updateStateText: String {
-    switch blockerViewModel.updateState {
-    case .idle:
-      return "Aucune mise à jour en cours"
-    case .starting:
-      return "Démarrage en cours"
-    case .downloading:
-      return "Téléchargement en cours"
-    case .converting:
-      return "Conversion en cours"
-    case .installing:
-      return "Installation en cours"
-    case .retrying:
-      return "Tentative de réessai en cours"
-    case .error:
-      return "Erreur lors de la mise à jour"
-    }
-  }
-
   @ViewBuilder
   private var updateStateBanner: some View {
     HStack(spacing: 12) {
       // Icône avec animation conditionnelle pour iOS 18+
       if #available(iOS 18.0, *) {
-        Image(systemName: updateStateIcon)
+        Image(systemName: blockerViewModel.updateState.iconName)
           .font(.system(size: 20))
-          .foregroundColor(updateStateColor)
+          .foregroundColor(blockerViewModel.updateState.color)
           .symbolEffect(
             .pulse,
             options: .repeating,
-            isActive: blockerViewModel.updateState.isInProgress
+            isActive: blockerViewModel.updateState == .inProgress
           )
       } else {
-        Image(systemName: updateStateIcon)
+        Image(systemName: blockerViewModel.updateState.iconName)
           .font(.system(size: 20))
-          .foregroundColor(updateStateColor)
+          .foregroundColor(blockerViewModel.updateState.color)
       }
 
       VStack(alignment: .leading, spacing: 2) {
@@ -330,7 +275,7 @@ struct HomeNavigationView: View {
           .fontWeight(.medium)
           .foregroundColor(.primary)
 
-        Text(updateStateText)
+        Text(blockerViewModel.updateState.description)
           .font(.caption)
           .foregroundColor(.secondary)
       }
@@ -341,10 +286,10 @@ struct HomeNavigationView: View {
     .padding(.vertical, 12)
     .background(
       RoundedRectangle(cornerRadius: 12)
-        .fill(updateStateColor.opacity(0.1))
+        .fill(blockerViewModel.updateState.color.opacity(0.1))
     )
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("État de la mise à jour: \(updateStateText)")
+    .accessibilityLabel("État de la mise à jour: \\$blockerViewModel.updateState.description")
   }
 
   private var donationView: some View {

@@ -172,7 +172,7 @@ struct InfoSheet: View {
         .padding(.vertical, 4)
 
         // État de la mise à jour (si applicable)
-        if blockerViewModel.updateState != .idle {
+        if blockerViewModel.updateState != .ok {
           HStack(spacing: 12) {
             Image(systemName: "arrow.down.circle.fill")
               .font(.system(size: 20))
@@ -182,7 +182,7 @@ struct InfoSheet: View {
               Text("État de la mise à jour")
                 .font(.subheadline)
                 .foregroundColor(.primary)
-              Text(updateStateText)
+              Text(blockerViewModel.updateState.description)
                 .font(.caption)
                 .foregroundColor(.secondary)
             }
@@ -375,25 +375,6 @@ struct InfoSheet: View {
       return "Erreur de vérification"
     case .unexpected:
       return "Statut inattendu"
-    }
-  }
-
-  private var updateStateText: String {
-    switch blockerViewModel.updateState {
-    case .idle:
-      return "Inactif"
-    case .starting:
-      return "Démarrage en cours"
-    case .downloading:
-      return "Téléchargement en cours"
-    case .converting:
-      return "Conversion en cours"
-    case .installing:
-      return "Installation en cours"
-    case .retrying:
-      return "Tentative de réessai"
-    case .error:
-      return "Erreur"
     }
   }
 

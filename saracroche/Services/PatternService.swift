@@ -467,4 +467,3 @@ class PatternService {
     }
   }
 }
-

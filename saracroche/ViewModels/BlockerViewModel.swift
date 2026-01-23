@@ -5,7 +5,7 @@ import SwiftUI
 @MainActor
 class BlockerViewModel: ObservableObject {
   @Published var blockerExtensionStatus: BlockerExtensionStatus = .unknown
-  @Published var updateState: UpdateState = .idle
+  @Published var updateState: BlockerUpdateStatus = .ok
   @Published var lastUpdateCheck: Date? = nil
   @Published var lastUpdate: Date? = nil
   @Published var updateStarted: Date? = nil
@@ -52,7 +52,7 @@ class BlockerViewModel: ObservableObject {
     let maxRetries = 5
 
     // Set starting state
-    updateState = .starting
+    updateState = .inProgress
 
     // Loop while there are pending patterns OR the list is empty
     while pendingPatternsCount > 0 || completedPatternsCount == 0 {
@@ -65,9 +65,6 @@ class BlockerViewModel: ObservableObject {
         completedPatternsCount = await patternService.getCompletedPatternsCount()
         pendingPatternsCount = await patternService.getPendingPatternsCount()
 
-        // Add small delay to prevent tight looping
-        try await Task.sleep(nanoseconds: 100_000_000)  // 100ms
-
         // Reset retry counter on success
         retryCount = 0
       } catch {
@@ -78,7 +75,7 @@ class BlockerViewModel: ObservableObject {
           let delaySeconds = pow(2.0, Double(retryCount - 1))
 
           // Update state to show retrying
-          updateState = .retrying
+          updateState = .inProgress
 
           Logger.error(
             "Update failed (attempt \(retryCount)/\(maxRetries)), retrying in \(delaySeconds)s",
@@ -101,9 +98,9 @@ class BlockerViewModel: ObservableObject {
       }
     }
 
-    // Success - set idle state
+    // Success - set ok state
     if updateState != .error {
-      updateState = .idle
+      updateState = .ok
     }
   }
 
