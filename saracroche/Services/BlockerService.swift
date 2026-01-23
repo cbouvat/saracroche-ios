@@ -50,7 +50,7 @@ final class BlockerService {
 
     // 2. If pending patterns exist → process ONE pattern and return
     if pendingCount > 0 {
-      Logger.debug("Pending patterns found, processing one pattern", category: .blockerService)
+      Logger.debug("Pending patterns found", category: .blockerService)
       do {
         try await processSinglePattern()
         // Success - set last update timestamp
