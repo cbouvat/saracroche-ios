@@ -66,7 +66,9 @@ struct DebugSheet: View {
 
             DebugButton(
               action: {
-                clearCoreData()
+                Task {
+                  await clearCoreData()
+                }
               },
               title: "Clear CoreData",
               background: .red,
@@ -144,9 +146,9 @@ struct DebugSheet: View {
     }
   }
 
-  private func clearCoreData() {
+  private func clearCoreData() async {
     let patternService = PatternService()
-    patternService.deleteAllPatterns()
+    await patternService.deleteAllPatterns()
     alertMessage = "✅ CoreData cleared"
     showAlert = true
   }

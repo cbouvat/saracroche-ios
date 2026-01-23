@@ -87,7 +87,9 @@ struct NumbersNavigationView: View {
               .foregroundColor(.primary)
               .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
-                  viewModel.deletePattern(pattern)
+                  Task {
+                    await viewModel.deletePattern(pattern)
+                  }
                 } label: {
                   Label("Supprimer", systemImage: "trash.fill")
                 }
@@ -128,7 +130,9 @@ struct NumbersNavigationView: View {
         Text(viewModel.alertMessage)
       }
       .onAppear {
-        viewModel.loadData()
+        Task {
+          await viewModel.loadData()
+        }
       }
     }
   }

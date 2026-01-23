@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-import OSLog
 
 @MainActor
 class NumbersViewModel: ObservableObject {
@@ -25,7 +24,6 @@ class NumbersViewModel: ObservableObject {
 
   private let patternService: PatternService
   private let blockerService: BlockerService
-  private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "NumbersViewModel")
 
   // MARK: - Initialization
 
@@ -35,24 +33,26 @@ class NumbersViewModel: ObservableObject {
   ) {
     self.patternService = patternService
     self.blockerService = blockerService
-    loadData()
+    Task { [weak self] in
+      await self?.loadData()
+    }
   }
 
   // MARK: - Data Loading
 
-  func loadData() {
-    loadAPIPatterns()
-    loadUserPatterns()
+  func loadData() async {
+    await loadAPIPatterns()
+    await loadUserPatterns()
     updateFrenchListMetadata()
   }
 
-  private func loadAPIPatterns() {
-    apiPatterns = patternService.getPatterns(bySource: "api")
+  private func loadAPIPatterns() async {
+    apiPatterns = await patternService.getPatterns(bySource: "api")
       .sorted { ($0.name ?? "") < ($1.name ?? "") }
   }
 
-  private func loadUserPatterns() {
-    userPatterns = patternService.getPatterns(bySource: "user")
+  private func loadUserPatterns() async {
+    userPatterns = await patternService.getPatterns(bySource: "user")
       .sorted { ($0.addedDate ?? Date()) > ($1.addedDate ?? Date()) }
   }
 
@@ -80,7 +80,7 @@ class NumbersViewModel: ObservableObject {
     guard validatePattern(patternString) else { return }
 
     // Check for duplicates
-    if patternService.getPattern(byPatternString: patternString) != nil {
+    if await patternService.getPattern(byPatternString: patternString) != nil {
       showError("Ce préfixe existe déjà dans votre liste.")
       return
     }
@@ -88,15 +88,15 @@ class NumbersViewModel: ObservableObject {
     isLoading = true
 
     // Create pattern
-    if patternService.createPattern(
+    if await patternService.createPattern(
       patternString: patternString,
       action: action,
       name: name?.isEmpty == true ? nil : name,
       source: "user"
     ) != nil {
-      logger.info("Prefix created: \(patternString)")
+      Logger.info("Prefix created: \(patternString)", category: .numbersViewModel)
       // Reload data
-      loadData()
+      await loadData()
     } else {
       showError("Impossible de créer le préfixe.")
     }
@@ -113,52 +113,53 @@ class NumbersViewModel: ObservableObject {
 
     // If pattern string changed, check for duplicates
     if pattern.pattern != newPatternString {
-      if patternService.getPattern(byPatternString: newPatternString) != nil {
+      if await patternService.getPattern(byPatternString: newPatternString) != nil {
         showError("Ce préfixe existe déjà.")
         isLoading = false
         return
       }
 
       // Delete old pattern and create new one
-      patternService.deletePattern(pattern)
-      _ = patternService.createPattern(
+      await patternService.deletePattern(pattern)
+      _ = await patternService.createPattern(
         patternString: newPatternString,
         action: action,
         name: name?.isEmpty == true ? nil : name,
         source: "user"
       )
-      logger.info("Prefix updated (string changed): \(newPatternString)")
+      Logger.info(
+        "Prefix updated (string changed): \(newPatternString)", category: .numbersViewModel)
     } else {
       // Just update action and name
-      patternService.updatePattern(
+      await patternService.updatePattern(
         pattern, action: action, name: name?.isEmpty == true ? nil : name
       )
-      logger.info("Prefix updated: \(newPatternString)")
+      Logger.info("Prefix updated: \(newPatternString)", category: .numbersViewModel)
     }
 
     // Reload data
-    loadData()
+    await loadData()
 
     isLoading = false
   }
 
-  func deletePattern(_ pattern: Pattern) {
-    patternService.deletePattern(pattern)
+  func deletePattern(_ pattern: Pattern) async {
+    await patternService.deletePattern(pattern)
 
     // Mark for removal
     if let patternString = pattern.pattern {
-      _ = patternService.createPattern(
+      _ = await patternService.createPattern(
         patternString: patternString,
         action: "remove",
         name: pattern.name,
         source: "user"
       )
-      logger.info("Prefix marked for removal: \(patternString)")
+      Logger.info("Prefix marked for removal: \(patternString)", category: .numbersViewModel)
     }
 
     // Trigger blocker update
     Task {
-      loadData()
+      await loadData()
     }
   }
 

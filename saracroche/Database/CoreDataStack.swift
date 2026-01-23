@@ -1,26 +1,79 @@
 import CoreData
 
-// Define an observable class to encapsulate all Core Data-related functionality.
+/// Thread-safe CoreData stack with proper context management
 class CoreDataStack: ObservableObject {
   static let shared = CoreDataStack()
 
   private init() {}
 
-  // Create a persistent container as a lazy variable to defer instantiation until its first use.
+  // MARK: - Persistent Container
+
+  /// The main persistent container
   lazy var persistentContainer: NSPersistentContainer = {
-
-    // Pass the data model filename to the container’s initializer.
     let container = NSPersistentContainer(name: "DataModel")
-
-    // Load any persistent stores, which creates a store if none exists.
     container.loadPersistentStores { _, error in
       if let error {
-        // Handle the error appropriately. However, it's useful to use
-        // `fatalError(_:file:line:)` during development.
-        fatalError("Failed to load persistent stores: \(error.localizedDescription)")
+        fatalError("Failed to load persistent stores: $error.localizedDescription")
       }
     }
     return container
   }()
 
+  // MARK: - Background Context
+
+  /// Private background context for off-main-thread operations
+  private lazy var _backgroundContext: NSManagedObjectContext = {
+    let context = persistentContainer.newBackgroundContext()
+    context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+    context.automaticallyMergesChangesFromParent = true
+    return context
+  }()
+
+  // MARK: - Public Methods
+
+  /// Get the view context (main thread only)
+  func viewContext() -> NSManagedObjectContext {
+    return persistentContainer.viewContext
+  }
+
+  /// Get a private background context for off-main-thread operations
+  func backgroundContext() -> NSManagedObjectContext {
+    return _backgroundContext
+  }
+
+  /// Perform a block on the view context
+  func performOnViewContext(_ block: @escaping (NSManagedObjectContext) -> Void) {
+    viewContext().perform { [weak self] in
+      block(
+        self?.viewContext() ?? self?.persistentContainer.viewContext
+          ?? NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType))
+    }
+  }
+
+  /// Perform a block on the background context
+  func performOnBackgroundContext(_ block: @escaping (NSManagedObjectContext) -> Void) {
+    _backgroundContext.perform { [weak self] in
+      block(
+        self?._backgroundContext ?? self?.persistentContainer.newBackgroundContext()
+          ?? NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType))
+    }
+  }
+
+  /// Save changes in a context
+  func saveContext(_ context: NSManagedObjectContext) throws {
+    var saveError: Error?
+    context.performAndWait {
+      if context.hasChanges {
+        do {
+          try context.save()
+        } catch {
+          saveError = error
+        }
+      }
+    }
+
+    if let saveError {
+      throw saveError
+    }
+  }
 }

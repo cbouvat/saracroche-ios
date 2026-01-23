@@ -1,8 +1,5 @@
 import Combine
-import OSLog
 import SwiftUI
-
-private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "BlockerViewModel")
 
 /// View model for call blocker functionality
 @MainActor
@@ -38,21 +35,21 @@ class BlockerViewModel: ObservableObject {
     self.patternService = PatternService()
   }
 
-  func loadData() {
+  func loadData() async {
     lastUpdateCheck = userDefaults.getLastBlockListUpdateCheckAt()
     lastUpdate = userDefaults.getLastBlockListUpdateAt()
     updateStarted = userDefaults.getBlockListUpdateStartedAt()
 
-    completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount()
-    completedPatternsCount = patternService.getCompletedPatternsCount()
-    pendingPatternsCount = patternService.getPendingPatternsCount()
-    lastCompletionDate = patternService.getLastCompletionDate()
+    completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
+    completedPatternsCount = await patternService.getCompletedPatternsCount()
+    pendingPatternsCount = await patternService.getPendingPatternsCount()
+    lastCompletionDate = await patternService.getLastCompletionDate()
   }
 
   /// Performs update with state management
   func performUpdateWithStateManagement() async {
     var retryCount = 0
-    let maxRetries = 10
+    let maxRetries = 5
 
     // Set starting state
     updateState = .starting
@@ -64,9 +61,9 @@ class BlockerViewModel: ObservableObject {
         try await blockerService.performUpdate()
 
         // Refresh counts after each update
-        completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount()
-        completedPatternsCount = patternService.getCompletedPatternsCount()
-        pendingPatternsCount = patternService.getPendingPatternsCount()
+        completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
+        completedPatternsCount = await patternService.getCompletedPatternsCount()
+        pendingPatternsCount = await patternService.getPendingPatternsCount()
 
         // Add small delay to prevent tight looping
         try await Task.sleep(nanoseconds: 100_000_000)  // 100ms
@@ -83,8 +80,9 @@ class BlockerViewModel: ObservableObject {
           // Update state to show retrying
           updateState = .retrying
 
-          logger.error(
-            "Update failed (attempt \(retryCount)/\(maxRetries)), retrying in \(delaySeconds)s: \(error)"
+          Logger.error(
+            "Update failed (attempt \(retryCount)/\(maxRetries)), retrying in \(delaySeconds)s",
+            category: .blockerViewModel, error: error
           )
 
           // Wait before retrying
@@ -94,7 +92,8 @@ class BlockerViewModel: ObservableObject {
           continue
         } else {
           // All retries exhausted - set error state
-          logger.error("Update failed after \(maxRetries) attempts: \(error)")
+          Logger.error(
+            "Update failed after \(maxRetries) attempts", category: .blockerViewModel, error: error)
           updateState = .error
           updateError = error.localizedDescription
           break
@@ -112,7 +111,7 @@ class BlockerViewModel: ObservableObject {
     do {
       blockerExtensionStatus = try await callDirectoryService.checkExtensionStatus()
     } catch {
-      logger.error("Failed to check extension status: \(error)")
+      Logger.error("Failed to check extension status", category: .blockerViewModel, error: error)
       blockerExtensionStatus = .error
     }
   }
@@ -125,13 +124,13 @@ class BlockerViewModel: ObservableObject {
     do {
       try await callDirectoryService.openSettings()
     } catch {
-      logger.error("Failed to open settings: \(error)")
+      Logger.error("Failed to open settings", category: .blockerViewModel, error: error)
     }
   }
 
-  func resetApplication() {
+  func resetApplication() async {
     // Clear all CoreData patterns
-    patternService.deleteAllPatterns()
+    await patternService.deleteAllPatterns()
 
     // Clear all UserDefaults data
     userDefaults.resetAllData()

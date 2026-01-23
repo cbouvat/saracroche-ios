@@ -1,8 +1,5 @@
 import CoreData
 import Foundation
-import OSLog
-
-private let logger = Logger(subsystem: "com.cbouvat.saracroche", category: "ListService")
 
 // MARK: - Error Types
 
@@ -65,16 +62,16 @@ final class ListService {
 
   /// Download and update the French block list
   func update() async throws {
-    logger.debug("Starting list update")
+    Logger.debug("Starting list update", category: .listService)
     userDefaultsService.setLastListDownloadAt(Date())
 
     do {
       let jsonResponse = try await listAPIService.downloadFrenchList()
       let apiResponse = try decodeListResponse(jsonResponse)
-      updateCoreData(apiResponse)
-      logger.info("List update completed successfully")
+      await updateCoreData(apiResponse)
+      Logger.info("List update completed successfully", category: .listService)
     } catch {
-      logger.error("Failed to download blocklist: \(error)")
+      Logger.error("Failed to download blocklist", category: .listService, error: error)
       throw ListServiceError.downloadFailed(error)
     }
   }
@@ -85,13 +82,14 @@ final class ListService {
   }
 
   /// Convert list from API response to CoreData
-  private func updateCoreData(_ apiResponse: APIListResponse) {
+  private func updateCoreData(_ apiResponse: APIListResponse) async {
     let newPatternStrings: Set<String> = Set(apiResponse.patterns.map { $0.pattern })
-    let existingPatterns = patternService.getAllPatterns()
+    let existingPatterns = await patternService.getAllPatterns()
 
-    logger.info(
-      "Starting updateCoreData - Found \(apiResponse.patterns.count) patterns in API response")
-    logger.info("Existing patterns in CoreData: \(existingPatterns.count)")
+    Logger.info(
+      "Starting updateCoreData - Found \(apiResponse.patterns.count) patterns in API response",
+      category: .listService)
+    Logger.info("Existing patterns in CoreData: \(existingPatterns.count)", category: .listService)
 
     var removedCount = 0
     var updatedCount = 0
@@ -113,7 +111,7 @@ final class ListService {
     // Mark patterns that are no longer in the new list for removal
     for patternString in patternsToRemove {
       if let pattern = existingPatternsDict[patternString] {
-        patternService.updatePattern(
+        await patternService.updatePattern(
           pattern,
           action: "remove"
         )
@@ -124,7 +122,7 @@ final class ListService {
     // Add or update patterns from the API response
     for newPattern in apiResponse.patterns {
       if let existingPattern = existingPatternsDict[newPattern.pattern] {
-        patternService.updatePattern(
+        await patternService.updatePattern(
           existingPattern,
           action: newPattern.action,
           name: newPattern.name,
@@ -133,7 +131,7 @@ final class ListService {
         )
         updatedCount += 1
       } else {
-        _ = patternService.createPattern(
+        _ = await patternService.createPattern(
           patternString: newPattern.pattern,
           action: newPattern.action,
           name: newPattern.name,
@@ -145,8 +143,9 @@ final class ListService {
       }
     }
 
-    logger.info(
-      "updateCoreData completed - Added: \(addedCount), Updated: \(updatedCount), Removed: \(removedCount)"
+    Logger.info(
+      "updateCoreData completed - Added: \(addedCount), Updated: \(updatedCount), Removed: \(removedCount)",
+      category: .listService
     )
   }
 }
