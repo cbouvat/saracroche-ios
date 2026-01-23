@@ -390,6 +390,8 @@ struct InfoSheet: View {
       return "Conversion en cours"
     case .installing:
       return "Installation en cours"
+    case .retrying:
+      return "Tentative de réessai"
     case .error:
       return "Erreur"
     }

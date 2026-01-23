@@ -29,11 +29,6 @@ class BlockerViewModel: ObservableObject {
   private let userDefaults: UserDefaultsService
   private let blockerService: BlockerService
   private let patternService: PatternService
-  private var refreshTask: Task<Void, Never>?
-
-  deinit {
-    refreshTask?.cancel()
-  }
 
   init() {
     self.callDirectoryService = CallDirectoryService()
@@ -41,23 +36,6 @@ class BlockerViewModel: ObservableObject {
     self.sharedUserDefaults = SharedUserDefaultsService()
     self.blockerService = BlockerService()
     self.patternService = PatternService()
-  }
-
-  func startAutoRefresh() {
-    stopAutoRefresh()
-
-    refreshTask = Task { @MainActor [weak self] in
-      while !Task.isCancelled {
-        self?.loadData()
-
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
-      }
-    }
-  }
-
-  func stopAutoRefresh() {
-    refreshTask?.cancel()
-    refreshTask = nil
   }
 
   func loadData() {
@@ -69,40 +47,64 @@ class BlockerViewModel: ObservableObject {
     completedPatternsCount = patternService.getCompletedPatternsCount()
     pendingPatternsCount = patternService.getPendingPatternsCount()
     lastCompletionDate = patternService.getLastCompletionDate()
-
-    isBackgroundRefreshEnabled = UIApplication.shared.backgroundRefreshStatus == .available
-
-    if updateState.isInProgress {
-      return
-    }
-
-    // Check if there's work to do
-    let hasPendingPatterns = pendingPatternsCount > 0
-    let needsUpdate = userDefaults.shouldUpdateList()
-
-    if hasPendingPatterns || needsUpdate {
-      Task {
-        await performUpdateWithStateManagement()
-      }
-    }
   }
 
   /// Performs update with state management
-  private func performUpdateWithStateManagement() async {
+  func performUpdateWithStateManagement() async {
+    var retryCount = 0
+    let maxRetries = 10
+
     // Set starting state
     updateState = .starting
 
-    do {
-      // Perform the update (handles all UserDefaults state persistence)
-      try await blockerService.performUpdate()
+    // Loop while there are pending patterns OR the list is empty
+    while pendingPatternsCount > 0 || completedPatternsCount == 0 {
+      do {
+        // Perform the update
+        try await blockerService.performUpdate()
 
-      // Success - set idle state
+        // Refresh counts after each update
+        completedPhoneNumbersCount = patternService.getCompletedPhoneNumbersCount()
+        completedPatternsCount = patternService.getCompletedPatternsCount()
+        pendingPatternsCount = patternService.getPendingPatternsCount()
+
+        // Add small delay to prevent tight looping
+        try await Task.sleep(nanoseconds: 100_000_000)  // 100ms
+
+        // Reset retry counter on success
+        retryCount = 0
+      } catch {
+        retryCount += 1
+
+        if retryCount <= maxRetries {
+          // Calculate exponential backoff delay (1s, 2s, 4s)
+          let delaySeconds = pow(2.0, Double(retryCount - 1))
+
+          // Update state to show retrying
+          updateState = .retrying
+
+          logger.error(
+            "Update failed (attempt \(retryCount)/\(maxRetries)), retrying in \(delaySeconds)s: \(error)"
+          )
+
+          // Wait before retrying
+          try? await Task.sleep(nanoseconds: UInt64(delaySeconds) * 1_000_000_000)
+
+          // Continue to retry
+          continue
+        } else {
+          // All retries exhausted - set error state
+          logger.error("Update failed after \(maxRetries) attempts: \(error)")
+          updateState = .error
+          updateError = error.localizedDescription
+          break
+        }
+      }
+    }
+
+    // Success - set idle state
+    if updateState != .error {
       updateState = .idle
-
-    } catch {
-      // Error - set error state
-      logger.error("Update failed: \(error)")
-      updateState = .error
     }
   }
 
@@ -113,6 +115,10 @@ class BlockerViewModel: ObservableObject {
       logger.error("Failed to check extension status: \(error)")
       blockerExtensionStatus = .error
     }
+  }
+
+  func checkBackgroundStatus() async {
+    isBackgroundRefreshEnabled = UIApplication.shared.backgroundRefreshStatus == .available
   }
 
   func openSettings() async {
