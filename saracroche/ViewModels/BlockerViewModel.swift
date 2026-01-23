@@ -91,22 +91,18 @@ class BlockerViewModel: ObservableObject {
   private func performUpdateWithStateManagement() async {
     // Set starting state
     updateState = .starting
-    userDefaults.setBlockListUpdateStartedAt(Date())
 
     do {
-      // Perform the update
+      // Perform the update (handles all UserDefaults state persistence)
       try await blockerService.performUpdate()
 
       // Success - set idle state
       updateState = .idle
-      userDefaults.setLastBlockListUpdateAt(Date())
-      userDefaults.clearBlockListUpdateStartedAt()
 
     } catch {
       // Error - set error state
       logger.error("Update failed: \(error)")
       updateState = .error
-      userDefaults.clearBlockListUpdateStartedAt()
     }
   }
 
