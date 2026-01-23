@@ -19,14 +19,13 @@ struct HomeNavigationView: View {
       }
       .navigationTitle("Saracroche")
       .onAppear {
+        blockerViewModel.loadData()
+        
         Task {
           await blockerViewModel.checkBlockerExtensionStatus()
+          await blockerViewModel.checkBackgroundStatus()
+          await blockerViewModel.performUpdateWithStateManagement()
         }
-
-        blockerViewModel.startAutoRefresh()
-      }
-      .onDisappear {
-        blockerViewModel.stopAutoRefresh()
       }
       .sheet(isPresented: $showDonationSheet) {
         DonationSheet()
@@ -264,6 +263,8 @@ struct HomeNavigationView: View {
       return "gearshape.2.fill"
     case .installing:
       return "checkmark.circle.fill"
+    case .retrying:
+      return "arrow.clockwise"
     case .error:
       return "exclamationmark.triangle.fill"
     }
@@ -279,6 +280,8 @@ struct HomeNavigationView: View {
       return .orange
     case .installing:
       return .green
+    case .retrying:
+      return .orange
     case .error:
       return .red
     }
@@ -296,6 +299,8 @@ struct HomeNavigationView: View {
       return "Conversion en cours"
     case .installing:
       return "Installation en cours"
+    case .retrying:
+      return "Tentative de réessai en cours"
     case .error:
       return "Erreur lors de la mise à jour"
     }

@@ -7,11 +7,12 @@ enum UpdateState: String, CaseIterable {
   case downloading = "downloading"
   case converting = "converting"
   case installing = "installing"
+  case retrying = "retrying"
   case error = "failed"
 
   var isInProgress: Bool {
     switch self {
-    case .starting, .downloading, .converting, .installing:
+    case .starting, .downloading, .converting, .installing, .retrying:
       return true
     default:
       return false
