@@ -49,7 +49,7 @@ class BlockerViewModel: ObservableObject {
   /// Performs update with state management
   func performUpdateWithStateManagement() async {
     var retryCount = 0
-    let maxRetries = 5
+    let maxRetries = 4
 
     // Set starting state
     updateState = .inProgress
@@ -95,9 +95,6 @@ class BlockerViewModel: ObservableObject {
         if retryCount <= maxRetries {
           // Calculate exponential backoff delay (1s, 2s, 4s)
           let delaySeconds = pow(2.0, Double(retryCount - 1))
-
-          // Update state to show retrying
-          updateState = .inProgress
 
           Logger.error(
             "Update failed (attempt \(retryCount)/\(maxRetries)), retrying in \(delaySeconds)s",
