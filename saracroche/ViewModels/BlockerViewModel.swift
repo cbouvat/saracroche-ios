@@ -59,7 +59,6 @@ class BlockerViewModel: ObservableObject {
       // Check for cancellation at the beginning of each iteration
       if Task.isCancelled {
         Logger.debug("Update task cancelled", category: .blockerViewModel)
-        updateState = .ok
         return
       }
 
@@ -70,7 +69,6 @@ class BlockerViewModel: ObservableObject {
         // Check for cancellation after update
         if Task.isCancelled {
           Logger.debug("Update task cancelled after performUpdate", category: .blockerViewModel)
-          updateState = .ok
           return
         }
 
@@ -82,7 +80,6 @@ class BlockerViewModel: ObservableObject {
         // Check for cancellation after count refresh
         if Task.isCancelled {
           Logger.debug("Update task cancelled after count refresh", category: .blockerViewModel)
-          updateState = .ok
           return
         }
 
@@ -91,7 +88,6 @@ class BlockerViewModel: ObservableObject {
       } catch is CancellationError {
         // Task was cancelled - set ok state and return
         Logger.debug("Update task cancelled", category: .blockerViewModel)
-        updateState = .ok
         return
       } catch {
         retryCount += 1
@@ -114,7 +110,6 @@ class BlockerViewModel: ObservableObject {
           } catch is CancellationError {
             // Task was cancelled during sleep
             Logger.debug("Update task cancelled during retry sleep", category: .blockerViewModel)
-            updateState = .ok
             return
           } catch {
             // Ignore other errors (shouldn't happen with Task.sleep)
