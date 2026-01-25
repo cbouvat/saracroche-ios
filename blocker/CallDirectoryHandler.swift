@@ -62,6 +62,11 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
         context.removeBlockingEntry(withPhoneNumber: number)
         logger.info(
           "Removed number: \(numberString)")
+      case "reset":
+        context.removeAllBlockingEntries()
+        context.removeAllIdentificationEntries()
+        logger.info(
+          "Reset all blocking and identification entries")
       case "":
         // No action specified, do nothing
         logger.debug(

@@ -161,6 +161,17 @@ class BlockerViewModel: ObservableObject {
   }
 
   func resetApplication() async {
+    // Send reset action to CallDirectory extension to remove all entries
+    sharedUserDefaults.setAction("reset")
+    sharedUserDefaults.setNumbers([])
+
+    // Reload the extension to process the reset action
+    do {
+      try await callDirectoryService.reloadExtension()
+    } catch {
+      Logger.error("Failed to reload extension during reset", category: .blockerViewModel, error: error)
+    }
+
     // Clear all CoreData patterns
     await patternService.deleteAllPatterns()
 
