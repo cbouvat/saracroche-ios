@@ -14,6 +14,10 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 
     if context.isIncremental {
       incrementalUpdate(to: context)
+    } else {
+      // Add fake number to iOS make sure the extension is working
+      context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
+      context.addIdentificationEntry(withNextSequentialPhoneNumber: 1_888_555_5555, label: "Fake")
     }
 
     context.completeRequest()
