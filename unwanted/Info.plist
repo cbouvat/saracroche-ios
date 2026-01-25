@@ -6,8 +6,8 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
-			<key>ILClassificationExtensionSMSReportDestination</key>
-			<string>+12345678910</string>
+			<key>ILClassificationExtensionNetworkReportDestination</key>
+			<string>https://saracroche.org/api/v1/apple/report</string>
 		</dict>
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).UnwantedCommunicationReportingExtension</string>
