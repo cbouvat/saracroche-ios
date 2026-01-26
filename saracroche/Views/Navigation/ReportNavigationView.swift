@@ -36,6 +36,12 @@ struct ReportNavigationView: View {
                 "Saisissez le numéro au format E.164, par exemple +33612345678"
               )
 
+            Toggle("Numéro légitime", isOn: $viewModel.isGood)
+              .padding(.vertical, 4)
+              .accessibilityLabel("Numéro légitime")
+              .accessibilityHint(
+                "Cochez si ce numéro est légitime, décochez pour signaler comme spam")
+
             Button {
               if isPhoneFieldFocused { isPhoneFieldFocused = false }
               Task {

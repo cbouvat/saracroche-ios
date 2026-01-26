@@ -5,6 +5,7 @@ import SwiftUI
 @MainActor
 class ReportViewModel: ObservableObject {
   @Published var phoneNumber: String = ""
+  @Published var isGood: Bool = false  // false = spam, true = legitimate
   @Published var showAlert: Bool = false
   @Published var alertMessage: String = ""
   @Published var alertType: AlertType = .info
@@ -33,7 +34,7 @@ class ReportViewModel: ObservableObject {
 
     do {
       let phoneNumberInt64 = convertToInt64(phoneNumber)
-      try await apiService.report(phoneNumberInt64)
+      try await apiService.report(phoneNumberInt64, isGood: isGood)
       handleSuccess()
     } catch {
       handleError(error)
@@ -65,7 +66,11 @@ class ReportViewModel: ObservableObject {
   private func handleSuccess() {
     phoneNumber = ""
     alertType = .success
-    alertMessage = "Phone number reported successfully! Thank you for your contribution 😊"
+    let message =
+      isGood
+      ? "Phone number reported as legitimate! Thank you for your contribution 😊"
+      : "Phone number reported as spam! Thank you for your contribution 😊"
+    alertMessage = message
     showAlert = true
   }
 

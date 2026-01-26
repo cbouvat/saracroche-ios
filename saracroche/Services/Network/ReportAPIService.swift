@@ -8,12 +8,15 @@ class ReportAPIService: APIService {
   }
 
   /// Report unwanted phone number
-  func report(_ phone: Int64) async throws {
+  /// - Parameters:
+  ///   - phone: The phone number to report
+  ///   - isGood: Whether the number is legitimate (true) or spam (false)
+  func report(_ phone: Int64, isGood: Bool = false) async throws {
     guard let url = URL(string: AppConstants.apiReportURL) else {
       throw NetworkError.invalidURL
     }
 
-    let requestData = ReportRequest(phone: phone, device_id: deviceIdentifier)
+    let requestData = ReportRequest(phone: phone, is_good: isGood, device_id: deviceIdentifier)
     let jsonData = try JSONEncoder().encode(requestData)
 
     var request = makeRequest(url: url, method: .post)
@@ -25,5 +28,6 @@ class ReportAPIService: APIService {
 
 private struct ReportRequest: Codable {
   let phone: Int64
+  let is_good: Bool
   let device_id: String
 }
