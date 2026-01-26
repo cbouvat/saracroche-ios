@@ -170,7 +170,8 @@ class BlockerViewModel: ObservableObject {
     do {
       try await callDirectoryService.reloadExtension()
     } catch {
-      Logger.error("Failed to reload extension during reset", category: .blockerViewModel, error: error)
+      Logger.error(
+        "Failed to reload extension during reset", category: .blockerViewModel, error: error)
     }
 
     // Exit the application
