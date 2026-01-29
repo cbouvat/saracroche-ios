@@ -27,6 +27,7 @@ The application is built as a modular iOS system with:
 - **Error Handling**: Implement proper error handling and logging
 - **Legacy Code**: Don't write Objective-C code (Swift-only project)
 - **Hardcoding**: Don't hardcode configuration values or strings
+- **Don't commit**: Don't commit code
 
 ## Commands
 
