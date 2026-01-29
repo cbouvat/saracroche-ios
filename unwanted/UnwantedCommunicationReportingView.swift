@@ -4,13 +4,10 @@ import SwiftUI
 
 class UnwantedReportViewModel: ObservableObject {
   @Published var phoneNumber: String = ""
-  @Published var selectedAction: ILClassificationAction = .reportJunk
-
-  var onActionSelected: ((ILClassificationAction) -> Void)?
+  @Published var selectedAction: ILClassificationAction?
 
   func selectAction(_ action: ILClassificationAction) {
     selectedAction = action
-    onActionSelected?(action)
   }
 }
 
