@@ -33,6 +33,7 @@ class APIService {
     jsonHeaders.forEach { field, value in
       request.setValue(value, forHTTPHeaderField: field)
     }
+    request.setValue(deviceIdentifier, forHTTPHeaderField: "X-Device-ID")
     return request
   }
 
