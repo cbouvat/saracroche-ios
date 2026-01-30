@@ -7,24 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		85330FB62E43A88900C36ABB /* unwanted.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85330FAC2E43A88900C36ABB /* unwanted.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		85330FC62E43A94F00C36ABB /* filter.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85330FBF2E43A94F00C36ABB /* filter.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		856E5ABF2F2C056600F2A520 /* unwanted.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 856E5AB52F2C056600F2A520 /* unwanted.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8576DA9A2F2D02ED00064165 /* filter.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8576DA932F2D02ED00064165 /* filter.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		85C9CE9D2D904D8C00584259 /* blocker.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85C9CE962D904D8C00584259 /* blocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		85330FB42E43A88900C36ABB /* PBXContainerItemProxy */ = {
+		856E5ABD2F2C056600F2A520 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 853F84802D904A1B00279342 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 85330FAB2E43A88900C36ABB;
+			remoteGlobalIDString = 856E5AB42F2C056600F2A520;
 			remoteInfo = unwanted;
 		};
-		85330FC42E43A94F00C36ABB /* PBXContainerItemProxy */ = {
+		8576DA982F2D02ED00064165 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 853F84802D904A1B00279342 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 85330FBE2E43A94F00C36ABB;
+			remoteGlobalIDString = 8576DA922F2D02ED00064165;
 			remoteInfo = filter;
 		};
 		85C9CE9B2D904D8C00584259 /* PBXContainerItemProxy */ = {
@@ -43,9 +43,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				85330FB62E43A88900C36ABB /* unwanted.appex in Embed Foundation Extensions */,
-				85330FC62E43A94F00C36ABB /* filter.appex in Embed Foundation Extensions */,
 				85C9CE9D2D904D8C00584259 /* blocker.appex in Embed Foundation Extensions */,
+				8576DA9A2F2D02ED00064165 /* filter.appex in Embed Foundation Extensions */,
+				856E5ABF2F2C056600F2A520 /* unwanted.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,26 +53,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		85330FAC2E43A88900C36ABB /* unwanted.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = unwanted.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		85330FBF2E43A94F00C36ABB /* filter.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = filter.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		853F84882D904A1B00279342 /* saracroche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = saracroche.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		856E5AB52F2C056600F2A520 /* unwanted.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = unwanted.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8576DA932F2D02ED00064165 /* filter.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = filter.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C9CE962D904D8C00584259 /* blocker.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = blocker.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		85330FBA2E43A88900C36ABB /* Exceptions for "unwanted" folder in "unwanted" target */ = {
+		8557D1902F2D071D00054909 /* Exceptions for "unwanted" folder in "unwanted" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 85330FAB2E43A88900C36ABB /* unwanted */;
+			target = 856E5AB42F2C056600F2A520 /* unwanted */;
 		};
-		85330FCA2E43A94F00C36ABB /* Exceptions for "filter" folder in "filter" target */ = {
+		8576DA9E2F2D02ED00064165 /* Exceptions for "filter" folder in "filter" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 85330FBE2E43A94F00C36ABB /* filter */;
+			target = 8576DA922F2D02ED00064165 /* filter */;
 		};
 		8593F3A72D90CAB9007C294B /* Exceptions for "saracroche" folder in "saracroche" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -91,28 +91,28 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		85330FAD2E43A88900C36ABB /* unwanted */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				85330FBA2E43A88900C36ABB /* Exceptions for "unwanted" folder in "unwanted" target */,
-			);
-			path = unwanted;
-			sourceTree = "<group>";
-		};
-		85330FC02E43A94F00C36ABB /* filter */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				85330FCA2E43A94F00C36ABB /* Exceptions for "filter" folder in "filter" target */,
-			);
-			path = filter;
-			sourceTree = "<group>";
-		};
 		853F848A2D904A1B00279342 /* saracroche */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				8593F3A72D90CAB9007C294B /* Exceptions for "saracroche" folder in "saracroche" target */,
 			);
 			path = saracroche;
+			sourceTree = "<group>";
+		};
+		856E5AB62F2C056600F2A520 /* unwanted */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8557D1902F2D071D00054909 /* Exceptions for "unwanted" folder in "unwanted" target */,
+			);
+			path = unwanted;
+			sourceTree = "<group>";
+		};
+		8576DA942F2D02ED00064165 /* filter */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8576DA9E2F2D02ED00064165 /* Exceptions for "filter" folder in "filter" target */,
+			);
+			path = filter;
 			sourceTree = "<group>";
 		};
 		85C9CE972D904D8C00584259 /* blocker */ = {
@@ -126,21 +126,21 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		85330FA92E43A88900C36ABB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		85330FBC2E43A94F00C36ABB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		853F84852D904A1B00279342 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		856E5AB22F2C056600F2A520 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8576DA902F2D02ED00064165 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -162,8 +162,8 @@
 			children = (
 				853F848A2D904A1B00279342 /* saracroche */,
 				85C9CE972D904D8C00584259 /* blocker */,
-				85330FAD2E43A88900C36ABB /* unwanted */,
-				85330FC02E43A94F00C36ABB /* filter */,
+				856E5AB62F2C056600F2A520 /* unwanted */,
+				8576DA942F2D02ED00064165 /* filter */,
 				853F84892D904A1B00279342 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -173,8 +173,8 @@
 			children = (
 				853F84882D904A1B00279342 /* saracroche.app */,
 				85C9CE962D904D8C00584259 /* blocker.appex */,
-				85330FAC2E43A88900C36ABB /* unwanted.appex */,
-				85330FBF2E43A94F00C36ABB /* filter.appex */,
+				856E5AB52F2C056600F2A520 /* unwanted.appex */,
+				8576DA932F2D02ED00064165 /* filter.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -182,50 +182,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		85330FAB2E43A88900C36ABB /* unwanted */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 85330FB72E43A88900C36ABB /* Build configuration list for PBXNativeTarget "unwanted" */;
-			buildPhases = (
-				85330FA82E43A88900C36ABB /* Sources */,
-				85330FA92E43A88900C36ABB /* Frameworks */,
-				85330FAA2E43A88900C36ABB /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				85330FAD2E43A88900C36ABB /* unwanted */,
-			);
-			name = unwanted;
-			packageProductDependencies = (
-			);
-			productName = unwanted;
-			productReference = 85330FAC2E43A88900C36ABB /* unwanted.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		85330FBE2E43A94F00C36ABB /* filter */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 85330FC72E43A94F00C36ABB /* Build configuration list for PBXNativeTarget "filter" */;
-			buildPhases = (
-				85330FBB2E43A94F00C36ABB /* Sources */,
-				85330FBC2E43A94F00C36ABB /* Frameworks */,
-				85330FBD2E43A94F00C36ABB /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				85330FC02E43A94F00C36ABB /* filter */,
-			);
-			name = filter;
-			packageProductDependencies = (
-			);
-			productName = filter;
-			productReference = 85330FBF2E43A94F00C36ABB /* filter.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		853F84872D904A1B00279342 /* saracroche */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 853F84962D904A1C00279342 /* Build configuration list for PBXNativeTarget "saracroche" */;
@@ -239,8 +195,8 @@
 			);
 			dependencies = (
 				85C9CE9C2D904D8C00584259 /* PBXTargetDependency */,
-				85330FB52E43A88900C36ABB /* PBXTargetDependency */,
-				85330FC52E43A94F00C36ABB /* PBXTargetDependency */,
+				856E5ABE2F2C056600F2A520 /* PBXTargetDependency */,
+				8576DA992F2D02ED00064165 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				853F848A2D904A1B00279342 /* saracroche */,
@@ -251,6 +207,50 @@
 			productName = saracroche;
 			productReference = 853F84882D904A1B00279342 /* saracroche.app */;
 			productType = "com.apple.product-type.application";
+		};
+		856E5AB42F2C056600F2A520 /* unwanted */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 856E5AC02F2C056600F2A520 /* Build configuration list for PBXNativeTarget "unwanted" */;
+			buildPhases = (
+				856E5AB12F2C056600F2A520 /* Sources */,
+				856E5AB22F2C056600F2A520 /* Frameworks */,
+				856E5AB32F2C056600F2A520 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				856E5AB62F2C056600F2A520 /* unwanted */,
+			);
+			name = unwanted;
+			packageProductDependencies = (
+			);
+			productName = unwanted;
+			productReference = 856E5AB52F2C056600F2A520 /* unwanted.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		8576DA922F2D02ED00064165 /* filter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8576DA9B2F2D02ED00064165 /* Build configuration list for PBXNativeTarget "filter" */;
+			buildPhases = (
+				8576DA8F2F2D02ED00064165 /* Sources */,
+				8576DA902F2D02ED00064165 /* Frameworks */,
+				8576DA912F2D02ED00064165 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8576DA942F2D02ED00064165 /* filter */,
+			);
+			name = filter;
+			packageProductDependencies = (
+			);
+			productName = filter;
+			productReference = 8576DA932F2D02ED00064165 /* filter.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		85C9CE952D904D8C00584259 /* blocker */ = {
 			isa = PBXNativeTarget;
@@ -281,17 +281,17 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 2600;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
-					85330FAB2E43A88900C36ABB = {
-						CreatedOnToolsVersion = 16.4;
-					};
-					85330FBE2E43A94F00C36ABB = {
-						CreatedOnToolsVersion = 16.4;
-					};
 					853F84872D904A1B00279342 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					856E5AB42F2C056600F2A520 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					8576DA922F2D02ED00064165 = {
+						CreatedOnToolsVersion = 26.2;
 					};
 					85C9CE952D904D8C00584259 = {
 						CreatedOnToolsVersion = 16.2;
@@ -314,28 +314,28 @@
 			targets = (
 				853F84872D904A1B00279342 /* saracroche */,
 				85C9CE952D904D8C00584259 /* blocker */,
-				85330FAB2E43A88900C36ABB /* unwanted */,
-				85330FBE2E43A94F00C36ABB /* filter */,
+				856E5AB42F2C056600F2A520 /* unwanted */,
+				8576DA922F2D02ED00064165 /* filter */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		85330FAA2E43A88900C36ABB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		85330FBD2E43A94F00C36ABB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		853F84862D904A1B00279342 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		856E5AB32F2C056600F2A520 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8576DA912F2D02ED00064165 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -352,21 +352,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		85330FA82E43A88900C36ABB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		85330FBB2E43A94F00C36ABB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		853F84842D904A1B00279342 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		856E5AB12F2C056600F2A520 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8576DA8F2F2D02ED00064165 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -383,15 +383,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		85330FB52E43A88900C36ABB /* PBXTargetDependency */ = {
+		856E5ABE2F2C056600F2A520 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 85330FAB2E43A88900C36ABB /* unwanted */;
-			targetProxy = 85330FB42E43A88900C36ABB /* PBXContainerItemProxy */;
+			target = 856E5AB42F2C056600F2A520 /* unwanted */;
+			targetProxy = 856E5ABD2F2C056600F2A520 /* PBXContainerItemProxy */;
 		};
-		85330FC52E43A94F00C36ABB /* PBXTargetDependency */ = {
+		8576DA992F2D02ED00064165 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 85330FBE2E43A94F00C36ABB /* filter */;
-			targetProxy = 85330FC42E43A94F00C36ABB /* PBXContainerItemProxy */;
+			target = 8576DA922F2D02ED00064165 /* filter */;
+			targetProxy = 8576DA982F2D02ED00064165 /* PBXContainerItemProxy */;
 		};
 		85C9CE9C2D904D8C00584259 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -401,130 +401,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		85330FB82E43A88900C36ABB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = unwanted/unwanted.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQZ9E7YS88;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = unwanted/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 4.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.unwanted;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		85330FB92E43A88900C36ABB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = unwanted/unwanted.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQZ9E7YS88;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = unwanted/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 4.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.unwanted;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		85330FC82E43A94F00C36ABB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = filter/filter.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQZ9E7YS88;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = filter/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 4.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.filter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		85330FC92E43A94F00C36ABB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = filter/filter.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQZ9E7YS88;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = filter/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 4.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.filter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
 		853F84942D904A1C00279342 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -668,7 +544,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -706,7 +582,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -724,6 +600,136 @@
 			};
 			name = Release;
 		};
+		856E5AC12F2C056600F2A520 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = unwanted/unwanted.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = unwanted/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = unwanted;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 4.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.unwanted;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		856E5AC22F2C056600F2A520 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = unwanted/unwanted.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = unwanted/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = unwanted;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 4.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.unwanted;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		8576DA9C2F2D02ED00064165 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = filter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = filter;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 4.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.filter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		8576DA9D2F2D02ED00064165 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = filter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = filter;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 4.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cbouvat.saracroche.filter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		85C9CEA02D904D8C00584259 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -733,9 +739,9 @@
 				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = blocker/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
+				INFOPLIST_KEY_CFBundleDisplayName = blocker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -764,9 +770,9 @@
 				DEVELOPMENT_TEAM = UQZ9E7YS88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = blocker/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Saracroche;
+				INFOPLIST_KEY_CFBundleDisplayName = blocker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -789,24 +795,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		85330FB72E43A88900C36ABB /* Build configuration list for PBXNativeTarget "unwanted" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				85330FB82E43A88900C36ABB /* Debug */,
-				85330FB92E43A88900C36ABB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		85330FC72E43A94F00C36ABB /* Build configuration list for PBXNativeTarget "filter" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				85330FC82E43A94F00C36ABB /* Debug */,
-				85330FC92E43A94F00C36ABB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		853F84832D904A1B00279342 /* Build configuration list for PBXProject "saracroche" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -821,6 +809,24 @@
 			buildConfigurations = (
 				853F84972D904A1C00279342 /* Debug */,
 				853F84982D904A1C00279342 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		856E5AC02F2C056600F2A520 /* Build configuration list for PBXNativeTarget "unwanted" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				856E5AC12F2C056600F2A520 /* Debug */,
+				856E5AC22F2C056600F2A520 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8576DA9B2F2D02ED00064165 /* Build configuration list for PBXNativeTarget "filter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8576DA9C2F2D02ED00064165 /* Debug */,
+				8576DA9D2F2D02ED00064165 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
