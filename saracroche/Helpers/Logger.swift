@@ -21,16 +21,17 @@ enum Logger {
   /// Logs a message with the specified category and level
   /// - Parameters:
   ///   - message: The message to log
-  ///   - category: The log category
+  ///   - category: The log category (optional)
   ///   - type: The log level (default: .info)
   ///   - error: Optional error to include in the log
   static func log(
     _ message: String,
-    category: Category,
+    category: Category? = nil,
     type: OSLogType = .info,
     error: Error? = nil
   ) {
-    let logger = OSLog(subsystem: subsystem, category: category.rawValue)
+    let categoryName = category?.rawValue ?? "general"
+    let logger = OSLog(subsystem: subsystem, category: categoryName)
 
     if let error = error {
       os_log("%{public}@", log: logger, type: type, message)
