@@ -60,17 +60,12 @@ class UnwantedCommunicationReportingExtension: ILClassificationUIExtensionViewCo
     -> ILClassificationResponse
   {
     guard let action = viewModel.selectedAction else {
-      NSLog("UnwantedCommunicationReportingExtension: No action selected, returning .none")
       return ILClassificationResponse(action: .none)
     }
 
     let response = ILClassificationResponse(action: action)
     let phoneNumber = extractPhoneNumber(from: request)
     response.userInfo = ["phoneNumber": phoneNumber]
-
-    NSLog(
-      "UnwantedCommunicationReportingExtension: Reporting action=%@ phoneNumber=%@",
-      String(describing: action), phoneNumber)
 
     return response
   }
