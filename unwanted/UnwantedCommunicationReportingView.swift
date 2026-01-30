@@ -1,6 +1,7 @@
 import Foundation
 import IdentityLookup
 import SwiftUI
+import Combine
 
 class UnwantedReportViewModel: ObservableObject {
   @Published var phoneNumber: String = ""
