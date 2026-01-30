@@ -7,7 +7,7 @@ struct AppConstants {
   static let callDirectoryExtensionIdentifier = "com.cbouvat.saracroche.blocker"
   static let coreDataModelName = "Database"
   static let apiBaseURL = "https://saracroche.org/api/v1"
-  static let apiReportURL = "\(apiBaseURL)/report"
+  static let apiReportURL = "\(apiBaseURL)/reports"
   static let apiListsURL = "\(apiBaseURL)/lists"
   static let apiFrenchListURL = "\(apiBaseURL)/lists/french-list-arcep-operators"
   static let backgroundServiceIdentifier = "com.cbouvat.saracroche.background-update"
