@@ -132,7 +132,8 @@ struct DebugSheet: View {
   private func convertList() {
     Task {
       do {
-        try await ListService().update()
+        let listService = ListService()
+        try await listService.update()
         DispatchQueue.main.async {
           alertMessage = "✅ Conversion successful"
           showAlert = true
