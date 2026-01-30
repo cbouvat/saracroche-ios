@@ -16,7 +16,7 @@ class ReportAPIService: APIService {
       throw NetworkError.invalidURL
     }
 
-    let requestData = ReportRequest(phone: phone, is_good: isGood, device_id: deviceIdentifier)
+    let requestData = ReportRequest(phone: phone, is_good: isGood)
     let jsonData = try JSONEncoder().encode(requestData)
 
     var request = makeRequest(url: url, method: .post)
@@ -29,5 +29,4 @@ class ReportAPIService: APIService {
 private struct ReportRequest: Codable {
   let phone: Int64
   let is_good: Bool
-  let device_id: String
 }
