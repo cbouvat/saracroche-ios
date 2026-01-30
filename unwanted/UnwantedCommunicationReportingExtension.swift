@@ -76,6 +76,8 @@ class UnwantedCommunicationReportingExtension: ILClassificationUIExtensionViewCo
       isGood = true  // Legitimate number
     case .reportJunk, .reportJunkAndBlockSender:
       isGood = false // Spam number
+    case .none:
+      isGood = false
     @unknown default:
       isGood = false // Default to spam for unknown actions
     }
