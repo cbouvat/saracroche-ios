@@ -91,10 +91,6 @@ struct UnwantedCommunicationReportingView: View {
           .background(
             RoundedRectangle(cornerRadius: 16)
               .fill(Color.orange.opacity(0.1))
-              .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                  .stroke(Color.orange.opacity(0.2), lineWidth: 1)
-              )
           )
         }
         .padding()
