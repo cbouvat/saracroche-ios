@@ -65,9 +65,53 @@ class UnwantedCommunicationReportingExtension: ILClassificationUIExtensionViewCo
 
     let response = ILClassificationResponse(action: action)
     let phoneNumber = extractPhoneNumber(from: request)
-    response.userInfo = ["phoneNumber": phoneNumber]
+
+    // Get device ID
+    let deviceId = getOrCreateDeviceID()
+
+    // Determine if the number is good (legitimate) or spam
+    let isGood: Bool
+    switch action {
+    case .reportNotJunk:
+      isGood = true  // Legitimate number
+    case .reportJunk, .reportJunkAndBlockSender:
+      isGood = false // Spam number
+    @unknown default:
+      isGood = false // Default to spam for unknown actions
+    }
+
+    // Create userInfo with phone number, device ID, and is_good flag
+    response.userInfo = [
+      "phoneNumber": phoneNumber,
+      "deviceId": deviceId,
+      "is_good": isGood
+    ]
 
     return response
+  }
+
+  // MARK: - Helper Methods
+
+  private func getOrCreateDeviceID() -> String {
+    // Key for storing device ID in UserDefaults
+    let deviceIDKey = "extensionDeviceID"
+
+    // Try to get UserDefaults
+    let userDefaults = UserDefaults.standard
+
+    // Check if we already have a device ID
+    if let existingDeviceID = userDefaults.string(forKey: deviceIDKey) {
+      return existingDeviceID
+    }
+
+    // Generate a new UUID for this extension
+    let newDeviceID = UUID().uuidString
+
+    // Store the device ID in UserDefaults
+    userDefaults.set(newDeviceID, forKey: deviceIDKey)
+    userDefaults.synchronize()
+
+    return newDeviceID
   }
 
   // MARK: - Helper Methods
