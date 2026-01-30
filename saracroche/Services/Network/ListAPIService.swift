@@ -13,14 +13,7 @@ class ListAPIService: APIService {
 
   /// Download French block list
   func downloadFrenchList() async throws -> [String: Any] {
-    guard var components = URLComponents(string: AppConstants.apiFrenchListURL) else {
-      throw NetworkError.invalidURL
-    }
-    components.queryItems = [
-      URLQueryItem(name: "device_id", value: deviceIdentifier)
-    ]
-
-    guard let url = components.url else {
+    guard let url = URL(string: AppConstants.apiFrenchListURL) else {
       throw NetworkError.invalidURL
     }
 
