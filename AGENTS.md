@@ -1,15 +1,26 @@
-# Project Overview
+# AGENTS.md
+
+## Project Overview
 
 Saracroche is an iOS call blocking app built with CallKit. It provides comprehensive spam call blocking, unwanted communication reporting, SMS filtering, background block list updates, and call reporting capabilities.
 
-The application is built as a modular iOS system with:
+## Architecture
 
-- **Main app** (`saracroche/`): SwiftUI-based user interface
-- **Call Directory extension** (`blocker/`): Manages call blocking using CallKit
-- **Unwanted extension** (`unwanted/`): Handles reporting of unwanted calls
-- **Filter extension** (`filter/`): SMS filtering capabilities
-- **Helpers** (`saracroche/Utilities/`): Helper functions and extensions
-- **Shared data**: App Groups (`group.com.saracroche`) for data sharing between app and extensions
+### Target Structure
+
+The project consists of four targets:
+
+- **saracroche** (main app): SwiftUI-based user interface with MVVM architecture
+- **blocker** (Call Directory extension): Manages call blocking/identification using CallKit's incremental updates
+- **unwanted** (Unwanted Communication Reporting extension): Handles reporting of spam calls to the server
+- **filter** (Message Filter extension): SMS filtering capabilities
+
+### Data Flow
+
+- **App Groups**: All targets share data via `group.com.cbouvat.saracroche` (defined in `AppConstants.swift`)
+- **CoreData**: Main app stores blocking patterns in `DataModel.xcdatamodeld` with the `Pattern` entity
+- **Shared UserDefaults**: Extensions communicate with the main app through shared UserDefaults to exchange phone numbers and actions
+- **Pattern System**: Phone numbers use wildcard patterns (e.g., `0899######` where `#` matches any digit) stored in CoreData and processed in batches
 
 ## Guidelines
 
@@ -29,6 +40,23 @@ The application is built as a modular iOS system with:
 - **Hardcoding**: Don't hardcode configuration values or strings
 - **Don't commit**: Don't commit code
 
-## Commands
+## Development Commands
 
-- **Code Formatting**: `swift-format --in-place --recursive .` - Format Swift code according to project standards
+### Building
+
+```bash
+# Build main app
+xcodebuild -scheme saracroche -configuration Debug build
+
+# Build all targets
+xcodebuild -project saracroche.xcodeproj build
+```
+
+### Code Formatting
+
+```bash
+# Format all Swift code (REQUIRED after changes)
+make lint
+# or
+swift-format --in-place --recursive .
+```
