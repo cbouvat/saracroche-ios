@@ -51,7 +51,6 @@ struct InfoSheet: View {
             .buttonStyle(
               .fullWidth(background: .blue, foreground: .white)
             )
-
           }
           .padding()
           .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,26 +88,26 @@ struct InfoSheet: View {
           Spacer()
         }
 
-        LazyVGrid(
-          columns: [GridItem(.flexible()), GridItem(.flexible())],
-          spacing: 12
-        ) {
-          statisticsCard(
+        VStack(spacing: 8) {
+          statisticsListItem(
             icon: "shield.fill",
             value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
-            label: "Numéros bloqués"
+            label: "Numéros bloqués",
+            color: .gray
           )
 
-          statisticsCard(
+          statisticsListItem(
             icon: "checkmark.circle.fill",
             value: "\(blockerViewModel.completedPatternsCount)",
-            label: "Préfixes actifs"
+            label: "Préfixes actifs",
+            color: .gray
           )
 
-          statisticsCard(
+          statisticsListItem(
             icon: "clock.fill",
             value: "\(blockerViewModel.pendingPatternsCount)",
-            label: "En attente"
+            label: "En attente",
+            color: .gray
           )
         }
       }
@@ -133,62 +132,32 @@ struct InfoSheet: View {
           Spacer()
         }
 
-        // État de l'extension
-        HStack(spacing: 12) {
-          Image(
-            systemName: extensionStatusIcon
+        VStack(spacing: 8) {
+          // État de l'extension
+          statisticsListItem(
+            icon: extensionStatusIcon,
+            value: extensionStatusText,
+            label: "État de l'extension",
+            color: extensionStatusColor
           )
-          .font(.system(size: 20))
-          .foregroundColor(extensionStatusColor)
 
-          VStack(alignment: .leading, spacing: 2) {
-            Text("État de l'extension")
-              .font(.subheadline)
-              .foregroundColor(.primary)
-            Text(extensionStatusText)
-              .font(.caption)
-              .foregroundColor(.secondary)
+          // État du service en arrière-plan
+          statisticsListItem(
+            icon: backgroundServiceIcon,
+            value: backgroundServiceText,
+            label: "Service en arrière-plan",
+            color: backgroundServiceColor
+          )
+
+          // État de la mise à jour (si applicable)
+          if blockerViewModel.updateState != .ok {
+            statisticsListItem(
+              icon: "arrow.down.circle.fill",
+              value: blockerViewModel.updateState.description,
+              label: "État de la mise à jour",
+              color: .blue
+            )
           }
-          Spacer()
-        }
-        .padding(.vertical, 4)
-
-        // État du service en arrière-plan
-        HStack(spacing: 12) {
-          Image(systemName: backgroundServiceIcon)
-            .font(.system(size: 20))
-            .foregroundColor(backgroundServiceColor)
-
-          VStack(alignment: .leading, spacing: 2) {
-            Text("Service en arrière-plan")
-              .font(.subheadline)
-              .foregroundColor(.primary)
-            Text(backgroundServiceText)
-              .font(.caption)
-              .foregroundColor(.secondary)
-          }
-          Spacer()
-        }
-        .padding(.vertical, 4)
-
-        // État de la mise à jour (si applicable)
-        if blockerViewModel.updateState != .ok {
-          HStack(spacing: 12) {
-            Image(systemName: "arrow.down.circle.fill")
-              .font(.system(size: 20))
-              .foregroundColor(.blue)
-
-            VStack(alignment: .leading, spacing: 2) {
-              Text("État de la mise à jour")
-                .font(.subheadline)
-                .foregroundColor(.primary)
-              Text(blockerViewModel.updateState.description)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            Spacer()
-          }
-          .padding(.vertical, 4)
         }
       }
       .padding()
@@ -212,64 +181,36 @@ struct InfoSheet: View {
           Spacer()
         }
 
-        // Dernière téléchargement de la liste
-        if let lastListDownloadAt = blockerViewModel.lastListDownloadAt {
-          HStack(spacing: 12) {
-            Image(systemName: "arrow.down.circle.fill")
-              .font(.system(size: 20))
-              .foregroundColor(.blue)
-
-            VStack(alignment: .leading, spacing: 2) {
-              Text("Dernier téléchargement de la liste")
-                .font(.subheadline)
-                .foregroundColor(.primary)
-              Text(formatDate(lastListDownloadAt))
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            Spacer()
+        VStack(spacing: 8) {
+          // Dernière téléchargement de la liste
+          if let lastListDownloadAt = blockerViewModel.lastListDownloadAt {
+            statisticsListItem(
+              icon: "arrow.down.circle.fill",
+              value: formatDate(lastListDownloadAt),
+              label: "Dernier téléchargement de la liste",
+              color: .blue
+            )
           }
-          .padding(.vertical, 4)
-        }
 
-        // Dernière mise à jour réussie
-        if let lastSuccessfulUpdateAt = blockerViewModel.lastSuccessfulUpdateAt {
-          HStack(spacing: 12) {
-            Image(systemName: "checkmark.circle.fill")
-              .font(.system(size: 20))
-              .foregroundColor(.green)
-
-            VStack(alignment: .leading, spacing: 2) {
-              Text("Dernière mise à jour réussie")
-                .font(.subheadline)
-                .foregroundColor(.primary)
-              Text(formatDate(lastSuccessfulUpdateAt))
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            Spacer()
+          // Dernière mise à jour réussie
+          if let lastSuccessfulUpdateAt = blockerViewModel.lastSuccessfulUpdateAt {
+            statisticsListItem(
+              icon: "checkmark.circle.fill",
+              value: formatDate(lastSuccessfulUpdateAt),
+              label: "Dernière mise à jour réussie",
+              color: .green
+            )
           }
-          .padding(.vertical, 4)
-        }
 
-        // Dernier lancement en arrière-plan
-        if let lastBackgroundLaunchAt = blockerViewModel.lastBackgroundLaunchAt {
-          HStack(spacing: 12) {
-            Image(systemName: "clock.arrow.circlepath")
-              .font(.system(size: 20))
-              .foregroundColor(.purple)
-
-            VStack(alignment: .leading, spacing: 2) {
-              Text("Dernier lancement en arrière-plan")
-                .font(.subheadline)
-                .foregroundColor(.primary)
-              Text(formatDate(lastBackgroundLaunchAt))
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            Spacer()
+          // Dernier lancement en arrière-plan
+          if let lastBackgroundLaunchAt = blockerViewModel.lastBackgroundLaunchAt {
+            statisticsListItem(
+              icon: "clock.arrow.circlepath",
+              value: formatDate(lastBackgroundLaunchAt),
+              label: "Dernier lancement en arrière-plan",
+              color: .purple
+            )
           }
-          .padding(.vertical, 4)
         }
       }
       .padding()
@@ -284,33 +225,31 @@ struct InfoSheet: View {
   // MARK: - Helpers
 
   @ViewBuilder
-  private func statisticsCard(
+  private func statisticsListItem(
     icon: String,
     value: String,
-    label: String
+    label: String,
+    color: Color
   ) -> some View {
-    VStack(spacing: 6) {
+    HStack(spacing: 12) {
       Image(systemName: icon)
-        .font(.system(size: 18))
-        .foregroundColor(.gray)
+        .font(.system(size: 20))
+        .foregroundColor(color)
+        .frame(width: 24)
 
-      Text(value)
-        .font(.body)
-        .fontWeight(.bold)
-        .foregroundColor(.primary)
+      VStack(alignment: .leading, spacing: 2) {
+        Text(value)
+          .font(.headline)
+          .foregroundColor(.primary)
 
-      Text(label)
-        .font(.caption2)
-        .foregroundColor(.secondary)
-        .multilineTextAlignment(.center)
+        Text(label)
+          .font(.subheadline)
+          .foregroundColor(.secondary)
+      }
+
+      Spacer()
     }
-    .frame(maxWidth: .infinity)
     .padding(.vertical, 8)
-    .padding(.horizontal, 4)
-    .background(
-      RoundedRectangle(cornerRadius: 10)
-        .fill(Color.gray.opacity(0.08))
-    )
   }
 
   private var extensionStatusIcon: String {
