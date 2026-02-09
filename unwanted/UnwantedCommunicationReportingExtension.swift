@@ -75,18 +75,18 @@ class UnwantedCommunicationReportingExtension: ILClassificationUIExtensionViewCo
     case .reportNotJunk:
       isGood = true  // Legitimate number
     case .reportJunk, .reportJunkAndBlockSender:
-      isGood = false // Spam number
+      isGood = false  // Spam number
     case .none:
       isGood = false
     @unknown default:
-      isGood = false // Default to spam for unknown actions
+      isGood = false  // Default to spam for unknown actions
     }
 
     // Create userInfo with phone number, device ID, and is_good flag
     response.userInfo = [
       "phoneNumber": phoneNumber,
       "deviceId": deviceId,
-      "is_good": isGood
+      "is_good": isGood,
     ]
 
     return response
