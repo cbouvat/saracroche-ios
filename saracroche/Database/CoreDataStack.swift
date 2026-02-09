@@ -8,12 +8,20 @@ class CoreDataStack: ObservableObject {
 
   // MARK: - Persistent Container
 
-  /// The main persistent container
+  /// The main persistent container, stored in App Group for extension access
   lazy var persistentContainer: NSPersistentContainer = {
     let container = NSPersistentContainer(name: "DataModel")
+
+    let storeURL = FileManager.default
+      .containerURL(forSecurityApplicationGroupIdentifier: AppConstants.appGroupIdentifier)!
+      .appendingPathComponent("DataModel.sqlite")
+
+    let description = NSPersistentStoreDescription(url: storeURL)
+    container.persistentStoreDescriptions = [description]
+
     container.loadPersistentStores { _, error in
       if let error {
-        fatalError("Failed to load persistent stores: $error.localizedDescription")
+        fatalError("Failed to load persistent stores: \(error.localizedDescription)")
       }
     }
     return container
