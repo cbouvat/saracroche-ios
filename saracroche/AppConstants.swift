@@ -11,7 +11,7 @@ struct AppConstants {
   static let apiListsURL = "\(apiBaseURL)/lists"
   static let apiFrenchListURL = "\(apiBaseURL)/lists/french-list-arcep-operators"
   static let backgroundServiceIdentifier = "com.cbouvat.saracroche.background-update"
-  static let backgroundUpdateInterval: TimeInterval = 4 * 60 * 60
+  static let backgroundUpdateInterval: TimeInterval = 6 * 60 * 60
   static let listDownloadInterval: TimeInterval = 24 * 60 * 60
   static let numberChunkSize = 10_000
   static let maxNumbersPerBatch: Int64 = 1_000_000
