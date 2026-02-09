@@ -175,22 +175,12 @@ struct HomeNavigationView: View {
       // Bandeau d'état de mise à jour
       updateStateBanner
 
-      // Grille de statistiques (2x1)
-      HStack(spacing: 12) {
-        // Statistique 1: Numéros bloqués
-        statisticCard(
+      // Liste des statistiques
+      VStack(spacing: 4) {
+        statisticsCard(
           icon: "shield.fill",
           value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
-          label: "Numéros bloqués",
-          color: .gray
-        )
-
-        // Statistique 2: Patterns actifs
-        statisticCard(
-          icon: "checkmark.circle.fill",
-          value: "\(blockerViewModel.completedPatternsCount)",
-          label: "Préfixes actifs",
-          color: .gray
+          label: "Numéros bloqués"
         )
       }
 
@@ -215,35 +205,32 @@ struct HomeNavigationView: View {
     )
   }
 
-  // Helper pour créer une carte de statistique
+  // Helper pour créer une carte de statistique dans une liste
   @ViewBuilder
-  private func statisticCard(
+  private func statisticsCard(
     icon: String,
     value: String,
-    label: String,
-    color: Color
+    label: String
   ) -> some View {
-    VStack(spacing: 8) {
+    HStack(spacing: 12) {
       Image(systemName: icon)
-        .font(.system(size: 24))
-        .foregroundColor(color)
+        .font(.system(size: 20))
+        .foregroundColor(.primary)
+        .frame(width: 24)
 
-      Text(value)
-        .font(.title2)
-        .fontWeight(.bold)
-        .foregroundColor(color)
+      VStack(alignment: .leading, spacing: 2) {
+        Text(value)
+          .font(.headline)
+          .foregroundColor(.primary)
 
-      Text(label)
-        .font(.caption)
-        .foregroundColor(.secondary)
-        .multilineTextAlignment(.center)
+        Text(label)
+          .font(.subheadline)
+          .foregroundColor(.secondary)
+      }
+
+      Spacer()
     }
-    .frame(maxWidth: .infinity)
-    .padding()
-    .background(
-      RoundedRectangle(cornerRadius: 12)
-        .fill(Color.gray.opacity(0.1))
-    )
+    .padding(.vertical, 8)
   }
 
   // MARK: - Update State Helpers
