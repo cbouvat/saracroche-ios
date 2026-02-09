@@ -65,8 +65,17 @@ extension MessageFilterExtension: ILMessageFilterQueryHandling,
   private func offlineAction(for queryRequest: ILMessageFilterQueryRequest) -> (
     ILMessageFilterAction, ILMessageFilterSubAction
   ) {
-    // TODO: Replace with logic to perform offline check whether to filter first (if possible).
-    return (.none, .none)
+    guard let sender = queryRequest.sender else {
+      return (.none, .none)
+    }
+
+    let service = MessageFilterService()
+    if service.shouldFilter(sender: sender) {
+      logger.info("Filtering message from sender: \(sender, privacy: .private)")
+      return (.junk, .none)
+    }
+
+    return (.allow, .none)
   }
 
   private func networkAction(for networkResponse: ILNetworkResponse) -> (
