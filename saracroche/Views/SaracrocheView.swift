@@ -15,7 +15,7 @@ struct SaracrocheView: View {
         }
       NumbersNavigationView()
         .tabItem {
-          Label("Numéros", systemImage: "number.square.fill")
+          Label("Numéros", systemImage: "number.circle.fill")
         }
       SettingsNavigationView(blockerViewModel: blockerViewModel)
         .tabItem {
