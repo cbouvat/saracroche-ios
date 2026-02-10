@@ -4,24 +4,27 @@ struct PatternRow: View {
   let pattern: Pattern
 
   var body: some View {
-    VStack(alignment: .leading) {
-      // Pattern string with icon
-      HStack(spacing: 6) {
-        Image(systemName: actionIcon)
-          .foregroundColor(actionColor)
-        Text(pattern.pattern ?? "")
-          .font(.body.monospaced())
-          .lineLimit(1)
-        Spacer()
-        Text("\(calculateBlockedCount(pattern)) numéros")
-          .font(.caption2)
-          .foregroundColor(.secondary)
-      }
+    HStack(alignment: .center, spacing: 6) {
+      Image(systemName: actionIcon)
+        .foregroundColor(actionColor)
 
-      // Name if available
-      if let name = pattern.name, !name.isEmpty {
-        Text(name)
-          .font(.caption2)
+      VStack(alignment: .leading) {
+        // Name and blocked numbers count
+        HStack {
+          if let name = pattern.name, !name.isEmpty {
+            Text(name)
+              .font(.caption.weight(.semibold))
+              .lineLimit(1)
+          }
+          Spacer()
+          Text("\(calculateBlockedCount(pattern)) numéros")
+            .font(.caption2)
+            .foregroundColor(.secondary)
+        }
+
+        // Pattern string
+        Text(pattern.pattern ?? "")
+          .font(.caption.monospaced())
           .foregroundColor(.secondary)
           .lineLimit(1)
       }
