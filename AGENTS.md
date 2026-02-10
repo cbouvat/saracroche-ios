@@ -26,7 +26,7 @@ The project consists of four targets:
 
 - **Code Formatting**: Run `swift-format --in-place --recursive .` after making changes to Swift code
 - **Design Principles**: Keep it simple (KISS principle), follow Single Responsibility Principle
-- **Target Platform**: Write for iOS 15 and later versions
+- **Target Platform**: Write for iOS 15
 - **Architecture**: Follow MVVM (Model-View-ViewModel) architecture pattern
 - **Concurrency**: Use async/await for all asynchronous operations
 - **Naming Conventions**: Use explicit, descriptive names for variables and functions
