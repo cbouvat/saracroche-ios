@@ -45,15 +45,19 @@ final class BlockerService {
   func performUpdate() async throws {
     Logger.debug("performUpdate called", category: .blockerService)
 
-    // 1. Check if pending patterns exist
-    let pendingCount = await patternService.getPendingPatternsCount()
+    // 1. Requeue expired patterns so the Call Directory extension stays up to date
+    let resetCount = await patternService.resetExpiredCompletedPatterns()
+    if resetCount > 0 {
+      Logger.debug(
+        "Reset \(resetCount) expired completed patterns", category: .blockerService)
+    }
 
-    // 2. If pending patterns exist → process patterns up to limit
+    // 2. Process pending patterns (includes freshly requeued ones)
+    let pendingCount = await patternService.getPendingPatternsCount()
     if pendingCount > 0 {
       Logger.debug("Pending patterns found", category: .blockerService)
       do {
         try await processPatternsUpToLimit()
-        // Success - set last update timestamp
         userDefaultsService.setLastSuccessfulUpdateAt(Date())
       } catch {
         throw BlockerServiceError.patternProcessingFailed(error)
@@ -61,13 +65,12 @@ final class BlockerService {
       return
     }
 
-    // 3. If no pending patterns → check if update is needed
+    // 3. First launch: no patterns at all → download the list
     let hasPatterns = await patternService.hasPatterns()
     if !hasPatterns {
       Logger.debug("No patterns found, launching update", category: .blockerService)
       do {
         try await listService.update()
-        // Success - set last update timestamp
         userDefaultsService.setLastSuccessfulUpdateAt(Date())
       } catch {
         throw BlockerServiceError.listUpdateFailed(error)
@@ -75,11 +78,11 @@ final class BlockerService {
       return
     }
 
+    // 4. Stale list: refresh if last download was more than 24 h ago
     if userDefaultsService.shouldUpdateList() {
       Logger.debug("Update needed based on date", category: .blockerService)
       do {
         try await listService.update()
-        // Success - set last update timestamp
         userDefaultsService.setLastSuccessfulUpdateAt(Date())
       } catch {
         throw BlockerServiceError.listUpdateFailed(error)
@@ -87,7 +90,7 @@ final class BlockerService {
       return
     }
 
-    // 4. No update needed, all patterns are completed
+    // 5. Nothing to do — all patterns are installed and the list is fresh
     Logger.debug("No update needed, all patterns are completed", category: .blockerService)
   }
 

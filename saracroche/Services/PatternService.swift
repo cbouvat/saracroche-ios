@@ -363,6 +363,44 @@ class PatternService {
     }
   }
 
+  /// Resets completedDate to nil for patterns completed more than the reprocess interval ago
+  /// Only affects "block" and "identify" actions (not removal actions)
+  /// - Returns: The number of patterns that were reset
+  func resetExpiredCompletedPatterns() async -> Int {
+    let context = dataStack.persistentContainer.viewContext
+
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        let cutoffDate = Date(
+          timeIntervalSinceNow: -AppConstants.patternReprocessInterval)
+        fetchRequest.predicate = NSPredicate(
+          format:
+            "completedDate != nil AND completedDate < %@ AND (action == %@ OR action == %@)",
+          cutoffDate as NSDate,
+          "block",
+          "identify"
+        )
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          for pattern in patterns {
+            pattern.completedDate = nil
+          }
+          Self.save(context: context)
+          continuation.resume(returning: patterns.count)
+        } catch {
+          Logger.error(
+            "Failed to reset expired completed patterns: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: 0)
+        }
+      }
+    }
+  }
+
   /// Clears the completedDate on all patterns, making them pending again for reinstallation
   func clearAllCompletedDates() async {
     let context = dataStack.persistentContainer.viewContext
