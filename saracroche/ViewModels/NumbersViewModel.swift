@@ -47,7 +47,6 @@ class NumbersViewModel: ObservableObject {
 
   private func loadAPIPatterns() async {
     apiPatterns = await patternService.getPatterns(bySource: "api")
-      .sorted { ($0.name ?? "") < ($1.name ?? "") }
   }
 
   private func loadUserPatterns() async {
