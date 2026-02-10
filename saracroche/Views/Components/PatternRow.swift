@@ -33,7 +33,7 @@ struct PatternRow: View {
     .accessibilityLabel(
       "Préfixe \(pattern.pattern ?? ""), action: \(actionLabel), \(calculateBlockedCount(pattern)) numéros bloqués"
     )
-    .accessibilityHint("Balayez vers la gauche pour modifier ou supprimer")
+    .accessibilityHint("Balayez vers la gauche pour supprimer")
   }
 
   private var actionIcon: String {

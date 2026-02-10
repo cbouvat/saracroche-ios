@@ -3,7 +3,6 @@ import SwiftUI
 struct NumbersNavigationView: View {
   @StateObject private var viewModel = NumbersViewModel()
   @State private var showAddPatternSheet = false
-  @State private var editingPattern: Pattern?
 
   var body: some View {
     NavigationView {
@@ -65,21 +64,17 @@ struct NumbersNavigationView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
           } else {
             ForEach(viewModel.userPatterns) { pattern in
-              Button {
-                editingPattern = pattern
-              } label: {
-                PatternRow(pattern: pattern)
-              }
-              .foregroundColor(.primary)
-              .swipeActions(edge: .trailing) {
-                Button(role: .destructive) {
-                  Task {
-                    await viewModel.deletePattern(pattern)
+              PatternRow(pattern: pattern)
+                .foregroundColor(.primary)
+                .swipeActions(edge: .trailing) {
+                  Button(role: .destructive) {
+                    Task {
+                      await viewModel.deletePattern(pattern)
+                    }
+                  } label: {
+                    Label("Supprimer", systemImage: "trash.fill")
                   }
-                } label: {
-                  Label("Supprimer", systemImage: "trash.fill")
                 }
-              }
             }
           }
 
@@ -104,11 +99,6 @@ struct NumbersNavigationView: View {
       .navigationTitle("Numéros")
       .sheet(isPresented: $showAddPatternSheet) {
         AddPatternSheet(viewModel: viewModel, isPresented: $showAddPatternSheet)
-      }
-      .sheet(item: $editingPattern) { pattern in
-        EditPatternSheet(
-          viewModel: viewModel, isPresented: $editingPattern, pattern: pattern
-        )
       }
       .alert("Erreur", isPresented: $viewModel.showAlert) {
         Button("OK", role: .cancel) {}

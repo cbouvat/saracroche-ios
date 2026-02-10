@@ -101,62 +101,6 @@ class NumbersViewModel: ObservableObject {
     isLoading = false
   }
 
-  func updatePattern(
-    pattern: Pattern, newPatternString: String, action: String, name: String?
-  ) async {
-    guard validatePattern(newPatternString) else { return }
-
-    isLoading = true
-
-    let oldAction = pattern.action ?? "block"
-    let oldPatternString = pattern.pattern
-    let patternStringChanged = oldPatternString != newPatternString
-    let actionChanged = oldAction != action
-
-    // If pattern string changed, check for duplicates
-    if patternStringChanged {
-      if await patternService.getPattern(byPatternString: newPatternString) != nil {
-        showError("Ce préfixe existe déjà.")
-        isLoading = false
-        return
-      }
-    }
-
-    if patternStringChanged || actionChanged {
-      // Delete old pattern and create removal entry for old entries
-      await patternService.deletePattern(pattern)
-      if let oldPattern = oldPatternString {
-        let removeAction = oldAction == "identify" ? "remove_identify" : "remove_block"
-        _ = await patternService.createPattern(
-          patternString: oldPattern,
-          action: removeAction,
-          name: pattern.name,
-          source: "user"
-        )
-      }
-      // Create new pattern with updated values
-      _ = await patternService.createPattern(
-        patternString: newPatternString,
-        action: action,
-        name: name?.isEmpty == true ? nil : name,
-        source: "user"
-      )
-      Logger.info(
-        "Prefix updated (recreated): \(newPatternString)", category: .numbersViewModel)
-    } else {
-      // Only name changed, update in place
-      await patternService.updatePattern(
-        pattern, name: name?.isEmpty == true ? nil : name
-      )
-      Logger.info("Prefix updated (name only): \(newPatternString)", category: .numbersViewModel)
-    }
-
-    // Reload data
-    await loadData()
-
-    isLoading = false
-  }
-
   func deletePattern(_ pattern: Pattern) async {
     let action = pattern.action ?? "block"
     await patternService.deletePattern(pattern)
