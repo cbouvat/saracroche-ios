@@ -52,7 +52,14 @@ final class BlockerService {
         "Reset \(resetCount) expired completed patterns", category: .blockerService)
     }
 
-    // 2. Process pending patterns (includes freshly requeued ones)
+    // 2. Purge completed removal patterns that have been processed
+    let deletedCount = await patternService.deleteCompletedRemovalPatterns()
+    if deletedCount > 0 {
+      Logger.debug(
+        "Deleted \(deletedCount) completed removal patterns", category: .blockerService)
+    }
+
+    // 3. Process pending patterns (includes freshly requeued ones)
     let pendingCount = await patternService.getPendingPatternsCount()
     if pendingCount > 0 {
       Logger.debug("Pending patterns found", category: .blockerService)
@@ -65,7 +72,7 @@ final class BlockerService {
       return
     }
 
-    // 3. First launch: no patterns at all → download the list
+    // 4. First launch: no patterns at all → download the list
     let hasPatterns = await patternService.hasPatterns()
     if !hasPatterns {
       Logger.debug("No patterns found, launching update", category: .blockerService)
@@ -78,7 +85,7 @@ final class BlockerService {
       return
     }
 
-    // 4. Stale list: refresh if last download was more than 24 h ago
+    // 5. Stale list: refresh if last download was more than 24 h ago
     if userDefaultsService.shouldUpdateList() {
       Logger.debug("Update needed based on date", category: .blockerService)
       do {
@@ -90,7 +97,7 @@ final class BlockerService {
       return
     }
 
-    // 5. Nothing to do — all patterns are installed and the list is fresh
+    // 6. Nothing to do — all patterns are installed and the list is fresh
     Logger.debug("No update needed, all patterns are completed", category: .blockerService)
   }
 

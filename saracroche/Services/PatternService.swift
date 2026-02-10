@@ -401,6 +401,41 @@ class PatternService {
     }
   }
 
+  /// Deletes completed removal patterns (remove_block/remove_identify with completedDate != nil)
+  /// These patterns have been successfully processed by the Call Directory extension and can be purged
+  /// - Returns: The number of patterns that were deleted
+  func deleteCompletedRemovalPatterns() async -> Int {
+    let context = dataStack.persistentContainer.viewContext
+
+    return await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+        fetchRequest.predicate = NSPredicate(
+          format:
+            "completedDate != nil AND (action == %@ OR action == %@)",
+          "remove_block",
+          "remove_identify"
+        )
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          for pattern in patterns {
+            context.delete(pattern)
+          }
+          Self.save(context: context)
+          continuation.resume(returning: patterns.count)
+        } catch {
+          Logger.error(
+            "Failed to delete completed removal patterns: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume(returning: 0)
+        }
+      }
+    }
+  }
+
   /// Clears the completedDate on all patterns, making them pending again for reinstallation
   func clearAllCompletedDates() async {
     let context = dataStack.persistentContainer.viewContext

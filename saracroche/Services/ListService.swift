@@ -112,11 +112,12 @@ final class ListService {
     for patternString in patternsToRemove {
       if let pattern = existingPatternsDict[patternString] {
         let currentAction = pattern.action ?? "block"
+        // Skip patterns already marked for removal
+        if currentAction.hasPrefix("remove_") {
+          continue
+        }
         let removeAction = currentAction == "identify" ? "remove_identify" : "remove_block"
-        await patternService.updatePattern(
-          pattern,
-          action: removeAction
-        )
+        await patternService.markPatternForDeletion(pattern, removalAction: removeAction)
         removedCount += 1
       }
     }
