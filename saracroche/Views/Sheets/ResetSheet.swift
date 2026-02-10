@@ -37,7 +37,7 @@ struct ResetSheet: View {
               .appFont(.body)
               .multilineTextAlignment(.leading)
 
-              VStack(alignment: .leading, spacing: 8) {
+              VStack(alignment: .leading, spacing: 16) {
                 resetDetailRow(
                   icon: "phone.fill.badge.checkmark",
                   title: "Numéros bloqués supprimés",

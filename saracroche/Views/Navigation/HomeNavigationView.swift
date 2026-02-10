@@ -43,7 +43,7 @@ struct HomeNavigationView: View {
   private var activeStatusView: some View {
     VStack(spacing: 16) {
       // Header : icône bouclier + texte
-      VStack(alignment: .center, spacing: 8) {
+      VStack(alignment: .center, spacing: 16) {
         if #available(iOS 18.0, *) {
           Image(systemName: "checkmark.shield.fill")
             .font(.system(size: 60))

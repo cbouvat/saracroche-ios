@@ -37,7 +37,7 @@ struct DonationSheet: View {
             Text("Pourquoi donner ?")
               .appFont(.headlineSemiBold)
 
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 16) {
               DonationBenefitRow(
                 icon: "curlybraces.square.fill",
                 title: "Projet open source",

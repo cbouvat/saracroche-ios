@@ -37,7 +37,7 @@ struct ReinstallSheet: View {
               .appFont(.body)
               .multilineTextAlignment(.leading)
 
-              VStack(alignment: .leading, spacing: 8) {
+              VStack(alignment: .leading, spacing: 16) {
                 reinstallDetailRow(
                   icon: "phone.fill.badge.checkmark",
                   title: "Extension réinitialisée",

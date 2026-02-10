@@ -80,7 +80,7 @@ struct InfoSheet: View {
           .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
 
-        VStack(spacing: 8) {
+        VStack(spacing: 16) {
           statisticsListItem(
             icon: "number.circle.fill",
             value: "\(blockerViewModel.totalPhoneNumbersCount.formatted())",
@@ -125,7 +125,7 @@ struct InfoSheet: View {
           .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
 
-        VStack(spacing: 8) {
+        VStack(spacing: 16) {
           // État de l'extension
           statisticsListItem(
             icon: extensionStatusIcon,
@@ -166,7 +166,7 @@ struct InfoSheet: View {
           .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
 
-        VStack(spacing: 8) {
+        VStack(spacing: 16) {
           // Dernier téléchargement de la liste
           if let lastListDownloadAt = blockerViewModel.lastListDownloadAt {
             statisticsListItem(
