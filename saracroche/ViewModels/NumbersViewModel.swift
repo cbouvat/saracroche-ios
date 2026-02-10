@@ -15,8 +15,7 @@ class NumbersViewModel: ObservableObject {
   @Published var userPatterns: [Pattern] = []
 
   // UI State
-  @Published var showAlert: Bool = false
-  @Published var alertMessage: String = ""
+  @Published var patternError: String? = nil
   @Published var isLoading: Bool = false
 
   // MARK: - Dependencies
@@ -72,12 +71,17 @@ class NumbersViewModel: ObservableObject {
   func addPattern(
     patternString: String, action: String, name: String?
   ) async {
-    // Validate pattern
-    guard validatePattern(patternString) else { return }
+    patternError = nil
+
+    // Validate pattern format
+    if let error = NumbersViewModel.validatePatternFormat(patternString) {
+      patternError = error
+      return
+    }
 
     // Check for duplicates
     if await patternService.getPattern(byPatternString: patternString) != nil {
-      showError("Ce préfixe existe déjà dans votre liste.")
+      patternError = "Ce préfixe existe déjà dans votre liste."
       return
     }
 
@@ -94,7 +98,7 @@ class NumbersViewModel: ObservableObject {
       // Reload data
       await loadData()
     } else {
-      showError("Impossible de créer le préfixe.")
+      patternError = "Impossible de créer le préfixe."
     }
 
     isLoading = false
@@ -124,64 +128,44 @@ class NumbersViewModel: ObservableObject {
 
   // MARK: - Validation
 
-  private func validatePattern(_ pattern: String) -> Bool {
-    // Remove whitespace
+  /// Validates a pattern string and returns an error message if invalid, or `nil` if valid.
+  static func validatePatternFormat(_ pattern: String) -> String? {
     let trimmed = pattern.trimmingCharacters(in: .whitespacesAndNewlines)
 
-    // Check if empty
     if trimmed.isEmpty {
-      showError("Le préfixe ne peut pas être vide.")
-      return false
+      return "Le préfixe ne peut pas être vide."
     }
 
-    // Check for spaces
     if trimmed.contains(" ") {
-      showError("Le préfixe ne doit pas contenir d'espaces.")
-      return false
+      return "Le préfixe ne doit pas contenir d'espaces."
     }
 
-    // Check if contains only numbers, +, and #
     let allowedCharacters = CharacterSet(charactersIn: "0123456789#+")
     if trimmed.rangeOfCharacter(from: allowedCharacters.inverted) != nil {
-      showError("Le préfixe ne peut contenir que des chiffres, '+' et '#'.")
-      return false
+      return "Le préfixe ne peut contenir que des chiffres, '+' et '#'."
     }
 
-    // Must start with + for international format
     if !trimmed.hasPrefix("+") {
-      showError("Le préfixe doit commencer par '+' (format international).")
-      return false
+      return "Le préfixe doit commencer par '+' (format international)."
     }
 
-    // Check that # wildcards are only at the end
     let hashCount = trimmed.filter { $0 == "#" }.count
     if hashCount > 0, let firstHash = trimmed.firstIndex(of: "#") {
       let afterFirstHash = trimmed[firstHash...]
       if afterFirstHash.contains(where: { $0 != "#" }) {
-        showError("Les jokers '#' doivent être uniquement en fin de numéro.")
-        return false
+        return "Les jokers '#' doivent être uniquement en fin de numéro."
       }
     }
 
-    // Minimum length check (e.g., +33 + at least 6 digits)
-    if trimmed.count < 9 {
-      showError("Le préfixe est trop court. Format attendu: +33XXXXXXXXX")
-      return false
+    if trimmed.count < 4 {
+      return "Le préfixe est trop court (minimum 4 caractères)."
     }
 
-    // Check that # wildcards don't create too many numbers
-    if hashCount > 4 {
-      showError("Trop de jokers '#'. Maximum 4 jokers dans un préfixe.")
-      return false
+    if hashCount > 6 {
+      return "Trop de jokers '#'. Maximum 6 jokers dans un préfixe."
     }
 
-    return true
+    return nil
   }
 
-  // MARK: - Alert Helpers
-
-  private func showError(_ message: String) {
-    alertMessage = message
-    showAlert = true
-  }
 }

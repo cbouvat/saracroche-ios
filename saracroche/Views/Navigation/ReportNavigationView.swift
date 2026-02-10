@@ -74,6 +74,7 @@ struct ReportNavigationView: View {
                 foreground: .black
               )
             )
+            .disabled(viewModel.phoneNumber.isEmpty)
             .accessibilityLabel("Bouton d'envoi du signalement")
           }
           .padding(.vertical, 6)

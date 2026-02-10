@@ -11,6 +11,22 @@ struct AddPatternSheet: View {
   @FocusState private var isPatternFieldFocused: Bool
   @FocusState private var isNameFieldFocused: Bool
 
+  /// Real-time format validation error (computed from current input).
+  private var formatError: String? {
+    guard !patternString.isEmpty else { return nil }
+    return NumbersViewModel.validatePatternFormat(patternString)
+  }
+
+  /// The error to display: async errors from the view model take priority, then format errors.
+  private var displayedError: String? {
+    viewModel.patternError ?? formatError
+  }
+
+  /// Whether the pattern contains `#` wildcards and has no format errors.
+  private var showRange: Bool {
+    patternString.contains("#") && formatError == nil && !patternString.isEmpty
+  }
+
   var body: some View {
     NavigationView {
       Form {
@@ -31,7 +47,9 @@ struct AddPatternSheet: View {
                 .overlay(
                   RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                      isPatternFieldFocused ? Color("AppColor") : Color(.systemGray4),
+                      displayedError != nil
+                        ? Color.red
+                        : isPatternFieldFocused ? Color("AppColor") : Color(.systemGray4),
                       lineWidth: 1
                     )
                 )
@@ -39,11 +57,36 @@ struct AddPatternSheet: View {
                 .accessibilityHint(
                   "Entrez un numéro avec des jokers '#' en fin de numéro. Exemple: +33612345####"
                 )
-              Text(
-                "Format international avec '#' comme joker en fin de numéro. Ex: +33612345####"
-              )
-              .appFont(.caption)
-              .foregroundColor(.secondary)
+                .onChange(of: patternString) { _ in
+                  viewModel.patternError = nil
+                }
+
+              if let error = displayedError {
+                Text(error)
+                  .appFont(.caption)
+                  .foregroundColor(.red)
+                  .accessibilityLabel("Erreur: \(error)")
+              } else {
+                Text(
+                  "Format international avec '#' comme joker en fin de numéro. Ex: +33612345####"
+                )
+                .appFont(.caption)
+                .foregroundColor(.secondary)
+              }
+
+              if showRange {
+                let trimmed = patternString.trimmingCharacters(in: .whitespacesAndNewlines)
+                let minValue = trimmed.replacingOccurrences(of: "#", with: "0")
+                let maxValue = trimmed.replacingOccurrences(of: "#", with: "9")
+                let count = PhoneNumberHelpers.countPhoneNumbers(for: trimmed)
+                Text("Plage: \(minValue) → \(maxValue) (\(count) numéros)")
+                  .appFont(.caption)
+                  .foregroundColor(.secondary)
+                  .accessibilityElement(children: .combine)
+                  .accessibilityLabel(
+                    "Plage de \(minValue) à \(maxValue), \(count) numéros"
+                  )
+              }
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -98,7 +141,7 @@ struct AddPatternSheet: View {
                   action: isBlock ? "block" : "identify",
                   name: name
                 )
-                if !viewModel.showAlert {
+                if viewModel.patternError == nil {
                   isPresented = false
                 }
               }
@@ -109,7 +152,8 @@ struct AddPatternSheet: View {
               }
             }
             .buttonStyle(.fullWidth(background: Color("AppColor"), foreground: .black))
-            .disabled(viewModel.isLoading || patternString.isEmpty || name.isEmpty)
+            .disabled(
+              viewModel.isLoading || patternString.isEmpty || name.isEmpty || formatError != nil)
           }
           .padding(.vertical, 6)
         }

@@ -106,11 +106,6 @@ struct NumbersNavigationView: View {
       .sheet(isPresented: $showAddPatternSheet) {
         AddPatternSheet(viewModel: viewModel, isPresented: $showAddPatternSheet)
       }
-      .alert("Erreur", isPresented: $viewModel.showAlert) {
-        Button("OK", role: .cancel) {}
-      } message: {
-        Text(viewModel.alertMessage)
-      }
       .onAppear {
         Task {
           await viewModel.loadData()
