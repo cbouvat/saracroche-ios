@@ -135,10 +135,10 @@ struct ActionButton: View {
       }
       .padding(12)
       .background(isSelected ? color.opacity(0.15) : Color(.systemBackground))
-      .cornerRadius(8)
+      .cornerRadius(12)
       .overlay(
-        RoundedRectangle(cornerRadius: 8)
-          .stroke(isSelected ? color : Color.gray.opacity(0.2), lineWidth: 1.5)
+        RoundedRectangle(cornerRadius: 12)
+          .stroke(isSelected ? color : Color(.systemGray4), lineWidth: 1)
       )
     }
     .buttonStyle(.plain)

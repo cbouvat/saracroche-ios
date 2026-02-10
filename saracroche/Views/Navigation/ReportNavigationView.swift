@@ -36,11 +36,24 @@ struct ReportNavigationView: View {
                 "Saisissez le numéro au format E.164, par exemple +33612345678"
               )
 
-            Toggle("Numéro légitime", isOn: $viewModel.isGood)
-              .padding(.vertical, 4)
-              .accessibilityLabel("Numéro légitime")
-              .accessibilityHint(
-                "Cochez si ce numéro est légitime, décochez pour signaler comme spam")
+            VStack(spacing: 12) {
+              ReportChoiceButton(
+                title: "Spam",
+                description: "Signaler comme indésirable",
+                icon: "exclamationmark.circle.fill",
+                isSelected: !viewModel.isGood,
+                color: .red,
+                action: { viewModel.isGood = false }
+              )
+              ReportChoiceButton(
+                title: "Légitime",
+                description: "Marquer comme légitime",
+                icon: "checkmark.circle.fill",
+                isSelected: viewModel.isGood,
+                color: .green,
+                action: { viewModel.isGood = true }
+              )
+            }
 
             Button {
               if isPhoneFieldFocused { isPhoneFieldFocused = false }

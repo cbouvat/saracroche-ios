@@ -24,6 +24,16 @@ struct AddPatternSheet: View {
               .textInputAutocapitalization(.never)
               .autocorrectionDisabled(true)
               .focused($isPatternFieldFocused)
+              .padding(12)
+              .background(Color(.systemBackground))
+              .cornerRadius(12)
+              .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                  .stroke(
+                    isPatternFieldFocused ? Color("AppColor") : Color(.systemGray4),
+                    lineWidth: 1
+                  )
+              )
               .accessibilityLabel("Champ de saisie du préfixe de blocage")
               .accessibilityHint(
                 "Entrez un numéro avec des jokers '#'. Exemple: +33612345####"
