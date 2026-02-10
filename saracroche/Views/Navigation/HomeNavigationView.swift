@@ -37,6 +37,9 @@ struct HomeNavigationView: View {
   private var enabledExtensionContentView: some View {
     VStack(spacing: 16) {
       activeStatusView
+      if !blockerViewModel.isNotificationReminderEnabled {
+        notificationReminderView
+      }
       donationView
     }
   }
@@ -251,6 +254,40 @@ struct HomeNavigationView: View {
     .accessibilityLabel(
       "État de la liste de blocage : \(blockerViewModel.updateState.description). "
         + "\(blockerViewModel.totalPhoneNumbersCount.formatted()) numéros dans la base de données"
+    )
+  }
+
+  private var notificationReminderView: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      Text("Rappel de mise à jour")
+        .appFont(.headlineSemiBold)
+
+      Text(
+        "Recevez une notification tous les 15 jours pour vous rappeler "
+          + "d'ouvrir l'application et mettre à jour la liste de blocage."
+      )
+      .appFont(.body)
+
+      Button {
+        Task {
+          await blockerViewModel.enableNotificationReminder()
+        }
+      } label: {
+        HStack {
+          Image(systemName: "bell.badge.fill")
+          Text("Activer le rappel")
+        }
+      }
+      .buttonStyle(
+        .fullWidth(background: .blue, foreground: .white)
+      )
+      .accessibilityLabel("Activer le rappel de mise à jour")
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.gray.opacity(0.1))
     )
   }
 

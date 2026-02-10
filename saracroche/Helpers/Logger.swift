@@ -16,6 +16,7 @@ enum Logger {
     case numbersViewModel = "NumbersViewModel"
     case callDirectoryHandler = "CallDirectoryHandler"
     case messageFilterExtension = "MessageFilterExtension"
+    case notificationService = "NotificationService"
   }
 
   /// Logs a message with the specified category and level

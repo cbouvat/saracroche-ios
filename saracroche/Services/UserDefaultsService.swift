@@ -10,6 +10,7 @@ class UserDefaultsService {
     static let lastBackgroundLaunchAt = "lastBackgroundLaunchAt"
     static let lastSuccessfulUpdateAt = "lastSuccessfulUpdateAt"
     static let businessCode = "businessCode"
+    static let notificationReminderEnabled = "notificationReminderEnabled"
   }
 
   init() {
@@ -73,6 +74,18 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.businessCode)
   }
 
+  func setNotificationReminderEnabled(_ enabled: Bool) {
+    userDefaults.set(enabled, forKey: Keys.notificationReminderEnabled)
+  }
+
+  func getNotificationReminderEnabled() -> Bool {
+    return userDefaults.bool(forKey: Keys.notificationReminderEnabled)
+  }
+
+  func clearNotificationReminderEnabled() {
+    userDefaults.removeObject(forKey: Keys.notificationReminderEnabled)
+  }
+
   func shouldDownloadList() -> Bool {
     guard let lastDownload = getLastListDownloadAt() else {
       return true  // First time, always download
@@ -86,5 +99,6 @@ class UserDefaultsService {
     clearLastBackgroundLaunchAt()
     clearLastSuccessfulUpdateAt()
     clearBusinessCode()
+    clearNotificationReminderEnabled()
   }
 }

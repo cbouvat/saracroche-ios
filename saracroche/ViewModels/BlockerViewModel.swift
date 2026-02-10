@@ -21,12 +21,14 @@ class BlockerViewModel: ObservableObject {
   @Published var isUpdating: Bool = false
   @Published var updateError: String?
   @Published var isBackgroundRefreshEnabled: Bool = false
+  @Published var isNotificationReminderEnabled: Bool = false
 
   private let callDirectoryService: CallDirectoryService
   private let sharedUserDefaults: SharedUserDefaultsService
   private let userDefaults: UserDefaultsService
   private let blockerService: BlockerService
   private let patternService: PatternService
+  private let notificationService: NotificationService
 
   init() {
     self.callDirectoryService = CallDirectoryService()
@@ -34,12 +36,17 @@ class BlockerViewModel: ObservableObject {
     self.sharedUserDefaults = SharedUserDefaultsService()
     self.blockerService = BlockerService()
     self.patternService = PatternService()
+    self.notificationService = NotificationService(userDefaults: self.userDefaults)
   }
 
   func loadData() async {
     lastSuccessfulUpdateAt = userDefaults.getLastSuccessfulUpdateAt()
     lastListDownloadAt = userDefaults.getLastListDownloadAt()
     lastBackgroundLaunchAt = userDefaults.getLastBackgroundLaunchAt()
+
+    isNotificationReminderEnabled = userDefaults.getNotificationReminderEnabled()
+    await notificationService.syncReminderStateOnLaunch()
+    isNotificationReminderEnabled = userDefaults.getNotificationReminderEnabled()
 
     totalPhoneNumbersCount = await patternService.getTotalPhoneNumbersCount()
     completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
@@ -134,6 +141,23 @@ class BlockerViewModel: ObservableObject {
     }
   }
 
+  /// Enables the notification reminder after requesting permission
+  func enableNotificationReminder() async {
+    let granted = await notificationService.requestAuthorization()
+    if granted {
+      await notificationService.scheduleReminderNotification()
+      userDefaults.setNotificationReminderEnabled(true)
+      isNotificationReminderEnabled = true
+    }
+  }
+
+  /// Disables the notification reminder
+  func disableNotificationReminder() {
+    notificationService.cancelReminderNotification()
+    userDefaults.setNotificationReminderEnabled(false)
+    isNotificationReminderEnabled = false
+  }
+
   func checkBlockerExtensionStatus() async {
     do {
       blockerExtensionStatus = try await callDirectoryService.checkExtensionStatus()
@@ -156,6 +180,9 @@ class BlockerViewModel: ObservableObject {
   }
 
   func resetApplication() async {
+    // Cancel any pending notification reminders
+    notificationService.cancelReminderNotification()
+
     // Clear all CoreData patterns
     await patternService.deleteAllPatterns()
 

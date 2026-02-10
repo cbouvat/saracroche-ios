@@ -23,6 +23,23 @@ struct SettingsNavigationView: View {
             )
           }
 
+          Toggle(
+            isOn: Binding(
+              get: { blockerViewModel.isNotificationReminderEnabled },
+              set: { newValue in
+                Task {
+                  if newValue {
+                    await blockerViewModel.enableNotificationReminder()
+                  } else {
+                    blockerViewModel.disableNotificationReminder()
+                  }
+                }
+              }
+            )
+          ) {
+            Label("Rappel de mise à jour", systemImage: "bell.badge.fill")
+          }
+
           Button {
             showingBusinessCodeSheet = true
           } label: {
