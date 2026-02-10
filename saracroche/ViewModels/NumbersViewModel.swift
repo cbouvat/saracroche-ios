@@ -50,6 +50,7 @@ class NumbersViewModel: ObservableObject {
 
   private func loadUserPatterns() async {
     userPatterns = await patternService.getPatterns(bySource: "user")
+      .filter { !($0.action?.hasPrefix("remove_") ?? false) }
       .sorted { ($0.addedDate ?? Date()) > ($1.addedDate ?? Date()) }
   }
 
@@ -106,24 +107,10 @@ class NumbersViewModel: ObservableObject {
 
   func deletePattern(_ pattern: Pattern) async {
     let action = pattern.action ?? "block"
-    await patternService.deletePattern(pattern)
-
-    // Mark for removal with action-specific removal type
-    if let patternString = pattern.pattern {
-      let removeAction = action == "identify" ? "remove_identify" : "remove_block"
-      _ = await patternService.createPattern(
-        patternString: patternString,
-        action: removeAction,
-        name: pattern.name,
-        source: "user"
-      )
-      Logger.info("Prefix marked for removal: \(patternString)", category: .numbersViewModel)
-    }
-
-    // Trigger blocker update
-    Task {
-      await loadData()
-    }
+    let removeAction = action == "identify" ? "remove_identify" : "remove_block"
+    await patternService.markPatternForDeletion(pattern, removalAction: removeAction)
+    Logger.info("Prefix marked for removal: \(pattern.pattern ?? "")", category: .numbersViewModel)
+    await loadData()
   }
 
   // MARK: - Validation

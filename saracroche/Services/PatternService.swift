@@ -158,32 +158,6 @@ class PatternService {
     }
   }
 
-  /// Fetches patterns by action
-  /// - Parameter action: The action to filter by ("block", "identify", or "remove")
-  /// - Returns: Array of Pattern entities matching the action
-  func getPatterns(byAction action: String) async -> [Pattern] {
-    let context = dataStack.persistentContainer.viewContext
-
-    return await withCheckedContinuation { continuation in
-      context.perform {
-        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-        fetchRequest.predicate = NSPredicate(format: "action == %@", action)
-
-        do {
-          let patterns = try context.fetch(fetchRequest)
-          continuation.resume(returning: patterns)
-        } catch {
-          Logger.error(
-            "Failed to fetch patterns by action %{public}@: %{public}@",
-            category: .patternService,
-            error: error
-          )
-          continuation.resume(returning: [])
-        }
-      }
-    }
-  }
-
   /// Checks if any patterns exist in the database
   /// - Returns: true if at least one pattern exists, false otherwise
   func hasPatterns() async -> Bool {
@@ -341,23 +315,26 @@ class PatternService {
     }
   }
 
-  // MARK: - Delete Operations
-
-  /// Deletes a pattern from CoreData
-  /// - Parameter pattern: The Pattern entity to delete
-  func deletePattern(_ pattern: Pattern) async {
+  /// Marks a pattern for deletion by changing its action and resetting completedDate
+  /// - Parameters:
+  ///   - pattern: The Pattern entity to mark for deletion
+  ///   - removalAction: The removal action ("remove_block" or "remove_identify")
+  func markPatternForDeletion(_ pattern: Pattern, removalAction: String) async {
     let context = dataStack.persistentContainer.viewContext
     let objectID = pattern.objectID
 
     await withCheckedContinuation { continuation in
       context.perform {
         let patternInContext = context.object(with: objectID) as! Pattern
-        context.delete(patternInContext)
+        patternInContext.action = removalAction
+        patternInContext.completedDate = nil
         Self.save(context: context)
         continuation.resume()
       }
     }
   }
+
+  // MARK: - Delete Operations
 
   /// Deletes all patterns
   func deleteAllPatterns() async {
@@ -382,83 +359,6 @@ class PatternService {
           )
           continuation.resume()
         }
-      }
-    }
-  }
-
-  /// Deletes all patterns from a specific source
-  /// - Parameter source: The source to filter by ("api" or "user")
-  func deletePatterns(bySource source: String) async {
-    let context = dataStack.persistentContainer.viewContext
-
-    await withCheckedContinuation { continuation in
-      context.perform {
-        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
-        fetchRequest.predicate = NSPredicate(format: "source == %@", source)
-
-        do {
-          let patterns = try context.fetch(fetchRequest)
-          for pattern in patterns {
-            context.delete(pattern)
-          }
-          Self.save(context: context)
-          continuation.resume()
-        } catch {
-          Logger.error(
-            "Failed to delete patterns by source %{public}@: %{public}@",
-            category: .patternService,
-            error: error
-          )
-          continuation.resume()
-        }
-      }
-    }
-  }
-
-  // MARK: - Batch Operations
-
-  /// Creates multiple patterns in batch
-  /// - Parameter patternsData: Array of tuples containing pattern data
-  /// - Returns: Array of created Pattern entities
-  func createPatterns(
-    _ patternsData: [(
-      patternString: String, action: String, name: String?, source: String, sourceListName: String?,
-      sourceVersion: String?
-    )]
-  ) async -> [Pattern] {
-    var createdPatterns: [Pattern] = []
-
-    for data in patternsData {
-      if let pattern = await createPattern(
-        patternString: data.patternString,
-        action: data.action,
-        name: data.name,
-        source: data.source,
-        sourceListName: data.sourceListName,
-        sourceVersion: data.sourceVersion
-      ) {
-        createdPatterns.append(pattern)
-      }
-    }
-
-    return createdPatterns
-  }
-
-  /// Marks multiple patterns as completed
-  /// - Parameter patterns: Array of Pattern entities to mark as completed
-  func markPatternsAsCompleted(_ patterns: [Pattern]) async {
-    let context = dataStack.persistentContainer.viewContext
-    let objectIDs = patterns.map { $0.objectID }
-
-    await withCheckedContinuation { continuation in
-      context.perform {
-        let now = Date()
-        for objectID in objectIDs {
-          let pattern = context.object(with: objectID) as! Pattern
-          pattern.completedDate = now
-        }
-        Self.save(context: context)
-        continuation.resume()
       }
     }
   }
