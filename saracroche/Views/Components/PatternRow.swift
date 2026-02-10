@@ -38,7 +38,7 @@ struct PatternRow: View {
 
   private var actionIcon: String {
     switch pattern.action {
-    case "block": return "xmark.shield.fill"
+    case "block": return "xmark.circle.fill"
     case "identify": return "info.circle.fill"
     default: return "questionmark.circle.fill"
     }
