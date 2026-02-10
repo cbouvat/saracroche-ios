@@ -81,7 +81,7 @@ struct EditPatternSheet: View {
               ReportChoiceButton(
                 title: "Bloquer",
                 description: "Bloquer les appels correspondants",
-                icon: "shield.fill",
+                icon: "xmark.circle.fill",
                 isSelected: isBlock,
                 color: .red,
                 action: { isBlock = true }
