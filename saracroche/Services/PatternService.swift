@@ -210,11 +210,14 @@ class PatternService {
     }
   }
 
-  /// Retrieves a random pending pattern for processing
-  /// - Returns: A random Pattern entity where completedDate is nil, or nil if none exist
+  /// Retrieves the oldest pending pattern for processing (FIFO order)
+  /// - Returns: The oldest Pattern entity where completedDate is nil, or nil if none exist
   func retrievePatternForProcessing() async -> Pattern? {
     let pendingPatterns = await getPendingPatterns()
-    return pendingPatterns.randomElement()
+    return pendingPatterns.sorted {
+      ($0.addedDate ?? .distantPast) < ($1.addedDate ?? .distantPast)
+    }
+    .first
   }
 
   /// Fetches all patterns that have been completed
