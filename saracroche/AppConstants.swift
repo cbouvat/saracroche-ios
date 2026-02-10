@@ -15,6 +15,6 @@ struct AppConstants {
   static let listDownloadInterval: TimeInterval = 24 * 60 * 60
   static let numberChunkSize = 10_000
   static let maxNumbersPerBatch: Int64 = 1_000_000
-  static let patternReprocessInterval: TimeInterval = 15 * 24 * 60 * 60
+  static let patternReprocessInterval: TimeInterval = 20 * 24 * 60 * 60
   static let notificationReminderInterval: TimeInterval = 15 * 24 * 60 * 60
 }
