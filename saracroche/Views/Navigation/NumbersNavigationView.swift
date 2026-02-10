@@ -17,36 +17,30 @@ struct NumbersNavigationView: View {
                 .foregroundColor(.secondary)
             }
           } else {
-            VStack(alignment: .leading, spacing: 12) {
-              // List name with icon
-              HStack {
+            NavigationLink {
+              APIPatternListView(patterns: viewModel.apiPatterns)
+            } label: {
+              VStack(alignment: .leading, spacing: 12) {
+                // List name
                 Text(viewModel.frenchListName)
                   .font(.headline)
                   .lineLimit(2)
-              }
 
-              // Version
-              Label("Version " + viewModel.frenchListVersion, systemImage: "number.circle.fill")
+                // Version
+                HStack(spacing: 4) {
+                  Image(systemName: "tag.circle.fill")
+                  Text("Version " + viewModel.frenchListVersion)
+                }
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-              // Blocked numbers count
-              Label(
-                "\(viewModel.frenchListBlockedCount) numéros bloqués",
-                systemImage: "number.circle.fill"
-              )
-              .font(.caption)
-              .foregroundColor(.secondary)
-
-              // Navigation to full prefix list
-              NavigationLink {
-                APIPatternListView(patterns: viewModel.apiPatterns)
-              } label: {
-                HStack {
-                  Image(systemName: "list.bullet")
-                  Text("Voir tous les préfixes")
+                // Blocked numbers count
+                HStack(spacing: 4) {
+                  Image(systemName: "number.circle.fill")
+                  Text("\(viewModel.frenchListBlockedCount) numéros bloqués")
                 }
-                .font(.body)
+                .font(.caption)
+                .foregroundColor(.secondary)
               }
             }
           }
