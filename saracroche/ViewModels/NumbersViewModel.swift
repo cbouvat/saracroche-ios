@@ -108,16 +108,33 @@ class NumbersViewModel: ObservableObject {
 
     isLoading = true
 
+    let oldAction = pattern.action ?? "block"
+    let oldPatternString = pattern.pattern
+    let patternStringChanged = oldPatternString != newPatternString
+    let actionChanged = oldAction != action
+
     // If pattern string changed, check for duplicates
-    if pattern.pattern != newPatternString {
+    if patternStringChanged {
       if await patternService.getPattern(byPatternString: newPatternString) != nil {
         showError("Ce préfixe existe déjà.")
         isLoading = false
         return
       }
+    }
 
-      // Delete old pattern and create new one
+    if patternStringChanged || actionChanged {
+      // Delete old pattern and create removal entry for old entries
       await patternService.deletePattern(pattern)
+      if let oldPattern = oldPatternString {
+        let removeAction = oldAction == "identify" ? "remove_identify" : "remove_block"
+        _ = await patternService.createPattern(
+          patternString: oldPattern,
+          action: removeAction,
+          name: pattern.name,
+          source: "user"
+        )
+      }
+      // Create new pattern with updated values
       _ = await patternService.createPattern(
         patternString: newPatternString,
         action: action,
@@ -125,13 +142,13 @@ class NumbersViewModel: ObservableObject {
         source: "user"
       )
       Logger.info(
-        "Prefix updated (string changed): \(newPatternString)", category: .numbersViewModel)
+        "Prefix updated (recreated): \(newPatternString)", category: .numbersViewModel)
     } else {
-      // Just update action and name
+      // Only name changed, update in place
       await patternService.updatePattern(
-        pattern, action: action, name: name?.isEmpty == true ? nil : name
+        pattern, name: name?.isEmpty == true ? nil : name
       )
-      Logger.info("Prefix updated: \(newPatternString)", category: .numbersViewModel)
+      Logger.info("Prefix updated (name only): \(newPatternString)", category: .numbersViewModel)
     }
 
     // Reload data
@@ -141,13 +158,15 @@ class NumbersViewModel: ObservableObject {
   }
 
   func deletePattern(_ pattern: Pattern) async {
+    let action = pattern.action ?? "block"
     await patternService.deletePattern(pattern)
 
-    // Mark for removal
+    // Mark for removal with action-specific removal type
     if let patternString = pattern.pattern {
+      let removeAction = action == "identify" ? "remove_identify" : "remove_block"
       _ = await patternService.createPattern(
         patternString: patternString,
-        action: "remove",
+        action: removeAction,
         name: pattern.name,
         source: "user"
       )

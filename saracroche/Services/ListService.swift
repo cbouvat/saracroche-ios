@@ -111,9 +111,11 @@ final class ListService {
     // Mark patterns that are no longer in the new list for removal
     for patternString in patternsToRemove {
       if let pattern = existingPatternsDict[patternString] {
+        let currentAction = pattern.action ?? "block"
+        let removeAction = currentAction == "identify" ? "remove_identify" : "remove_block"
         await patternService.updatePattern(
           pattern,
-          action: "remove"
+          action: removeAction
         )
         removedCount += 1
       }

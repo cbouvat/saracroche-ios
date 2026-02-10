@@ -62,10 +62,14 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
         context.addIdentificationEntry(withNextSequentialPhoneNumber: number, label: name ?? "")
         logger.info(
           "Identified number: \(numberString) - \(name ?? "")")
-      case "remove":
+      case "remove_block":
         context.removeBlockingEntry(withPhoneNumber: number)
         logger.info(
-          "Removed number: \(numberString)")
+          "Removed blocking entry: \(numberString)")
+      case "remove_identify":
+        context.removeIdentificationEntry(withPhoneNumber: number)
+        logger.info(
+          "Removed identification entry: \(numberString)")
       case "reset":
         context.removeAllBlockingEntries()
         context.removeAllIdentificationEntries()
