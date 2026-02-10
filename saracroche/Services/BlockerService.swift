@@ -94,7 +94,7 @@ final class BlockerService {
     Logger.debug("No update needed, all patterns are completed", category: .blockerService)
   }
 
-  /// Process multiple pending patterns up to a limit of 250,000 numbers
+  /// Process multiple pending patterns up to a limit
   private func processPatternsUpToLimit() async throws {
     var totalProcessedNumbers: Int64 = 0
     let maxNumbers = AppConstants.maxNumbersPerBatch
