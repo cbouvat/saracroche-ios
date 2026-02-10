@@ -172,6 +172,12 @@ class NumbersViewModel: ObservableObject {
       return false
     }
 
+    // Check for spaces
+    if trimmed.contains(" ") {
+      showError("Le préfixe ne doit pas contenir d'espaces.")
+      return false
+    }
+
     // Check if contains only numbers, +, and #
     let allowedCharacters = CharacterSet(charactersIn: "0123456789#+")
     if trimmed.rangeOfCharacter(from: allowedCharacters.inverted) != nil {
@@ -185,6 +191,16 @@ class NumbersViewModel: ObservableObject {
       return false
     }
 
+    // Check that # wildcards are only at the end
+    let hashCount = trimmed.filter { $0 == "#" }.count
+    if hashCount > 0, let firstHash = trimmed.firstIndex(of: "#") {
+      let afterFirstHash = trimmed[firstHash...]
+      if afterFirstHash.contains(where: { $0 != "#" }) {
+        showError("Les jokers '#' doivent être uniquement en fin de numéro.")
+        return false
+      }
+    }
+
     // Minimum length check (e.g., +33 + at least 6 digits)
     if trimmed.count < 9 {
       showError("Le préfixe est trop court. Format attendu: +33XXXXXXXXX")
@@ -192,7 +208,6 @@ class NumbersViewModel: ObservableObject {
     }
 
     // Check that # wildcards don't create too many numbers
-    let hashCount = trimmed.filter { $0 == "#" }.count
     if hashCount > 4 {
       showError("Trop de jokers '#'. Maximum 4 jokers dans un préfixe.")
       return false
