@@ -8,7 +8,6 @@ class NumbersViewModel: ObservableObject {
   // French list metadata
   @Published var frenchListName: String = ""
   @Published var frenchListVersion: String = ""
-  @Published var frenchListDate: Date?
   @Published var frenchListBlockedCount: Int = 0
 
   // Pattern arrays
@@ -61,8 +60,6 @@ class NumbersViewModel: ObservableObject {
     if let firstPattern = apiPatterns.first {
       frenchListName = firstPattern.sourceListName ?? "Liste Française"
       frenchListVersion = firstPattern.sourceVersion ?? "1.0"
-      frenchListDate = firstPattern.addedDate
-
       // Calculate total blocked numbers
       frenchListBlockedCount = apiPatterns.reduce(0) { total, pattern in
         guard let patternString = pattern.pattern else { return total }

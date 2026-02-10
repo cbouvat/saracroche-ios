@@ -30,16 +30,6 @@ struct NumbersNavigationView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-              // Date
-              if let date = viewModel.frenchListDate {
-                Label(
-                  "Téléchargement le " + date.formatted(date: .abbreviated, time: .omitted),
-                  systemImage: "calendar.circle.fill"
-                )
-                .font(.caption)
-                .foregroundColor(.secondary)
-              }
-
               // Blocked numbers count
               Label(
                 "\(viewModel.frenchListBlockedCount) numéros bloqués",
