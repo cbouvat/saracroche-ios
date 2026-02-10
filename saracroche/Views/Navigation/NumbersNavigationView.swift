@@ -49,7 +49,7 @@ struct NumbersNavigationView: View {
           }
         } header: {
           Text("Liste")
-            .appFont(.caption)
+            .appFont(.subheadlineSemiBold)
         } footer: {
           Text(
             "Liste téléchargée automatiquement et mise à jour régulièrement."
@@ -57,7 +57,7 @@ struct NumbersNavigationView: View {
           .appFont(.caption)
         }
 
-        // SECTION 2: Mes préfixes et numéros
+        // SECTION 2: Mes préfixes
         Section {
           if viewModel.userPatterns.isEmpty {
             VStack {
@@ -93,11 +93,11 @@ struct NumbersNavigationView: View {
           }
           .buttonStyle(.fullWidth(background: Color("AppColor"), foreground: .black))
         } header: {
-          Text("Mes préfixes et numéros")
-            .appFont(.caption)
+          Text("Mes préfixes")
+            .appFont(.subheadlineSemiBold)
         } footer: {
           Text(
-            "Ajoutez vos propres préfixes ou numéros pour les bloquer les identifier."
+            "Ajoutez vos propres préfixes pour les bloquer les identifier."
           )
           .appFont(.caption)
         }

@@ -42,7 +42,7 @@ struct SettingsNavigationView: View {
           .foregroundColor(.red)
         } header: {
           Text("Configuration")
-            .appFont(.caption)
+            .appFont(.subheadlineSemiBold)
         }
 
         Section {
@@ -95,7 +95,7 @@ struct SettingsNavigationView: View {
           }
         } header: {
           Text("Liens")
-            .appFont(.caption)
+            .appFont(.subheadlineSemiBold)
         }
 
         Section {
@@ -144,7 +144,7 @@ struct SettingsNavigationView: View {
           }
         } header: {
           Text("Contact")
-            .appFont(.caption)
+            .appFont(.subheadlineSemiBold)
         } footer: {
           Button {
             bisouTapCount += 1
