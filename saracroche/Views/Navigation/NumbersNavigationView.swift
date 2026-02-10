@@ -29,19 +29,21 @@ struct NumbersNavigationView: View {
                 HStack(spacing: 4) {
                   Image(systemName: "tag.circle.fill")
                     .appFont(.body)
+                    .foregroundColor(.primary)
                   Text("Version " + viewModel.frenchListVersion)
                     .appFont(.caption)
+                    .foregroundColor(.secondary)
                 }
-                .foregroundColor(.secondary)
 
                 // Blocked numbers count
                 HStack(spacing: 4) {
                   Image(systemName: "number.circle.fill")
                     .appFont(.body)
+                    .foregroundColor(.primary)
                   Text("\(viewModel.frenchListBlockedCount) numéros bloqués")
                     .appFont(.caption)
+                    .foregroundColor(.secondary)
                 }
-                .foregroundColor(.secondary)
               }
             }
           }
