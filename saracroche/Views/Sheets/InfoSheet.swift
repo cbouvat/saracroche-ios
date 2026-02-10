@@ -20,7 +20,7 @@ struct InfoSheet: View {
                 .foregroundColor(.blue)
             }
 
-            Text("Informations sur le blocage")
+            Text("Informations")
               .font(.title)
               .fontWeight(.bold)
               .multilineTextAlignment(.center)
@@ -30,7 +30,7 @@ struct InfoSheet: View {
 
           VStack(alignment: .leading, spacing: 16) {
             Text("Besoin d'informations supplémentaires ?")
-              .font(.title3)
+              .font(.headline)
               .fontWeight(.semibold)
 
             Text(
@@ -55,7 +55,7 @@ struct InfoSheet: View {
           .padding()
           .frame(maxWidth: .infinity, alignment: .leading)
           .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 16)
               .fill(Color.gray.opacity(0.1))
           )
         }
@@ -76,39 +76,41 @@ struct InfoSheet: View {
     VStack(spacing: 20) {
       // SECTION: STATISTIQUES
       VStack(spacing: 16) {
-        HStack {
-          Image(systemName: "chart.bar.fill")
-            .font(.system(size: 18))
-            .foregroundColor(.gray)
-
-          Text("Statistiques")
-            .font(.headline)
-            .fontWeight(.semibold)
-
-          Spacer()
-        }
+        Text("Statistiques")
+          .font(.headline)
+          .fontWeight(.semibold)
+          .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 8) {
           statisticsListItem(
-            icon: "shield.fill",
+            icon: "number.circle.fill",
+            value: "\(blockerViewModel.totalPhoneNumbersCount.formatted())",
+            label: "Numéros dans la base de données",
+            color: .green
+          )
+
+          statisticsListItem(
+            icon: "number.circle.fill",
             value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
-            label: "Numéros bloqués",
-            color: .gray
+            label: "Numéros installés",
+            color: .blue
+          )
+
+          statisticsListItem(
+            icon: "checkmark.circle.fill",
+            value:
+              "\(blockerViewModel.completedPatternsCount + blockerViewModel.pendingPatternsCount)",
+            label: "Préfixes dans la base de données",
+            color: .green
           )
 
           statisticsListItem(
             icon: "checkmark.circle.fill",
             value: "\(blockerViewModel.completedPatternsCount)",
-            label: "Préfixes actifs",
-            color: .gray
+            label: "Préfixes installés",
+            color: .blue
           )
 
-          statisticsListItem(
-            icon: "clock.fill",
-            value: "\(blockerViewModel.pendingPatternsCount)",
-            label: "En attente",
-            color: .gray
-          )
         }
       }
       .padding()
@@ -120,17 +122,10 @@ struct InfoSheet: View {
 
       // SECTION: ÉTAT
       VStack(spacing: 16) {
-        HStack {
-          Image(systemName: "checkmark.shield.fill")
-            .font(.system(size: 18))
-            .foregroundColor(.gray)
-
-          Text("État du service")
-            .font(.headline)
-            .fontWeight(.semibold)
-
-          Spacer()
-        }
+        Text("État du service")
+          .font(.headline)
+          .fontWeight(.semibold)
+          .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 8) {
           // État de l'extension
@@ -152,7 +147,7 @@ struct InfoSheet: View {
           // État de la mise à jour (si applicable)
           if blockerViewModel.updateState != .ok {
             statisticsListItem(
-              icon: "arrow.down.circle.fill",
+              icon: "arrow.clockwise.circle.fill",
               value: blockerViewModel.updateState.description,
               label: "État de la mise à jour",
               color: .blue
@@ -169,17 +164,10 @@ struct InfoSheet: View {
 
       // SECTION: DATES
       VStack(spacing: 16) {
-        HStack {
-          Image(systemName: "calendar.circle.fill")
-            .font(.system(size: 18))
-            .foregroundColor(.gray)
-
-          Text("Dates et historique")
-            .font(.headline)
-            .fontWeight(.semibold)
-
-          Spacer()
-        }
+        Text("Dates et historique")
+          .font(.headline)
+          .fontWeight(.semibold)
+          .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 8) {
           // Dernière téléchargement de la liste
@@ -187,7 +175,7 @@ struct InfoSheet: View {
             statisticsListItem(
               icon: "arrow.down.circle.fill",
               value: formatDate(lastListDownloadAt),
-              label: "Dernier téléchargement de la liste",
+              label: "Dernier téléchargement",
               color: .blue
             )
           }
@@ -205,7 +193,7 @@ struct InfoSheet: View {
           // Dernier lancement en arrière-plan
           if let lastBackgroundLaunchAt = blockerViewModel.lastBackgroundLaunchAt {
             statisticsListItem(
-              icon: "clock.arrow.circlepath",
+              icon: "clock.circle.fill",
               value: formatDate(lastBackgroundLaunchAt),
               label: "Dernier lancement en arrière-plan",
               color: .purple
@@ -239,17 +227,17 @@ struct InfoSheet: View {
 
       VStack(alignment: .leading, spacing: 2) {
         Text(value)
-          .font(.headline)
+          .font(.subheadline)
+          .fontWeight(.medium)
           .foregroundColor(.primary)
 
         Text(label)
-          .font(.subheadline)
+          .font(.caption)
           .foregroundColor(.secondary)
       }
 
       Spacer()
     }
-    .padding(.vertical, 8)
   }
 
   private var extensionStatusIcon: String {
@@ -285,9 +273,9 @@ struct InfoSheet: View {
   private var extensionStatusText: String {
     switch blockerViewModel.blockerExtensionStatus {
     case .enabled:
-      return "Actif"
+      return "Extension active"
     case .disabled:
-      return "Désactivé"
+      return "Extension désactivée"
     case .unknown:
       return "Vérification en cours"
     case .error:
@@ -308,19 +296,8 @@ struct InfoSheet: View {
 
   private var backgroundServiceText: String {
     blockerViewModel.isBackgroundRefreshEnabled
-      ? "Actif - mises à jour automatiques toutes les 4h"
+      ? "Service en arrière-plan actif"
       : "Désactivé - activer dans Réglages > Général > Actualisation en arrière-plan"
-  }
-
-  private var lastCompletionDateFormatted: String {
-    guard let date = blockerViewModel.lastCompletionDate else {
-      return "Jamais"
-    }
-
-    let formatter = RelativeDateTimeFormatter()
-    formatter.unitsStyle = .short
-    formatter.locale = Locale(identifier: "fr_FR")
-    return formatter.localizedString(for: date, relativeTo: Date())
   }
 
   private func formatDate(_ date: Date) -> String {

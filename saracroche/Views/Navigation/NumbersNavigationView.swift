@@ -43,7 +43,7 @@ struct NumbersNavigationView: View {
               // Blocked numbers count
               Label(
                 "\(viewModel.frenchListBlockedCount) numéros bloqués",
-                systemImage: "shield.fill"
+                systemImage: "number.circle.fill"
               )
               .font(.caption)
               .foregroundColor(.secondary)

@@ -35,10 +35,55 @@ struct HomeNavigationView: View {
 
   private var enabledExtensionContentView: some View {
     VStack(spacing: 16) {
-      completeInstallationView
-      statisticsView
+      activeStatusView
       donationView
     }
+  }
+
+  private var activeStatusView: some View {
+    VStack(spacing: 16) {
+      // Header : icône bouclier + texte
+      VStack(alignment: .center, spacing: 8) {
+        if #available(iOS 18.0, *) {
+          Image(systemName: "checkmark.shield.fill")
+            .font(.system(size: 60))
+            .symbolEffect(.bounce.up.byLayer, options: .repeat(.periodic(delay: 2.0)))
+            .foregroundColor(.green)
+        } else {
+          Image(systemName: "checkmark.shield.fill")
+            .font(.system(size: 60))
+            .foregroundColor(.green)
+        }
+
+        Text("Le bloqueur est actif")
+          .font(.title3)
+          .bold()
+          .multilineTextAlignment(.center)
+      }
+      .padding(.bottom, 8)
+
+      // Bandeau d'état + statistiques
+      updateStateBanner
+
+      // Bouton "En savoir plus"
+      Button {
+        showInfoSheet = true
+      } label: {
+        HStack {
+          Image(systemName: "info.circle.fill")
+          Text("En savoir plus")
+        }
+      }
+      .buttonStyle(
+        .fullWidth(background: .green, foreground: .white)
+      )
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.green.opacity(0.15))
+    )
   }
 
   private var disabledExtensionContentView: some View {
@@ -144,137 +189,69 @@ struct HomeNavigationView: View {
     )
   }
 
-  private var completeInstallationView: some View {
-    VStack(alignment: .center, spacing: 16) {
-      if #available(iOS 18.0, *) {
-        Image(systemName: "checkmark.shield.fill")
-          .font(.system(size: 60))
-          .symbolEffect(.bounce.up.byLayer, options: .repeat(.periodic(delay: 2.0)))
-          .foregroundColor(.green)
-      } else {
-        Image(systemName: "checkmark.shield.fill")
-          .font(.system(size: 60))
-          .foregroundColor(.green)
-      }
-
-      Text("Le bloqueur est actif")
-        .font(.title3)
-        .bold()
-        .multilineTextAlignment(.center)
-    }
-    .padding()
-    .frame(maxWidth: .infinity, alignment: .center)
-    .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color.green.opacity(0.15))
-    )
-  }
-
-  private var statisticsView: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      // Bandeau d'état de mise à jour
-      updateStateBanner
-
-      // Liste des statistiques
-      VStack(spacing: 4) {
-        statisticsCard(
-          icon: "shield.fill",
-          value: "\(blockerViewModel.completedPhoneNumbersCount.formatted())",
-          label: "Numéros bloqués"
-        )
-      }
-
-      // Bouton "En savoir plus"
-      Button {
-        showInfoSheet = true
-      } label: {
-        HStack {
-          Image(systemName: "info.circle.fill")
-          Text("En savoir plus")
-        }
-      }
-      .buttonStyle(
-        .fullWidth(background: .green, foreground: .white)
-      )
-    }
-    .padding()
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color.gray.opacity(0.1))
-    )
-  }
-
-  // Helper pour créer une carte de statistique dans une liste
-  @ViewBuilder
-  private func statisticsCard(
-    icon: String,
-    value: String,
-    label: String
-  ) -> some View {
-    HStack(spacing: 12) {
-      Image(systemName: icon)
-        .font(.system(size: 20))
-        .foregroundColor(.primary)
-        .frame(width: 24)
-
-      VStack(alignment: .leading, spacing: 2) {
-        Text(value)
-          .font(.headline)
-          .foregroundColor(.primary)
-
-        Text(label)
-          .font(.subheadline)
-          .foregroundColor(.secondary)
-      }
-
-      Spacer()
-    }
-    .padding(.vertical, 8)
-  }
-
   // MARK: - Update State Helpers
 
   @ViewBuilder
   private var updateStateBanner: some View {
-    HStack(spacing: 12) {
-      // Icône avec animation conditionnelle pour iOS 18+
-      if #available(iOS 18.0, *) {
-        Image(systemName: blockerViewModel.updateState.iconName)
-          .font(.system(size: 20))
-          .foregroundColor(blockerViewModel.updateState.color)
-          .symbolEffect(
-            .pulse,
-            options: .repeating,
-            isActive: blockerViewModel.updateState == .inProgress
-          )
-      } else {
-        Image(systemName: blockerViewModel.updateState.iconName)
-          .font(.system(size: 20))
-          .foregroundColor(blockerViewModel.updateState.color)
+    VStack(spacing: 12) {
+      HStack(spacing: 12) {
+        // Icône avec animation conditionnelle pour iOS 18+
+        if #available(iOS 18.0, *) {
+          Image(systemName: blockerViewModel.updateState.iconName)
+            .font(.system(size: 20))
+            .frame(width: 24)
+            .foregroundColor(blockerViewModel.updateState.color)
+            .symbolEffect(
+              .rotate,
+              options: .repeating,
+              isActive: blockerViewModel.updateState == .inProgress
+            )
+        } else {
+          Image(systemName: blockerViewModel.updateState.iconName)
+            .font(.system(size: 20))
+            .frame(width: 24)
+            .foregroundColor(blockerViewModel.updateState.color)
+        }
+
+        VStack(alignment: .leading, spacing: 2) {
+          Text("État de la liste blocage")
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .foregroundColor(.primary)
+
+          Text(blockerViewModel.updateState.description)
+            .font(.caption)
+            .foregroundColor(.secondary)
+        }
+
+        Spacer()
       }
 
-      VStack(alignment: .leading, spacing: 2) {
-        Text("État de la liste blocage")
-          .font(.subheadline)
-          .fontWeight(.medium)
-          .foregroundColor(.primary)
+      HStack(spacing: 12) {
+        Image(systemName: "number.circle.fill")
+          .font(.system(size: 20))
+          .frame(width: 24)
+          .foregroundColor(.green)
 
-        Text(blockerViewModel.updateState.description)
-          .font(.caption)
-          .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 2) {
+          Text("\(blockerViewModel.totalPhoneNumbersCount.formatted())")
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .foregroundColor(.primary)
+
+          Text("Numéros dans la base de données")
+            .font(.caption)
+            .foregroundColor(.secondary)
+        }
+
+        Spacer()
       }
-
-      Spacer()
     }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 12)
-    .background(
-      RoundedRectangle(cornerRadius: 12)
-        .fill(blockerViewModel.updateState.color.opacity(0.1))
-    )
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("État de la liste blocage : \(blockerViewModel.updateState.description)")
+    .accessibilityLabel(
+      "État de la liste blocage : \(blockerViewModel.updateState.description). "
+        + "\(blockerViewModel.totalPhoneNumbersCount.formatted()) numéros dans la base de données"
+    )
   }
 
   private var donationView: some View {

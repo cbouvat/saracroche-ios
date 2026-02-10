@@ -9,6 +9,7 @@ class BlockerViewModel: ObservableObject {
   @Published var lastSuccessfulUpdateAt: Date? = nil
 
   // Statistics for blocked numbers
+  @Published var totalPhoneNumbersCount: Int64 = 0
   @Published var completedPhoneNumbersCount: Int64 = 0
   @Published var completedPatternsCount: Int = 0
   @Published var pendingPatternsCount: Int = 0
@@ -40,6 +41,7 @@ class BlockerViewModel: ObservableObject {
     lastListDownloadAt = userDefaults.getLastListDownloadAt()
     lastBackgroundLaunchAt = userDefaults.getLastBackgroundLaunchAt()
 
+    totalPhoneNumbersCount = await patternService.getTotalPhoneNumbersCount()
     completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
     completedPatternsCount = await patternService.getCompletedPatternsCount()
     pendingPatternsCount = await patternService.getPendingPatternsCount()
@@ -73,6 +75,7 @@ class BlockerViewModel: ObservableObject {
         }
 
         // Refresh counts after each update
+        totalPhoneNumbersCount = await patternService.getTotalPhoneNumbersCount()
         completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
         completedPatternsCount = await patternService.getCompletedPatternsCount()
         pendingPatternsCount = await patternService.getPendingPatternsCount()

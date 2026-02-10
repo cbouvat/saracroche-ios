@@ -252,6 +252,16 @@ class PatternService {
     }
   }
 
+  /// Counts the total number of phone numbers represented by all patterns in the database
+  /// - Returns: Total count of phone numbers across all patterns
+  func getTotalPhoneNumbersCount() async -> Int64 {
+    let allPatterns = await getAllPatterns()
+    return allPatterns.reduce(0) { total, pattern in
+      guard let patternString = pattern.pattern else { return total }
+      return total + Int64(PhoneNumberHelpers.countPhoneNumbers(for: patternString))
+    }
+  }
+
   /// Gets the most recent completion date from all completed patterns
   /// - Returns: The most recent completedDate, or nil if no patterns are completed
   func getLastCompletionDate() async -> Date? {
