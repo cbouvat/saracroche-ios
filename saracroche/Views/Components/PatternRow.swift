@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PatternRow: View {
-  let pattern: Pattern
+  @ObservedObject var pattern: Pattern
 
   var body: some View {
     HStack(alignment: .center, spacing: 6) {

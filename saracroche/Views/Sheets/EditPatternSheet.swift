@@ -8,81 +8,116 @@ struct EditPatternSheet: View {
   let pattern: Pattern
 
   @State private var patternString: String = ""
-  @State private var action: String = "block"
+  @State private var isBlock: Bool = true
   @State private var name: String = ""
   @FocusState private var isPatternFieldFocused: Bool
+  @FocusState private var isNameFieldFocused: Bool
 
   var body: some View {
     NavigationView {
       Form {
         Section {
-          VStack(alignment: .leading, spacing: 4) {
-            Text("Saisissez le préfixe au format international avec des jokers '#'")
+          VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+              Text("Préfixe")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+              TextField("+33612345####", text: $patternString)
+                .keyboardType(.phonePad)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled(true)
+                .textFieldStyle(.plain)
+                .focused($isPatternFieldFocused)
+                .padding(12)
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .overlay(
+                  RoundedRectangle(cornerRadius: 12)
+                    .stroke(
+                      isPatternFieldFocused ? Color("AppColor") : Color(.systemGray4),
+                      lineWidth: 1
+                    )
+                )
+                .accessibilityLabel("Champ de saisie du préfixe de blocage")
+                .accessibilityHint(
+                  "Entrez un numéro avec des jokers '#' en fin de numéro. Exemple: +33612345####"
+                )
+              Text(
+                "Format international avec '#' comme joker en fin de numéro. Ex: +33612345####"
+              )
               .font(.caption)
               .foregroundColor(.secondary)
+            }
 
-            TextField("+33612345####", text: $patternString)
-              .keyboardType(.phonePad)
-              .textInputAutocapitalization(.never)
-              .autocorrectionDisabled(true)
-              .focused($isPatternFieldFocused)
-              .accessibilityLabel("Champ de saisie du préfixe de blocage")
-              .accessibilityHint(
-                "Entrez un numéro avec des jokers '#'. Exemple: +33612345####"
+            VStack(alignment: .leading, spacing: 4) {
+              Text("Nom")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+              TextField("Spam Marketing", text: $name)
+                .textInputAutocapitalization(.words)
+                .textFieldStyle(.plain)
+                .focused($isNameFieldFocused)
+                .padding(12)
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .overlay(
+                  RoundedRectangle(cornerRadius: 12)
+                    .stroke(
+                      isNameFieldFocused ? Color("AppColor") : Color(.systemGray4),
+                      lineWidth: 1
+                    )
+                )
+                .accessibilityLabel("Nom du préfixe")
+                .accessibilityHint("Entrez un nom pour identifier ce préfixe")
+              Text("Un nom pour identifier ce préfixe, par exemple 'Spam Marketing'.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+              Text("Action")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+              ReportChoiceButton(
+                title: "Bloquer",
+                description: "Bloquer les appels correspondants",
+                icon: "shield.fill",
+                isSelected: isBlock,
+                color: .red,
+                action: { isBlock = true }
               )
-          }
-        } header: {
-          Text("Préfixe")
-        } footer: {
-          Text(
-            "Utilisez '#' comme joker. Exemple: +33612345#### bloque de +33612345000 à +33612345999."
-          )
-        }
-
-        Section {
-          Picker("Action", selection: $action) {
-            Text("Bloquer").tag("block")
-            Text("Identifier").tag("identify")
-          }
-          .pickerStyle(.segmented)
-          .accessibilityLabel("Action du pattern")
-          .accessibilityHint("Choisissez si le pattern doit bloquer ou identifier les numéros")
-        } header: {
-          Text("Action")
-        }
-
-        Section {
-          TextField("Optionnel", text: $name)
-            .textInputAutocapitalization(.words)
-            .accessibilityLabel("Nom du préfixe")
-            .accessibilityHint("Entrez un nom optionnel pour identifier ce préfixe")
-        } header: {
-          Text("Nom")
-        } footer: {
-          Text("Un nom optionnel pour identifier ce préfixe (ex: 'Spam Marketing').")
-        }
-
-        Section {
-          Button {
-            Task {
-              await viewModel.updatePattern(
-                pattern: pattern,
-                newPatternString: patternString,
-                action: action,
-                name: name
+              ReportChoiceButton(
+                title: "Identifier",
+                description: "Identifier les appels correspondants",
+                icon: "info.circle.fill",
+                isSelected: !isBlock,
+                color: .blue,
+                action: { isBlock = false }
               )
-              if !viewModel.showAlert {
-                isPresented = nil
+            }
+
+            Button {
+              Task {
+                await viewModel.updatePattern(
+                  pattern: pattern,
+                  newPatternString: patternString,
+                  action: isBlock ? "block" : "identify",
+                  name: name
+                )
+                if !viewModel.showAlert {
+                  isPresented = nil
+                }
+              }
+            } label: {
+              HStack {
+                Image(systemName: "checkmark.circle.fill")
+                Text("Enregistrer")
               }
             }
-          } label: {
-            HStack {
-              Image(systemName: "checkmark.circle.fill")
-              Text("Enregistrer")
-            }
+            .buttonStyle(.fullWidth(background: Color("AppColor"), foreground: .black))
+            .disabled(viewModel.isLoading || patternString.isEmpty || name.isEmpty)
           }
-          .buttonStyle(.fullWidth(background: Color("AppColor"), foreground: .black))
-          .disabled(viewModel.isLoading || patternString.isEmpty)
+          .padding(.vertical, 6)
         }
       }
       .navigationTitle("Modifier Préfixe")
@@ -97,13 +132,14 @@ struct EditPatternSheet: View {
           Spacer()
           Button("Terminé") {
             isPatternFieldFocused = false
+            isNameFieldFocused = false
           }
           .font(.body.weight(.bold))
         }
       }
       .onAppear {
         patternString = pattern.pattern ?? ""
-        action = pattern.action ?? "block"
+        isBlock = (pattern.action ?? "block") == "block"
         name = pattern.name ?? ""
       }
     }
