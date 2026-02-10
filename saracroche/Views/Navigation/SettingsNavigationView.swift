@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsNavigationView: View {
   @ObservedObject var blockerViewModel: BlockerViewModel
+  @State private var showingBusinessCodeSheet = false
   @State private var showingReinstallSheet = false
   @State private var showingResetSheet = false
   @State private var bisouTapCount = 0
@@ -20,6 +21,12 @@ struct SettingsNavigationView: View {
               "Activer ou désactiver Saracroche dans **Réglages**",
               systemImage: "gearshape.fill"
             )
+          }
+
+          Button {
+            showingBusinessCodeSheet = true
+          } label: {
+            Label("Code entreprise", systemImage: "building.2.fill")
           }
 
           Button {
@@ -174,6 +181,9 @@ struct SettingsNavigationView: View {
       .appFont(.body)
       .tint(.primary)
       .navigationTitle("Réglages")
+      .sheet(isPresented: $showingBusinessCodeSheet) {
+        BusinessCodeSheet()
+      }
       .sheet(isPresented: $showingReinstallSheet) {
         ReinstallSheet(blockerViewModel: blockerViewModel)
       }

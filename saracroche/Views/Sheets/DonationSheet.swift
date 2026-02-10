@@ -38,34 +38,34 @@ struct DonationSheet: View {
               .appFont(.headlineSemiBold)
 
             VStack(alignment: .leading, spacing: 16) {
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "curlybraces.square.fill",
                 title: "Projet open source",
                 description: "Code source ouvert et transparent"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "gift.fill",
                 title: "Entièrement gratuit",
                 description:
                   "Pas de pub, pas d'abonnement, pas de version premium"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "person.fill",
                 title: "Développeur indépendant",
                 description:
                   "Camille développe bénévolement sur son temps libre"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "arrow.clockwise.circle.fill",
                 title: "Mises à jour régulières",
                 description:
                   "Nouvelles listes de blocage et améliorations continues"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "lock.shield.fill",
                 title: "Confidentialité respectée",
                 description:
@@ -162,32 +162,6 @@ struct DonationSheet: View {
           }
         }
       }
-    }
-  }
-}
-
-struct DonationBenefitRow: View {
-  let icon: String
-  let title: String
-  let description: String
-
-  var body: some View {
-    HStack(alignment: .center, spacing: 12) {
-      Image(systemName: icon)
-        .font(.system(size: 20))
-        .foregroundColor(.accent)
-        .frame(width: 24)
-
-      VStack(alignment: .leading, spacing: 4) {
-        Text(title)
-          .appFont(.subheadlineMedium)
-
-        Text(description)
-          .appFont(.caption)
-          .foregroundColor(.secondary)
-      }
-
-      Spacer()
     }
   }
 }

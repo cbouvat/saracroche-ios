@@ -9,6 +9,7 @@ class UserDefaultsService {
     static let lastListDownloadAt = "lastListDownloadAt"
     static let lastBackgroundLaunchAt = "lastBackgroundLaunchAt"
     static let lastSuccessfulUpdateAt = "lastSuccessfulUpdateAt"
+    static let businessCode = "businessCode"
   }
 
   init() {
@@ -60,6 +61,18 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.lastBackgroundLaunchAt)
   }
 
+  func setBusinessCode(_ code: String) {
+    userDefaults.set(code, forKey: Keys.businessCode)
+  }
+
+  func getBusinessCode() -> String? {
+    return userDefaults.string(forKey: Keys.businessCode)
+  }
+
+  func clearBusinessCode() {
+    userDefaults.removeObject(forKey: Keys.businessCode)
+  }
+
   func shouldDownloadList() -> Bool {
     guard let lastDownload = getLastListDownloadAt() else {
       return true  // First time, always download
@@ -72,5 +85,6 @@ class UserDefaultsService {
     clearLastListDownloadAt()
     clearLastBackgroundLaunchAt()
     clearLastSuccessfulUpdateAt()
+    clearBusinessCode()
   }
 }

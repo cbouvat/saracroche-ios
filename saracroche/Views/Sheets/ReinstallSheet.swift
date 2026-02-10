@@ -38,18 +38,20 @@ struct ReinstallSheet: View {
               .multilineTextAlignment(.leading)
 
               VStack(alignment: .leading, spacing: 16) {
-                reinstallDetailRow(
+                BenefitRow(
                   icon: "phone.fill.badge.checkmark",
                   title: "Extension réinitialisée",
                   description:
-                    "Les numéros bloqués seront temporairement supprimés"
+                    "Les numéros bloqués seront temporairement supprimés",
+                  iconColor: .blue
                 )
 
-                reinstallDetailRow(
+                BenefitRow(
                   icon: "arrow.clockwise",
                   title: "Réinstallation automatique",
                   description:
-                    "Les numéros seront réinstallés progressivement"
+                    "Les numéros seront réinstallés progressivement",
+                  iconColor: .blue
                 )
               }
             }
@@ -85,32 +87,6 @@ struct ReinstallSheet: View {
     }
   }
 
-  // MARK: - Helpers
-
-  @ViewBuilder
-  private func reinstallDetailRow(
-    icon: String,
-    title: String,
-    description: String
-  ) -> some View {
-    HStack(alignment: .center, spacing: 12) {
-      Image(systemName: icon)
-        .font(.system(size: 20))
-        .foregroundColor(.blue)
-        .frame(width: 24)
-
-      VStack(alignment: .leading, spacing: 2) {
-        Text(title)
-          .appFont(.subheadlineMedium)
-
-        Text(description)
-          .appFont(.caption)
-          .foregroundColor(.secondary)
-      }
-
-      Spacer()
-    }
-  }
 }
 
 #Preview {
