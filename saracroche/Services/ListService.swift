@@ -84,7 +84,7 @@ final class ListService {
   /// Convert list from API response to CoreData
   private func updateCoreData(_ apiResponse: APIListResponse) async {
     let newPatternStrings: Set<String> = Set(apiResponse.patterns.map { $0.pattern })
-    let existingPatterns = await patternService.getAllPatterns()
+    let existingPatterns = await patternService.getPatterns(bySource: "api")
 
     Logger.info(
       "Starting updateCoreData - Found \(apiResponse.patterns.count) patterns in API response",
