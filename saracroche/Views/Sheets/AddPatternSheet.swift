@@ -23,6 +23,7 @@ struct AddPatternSheet: View {
               .keyboardType(.phonePad)
               .textInputAutocapitalization(.never)
               .autocorrectionDisabled(true)
+              .textFieldStyle(.plain)
               .focused($isPatternFieldFocused)
               .padding(12)
               .background(Color(.systemBackground))

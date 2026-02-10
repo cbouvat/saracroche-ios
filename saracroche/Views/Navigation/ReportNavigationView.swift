@@ -19,6 +19,7 @@ struct ReportNavigationView: View {
               .keyboardType(.phonePad)
               .textInputAutocapitalization(.never)
               .autocorrectionDisabled(true)
+              .textFieldStyle(.plain)
               .padding(12)
               .background(Color(.systemBackground))
               .cornerRadius(12)
