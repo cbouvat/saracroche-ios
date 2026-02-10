@@ -32,6 +32,7 @@ struct SettingsNavigationView: View {
           .foregroundColor(.red)
         } header: {
           Text("Configuration")
+            .appFont(.caption)
         }
 
         Section {
@@ -84,6 +85,7 @@ struct SettingsNavigationView: View {
           }
         } header: {
           Text("Liens")
+            .appFont(.caption)
         }
 
         Section {
@@ -132,6 +134,7 @@ struct SettingsNavigationView: View {
           }
         } header: {
           Text("Contact")
+            .appFont(.caption)
         } footer: {
           Button {
             bisouTapCount += 1
@@ -158,6 +161,8 @@ struct SettingsNavigationView: View {
           .padding(.vertical, 8)
         }
       }
+      .appFont(.body)
+      .tint(.primary)
       .navigationTitle("Réglages")
       .confirmationDialog(
         "Réinitialiser l'application", isPresented: $showingResetAlert, titleVisibility: .visible

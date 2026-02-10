@@ -56,8 +56,7 @@ struct HomeNavigationView: View {
         }
 
         Text("Le bloqueur est actif")
-          .font(.title3)
-          .bold()
+          .appFont(.title3Bold)
           .multilineTextAlignment(.center)
       }
       .padding(.bottom, 8)
@@ -104,8 +103,7 @@ struct HomeNavigationView: View {
         }
 
         Text("Le bloqueur n'est pas activé")
-          .font(.title3)
-          .bold()
+          .appFont(.title3Bold)
           .multilineTextAlignment(.center)
 
         Text(
@@ -113,7 +111,7 @@ struct HomeNavigationView: View {
             + "Saracroche dans les réglages. Une fois l'activation effectuée, "
             + "la liste de blocage sera automatiquement installée."
         )
-        .font(.body)
+        .appFont(.body)
         .frame(maxWidth: .infinity, alignment: .leading)
 
         Button {
@@ -142,8 +140,7 @@ struct HomeNavigationView: View {
         }
 
         Text("Vérification du statut du bloqueur en cours…")
-          .font(.title3)
-          .bold()
+          .appFont(.title3Bold)
           .multilineTextAlignment(.center)
       } else if blockerViewModel.blockerExtensionStatus == .error {
         if #available(iOS 18.0, *) {
@@ -158,8 +155,7 @@ struct HomeNavigationView: View {
         }
 
         Text("Erreur lors de la vérification")
-          .font(.title3)
-          .bold()
+          .appFont(.title3Bold)
       } else if blockerViewModel.blockerExtensionStatus == .unexpected {
         if #available(iOS 18.0, *) {
           Image(systemName: "exclamationmark.triangle.fill")
@@ -176,8 +172,7 @@ struct HomeNavigationView: View {
         }
 
         Text("Statut inattendu")
-          .font(.title3)
-          .bold()
+          .appFont(.title3Bold)
           .multilineTextAlignment(.center)
       }
     }
@@ -215,12 +210,11 @@ struct HomeNavigationView: View {
 
         VStack(alignment: .leading, spacing: 2) {
           Text("État de la liste de blocage")
-            .font(.subheadline)
-            .fontWeight(.medium)
+            .appFont(.subheadlineMedium)
             .foregroundColor(.primary)
 
           Text(blockerViewModel.updateState.description)
-            .font(.caption)
+            .appFont(.caption)
             .foregroundColor(.secondary)
         }
 
@@ -235,12 +229,11 @@ struct HomeNavigationView: View {
 
         VStack(alignment: .leading, spacing: 2) {
           Text("\(blockerViewModel.totalPhoneNumbersCount.formatted())")
-            .font(.subheadline)
-            .fontWeight(.medium)
+            .appFont(.subheadlineMedium)
             .foregroundColor(.primary)
 
           Text("Numéros dans la base de données")
-            .font(.caption)
+            .appFont(.caption)
             .foregroundColor(.secondary)
         }
 
@@ -262,15 +255,14 @@ struct HomeNavigationView: View {
           .foregroundColor(.red)
 
         Text("Soutenez Saracroche")
-          .font(.headline)
-          .fontWeight(.semibold)
+          .appFont(.headlineSemiBold)
       }
 
       Text(
         "Saracroche est une application entièrement gratuite, open source et sans publicité. "
           + "Elle vit grâce aux dons de ses utilisateurs pour continuer à évoluer."
       )
-      .font(.body)
+      .appFont(.body)
 
       Button {
         showDonationSheet = true

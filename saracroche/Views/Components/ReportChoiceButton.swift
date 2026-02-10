@@ -18,11 +18,10 @@ struct ReportChoiceButton: View {
 
         VStack(alignment: .leading, spacing: 2) {
           Text(title)
-            .font(.subheadline)
-            .fontWeight(.semibold)
+            .appFont(.subheadlineSemiBold)
             .foregroundColor(.primary)
           Text(description)
-            .font(.caption)
+            .appFont(.caption)
             .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

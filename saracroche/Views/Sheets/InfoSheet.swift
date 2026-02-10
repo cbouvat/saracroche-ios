@@ -21,8 +21,7 @@ struct InfoSheet: View {
             }
 
             Text("Informations")
-              .font(.title)
-              .fontWeight(.bold)
+              .appFont(.titleBold)
               .multilineTextAlignment(.center)
           }
 
@@ -30,8 +29,7 @@ struct InfoSheet: View {
 
           VStack(alignment: .leading, spacing: 16) {
             Text("Besoin d'informations supplémentaires ?")
-              .font(.headline)
-              .fontWeight(.semibold)
+              .appFont(.headlineSemiBold)
 
             Text(
               """
@@ -39,7 +37,7 @@ struct InfoSheet: View {
               Vous y trouverez la foire aux questions (FAQ).
               """
             )
-            .font(.body)
+            .appFont(.body)
 
             Button {
               if let url = URL(string: "https://saracroche.org/fr/help") {
@@ -77,8 +75,7 @@ struct InfoSheet: View {
       // SECTION: STATISTIQUES
       VStack(spacing: 16) {
         Text("Statistiques")
-          .font(.headline)
-          .fontWeight(.semibold)
+          .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 8) {
@@ -123,8 +120,7 @@ struct InfoSheet: View {
       // SECTION: ÉTAT
       VStack(spacing: 16) {
         Text("État du service")
-          .font(.headline)
-          .fontWeight(.semibold)
+          .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 8) {
@@ -165,8 +161,7 @@ struct InfoSheet: View {
       // SECTION: DATES
       VStack(spacing: 16) {
         Text("Dates et historique")
-          .font(.headline)
-          .fontWeight(.semibold)
+          .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 8) {
@@ -227,12 +222,11 @@ struct InfoSheet: View {
 
       VStack(alignment: .leading, spacing: 2) {
         Text(value)
-          .font(.subheadline)
-          .fontWeight(.medium)
+          .appFont(.subheadlineMedium)
           .foregroundColor(.primary)
 
         Text(label)
-          .font(.caption)
+          .appFont(.caption)
           .foregroundColor(.secondary)
       }
 

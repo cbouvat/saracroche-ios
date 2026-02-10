@@ -6,7 +6,7 @@ struct PatternRow: View {
   var body: some View {
     HStack(alignment: .center, spacing: 6) {
       Image(systemName: actionIcon)
-        .font(.body)
+        .appFont(.body)
         .foregroundColor(actionColor)
 
       VStack(alignment: .leading) {
@@ -14,12 +14,12 @@ struct PatternRow: View {
         HStack {
           if let name = pattern.name, !name.isEmpty {
             Text(name)
-              .font(.caption.weight(.semibold))
+              .appFont(.captionSemiBold)
               .lineLimit(1)
           }
           Spacer()
           Text("\(calculateBlockedCount(pattern)) numéros")
-            .font(.caption2)
+            .appFont(.caption2)
             .foregroundColor(.secondary)
         }
 

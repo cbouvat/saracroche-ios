@@ -34,7 +34,7 @@ struct ReportNavigationView: View {
             Text(
               "Saisissez le numéro de téléphone au format international, par exemple +33612345678 pour la France."
             )
-            .font(.footnote)
+            .appFont(.footnote)
             .foregroundColor(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -82,6 +82,7 @@ struct ReportNavigationView: View {
             "Signaler un numéro, contribue à améliorer la liste de "
               + "blocage et à rendre l'application plus efficace."
           )
+          .appFont(.caption)
         }
       }
       .navigationTitle("Signaler")
@@ -91,7 +92,7 @@ struct ReportNavigationView: View {
           Button("Terminé") {
             isPhoneFieldFocused = false
           }
-          .font(.body.weight(.bold))
+          .appFont(.bodyBold)
         }
       }
       .alert(viewModel.alertType.title, isPresented: $viewModel.showAlert) {

@@ -11,6 +11,10 @@
 		<string>processing</string>
 		<string>fetch</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AtkinsonHyperlegibleNextVF-Variable.ttf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>

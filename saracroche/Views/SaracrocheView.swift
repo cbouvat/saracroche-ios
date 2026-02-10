@@ -22,6 +22,7 @@ struct SaracrocheView: View {
           Label("Réglages", systemImage: "gearshape.fill")
         }
     }
+    .tint(.primary)
   }
 }
 

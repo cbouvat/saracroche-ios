@@ -12,7 +12,7 @@ struct NumbersNavigationView: View {
           if viewModel.apiPatterns.isEmpty {
             VStack {
               Text("La liste sera téléchargée automatiquement. Veuillez patienter.")
-                .font(.caption)
+                .appFont(.caption)
                 .foregroundColor(.secondary)
             }
           } else {
@@ -22,24 +22,24 @@ struct NumbersNavigationView: View {
               VStack(alignment: .leading, spacing: 12) {
                 // List name
                 Text(viewModel.frenchListName)
-                  .font(.headline)
+                  .appFont(.headline)
                   .lineLimit(2)
 
                 // Version
                 HStack(spacing: 4) {
                   Image(systemName: "tag.circle.fill")
-                    .font(.body)
+                    .appFont(.body)
                   Text("Version " + viewModel.frenchListVersion)
-                    .font(.caption)
+                    .appFont(.caption)
                 }
                 .foregroundColor(.secondary)
 
                 // Blocked numbers count
                 HStack(spacing: 4) {
                   Image(systemName: "number.circle.fill")
-                    .font(.body)
+                    .appFont(.body)
                   Text("\(viewModel.frenchListBlockedCount) numéros bloqués")
-                    .font(.caption)
+                    .appFont(.caption)
                 }
                 .foregroundColor(.secondary)
               }
@@ -47,10 +47,12 @@ struct NumbersNavigationView: View {
           }
         } header: {
           Text("Liste")
+            .appFont(.caption)
         } footer: {
           Text(
             "Liste téléchargée automatiquement et mise à jour régulièrement."
           )
+          .appFont(.caption)
         }
 
         // SECTION 2: Mes préfixes et numéros
@@ -58,7 +60,7 @@ struct NumbersNavigationView: View {
           if viewModel.userPatterns.isEmpty {
             VStack {
               Text("Aucun préfixe ou numéro personnalisé n'a été ajouté encore.")
-                .font(.caption)
+                .appFont(.caption)
                 .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -90,10 +92,12 @@ struct NumbersNavigationView: View {
           .buttonStyle(.fullWidth(background: Color("AppColor"), foreground: .black))
         } header: {
           Text("Mes préfixes et numéros")
+            .appFont(.caption)
         } footer: {
           Text(
             "Ajoutez vos propres préfixes ou numéros pour les bloquer les identifier."
           )
+          .appFont(.caption)
         }
       }
       .navigationTitle("Numéros")

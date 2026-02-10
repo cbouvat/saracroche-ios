@@ -22,8 +22,7 @@ struct DebugSheet: View {
             }
 
             Text("Debug")
-              .font(.title)
-              .fontWeight(.bold)
+              .appFont(.titleBold)
               .multilineTextAlignment(.center)
           }
 
@@ -33,7 +32,7 @@ struct DebugSheet: View {
               Text(
                 "These tools are reserved for testing and may cause instabilities in the application."
               )
-              .font(.body)
+              .appFont(.body)
               .multilineTextAlignment(.leading)
             }
 
@@ -168,7 +167,7 @@ struct DebugButton: View {
         .padding(12)
         .background(background)
         .foregroundColor(foreground)
-        .font(.body.weight(.bold))
+        .appFont(.bodyBold)
         .cornerRadius(24)
     }
   }

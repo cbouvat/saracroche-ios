@@ -20,24 +20,22 @@ struct DonationSheet: View {
             }
 
             Text("Soutenez Saracroche")
-              .font(.title)
-              .fontWeight(.bold)
+              .appFont(.titleBold)
               .multilineTextAlignment(.center)
           }
 
           VStack(alignment: .leading, spacing: 16) {
             Text(
-              "Saracroche est développée bénévolement par Camille sur son temps libre. Vos dons lui permettent d’améliorer l’application et de maintenir les listes de blocage à jour. "
+              "Saracroche est développée bénévolement par Camille sur son temps libre. Vos dons lui permettent d'améliorer l'application et de maintenir les listes de blocage à jour. "
                 + "Une note sur le store, ça fait toujours plaisir et aide beaucoup !"
             )
-            .font(.body)
+            .appFont(.body)
             .multilineTextAlignment(.leading)
 
             Spacer()
 
             Text("Pourquoi donner ?")
-              .font(.headline)
-              .fontWeight(.semibold)
+              .appFont(.headlineSemiBold)
 
             VStack(alignment: .leading, spacing: 8) {
               DonationBenefitRow(
@@ -182,11 +180,10 @@ struct DonationBenefitRow: View {
 
       VStack(alignment: .leading, spacing: 4) {
         Text(title)
-          .font(.subheadline)
-          .fontWeight(.medium)
+          .appFont(.subheadlineMedium)
 
         Text(description)
-          .font(.caption)
+          .appFont(.caption)
           .foregroundColor(.secondary)
       }
 

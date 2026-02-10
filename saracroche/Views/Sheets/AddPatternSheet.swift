@@ -18,8 +18,7 @@ struct AddPatternSheet: View {
           VStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
               Text("Préfixe")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+                .appFont(.subheadlineSemiBold)
               TextField("+33612345####", text: $patternString)
                 .keyboardType(.phonePad)
                 .textInputAutocapitalization(.never)
@@ -43,14 +42,13 @@ struct AddPatternSheet: View {
               Text(
                 "Format international avec '#' comme joker en fin de numéro. Ex: +33612345####"
               )
-              .font(.caption)
+              .appFont(.caption)
               .foregroundColor(.secondary)
             }
 
             VStack(alignment: .leading, spacing: 4) {
               Text("Nom")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+                .appFont(.subheadlineSemiBold)
               TextField("Spam Marketing", text: $name)
                 .textInputAutocapitalization(.words)
                 .textFieldStyle(.plain)
@@ -68,14 +66,13 @@ struct AddPatternSheet: View {
                 .accessibilityLabel("Nom du préfixe")
                 .accessibilityHint("Entrez un nom pour identifier ce préfixe")
               Text("Un nom pour identifier ce préfixe, par exemple 'Spam Marketing'.")
-                .font(.caption)
+                .appFont(.caption)
                 .foregroundColor(.secondary)
             }
 
             VStack(alignment: .leading, spacing: 8) {
               Text("Action")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+                .appFont(.subheadlineSemiBold)
               ReportChoiceButton(
                 title: "Bloquer",
                 description: "Bloquer les appels correspondants",
@@ -131,7 +128,7 @@ struct AddPatternSheet: View {
             isPatternFieldFocused = false
             isNameFieldFocused = false
           }
-          .font(.body.weight(.bold))
+          .appFont(.bodyBold)
         }
       }
     }
