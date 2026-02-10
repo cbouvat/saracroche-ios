@@ -4,6 +4,7 @@ struct HomeNavigationView: View {
   @ObservedObject var blockerViewModel: BlockerViewModel
   @State private var showDonationSheet = false
   @State private var showInfoSheet = false
+  @State private var updateIconRotation: Double = 0
 
   var body: some View {
     NavigationView {
@@ -190,23 +191,29 @@ struct HomeNavigationView: View {
   private var updateStateBanner: some View {
     VStack(spacing: 12) {
       HStack(spacing: 12) {
-        // Icône avec animation conditionnelle pour iOS 18+
-        if #available(iOS 18.0, *) {
-          Image(systemName: blockerViewModel.updateState.iconName)
-            .font(.system(size: 20))
-            .frame(width: 24)
-            .foregroundColor(blockerViewModel.updateState.color)
-            .symbolEffect(
-              .rotate,
-              options: .repeating,
-              isActive: blockerViewModel.updateState == .inProgress
-            )
-        } else {
-          Image(systemName: blockerViewModel.updateState.iconName)
-            .font(.system(size: 20))
-            .frame(width: 24)
-            .foregroundColor(blockerViewModel.updateState.color)
-        }
+        Image(systemName: blockerViewModel.updateState.iconName)
+          .font(.system(size: 20))
+          .frame(width: 24)
+          .foregroundColor(blockerViewModel.updateState.color)
+          .rotationEffect(.degrees(updateIconRotation))
+          .onChange(of: blockerViewModel.updateState) { _ in
+            if blockerViewModel.updateState == .inProgress {
+              withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
+                updateIconRotation = 360
+              }
+            } else {
+              withAnimation(.default) {
+                updateIconRotation = 0
+              }
+            }
+          }
+          .onAppear {
+            if blockerViewModel.updateState == .inProgress {
+              withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
+                updateIconRotation = 360
+              }
+            }
+          }
 
         VStack(alignment: .leading, spacing: 2) {
           Text("État de la liste de blocage")
