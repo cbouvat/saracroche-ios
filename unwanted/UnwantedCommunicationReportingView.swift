@@ -141,5 +141,6 @@ struct ActionButton: View {
           .stroke(isSelected ? color : Color.gray.opacity(0.2), lineWidth: 1.5)
       )
     }
+    .buttonStyle(.plain)
   }
 }
