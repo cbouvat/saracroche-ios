@@ -170,7 +170,7 @@ struct InfoSheet: View {
           .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 8) {
-          // Dernière téléchargement de la liste
+          // Dernier téléchargement de la liste
           if let lastListDownloadAt = blockerViewModel.lastListDownloadAt {
             statisticsListItem(
               icon: "arrow.down.circle.fill",

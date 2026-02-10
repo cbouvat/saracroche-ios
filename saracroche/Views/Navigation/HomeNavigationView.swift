@@ -214,7 +214,7 @@ struct HomeNavigationView: View {
         }
 
         VStack(alignment: .leading, spacing: 2) {
-          Text("État de la liste blocage")
+          Text("État de la liste de blocage")
             .font(.subheadline)
             .fontWeight(.medium)
             .foregroundColor(.primary)
@@ -249,7 +249,7 @@ struct HomeNavigationView: View {
     }
     .accessibilityElement(children: .combine)
     .accessibilityLabel(
-      "État de la liste blocage : \(blockerViewModel.updateState.description). "
+      "État de la liste de blocage : \(blockerViewModel.updateState.description). "
         + "\(blockerViewModel.totalPhoneNumbersCount.formatted()) numéros dans la base de données"
     )
   }
