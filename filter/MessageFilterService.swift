@@ -17,8 +17,6 @@ final class MessageFilterService {
     let context = Self.persistentContainer.viewContext
 
     let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Pattern")
-    fetchRequest.predicate = NSPredicate(
-      format: "action == %@ AND completedDate != nil", "block")
 
     do {
       let patterns = try context.fetch(fetchRequest)
