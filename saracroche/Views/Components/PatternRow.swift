@@ -6,6 +6,7 @@ struct PatternRow: View {
   var body: some View {
     HStack(alignment: .center, spacing: 6) {
       Image(systemName: actionIcon)
+        .font(.body)
         .foregroundColor(actionColor)
 
       VStack(alignment: .leading) {
