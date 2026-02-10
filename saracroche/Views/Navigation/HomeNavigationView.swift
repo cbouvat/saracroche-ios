@@ -256,14 +256,8 @@ struct HomeNavigationView: View {
 
   private var donationView: some View {
     VStack(alignment: .leading, spacing: 16) {
-      HStack {
-        Image(systemName: "heart.fill")
-          .font(.system(size: 20))
-          .foregroundColor(.red)
-
-        Text("Soutenez Saracroche")
-          .appFont(.headlineSemiBold)
-      }
+      Text("Soutenez Saracroche")
+        .appFont(.headlineSemiBold)
 
       Text(
         "Saracroche est une application entièrement gratuite, open source et sans publicité. "
