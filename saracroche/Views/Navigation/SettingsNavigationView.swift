@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SettingsNavigationView: View {
   @ObservedObject var blockerViewModel: BlockerViewModel
-  @State private var showingResetAlert = false
+  @State private var showingResetSheet = false
   @State private var bisouTapCount = 0
   @State private var showingDebugSheet = false
 
@@ -22,7 +22,7 @@ struct SettingsNavigationView: View {
           }
 
           Button {
-            showingResetAlert = true
+            showingResetSheet = true
           } label: {
             Label(
               "Réinitialiser l'application",
@@ -164,19 +164,8 @@ struct SettingsNavigationView: View {
       .appFont(.body)
       .tint(.primary)
       .navigationTitle("Réglages")
-      .confirmationDialog(
-        "Réinitialiser l'application", isPresented: $showingResetAlert, titleVisibility: .visible
-      ) {
-        Button("Réinitialiser", role: .destructive) {
-          Task {
-            await blockerViewModel.resetApplication()
-          }
-        }
-        Button("Annuler", role: .cancel) {}
-      } message: {
-        Text(
-          "Êtes-vous sûr de vouloir réinitialiser l'application ? Toutes les données seront supprimées et l'application se fermera. Cette action est irréversible."
-        )
+      .sheet(isPresented: $showingResetSheet) {
+        ResetSheet(blockerViewModel: blockerViewModel)
       }
       .sheet(isPresented: $showingDebugSheet) {
         DebugSheet()
