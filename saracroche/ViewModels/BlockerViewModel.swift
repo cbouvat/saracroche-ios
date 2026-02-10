@@ -22,6 +22,7 @@ class BlockerViewModel: ObservableObject {
   @Published var updateError: String?
   @Published var isBackgroundRefreshEnabled: Bool = false
   @Published var isNotificationReminderEnabled: Bool = false
+  @Published var isExtensionsSetupDismissed: Bool = false
 
   private let callDirectoryService: CallDirectoryService
   private let sharedUserDefaults: SharedUserDefaultsService
@@ -47,6 +48,8 @@ class BlockerViewModel: ObservableObject {
     isNotificationReminderEnabled = userDefaults.getNotificationReminderEnabled()
     await notificationService.syncReminderStateOnLaunch()
     isNotificationReminderEnabled = userDefaults.getNotificationReminderEnabled()
+
+    isExtensionsSetupDismissed = userDefaults.getExtensionsSetupDismissed()
 
     totalPhoneNumbersCount = await patternService.getTotalPhoneNumbersCount()
     completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
@@ -149,6 +152,12 @@ class BlockerViewModel: ObservableObject {
       userDefaults.setNotificationReminderEnabled(true)
       isNotificationReminderEnabled = true
     }
+  }
+
+  /// Dismisses the extensions setup card
+  func dismissExtensionsSetup() {
+    userDefaults.setExtensionsSetupDismissed(true)
+    isExtensionsSetupDismissed = true
   }
 
   /// Disables the notification reminder

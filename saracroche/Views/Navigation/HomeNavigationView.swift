@@ -4,6 +4,7 @@ struct HomeNavigationView: View {
   @ObservedObject var blockerViewModel: BlockerViewModel
   @State private var showDonationSheet = false
   @State private var showInfoSheet = false
+  @State private var showExtensionsSetupSheet = false
   @State private var updateIconRotation: Double = 0
 
   var body: some View {
@@ -31,6 +32,9 @@ struct HomeNavigationView: View {
       .sheet(isPresented: $showInfoSheet) {
         InfoSheet(blockerViewModel: blockerViewModel)
       }
+      .sheet(isPresented: $showExtensionsSetupSheet) {
+        ExtensionsSetupSheet(blockerViewModel: blockerViewModel)
+      }
     }
   }
 
@@ -39,6 +43,9 @@ struct HomeNavigationView: View {
       activeStatusView
       if !blockerViewModel.isNotificationReminderEnabled {
         notificationReminderView
+      }
+      if !blockerViewModel.isExtensionsSetupDismissed {
+        extensionsSetupView
       }
       donationView
     }
@@ -282,6 +289,37 @@ struct HomeNavigationView: View {
         .fullWidth(background: .blue, foreground: .white)
       )
       .accessibilityLabel("Activer le rappel de mise à jour")
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.gray.opacity(0.1))
+    )
+  }
+
+  private var extensionsSetupView: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      Text("Protections supplémentaires")
+        .appFont(.headlineSemiBold)
+
+      Text(
+        "Activez le filtre SMS et le signalement d'appels indésirables pour une protection complète."
+      )
+      .appFont(.body)
+
+      Button {
+        showExtensionsSetupSheet = true
+      } label: {
+        HStack {
+          Image(systemName: "gearshape.2.fill")
+          Text("Configurer")
+        }
+      }
+      .buttonStyle(
+        .fullWidth(background: .blue, foreground: .white)
+      )
+      .accessibilityLabel("Configurer les protections supplémentaires")
     }
     .padding()
     .frame(maxWidth: .infinity)
