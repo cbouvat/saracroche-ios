@@ -61,7 +61,7 @@ struct NumbersNavigationView: View {
         Section {
           if viewModel.userPatterns.isEmpty {
             VStack {
-              Text("Aucun préfixe ou numéro personnalisé n'a été ajouté encore.")
+              Text("Aucun préfixe personnalisé n'a été ajouté encore.")
                 .appFont(.caption)
                 .foregroundColor(.secondary)
             }
