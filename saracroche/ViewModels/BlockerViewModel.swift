@@ -180,4 +180,25 @@ class BlockerViewModel: ObservableObject {
     // Exit the application
     exit(0)
   }
+
+  /// Reinstalls the block list by resetting the extension and marking all patterns as pending
+  func reinstallBlockList() async {
+    // Send reset action to CallDirectory extension to remove all entries
+    sharedUserDefaults.setAction("reset")
+    sharedUserDefaults.setNumbers([])
+
+    // Reload the extension to process the reset action
+    do {
+      try await callDirectoryService.reloadExtension()
+    } catch {
+      Logger.error(
+        "Failed to reload extension during reinstall", category: .blockerViewModel, error: error)
+    }
+
+    // Clear completedDate on all patterns so they become pending again
+    await patternService.clearAllCompletedDates()
+
+    // Refresh data to update counters
+    await loadData()
+  }
 }

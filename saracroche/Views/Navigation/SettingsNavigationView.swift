@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsNavigationView: View {
   @ObservedObject var blockerViewModel: BlockerViewModel
+  @State private var showingReinstallSheet = false
   @State private var showingResetSheet = false
   @State private var bisouTapCount = 0
   @State private var showingDebugSheet = false
@@ -18,6 +19,15 @@ struct SettingsNavigationView: View {
             Label(
               "Activer ou désactiver Saracroche dans **Réglages**",
               systemImage: "gearshape.fill"
+            )
+          }
+
+          Button {
+            showingReinstallSheet = true
+          } label: {
+            Label(
+              "Réinstaller la liste de blocage",
+              systemImage: "arrow.clockwise.circle.fill"
             )
           }
 
@@ -164,6 +174,9 @@ struct SettingsNavigationView: View {
       .appFont(.body)
       .tint(.primary)
       .navigationTitle("Réglages")
+      .sheet(isPresented: $showingReinstallSheet) {
+        ReinstallSheet(blockerViewModel: blockerViewModel)
+      }
       .sheet(isPresented: $showingResetSheet) {
         ResetSheet(blockerViewModel: blockerViewModel)
       }

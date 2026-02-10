@@ -463,6 +463,33 @@ class PatternService {
     }
   }
 
+  /// Clears the completedDate on all patterns, making them pending again for reinstallation
+  func clearAllCompletedDates() async {
+    let context = dataStack.persistentContainer.viewContext
+
+    await withCheckedContinuation { continuation in
+      context.perform {
+        let fetchRequest = NSFetchRequest<Pattern>(entityName: "Pattern")
+
+        do {
+          let patterns = try context.fetch(fetchRequest)
+          for pattern in patterns {
+            pattern.completedDate = nil
+          }
+          Self.save(context: context)
+          continuation.resume()
+        } catch {
+          Logger.error(
+            "Failed to clear completed dates: %{public}@",
+            category: .patternService,
+            error: error
+          )
+          continuation.resume()
+        }
+      }
+    }
+  }
+
   // MARK: - Private Methods
 
   /// Saves changes to the CoreData context
