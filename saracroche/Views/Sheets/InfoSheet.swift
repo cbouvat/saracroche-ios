@@ -10,12 +10,12 @@ struct InfoSheet: View {
         VStack(spacing: 20) {
           VStack(spacing: 16) {
             if #available(iOS 18.0, *) {
-              Image(systemName: "phone.bubble.fill")
+              Image(systemName: "info.circle.fill")
                 .font(.system(size: 60))
                 .foregroundColor(.blue)
                 .symbolEffect(.wiggle.clockwise.byLayer, options: .repeat(.periodic(delay: 2)))
             } else {
-              Image(systemName: "phone.bubble.fill")
+              Image(systemName: "info.circle.fill")
                 .font(.system(size: 60))
                 .foregroundColor(.blue)
             }
@@ -27,35 +27,37 @@ struct InfoSheet: View {
 
           updateInfoView
 
-          VStack(alignment: .leading, spacing: 16) {
+          VStack(alignment: .leading, spacing: 8) {
             Text("Besoin d'informations supplémentaires ?")
               .appFont(.headlineSemiBold)
 
-            Text(
-              """
-              Si vous avez d'autres questions ou besoin d'aide, n'hésitez pas à vous rendre sur la page web d'aide.
-              Vous y trouverez la foire aux questions (FAQ).
-              """
-            )
-            .appFont(.body)
+            VStack(alignment: .leading, spacing: 16) {
+              Text(
+                """
+                Si vous avez d'autres questions ou besoin d'aide, n'hésitez pas à vous rendre sur la page web d'aide.
+                Vous y trouverez la foire aux questions (FAQ).
+                """
+              )
+              .appFont(.body)
 
-            Button {
-              if let url = URL(string: "https://saracroche.org/fr/help") {
-                UIApplication.shared.open(url)
+              Button {
+                if let url = URL(string: "https://saracroche.org/fr/help") {
+                  UIApplication.shared.open(url)
+                }
+              } label: {
+                Label("Ouvrir la page d'aide", systemImage: "questionmark.circle.fill")
               }
-            } label: {
-              Label("Ouvrir la page d'aide", systemImage: "questionmark.circle.fill")
+              .buttonStyle(
+                .fullWidth(background: .blue, foreground: .white)
+              )
             }
-            .buttonStyle(
-              .fullWidth(background: .blue, foreground: .white)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+              RoundedRectangle(cornerRadius: 16)
+                .fill(Color.gray.opacity(0.1))
             )
           }
-          .padding()
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .background(
-            RoundedRectangle(cornerRadius: 16)
-              .fill(Color.gray.opacity(0.1))
-          )
         }
         .padding()
       }
@@ -73,7 +75,7 @@ struct InfoSheet: View {
   private var updateInfoView: some View {
     VStack(spacing: 20) {
       // SECTION: STATISTIQUES
-      VStack(spacing: 16) {
+      VStack(spacing: 8) {
         Text("Statistiques")
           .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
@@ -109,16 +111,16 @@ struct InfoSheet: View {
           )
 
         }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+          RoundedRectangle(cornerRadius: 16)
+            .fill(Color.gray.opacity(0.1))
+        )
       }
-      .padding()
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .background(
-        RoundedRectangle(cornerRadius: 16)
-          .fill(Color.gray.opacity(0.1))
-      )
 
       // SECTION: ÉTAT
-      VStack(spacing: 16) {
+      VStack(spacing: 8) {
         Text("État du service")
           .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
@@ -150,16 +152,16 @@ struct InfoSheet: View {
             )
           }
         }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+          RoundedRectangle(cornerRadius: 16)
+            .fill(Color.gray.opacity(0.1))
+        )
       }
-      .padding()
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .background(
-        RoundedRectangle(cornerRadius: 16)
-          .fill(Color.gray.opacity(0.1))
-      )
 
       // SECTION: DATES
-      VStack(spacing: 16) {
+      VStack(spacing: 8) {
         Text("Dates et historique")
           .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
@@ -195,13 +197,13 @@ struct InfoSheet: View {
             )
           }
         }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+          RoundedRectangle(cornerRadius: 16)
+            .fill(Color.gray.opacity(0.1))
+        )
       }
-      .padding()
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .background(
-        RoundedRectangle(cornerRadius: 16)
-          .fill(Color.gray.opacity(0.1))
-      )
     }
   }
 
