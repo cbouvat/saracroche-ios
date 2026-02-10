@@ -21,11 +21,11 @@ enum BlockerUpdateStatus {
   var iconName: String {
     switch self {
     case .ok:
-      return "checkmark.circle"
+      return "checkmark.circle.fill"
     case .inProgress:
-      return "arrow.clockwise.circle"
+      return "arrow.clockwise.circle.fill"
     case .error:
-      return "exclamationmark.triangle.fill"
+      return "exclamationmark.circle.fill"
     }
   }
 
