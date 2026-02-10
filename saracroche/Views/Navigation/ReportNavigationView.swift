@@ -9,12 +9,6 @@ struct ReportNavigationView: View {
       Form {
         Section {
           VStack(spacing: 16) {
-            Text(
-              "Saisissez le numéro de téléphone au format international, par exemple +33612345678 pour la France."
-            )
-            .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .leading)
-
             TextField("+33612345678", text: $viewModel.phoneNumber)
               .keyboardType(.phonePad)
               .textInputAutocapitalization(.never)
@@ -36,6 +30,13 @@ struct ReportNavigationView: View {
               .accessibilityHint(
                 "Saisissez le numéro au format E.164, par exemple +33612345678"
               )
+
+            Text(
+              "Saisissez le numéro de téléphone au format international, par exemple +33612345678 pour la France."
+            )
+            .font(.footnote)
+            .foregroundColor(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(spacing: 12) {
               ReportChoiceButton(
@@ -76,8 +77,6 @@ struct ReportNavigationView: View {
             .accessibilityLabel("Bouton d'envoi du signalement")
           }
           .padding(.vertical, 6)
-        } header: {
-          Text("Signaler un numéro")
         } footer: {
           Text(
             "Signaler un numéro, contribue à améliorer la liste de "
