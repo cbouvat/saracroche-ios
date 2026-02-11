@@ -1,6 +1,6 @@
 # Saracroche iOS
 
-> 🤖 **Also available for Android**: Check out [Saracroche Android](https://github.com/cbouvat/saracroche-android) for Android users!
+> 🤖 **Also available for Android**: Check out [Saracroche Android](https://codeberg.org/cbouvat/saracroche-android) for Android users!
 
 ## Description
 
@@ -66,7 +66,7 @@ If you find Saracroche useful, consider sponsoring the project to help with main
 
 ## Star the Project ⭐
 
-If you like Saracroche, please consider giving it a star on GitHub to show your support and help others discover the project.
+If you like Saracroche, please consider giving it a star on Codeberg to show your support and help others discover the project.
 
 ## License
 
