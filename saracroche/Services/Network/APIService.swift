@@ -22,11 +22,6 @@ class APIService {
     self.session = URLSession(configuration: configuration)
   }
 
-  func get(url: URL) async throws -> Data {
-    let request = makeRequest(url: url, method: .get)
-    return try await performRequest(request)
-  }
-
   func makeRequest(url: URL, method: HTTPMethod) -> URLRequest {
     var request = URLRequest(url: url)
     request.httpMethod = method.rawValue
