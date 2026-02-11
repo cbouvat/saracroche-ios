@@ -78,6 +78,7 @@ struct NumbersNavigationView: View {
                   } label: {
                     Label("Supprimer", systemImage: "trash.fill")
                   }
+                  .tint(.red)
                 }
             }
           }
