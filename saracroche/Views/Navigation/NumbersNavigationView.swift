@@ -7,7 +7,7 @@ struct NumbersNavigationView: View {
   var body: some View {
     NavigationView {
       Form {
-        // SECTION 1: Liste
+        // SECTION 1: List
         Section {
           if viewModel.apiPatterns.isEmpty {
             VStack {
@@ -57,7 +57,7 @@ struct NumbersNavigationView: View {
           .appFont(.caption)
         }
 
-        // SECTION 2: Mes préfixes
+        // SECTION 2: My prefixes
         Section {
           if viewModel.userPatterns.isEmpty {
             VStack {

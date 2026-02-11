@@ -57,7 +57,7 @@ struct HomeNavigationView: View {
 
   private var activeStatusView: some View {
     VStack(spacing: 16) {
-      // Header : icône bouclier + texte
+      // Header: shield icon + text
       VStack(alignment: .center, spacing: 16) {
         if #available(iOS 18.0, *) {
           Image(systemName: "checkmark.shield.fill")
@@ -76,10 +76,10 @@ struct HomeNavigationView: View {
       }
       .padding(.bottom, 8)
 
-      // Bandeau d'état + statistiques
+      // Status banner + statistics
       updateStateBanner
 
-      // Bouton "En savoir plus"
+      // "Learn more" button
       Button {
         showInfoSheet = true
       } label: {

@@ -74,7 +74,7 @@ struct InfoSheet: View {
   @ViewBuilder
   private var updateInfoView: some View {
     VStack(spacing: 20) {
-      // SECTION: STATISTIQUES
+      // SECTION: STATISTICS
       VStack(spacing: 8) {
         Text("Statistiques")
           .appFont(.headlineSemiBold)
@@ -119,14 +119,14 @@ struct InfoSheet: View {
         )
       }
 
-      // SECTION: ÉTAT
+      // SECTION: STATUS
       VStack(spacing: 8) {
         Text("État du service")
           .appFont(.headlineSemiBold)
           .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 16) {
-          // État de l'extension
+          // Extension status
           statisticsListItem(
             icon: extensionStatusIcon,
             value: extensionStatusText,
@@ -134,7 +134,7 @@ struct InfoSheet: View {
             color: extensionStatusColor
           )
 
-          // État du service en arrière-plan
+          // Background service status
           statisticsListItem(
             icon: backgroundServiceIcon,
             value: backgroundServiceText,
@@ -142,7 +142,7 @@ struct InfoSheet: View {
             color: backgroundServiceColor
           )
 
-          // État de la mise à jour (si applicable)
+          // Update status (if applicable)
           if blockerViewModel.updateState != .ok {
             statisticsListItem(
               icon: "arrow.clockwise.circle.fill",
@@ -167,7 +167,7 @@ struct InfoSheet: View {
           .frame(maxWidth: .infinity, alignment: .leading)
 
         VStack(spacing: 16) {
-          // Dernier téléchargement de la liste
+          // Last list download
           if let lastListDownloadAt = blockerViewModel.lastListDownloadAt {
             statisticsListItem(
               icon: "arrow.down.circle.fill",
@@ -177,7 +177,7 @@ struct InfoSheet: View {
             )
           }
 
-          // Dernière mise à jour réussie
+          // Last successful update
           if let lastSuccessfulUpdateAt = blockerViewModel.lastSuccessfulUpdateAt {
             statisticsListItem(
               icon: "checkmark.circle.fill",
@@ -187,7 +187,7 @@ struct InfoSheet: View {
             )
           }
 
-          // Dernier lancement en arrière-plan
+          // Last background launch
           if let lastBackgroundLaunchAt = blockerViewModel.lastBackgroundLaunchAt {
             statisticsListItem(
               icon: "clock.circle.fill",
