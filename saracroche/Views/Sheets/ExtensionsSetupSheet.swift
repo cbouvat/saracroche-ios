@@ -42,7 +42,7 @@ struct ExtensionsSetupSheet: View {
                   icon: "message.fill",
                   title: "Comment activer",
                   description:
-                    "Réglages > Apps> Messages > Filter les messages texte > Saracroche",
+                    "Réglages > Apps > Messages > Filter les messages texte > Saracroche",
                   iconColor: .blue
                 )
               }
@@ -72,7 +72,7 @@ struct ExtensionsSetupSheet: View {
                   icon: "phone.fill",
                   title: "Comment activer",
                   description:
-                    "Réglages > Apps> Téléphone > Signalements des SMS/appels > Saracroche",
+                    "Réglages > Apps > Téléphone > Signalements des SMS/appels > Saracroche",
                   iconColor: .blue
                 )
               }
