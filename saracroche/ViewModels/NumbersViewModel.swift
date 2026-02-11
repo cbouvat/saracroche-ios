@@ -106,9 +106,7 @@ class NumbersViewModel: ObservableObject {
   }
 
   func deletePattern(_ pattern: Pattern) async {
-    let action = pattern.action ?? "block"
-    let removeAction = action == "identify" ? "remove_identify" : "remove_block"
-    await patternService.markPatternForDeletion(pattern, removalAction: removeAction)
+    await patternService.markPatternForDeletion(pattern)
     Logger.info("Prefix marked for removal: \(pattern.pattern ?? "")", category: .numbersViewModel)
     await loadData()
   }

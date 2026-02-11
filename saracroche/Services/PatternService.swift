@@ -316,16 +316,21 @@ class PatternService {
   }
 
   /// Marks a pattern for deletion by changing its action and resetting completedDate
-  /// - Parameters:
-  ///   - pattern: The Pattern entity to mark for deletion
-  ///   - removalAction: The removal action ("remove_block" or "remove_identify")
-  func markPatternForDeletion(_ pattern: Pattern, removalAction: String) async {
+  /// - Parameter pattern: The Pattern entity to mark for deletion
+  func markPatternForDeletion(_ pattern: Pattern) async {
     let context = dataStack.persistentContainer.viewContext
     let objectID = pattern.objectID
 
     await withCheckedContinuation { continuation in
       context.perform {
         let patternInContext = context.object(with: objectID) as! Pattern
+        let currentAction = patternInContext.action ?? "block"
+        // Skip patterns already marked for removal
+        if currentAction.hasPrefix("remove_") {
+          continuation.resume()
+          return
+        }
+        let removalAction = currentAction == "identify" ? "remove_identify" : "remove_block"
         patternInContext.action = removalAction
         patternInContext.completedDate = nil
         Self.save(context: context)
