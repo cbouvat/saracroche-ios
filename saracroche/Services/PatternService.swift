@@ -59,7 +59,7 @@ class PatternService {
 
   /// Fetches all patterns from CoreData
   /// - Returns: Array of all Pattern entities
-  func getAllPatterns() async -> [Pattern] {
+  private func getAllPatterns() async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
 
     return await withCheckedContinuation { continuation in
@@ -109,7 +109,7 @@ class PatternService {
 
   /// Fetches all patterns that have not been completed yet
   /// - Returns: Array of Pattern entities where completedDate is nil
-  func getPendingPatterns() async -> [Pattern] {
+  private func getPendingPatterns() async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
 
     return await withCheckedContinuation { continuation in
@@ -196,7 +196,7 @@ class PatternService {
 
   /// Fetches all patterns that have been completed
   /// - Returns: Array of Pattern entities where completedDate is not nil
-  func getCompletedPatterns() async -> [Pattern] {
+  private func getCompletedPatterns() async -> [Pattern] {
     let context = dataStack.persistentContainer.viewContext
 
     return await withCheckedContinuation { continuation in
