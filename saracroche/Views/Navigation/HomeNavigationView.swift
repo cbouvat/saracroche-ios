@@ -21,10 +21,14 @@ struct HomeNavigationView: View {
       }
       .navigationTitle("Saracroche")
       .task {
-        await blockerViewModel.loadData()
         await blockerViewModel.checkBlockerExtensionStatus()
         await blockerViewModel.checkBackgroundStatus()
         await blockerViewModel.performUpdateWithStateManagement()
+      }
+      .onAppear {
+        Task {
+          await blockerViewModel.loadData()
+        }
       }
       .sheet(isPresented: $showDonationSheet) {
         DonationSheet()
