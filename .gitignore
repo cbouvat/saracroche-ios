@@ -2,4 +2,6 @@
 xcuserdata/
 build/
 .vscode/
+.claude/
+.vibe/
 /docs/
