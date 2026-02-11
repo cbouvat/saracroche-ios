@@ -99,14 +99,6 @@ class UserDefaultsService {
     userDefaults.removeObject(forKey: Keys.extensionsSetupDismissed)
   }
 
-  func shouldDownloadList() -> Bool {
-    guard let lastDownload = getLastListDownloadAt() else {
-      return true  // First time, always download
-    }
-
-    return Date().timeIntervalSince(lastDownload) > AppConstants.listDownloadInterval
-  }
-
   func resetAllData() {
     clearLastListDownloadAt()
     clearLastBackgroundLaunchAt()
