@@ -39,6 +39,7 @@ struct SettingsNavigationView: View {
           ) {
             Label("Rappel de mise à jour", systemImage: "bell.badge.fill")
           }
+          .tint(Color("AppColor"))
 
           Button {
             showingBusinessCodeSheet = true
