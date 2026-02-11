@@ -19,14 +19,8 @@ class SharedUserDefaultsService {
     userDefaults?.set(action, forKey: Keys.action)
   }
 
-  /// Clear the action
   func clearAction() {
     userDefaults?.set("", forKey: Keys.action)
-  }
-
-  /// Get the action
-  func getAction() -> String {
-    return userDefaults?.string(forKey: Keys.action) ?? ""
   }
 
   // MARK: - Numbers
@@ -37,20 +31,13 @@ class SharedUserDefaultsService {
     userDefaults?.set(numbers, forKey: Keys.numbers)
   }
 
-  /// Clear the numbers array
   func clearNumbers() {
     userDefaults?.set([], forKey: Keys.numbers)
   }
 
-  /// Get the numbers array
-  /// - Returns: Array of dictionaries containing number and optional name
-  func getNumbers() -> [[String: Any]] {
-    return userDefaults?.array(forKey: Keys.numbers) as? [[String: Any]] ?? []
-  }
-
   // MARK: - Reset All
   func resetAllData() {
-    userDefaults?.removeObject(forKey: Keys.action)
-    userDefaults?.removeObject(forKey: Keys.numbers)
+    clearAction()
+    clearNumbers()
   }
 }
