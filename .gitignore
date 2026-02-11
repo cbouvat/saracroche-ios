@@ -1,5 +1,7 @@
 .DS_Store
 xcuserdata/
-
-# Configuration files with sensitive data
-saracroche/Config.swift
+build/
+.vscode/
+.claude/
+.vibe/
+/docs/

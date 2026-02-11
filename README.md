@@ -1,6 +1,6 @@
 # Saracroche iOS
 
-> 🤖 **Also available for Android**: Check out [Saracroche Android](https://github.com/cbouvat/saracroche-android) for Android users!
+> 🤖 **Also available for Android**: Check out [Saracroche Android](https://codeberg.org/cbouvat/saracroche-android) for Android users!
 
 ## Description
 
@@ -16,12 +16,15 @@ Saracroche is an iOS app that protects you from unwanted calls by blocking spam 
 ## Installation
 
 ### App Store
+
 Saracroche is available on the [App Store](https://apps.apple.com/app/saracroche/id6743679292).
 
 ### TestFlight
+
 You can also try the latest beta version through [TestFlight](https://testflight.apple.com/join/CFCjF6d2).
 
 ### Building from Source
+
 1. Clone the repository
 2. Copy `saracroche/Config.swift.example` to `Config.swift`
 3. Update the configuration with your server URL
@@ -29,20 +32,10 @@ You can also try the latest beta version through [TestFlight](https://testflight
 5. Build and run the project on your device
 
 **Requirements:**
+
 - Xcode 15.0+
 - iOS 15.0+
 - Swift 5.9+
-
-## Configuration
-
-The app requires a configuration file `Config.swift` that contains sensitive information like server URLs. This file is gitignored for security.
-
-1. Copy the example configuration:
-   ```bash
-   cp saracroche/Config.swift.example saracroche/Config.swift
-   ```
-
-2. Edit `Config.swift` with your actual configuration values.
 
 ## Technology Stack
 
@@ -53,16 +46,7 @@ The app requires a configuration file `Config.swift` that contains sensitive inf
 
 ## List of prefix numbers
 
-The first list is the one containing numbers reserved for telemarketing by ARCEP : https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/la-numerotation.html
-And other numbers by the community.
-
-### Information about prefixes
-
-All prefixes are communicated by ARCEP : https://www.data.gouv.fr/fr/datasets/ressources-en-numerotation-telephonique/ and https://www.data.gouv.fr/fr/datasets/identifiants-de-communications-electroniques/
-- `MAJNUM.csv` file for the list of prefixes : https://extranet.arcep.fr/uploads/MAJNUM.csv
-- `identifiants_CE.csv` file for the operators of the prefixes : https://extranet.arcep.fr/uploads/identifiants_CE.csv
-
-Tool to identify the operator by prefix : https://www.arcep.fr/mes-demarches-et-services/entreprises/fiches-pratiques/base-numerotation.html
+The prefix numbers are provided by the remote download service and kept current via the app's background updates.
 
 ## Contributing
 
@@ -78,11 +62,11 @@ Contributions are welcome! Here's how you can help:
 
 If you find Saracroche useful, consider sponsoring the project to help with maintenance and new features:
 
-- [GitHub Sponsors](https://github.com/sponsors/cbouvat)
+- [Sponsor and support on Saracroche.org](https://saracroche.org/fr/support)
 
 ## Star the Project ⭐
 
-If you like Saracroche, please consider giving it a star on GitHub to show your support and help others discover the project.
+If you like Saracroche, please consider giving it a star on Codeberg to show your support and help others discover the project.
 
 ## License
 

@@ -1,160 +1,168 @@
 import Combine
 import SwiftUI
 
+/// View model for call blocker functionality
+@MainActor
 class BlockerViewModel: ObservableObject {
+
+  // MARK: - Published Properties
+
   @Published var blockerExtensionStatus: BlockerExtensionStatus = .unknown
-  @Published var blockerActionState: BlockerActionState = .nothing
-  @Published var blockerPhoneNumberBlocked: Int64 = 0
-  @Published var blockerPhoneNumberTotal: Int64 = 0
-  @Published var blocklistInstalledVersion: String = ""
-  @Published var blocklistVersion: String = AppConstants.currentBlocklistVersion
-  @Published var showUpdateListSheet: Bool = false
-  @Published var showDeleteBlockerSheet: Bool = false
-  @Published var showUpdateListFinishedSheet: Bool = false
-  @Published var showDeleteFinishedSheet: Bool = false
-  @Published var showActionErrorSheet: Bool = false
+  @Published var updateState: BlockerUpdateStatus = .ok
+  @Published var lastSuccessfulUpdateAt: Date? = nil
 
-  private let callDirectoryService = CallDirectoryService.shared
-  private let sharedUserDefaults = SharedUserDefaultsService.shared
-  private let phoneNumberService = PhoneNumberService.shared
+  // Statistics for blocked numbers
+  @Published var totalPhoneNumbersCount: Int64 = 0
+  @Published var completedPhoneNumbersCount: Int64 = 0
+  @Published var completedPatternsCount: Int = 0
+  @Published var pendingPatternsCount: Int = 0
+  @Published var lastListDownloadAt: Date? = nil
+  @Published var lastBackgroundLaunchAt: Date? = nil
 
-  // MARK: - Status Management
-  func checkBlockerExtensionStatus() {
-    callDirectoryService.checkExtensionStatus { [weak self] status in
-      print("Blocker extension status: \(status)")
-      self?.blockerExtensionStatus = status
-      self?.updateBlockerState()
-    }
+  @Published var isBackgroundRefreshEnabled: Bool = false
+  @Published var isNotificationReminderEnabled: Bool = false
+  @Published var isExtensionsSetupDismissed: Bool = false
+
+  // MARK: - Dependencies
+
+  private let userDefaults: UserDefaultsService
+  private let blockerService: BlockerService
+  private let patternService: PatternService
+  private let notificationService: NotificationService
+
+  // MARK: - Initialization
+
+  init() {
+    self.userDefaults = UserDefaultsService()
+    self.blockerService = BlockerService()
+    self.patternService = PatternService()
+    self.notificationService = NotificationService(userDefaults: self.userDefaults)
   }
 
-  func updateBlockerState() {
-    let blockedNumbers = sharedUserDefaults.getBlockedNumbers()
-    let totalBlockedNumbers = sharedUserDefaults.getTotalBlockedNumbers()
-    let blocklistInstalledVersion = sharedUserDefaults.getBlocklistVersion()
+  // MARK: - Data Loading
 
-    self.blockerPhoneNumberBlocked = Int64(blockedNumbers)
-    self.blockerPhoneNumberTotal = Int64(totalBlockedNumbers)
-    self.blocklistInstalledVersion = blocklistInstalledVersion
+  func loadData() async {
+    lastSuccessfulUpdateAt = userDefaults.getLastSuccessfulUpdateAt()
+    lastListDownloadAt = userDefaults.getLastListDownloadAt()
+    lastBackgroundLaunchAt = userDefaults.getLastBackgroundLaunchAt()
 
-    switch blockerActionState {
-    case .update:
-      self.showUpdateListSheet = true
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .delete:
-      self.showDeleteBlockerSheet = true
-      self.showUpdateListSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .updateFinish:
-      self.showUpdateListFinishedSheet = true
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .deleteFinish:
-      self.showDeleteFinishedSheet = true
-      self.showUpdateListSheet = false
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showActionErrorSheet = false
-    case .error:
-      self.showActionErrorSheet = true
-      self.showUpdateListSheet = false
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-    default:
-      self.showUpdateListSheet = false
-      self.showDeleteBlockerSheet = false
-      self.showUpdateListFinishedSheet = false
-      self.showDeleteFinishedSheet = false
-      self.showActionErrorSheet = false
-    }
+    isNotificationReminderEnabled = userDefaults.getNotificationReminderEnabled()
+    await notificationService.syncReminderStateOnLaunch()
+    isNotificationReminderEnabled = userDefaults.getNotificationReminderEnabled()
+
+    isExtensionsSetupDismissed = userDefaults.getExtensionsSetupDismissed()
+
+    totalPhoneNumbersCount = await patternService.getTotalPhoneNumbersCount()
+    completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
+    completedPatternsCount = await patternService.getCompletedPatternsCount()
+    pendingPatternsCount = await patternService.getPendingPatternsCount()
   }
 
-  // MARK: - Actions
-  func updateBlockerList() {
-    UIApplication.shared.isIdleTimerDisabled = true
-    self.blockerActionState = .update
-    self.sharedUserDefaults.setBlocklistVersion(AppConstants.currentBlocklistVersion)
-    self.sharedUserDefaults.setBlockedNumbers(0)
-    self.sharedUserDefaults.setTotalBlockedNumbers(
-      phoneNumberService.countAllBlockedNumbers()
-    )
-    self.updateBlockerState()
+  // MARK: - Update Management
 
-    callDirectoryService.updateBlockerList(
-      onProgress: { [weak self] in
-        self?.updateBlockerState()
-      },
-      onCompletion: { [weak self] success in
-        if success {
-          self?.updateBlockerListFinished()
-        } else {
-          self?.errorAction()
-        }
+  /// Performs update with state management
+  func performUpdateWithStateManagement() async {
+    // Set starting state
+    updateState = .inProgress
+
+    // Loop while there are pending patterns OR the list is empty
+    while pendingPatternsCount > 0 || completedPatternsCount == 0 {
+      // Check for cancellation at the beginning of each iteration
+      if Task.isCancelled {
+        Logger.debug("Update task cancelled", category: .blockerViewModel)
+        return
       }
-    )
-  }
 
-  func updateBlockerListFinished() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .updateFinish
-    self.updateBlockerState()
-  }
+      do {
+        // Perform the update with retry handled by the service
+        try await blockerService.performUpdateWithRetry()
 
-  func removeBlockerList() {
-    UIApplication.shared.isIdleTimerDisabled = true
-    self.blockerActionState = .delete
-    self.updateBlockerState()
-
-    callDirectoryService.removeBlockerList(
-      onProgress: { [weak self] in
-        self?.updateBlockerState()
-      },
-      onCompletion: { [weak self] success in
-        if success {
-          self?.removeBlockerListFinished()
-        } else {
-          self?.errorAction()
+        // Check for cancellation after update
+        if Task.isCancelled {
+          Logger.debug("Update task cancelled after performUpdate", category: .blockerViewModel)
+          return
         }
+
+        // Refresh counts after each update
+        totalPhoneNumbersCount = await patternService.getTotalPhoneNumbersCount()
+        completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
+        completedPatternsCount = await patternService.getCompletedPatternsCount()
+        pendingPatternsCount = await patternService.getPendingPatternsCount()
+      } catch is CancellationError {
+        Logger.debug("Update task cancelled", category: .blockerViewModel)
+        return
+      } catch {
+        Logger.error("Update failed", category: .blockerViewModel, error: error)
+        updateState = .error
+        return
       }
-    )
+    }
+
+    // Success - refresh dates and set ok state
+    lastSuccessfulUpdateAt = userDefaults.getLastSuccessfulUpdateAt()
+    lastListDownloadAt = userDefaults.getLastListDownloadAt()
+    updateState = .ok
   }
 
-  func removeBlockerListFinished() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .deleteFinish
-    self.updateBlockerState()
+  /// Reinstalls the block list by resetting the extension and marking all patterns as pending
+  func reinstallBlockList() async {
+    await blockerService.resetExtensionState()
+
+    // Refresh data to update counters
+    await loadData()
   }
 
-  func errorAction() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .error
-    self.sharedUserDefaults.clearAction()
-    self.updateBlockerState()
-  }
+  // MARK: - Extension Status
 
-  func clearAction() {
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.blockerActionState = .nothing
-    self.sharedUserDefaults.clearAction()
-    self.checkBlockerExtensionStatus()
-  }
-
-  func checkExtensionStatusAction() {
-    self.blockerExtensionStatus = .unknown
-    // Wait 2 seconds to ensure the UI is updated before checking the status
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-      self.checkBlockerExtensionStatus()
+  func checkBlockerExtensionStatus() async {
+    do {
+      blockerExtensionStatus = try await blockerService.checkExtensionStatus()
+    } catch {
+      Logger.error("Failed to check extension status", category: .blockerViewModel, error: error)
+      blockerExtensionStatus = .error
     }
   }
 
-  func openSettings() {
-    callDirectoryService.openSettings()
+  func checkBackgroundStatus() async {
+    isBackgroundRefreshEnabled = UIApplication.shared.backgroundRefreshStatus == .available
+  }
+
+  func openSettings() async {
+    do {
+      try await blockerService.openSettings()
+    } catch {
+      Logger.error("Failed to open settings", category: .blockerViewModel, error: error)
+    }
+  }
+
+  // MARK: - Notifications
+
+  /// Enables the notification reminder after requesting permission
+  func enableNotificationReminder() async {
+    let granted = await notificationService.requestAuthorization()
+    if granted {
+      await notificationService.scheduleReminderNotification()
+      userDefaults.setNotificationReminderEnabled(true)
+      isNotificationReminderEnabled = true
+    }
+  }
+
+  /// Disables the notification reminder
+  func disableNotificationReminder() {
+    notificationService.cancelReminderNotification()
+    userDefaults.setNotificationReminderEnabled(false)
+    isNotificationReminderEnabled = false
+  }
+
+  // MARK: - Settings
+
+  /// Dismisses the extensions setup card
+  func dismissExtensionsSetup() {
+    userDefaults.setExtensionsSetupDismissed(true)
+    isExtensionsSetupDismissed = true
+  }
+
+  func resetApplication() async {
+    await blockerService.resetApplication(notificationService: notificationService)
   }
 }

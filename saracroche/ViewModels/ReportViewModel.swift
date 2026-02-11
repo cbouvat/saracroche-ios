@@ -1,36 +1,40 @@
 import Foundation
 import SwiftUI
 
+/// View model for phone number reporting
 @MainActor
 class ReportViewModel: ObservableObject {
   @Published var phoneNumber: String = ""
+  @Published var isGood: Bool = false  // false = spam, true = legitimate
   @Published var showAlert: Bool = false
   @Published var alertMessage: String = ""
   @Published var alertType: AlertType = .info
 
   enum AlertType {
-    case success, error, info
+    case success
+    case error
+    case info
 
     var title: String {
       switch self {
-      case .success: return "Succès"
-      case .error: return "Erreur"
+      case .success: return "Success"
+      case .error: return "Error"
       case .info: return "Information"
       }
     }
   }
 
-  private let networkService = NetworkService()
+  private let apiService = ReportAPIService()
 
   func submitPhoneNumber() async {
-    // Formater le numéro avant validation
+    // Format the phone number before validation
     phoneNumber = formatPhoneNumber(phoneNumber)
 
     guard validatePhoneNumber() else { return }
 
     do {
       let phoneNumberInt64 = convertToInt64(phoneNumber)
-      try await networkService.reportPhoneNumber(phoneNumberInt64)
+      try await apiService.report(phoneNumberInt64, isGood: isGood)
       handleSuccess()
     } catch {
       handleError(error)
@@ -47,12 +51,12 @@ class ReportViewModel: ObservableObject {
     let isValidFormat = trimmedNumber.matches(e164Regex)
 
     if trimmedNumber.isEmpty {
-      showError("Veuillez saisir un numéro de téléphone.")
+      showError("Please enter a phone number.")
       return false
     }
 
     if !isValidFormat {
-      showError("Le numéro doit être au format E.164 (ex: +33612345678).")
+      showError("The number must be in E.164 format (e.g., +33612345678).")
       return false
     }
 
@@ -62,7 +66,11 @@ class ReportViewModel: ObservableObject {
   private func handleSuccess() {
     phoneNumber = ""
     alertType = .success
-    alertMessage = "Numéro signalé avec succès ! Merci de votre contribution 😊"
+    let message =
+      isGood
+      ? "Phone number reported as legitimate! Thank you for your contribution 😊"
+      : "Phone number reported as spam! Thank you for your contribution 😊"
+    alertMessage = message
     showAlert = true
   }
 
@@ -72,7 +80,7 @@ class ReportViewModel: ObservableObject {
       alertMessage = networkError.userMessage
     } else {
       alertType = .error
-      alertMessage = "Une erreur inattendue s'est produite. Veuillez réessayer."
+      alertMessage = "An unexpected error occurred. Please try again."
     }
     showAlert = true
   }

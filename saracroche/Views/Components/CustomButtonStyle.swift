@@ -9,15 +9,17 @@ struct CustomButtonStyle: ButtonStyle {
     self.foreground = foreground
   }
 
+  @Environment(\.isEnabled) private var isEnabled
+
   func makeBody(configuration: Configuration) -> some View {
     HStack {
       configuration.label
     }
     .frame(maxWidth: .infinity)
-    .frame(height: 48)
-    .background(background)
-    .foregroundColor(foreground)
-    .font(.body.weight(.bold))
+    .padding(12)
+    .background(isEnabled ? background : Color(.systemGray4))
+    .foregroundColor(isEnabled ? foreground : Color(.systemGray))
+    .appFont(.bodyBold)
     .cornerRadius(24)
     .opacity(configuration.isPressed ? 0.8 : 1.0)
   }

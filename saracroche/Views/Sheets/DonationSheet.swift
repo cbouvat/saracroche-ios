@@ -6,7 +6,7 @@ struct DonationSheet: View {
   var body: some View {
     NavigationView {
       ScrollView {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
           VStack(spacing: 16) {
             if #available(iOS 18.0, *) {
               Image(systemName: "heart.fill")
@@ -20,54 +20,52 @@ struct DonationSheet: View {
             }
 
             Text("Soutenez Saracroche")
-              .font(.title)
-              .fontWeight(.bold)
+              .appFont(.titleBold)
               .multilineTextAlignment(.center)
           }
 
           VStack(alignment: .leading, spacing: 16) {
             Text(
-              "Saracroche est développée bénévolement par Camille sur son temps libre. Vos dons lui permettent d’améliorer l’application et de maintenir les listes de blocage à jour. "
+              "Saracroche est développée bénévolement par Camille sur son temps libre. Vos dons lui permettent d'améliorer l'application et de maintenir les listes de blocage à jour. "
                 + "Une note sur le store, ça fait toujours plaisir et aide beaucoup !"
             )
-            .font(.body)
+            .appFont(.body)
             .multilineTextAlignment(.leading)
 
             Spacer()
 
             Text("Pourquoi donner ?")
-              .font(.headline)
-              .fontWeight(.semibold)
+              .appFont(.headlineSemiBold)
 
-            VStack(alignment: .leading, spacing: 8) {
-              DonationBenefitRow(
+            VStack(alignment: .leading, spacing: 16) {
+              BenefitRow(
                 icon: "curlybraces.square.fill",
                 title: "Projet open source",
                 description: "Code source ouvert et transparent"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "gift.fill",
                 title: "Entièrement gratuit",
                 description:
                   "Pas de pub, pas d'abonnement, pas de version premium"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "person.fill",
                 title: "Développeur indépendant",
                 description:
                   "Camille développe bénévolement sur son temps libre"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "arrow.clockwise.circle.fill",
                 title: "Mises à jour régulières",
                 description:
                   "Nouvelles listes de blocage et améliorations continues"
               )
 
-              DonationBenefitRow(
+              BenefitRow(
                 icon: "lock.shield.fill",
                 title: "Confidentialité respectée",
                 description:
@@ -80,7 +78,7 @@ struct DonationSheet: View {
 
           VStack(spacing: 16) {
             Button {
-              if let url = URL(string: "https://buy.stripe.com/9B6aEXcJ8flofsgfIU2oE01") {
+              if let url = URL(string: "https://donate.stripe.com/9B6aEXcJ8flofsgfIU2oE01") {
                 UIApplication.shared.open(url)
               }
             } label: {
@@ -94,7 +92,10 @@ struct DonationSheet: View {
             )
 
             Button {
-              if let url = URL(string: "https://paypal.me/cbouvat") {
+              if let url = URL(
+                string:
+                  "https://www.paypal.com/donate/?hosted_button_id=WJYS344L5MMYJ&locale.x=fr_FR")
+              {
                 UIApplication.shared.open(url)
               }
             } label: {
@@ -154,7 +155,6 @@ struct DonationSheet: View {
         }
         .padding()
       }
-      .navigationBarBackButtonHidden(true)
       .toolbar {
         ToolbarItem {
           Button("Fermer") {
@@ -162,33 +162,6 @@ struct DonationSheet: View {
           }
         }
       }
-    }
-  }
-}
-
-struct DonationBenefitRow: View {
-  let icon: String
-  let title: String
-  let description: String
-
-  var body: some View {
-    HStack(alignment: .center, spacing: 12) {
-      Image(systemName: icon)
-        .font(.system(size: 20))
-        .foregroundColor(.accent)
-        .frame(width: 24)
-
-      VStack(alignment: .leading, spacing: 4) {
-        Text(title)
-          .font(.subheadline)
-          .fontWeight(.medium)
-
-        Text(description)
-          .font(.caption)
-          .foregroundColor(.secondary)
-      }
-
-      Spacer()
     }
   }
 }

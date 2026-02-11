@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25C56" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Pattern" representedClassName=".Pattern" syncable="YES" codeGenerationType="class">
+        <attribute name="action" attributeType="String"/>
+        <attribute name="addedDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="completedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="pattern" attributeType="String"/>
+        <attribute name="source" attributeType="String"/>
+        <attribute name="sourceListName" optional="YES" attributeType="String"/>
+        <attribute name="sourceVersion" optional="YES" attributeType="String"/>
+    </entity>
+</model>

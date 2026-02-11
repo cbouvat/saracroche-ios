@@ -1,137 +1,84 @@
 import CallKit
 import Foundation
-import UIKit
 
+// MARK: - Error Types
+
+enum CallDirectoryError: LocalizedError {
+  case statusCheckFailed(Error)
+  case settingsOpenFailed(Error)
+  case reloadFailed(Error)
+
+  var errorDescription: String? {
+    switch self {
+    case .statusCheckFailed(let error):
+      return "Failed to check extension status: \(error.localizedDescription)"
+    case .settingsOpenFailed(let error):
+      return "Failed to open settings: \(error.localizedDescription)"
+    case .reloadFailed(let error):
+      return "Failed to reload extension: \(error.localizedDescription)"
+    }
+  }
+}
+
+/// Service for CallKit extension functionality
 class CallDirectoryService {
+  /// The CallKit manager instance for interacting with the Call Directory extension.
 
-  static let shared = CallDirectoryService()
-
-  private let manager = CXCallDirectoryManager.sharedInstance
-  private let sharedUserDefaults = SharedUserDefaultsService.shared
-  private let phoneNumberService = PhoneNumberService.shared
-
-  private init() {}
-
-  // MARK: - Check Extension Status
-  func checkExtensionStatus(
-    completion: @escaping (BlockerExtensionStatus) -> Void
-  ) {
-    manager.getEnabledStatusForExtension(
-      withIdentifier: AppConstants.callDirectoryExtensionIdentifier
-    ) { status, error in
-      DispatchQueue.main.async {
-        if error != nil {
-          completion(.error)
+  /// Check CallKit extension status
+  func checkExtensionStatus() async throws -> BlockerExtensionStatus {
+    try await withCheckedThrowingContinuation { continuation in
+      CXCallDirectoryManager.sharedInstance.getEnabledStatusForExtension(
+        withIdentifier: AppConstants.callDirectoryExtensionIdentifier
+      ) { status, error in
+        if let error = error {
+          continuation.resume(throwing: CallDirectoryError.statusCheckFailed(error))
           return
         }
 
+        let blockerStatus: BlockerExtensionStatus
         switch status {
         case .enabled:
-          completion(.enabled)
+          blockerStatus = .enabled
         case .disabled:
-          completion(.disabled)
+          blockerStatus = .disabled
         case .unknown:
-          completion(.unknown)
+          blockerStatus = .unknown
         @unknown default:
-          completion(.unexpected)
+          blockerStatus = .unexpected
+        }
+
+        continuation.resume(returning: blockerStatus)
+      }
+    }
+  }
+
+  /// Open CallKit settings
+  func openSettings() async throws {
+    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+      CXCallDirectoryManager.sharedInstance.openSettings { error in
+        if let error = error {
+          Logger.error(
+            "Error opening settings: $error.localizedDescription", category: .callDirectoryService,
+            error: error)
+          continuation.resume(throwing: CallDirectoryError.settingsOpenFailed(error))
+        } else {
+          continuation.resume()
         }
       }
     }
   }
 
-  // MARK: - Open Settings
-  func openSettings() {
-    manager.openSettings { error in
-      if let error = error {
-        print(
-          "Error opening settings: \(error.localizedDescription)"
-        )
-      }
-    }
-  }
-
-  // MARK: - Reload Extension
-  func reloadExtension(completion: @escaping (Bool) -> Void) {
-    manager.reloadExtension(
-      withIdentifier: AppConstants.callDirectoryExtensionIdentifier
-    ) { error in
-      DispatchQueue.main.async {
-        completion(error == nil)
-      }
-    }
-  }
-
-  // MARK: - Update Blocker List
-  func updateBlockerList(
-    onProgress: @escaping () -> Void,
-    onCompletion: @escaping (Bool) -> Void
-  ) {
-    var patternsToProcess = phoneNumberService.loadPhoneNumberPatterns()
-
-    func processNextPattern() {
-      if !patternsToProcess.isEmpty {
-        let pattern = patternsToProcess.removeFirst()
-        let numbersListForPattern = phoneNumberService.generatePhoneNumbers(
-          pattern: pattern
-        )
-
-        var chunkIndex = 0
-
-        func processNextChunk() {
-          onProgress()
-
-          let start = chunkIndex * AppConstants.phoneNumberChunkSize
-          let end = min(
-            start + AppConstants.phoneNumberChunkSize,
-            numbersListForPattern.count
-          )
-
-          if start < end {
-            let chunk = Array(numbersListForPattern[start..<end])
-            sharedUserDefaults.setAction(AppConstants.Actions.addNumbersList)
-            sharedUserDefaults.setNumbersList(chunk)
-
-            self.reloadExtension { success in
-              if success {
-                chunkIndex += 1
-                processNextChunk()
-              } else {
-                onCompletion(false)
-              }
-            }
-          } else {
-            processNextPattern()
-          }
+  /// Reload CallKit extension
+  func reloadExtension() async throws {
+    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+      CXCallDirectoryManager.sharedInstance.reloadExtension(
+        withIdentifier: AppConstants.callDirectoryExtensionIdentifier
+      ) { error in
+        if let error = error {
+          continuation.resume(throwing: CallDirectoryError.reloadFailed(error))
+        } else {
+          continuation.resume()
         }
-
-        processNextChunk()
-      } else {
-        onCompletion(true)
-      }
-    }
-
-    sharedUserDefaults.setAction(AppConstants.Actions.resetNumbersList)
-    self.reloadExtension { success in
-      if success {
-        processNextPattern()
-      } else {
-        onCompletion(false)
-      }
-    }
-  }
-
-  // MARK: - Remove Blocker List
-  func removeBlockerList(
-    onProgress: @escaping () -> Void,
-    onCompletion: @escaping (Bool) -> Void
-  ) {
-    sharedUserDefaults.setAction(AppConstants.Actions.resetNumbersList)
-
-    self.reloadExtension { success in
-      if success {
-        onCompletion(true)
-      } else {
-        onCompletion(false)
       }
     }
   }

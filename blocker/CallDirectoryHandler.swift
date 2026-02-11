@@ -1,95 +1,104 @@
 import CallKit
 import Foundation
+import OSLog
 
+/// Call Directory extension handler
 class CallDirectoryHandler: CXCallDirectoryProvider {
+  private let logger = Logger(subsystem: "com.saracroche.blocker", category: "CallDirectoryHandler")
+
+  /// Handle CallKit request
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {
+    logger.info("Starting request processing")
+
     context.delegate = self
 
     if context.isIncremental {
       incrementalUpdate(to: context)
     } else {
-      fullUpdate(to: context)
+      // Add fake number to iOS make sure the extension is working
+      context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
+      context.addIdentificationEntry(withNextSequentialPhoneNumber: 1_888_555_5555, label: "Fake")
     }
 
     context.completeRequest()
   }
 
+  /// Get shared UserDefaults
   private func sharedUserDefaults() -> UserDefaults? {
     UserDefaults(suiteName: "group.com.cbouvat.saracroche")
   }
 
+  /// Process incremental update
   private func incrementalUpdate(
     to context: CXCallDirectoryExtensionContext
   ) {
-
-    let action = sharedUserDefaults()?.string(forKey: "action") ?? ""
-
-    if action == "resetNumbersList" {
-      resetNumbersList(to: context)
-    } else if action == "addNumbersList" {
-      addNumbersList(to: context)
-    } else {
-      print("Unknown action: \(action)")
+    guard let sharedDefaults = sharedUserDefaults() else {
+      logger.error(
+        "Could not access shared UserDefaults")
+      return
     }
 
-    sharedUserDefaults()?.set("", forKey: "action")
-  }
+    let action = sharedDefaults.string(forKey: "action") ?? ""
+    let numbersData = sharedDefaults.array(forKey: "numbers") as? [[String: Any]] ?? []
 
-  private func fullUpdate(
-    to context: CXCallDirectoryExtensionContext
-  ) {
-    // Add fake number to iOS make sure the extension is working
-    context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
-  }
+    logger.info(
+      "Processing action \(action) with \(numbersData.count) numbers")
 
-  private func resetNumbersList(
-    to context: CXCallDirectoryExtensionContext
-  ) {
+    for numberData in numbersData {
+      guard let numberString = numberData["number"] as? String,
+        let number = Int64(numberString)
+      else {
+        continue
+      }
 
-    print("Resetting all numbers list")
-    sharedUserDefaults()?.set(0, forKey: "blockedNumbers")
+      let name = numberData["name"] as? String
 
-    context.removeAllBlockingEntries()
-    // Add fake number to iOS make sure the extension is working
-    context.addBlockingEntry(withNextSequentialPhoneNumber: 1_800_555_5555)
-
-    context.removeAllIdentificationEntries()
-
-    print("Successfully reset all numbers list")
-  }
-
-  private func addNumbersList(
-    to context: CXCallDirectoryExtensionContext
-  ) {
-
-    var blockedNumbers = Int64(
-      sharedUserDefaults()?.integer(forKey: "blockedNumbers") ?? 0
-    )
-
-    let numbersList =
-      sharedUserDefaults()?.stringArray(forKey: "numbersList") ?? []
-
-    print(
-      "Adding numbers : count \(numbersList.count), first \(numbersList.first ?? "")"
-    )
-
-    for number in numbersList {
-      let number = Int64("\(number)") ?? 0
-      context.addBlockingEntry(withNextSequentialPhoneNumber: number)
-      blockedNumbers += 1
+      switch action {
+      case "block":
+        context.addBlockingEntry(withNextSequentialPhoneNumber: number)
+        logger.info(
+          "Blocked number: \(numberString) - \(name ?? "")")
+      case "identify":
+        context.addIdentificationEntry(withNextSequentialPhoneNumber: number, label: name ?? "")
+        logger.info(
+          "Identified number: \(numberString) - \(name ?? "")")
+      case "remove_block":
+        context.removeBlockingEntry(withPhoneNumber: number)
+        logger.info(
+          "Removed blocking entry: \(numberString)")
+      case "remove_identify":
+        context.removeIdentificationEntry(withPhoneNumber: number)
+        logger.info(
+          "Removed identification entry: \(numberString)")
+      case "reset":
+        context.removeAllBlockingEntries()
+        context.removeAllIdentificationEntries()
+        logger.info(
+          "Reset all blocking and identification entries")
+      case "":
+        // No action specified, do nothing
+        logger.debug(
+          "No action specified")
+        break
+      default:
+        logger.warning(
+          "Unknown action: \(action)")
+      }
     }
 
-    sharedUserDefaults()?.set(blockedNumbers, forKey: "blockedNumbers")
+    // Clear the action after processing
+    sharedDefaults.set("", forKey: "action")
+    sharedDefaults.set([], forKey: "numbers")
   }
 }
 
 extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
-
+  /// Handle request failure
   func requestFailed(
     for extensionContext: CXCallDirectoryExtensionContext,
     withError error: Error
   ) {
-    print("Request failed with error: \(error.localizedDescription)")
+    logger.error(
+      "Request failed with error: \(error.localizedDescription)")
   }
-
 }
