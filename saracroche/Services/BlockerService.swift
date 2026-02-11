@@ -156,8 +156,8 @@ final class BlockerService {
           throw error
         }
 
-        // Calculate exponential backoff delay (1s, 2s, 4s, 8s, 16s)
-        let delaySeconds = pow(2.0, Double(retryCount - 1))
+        // Calculate linear backoff delay (5s, 10s, 15s, 20s, 25s)
+        let delaySeconds = 5.0 * Double(retryCount)
 
         Logger.error(
           "Update failed (attempt \(retryCount)/\(maxRetries)), resetting extension and retrying in \(delaySeconds)s",
