@@ -60,9 +60,6 @@ class BlockerViewModel: ObservableObject {
 
   /// Performs update with state management
   func performUpdateWithStateManagement() async {
-    var retryCount = 0
-    let maxRetries = 4
-
     // Set starting state
     updateState = .inProgress
 
@@ -75,8 +72,8 @@ class BlockerViewModel: ObservableObject {
       }
 
       do {
-        // Perform the update
-        try await blockerService.performUpdate()
+        // Perform the update with retry handled by the service
+        try await blockerService.performUpdateWithRetry()
 
         // Check for cancellation after update
         if Task.isCancelled {
@@ -89,59 +86,19 @@ class BlockerViewModel: ObservableObject {
         completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
         completedPatternsCount = await patternService.getCompletedPatternsCount()
         pendingPatternsCount = await patternService.getPendingPatternsCount()
-
-        // Check for cancellation after count refresh
-        if Task.isCancelled {
-          Logger.debug("Update task cancelled after count refresh", category: .blockerViewModel)
-          return
-        }
-
-        // Reset retry counter on success
-        retryCount = 0
       } catch is CancellationError {
-        // Task was cancelled - set ok state and return
         Logger.debug("Update task cancelled", category: .blockerViewModel)
         return
       } catch {
-        retryCount += 1
-
-        if retryCount <= maxRetries {
-          // Calculate exponential backoff delay (1s, 2s, 4s)
-          let delaySeconds = pow(2.0, Double(retryCount - 1))
-
-          Logger.error(
-            "Update failed (attempt \(retryCount)/\(maxRetries)), retrying in \(delaySeconds)s",
-            category: .blockerViewModel, error: error
-          )
-
-          // Wait before retrying
-          do {
-            try await Task.sleep(nanoseconds: UInt64(delaySeconds) * 1_000_000_000)
-          } catch is CancellationError {
-            // Task was cancelled during sleep
-            Logger.debug("Update task cancelled during retry sleep", category: .blockerViewModel)
-            return
-          } catch {
-            // Ignore other errors (shouldn't happen with Task.sleep)
-          }
-
-          // Continue to retry
-          continue
-        } else {
-          // All retries exhausted - set error state
-          Logger.error(
-            "Update failed after \(maxRetries) attempts", category: .blockerViewModel, error: error)
-          updateState = .error
-          updateError = error.localizedDescription
-          break
-        }
+        Logger.error("Update failed", category: .blockerViewModel, error: error)
+        updateState = .error
+        updateError = error.localizedDescription
+        return
       }
     }
 
     // Success - set ok state
-    if updateState != .error {
-      updateState = .ok
-    }
+    updateState = .ok
   }
 
   /// Enables the notification reminder after requesting permission
@@ -219,20 +176,7 @@ class BlockerViewModel: ObservableObject {
 
   /// Reinstalls the block list by resetting the extension and marking all patterns as pending
   func reinstallBlockList() async {
-    // Send reset action to CallDirectory extension to remove all entries
-    sharedUserDefaults.setAction("reset")
-    sharedUserDefaults.setNumbers([])
-
-    // Reload the extension to process the reset action
-    do {
-      try await callDirectoryService.reloadExtension()
-    } catch {
-      Logger.error(
-        "Failed to reload extension during reinstall", category: .blockerViewModel, error: error)
-    }
-
-    // Clear completedDate on all patterns so they become pending again
-    await patternService.clearAllCompletedDates()
+    await blockerService.resetExtensionState()
 
     // Refresh data to update counters
     await loadData()

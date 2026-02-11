@@ -66,7 +66,7 @@ final class BackgroundService: ObservableObject {
     // Use Task to bridge sync context to async
     Task {
       do {
-        try await BlockerService().performUpdate()
+        try await BlockerService().performUpdateWithRetry()
         task.setTaskCompleted(success: true)
       } catch {
         Logger.error("Background update failed", category: .backgroundService, error: error)

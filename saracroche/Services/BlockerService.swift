@@ -101,6 +101,58 @@ final class BlockerService {
     Logger.debug("No update needed, all patterns are completed", category: .blockerService)
   }
 
+  /// Resets the Call Directory extension state and invalidates all patterns
+  func resetExtensionState() async {
+    sharedUserDefaultsService.setAction("reset")
+    sharedUserDefaultsService.setNumbers([])
+    do {
+      try await callDirectoryService.reloadExtension()
+    } catch {
+      Logger.error(
+        "Failed to reload extension during reset, continuing anyway",
+        category: .blockerService, error: error)
+    }
+    await patternService.clearAllCompletedDates()
+  }
+
+  /// Performs `performUpdate()` with retry, reset, and exponential backoff
+  func performUpdateWithRetry() async throws {
+    var retryCount = 0
+    let maxRetries = 5
+
+    while true {
+      do {
+        try Task.checkCancellation()
+        try await performUpdate()
+        return
+      } catch is CancellationError {
+        throw CancellationError()
+      } catch {
+        retryCount += 1
+
+        if retryCount > maxRetries {
+          Logger.error(
+            "Update failed after \(maxRetries) attempts",
+            category: .blockerService, error: error)
+          throw error
+        }
+
+        // Calculate exponential backoff delay (1s, 2s, 4s, 8s, 16s)
+        let delaySeconds = pow(2.0, Double(retryCount - 1))
+
+        Logger.error(
+          "Update failed (attempt \(retryCount)/\(maxRetries)), resetting extension and retrying in \(delaySeconds)s",
+          category: .blockerService, error: error)
+
+        // Reset extension state to recover from potential corruption
+        await resetExtensionState()
+
+        // Wait before retrying
+        try await Task.sleep(nanoseconds: UInt64(delaySeconds) * 1_000_000_000)
+      }
+    }
+  }
+
   /// Process multiple pending patterns up to a limit
   private func processPatternsUpToLimit() async throws {
     var totalProcessedNumbers: Int64 = 0
