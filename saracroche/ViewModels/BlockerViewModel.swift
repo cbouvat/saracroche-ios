@@ -4,6 +4,9 @@ import SwiftUI
 /// View model for call blocker functionality
 @MainActor
 class BlockerViewModel: ObservableObject {
+
+  // MARK: - Published Properties
+
   @Published var blockerExtensionStatus: BlockerExtensionStatus = .unknown
   @Published var updateState: BlockerUpdateStatus = .ok
   @Published var lastSuccessfulUpdateAt: Date? = nil
@@ -13,32 +16,30 @@ class BlockerViewModel: ObservableObject {
   @Published var completedPhoneNumbersCount: Int64 = 0
   @Published var completedPatternsCount: Int = 0
   @Published var pendingPatternsCount: Int = 0
-  @Published var lastCompletionDate: Date? = nil
   @Published var lastListDownloadAt: Date? = nil
   @Published var lastBackgroundLaunchAt: Date? = nil
 
-  // Update state
-  @Published var isUpdating: Bool = false
-  @Published var updateError: String?
   @Published var isBackgroundRefreshEnabled: Bool = false
   @Published var isNotificationReminderEnabled: Bool = false
   @Published var isExtensionsSetupDismissed: Bool = false
 
-  private let callDirectoryService: CallDirectoryService
-  private let sharedUserDefaults: SharedUserDefaultsService
+  // MARK: - Dependencies
+
   private let userDefaults: UserDefaultsService
   private let blockerService: BlockerService
   private let patternService: PatternService
   private let notificationService: NotificationService
 
+  // MARK: - Initialization
+
   init() {
-    self.callDirectoryService = CallDirectoryService()
     self.userDefaults = UserDefaultsService()
-    self.sharedUserDefaults = SharedUserDefaultsService()
     self.blockerService = BlockerService()
     self.patternService = PatternService()
     self.notificationService = NotificationService(userDefaults: self.userDefaults)
   }
+
+  // MARK: - Data Loading
 
   func loadData() async {
     lastSuccessfulUpdateAt = userDefaults.getLastSuccessfulUpdateAt()
@@ -55,8 +56,9 @@ class BlockerViewModel: ObservableObject {
     completedPhoneNumbersCount = await patternService.getCompletedPhoneNumbersCount()
     completedPatternsCount = await patternService.getCompletedPatternsCount()
     pendingPatternsCount = await patternService.getPendingPatternsCount()
-    lastCompletionDate = await patternService.getLastCompletionDate()
   }
+
+  // MARK: - Update Management
 
   /// Performs update with state management
   func performUpdateWithStateManagement() async {
@@ -92,41 +94,29 @@ class BlockerViewModel: ObservableObject {
       } catch {
         Logger.error("Update failed", category: .blockerViewModel, error: error)
         updateState = .error
-        updateError = error.localizedDescription
         return
       }
     }
 
-    // Success - set ok state
+    // Success - refresh dates and set ok state
+    lastSuccessfulUpdateAt = userDefaults.getLastSuccessfulUpdateAt()
+    lastListDownloadAt = userDefaults.getLastListDownloadAt()
     updateState = .ok
   }
 
-  /// Enables the notification reminder after requesting permission
-  func enableNotificationReminder() async {
-    let granted = await notificationService.requestAuthorization()
-    if granted {
-      await notificationService.scheduleReminderNotification()
-      userDefaults.setNotificationReminderEnabled(true)
-      isNotificationReminderEnabled = true
-    }
+  /// Reinstalls the block list by resetting the extension and marking all patterns as pending
+  func reinstallBlockList() async {
+    await blockerService.resetExtensionState()
+
+    // Refresh data to update counters
+    await loadData()
   }
 
-  /// Dismisses the extensions setup card
-  func dismissExtensionsSetup() {
-    userDefaults.setExtensionsSetupDismissed(true)
-    isExtensionsSetupDismissed = true
-  }
-
-  /// Disables the notification reminder
-  func disableNotificationReminder() {
-    notificationService.cancelReminderNotification()
-    userDefaults.setNotificationReminderEnabled(false)
-    isNotificationReminderEnabled = false
-  }
+  // MARK: - Extension Status
 
   func checkBlockerExtensionStatus() async {
     do {
-      blockerExtensionStatus = try await callDirectoryService.checkExtensionStatus()
+      blockerExtensionStatus = try await blockerService.checkExtensionStatus()
     } catch {
       Logger.error("Failed to check extension status", category: .blockerViewModel, error: error)
       blockerExtensionStatus = .error
@@ -139,46 +129,40 @@ class BlockerViewModel: ObservableObject {
 
   func openSettings() async {
     do {
-      try await callDirectoryService.openSettings()
+      try await blockerService.openSettings()
     } catch {
       Logger.error("Failed to open settings", category: .blockerViewModel, error: error)
     }
   }
 
-  func resetApplication() async {
-    // Cancel any pending notification reminders
-    notificationService.cancelReminderNotification()
+  // MARK: - Notifications
 
-    // Clear all CoreData patterns
-    await patternService.deleteAllPatterns()
-
-    // Clear all UserDefaults data
-    userDefaults.resetAllData()
-
-    // Clear all SharedUserDefaults data
-    sharedUserDefaults.resetAllData()
-
-    // Send reset action to CallDirectory extension to remove all entries
-    sharedUserDefaults.setAction("reset")
-    sharedUserDefaults.setNumbers([])
-
-    // Reload the extension to process the reset action
-    do {
-      try await callDirectoryService.reloadExtension()
-    } catch {
-      Logger.error(
-        "Failed to reload extension during reset", category: .blockerViewModel, error: error)
+  /// Enables the notification reminder after requesting permission
+  func enableNotificationReminder() async {
+    let granted = await notificationService.requestAuthorization()
+    if granted {
+      await notificationService.scheduleReminderNotification()
+      userDefaults.setNotificationReminderEnabled(true)
+      isNotificationReminderEnabled = true
     }
-
-    // Exit the application
-    exit(0)
   }
 
-  /// Reinstalls the block list by resetting the extension and marking all patterns as pending
-  func reinstallBlockList() async {
-    await blockerService.resetExtensionState()
+  /// Disables the notification reminder
+  func disableNotificationReminder() {
+    notificationService.cancelReminderNotification()
+    userDefaults.setNotificationReminderEnabled(false)
+    isNotificationReminderEnabled = false
+  }
 
-    // Refresh data to update counters
-    await loadData()
+  // MARK: - Settings
+
+  /// Dismisses the extensions setup card
+  func dismissExtensionsSetup() {
+    userDefaults.setExtensionsSetupDismissed(true)
+    isExtensionsSetupDismissed = true
+  }
+
+  func resetApplication() async {
+    await blockerService.resetApplication(notificationService: notificationService)
   }
 }

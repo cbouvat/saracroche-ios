@@ -21,11 +21,16 @@ enum BlockerServiceError: LocalizedError {
 
 /// Service for managing blocklist updates
 final class BlockerService {
+
+  // MARK: - Dependencies
+
   private let callDirectoryService: CallDirectoryService
   private let userDefaultsService: UserDefaultsService
   private let listService: ListService
   private let patternService: PatternService
   private let sharedUserDefaultsService: SharedUserDefaultsService
+
+  // MARK: - Initialization
 
   init(
     callDirectoryService: CallDirectoryService = CallDirectoryService(),
@@ -40,6 +45,34 @@ final class BlockerService {
     self.patternService = patternService
     self.sharedUserDefaultsService = sharedUserDefaultsService
   }
+
+  // MARK: - Extension Management
+
+  /// Checks the current status of the Call Directory extension
+  func checkExtensionStatus() async throws -> BlockerExtensionStatus {
+    try await callDirectoryService.checkExtensionStatus()
+  }
+
+  /// Opens the app's settings page
+  func openSettings() async throws {
+    try await callDirectoryService.openSettings()
+  }
+
+  /// Resets the Call Directory extension state and invalidates all patterns
+  func resetExtensionState() async {
+    sharedUserDefaultsService.setAction("reset")
+    sharedUserDefaultsService.setNumbers([])
+    do {
+      try await callDirectoryService.reloadExtension()
+    } catch {
+      Logger.error(
+        "Failed to reload extension during reset, continuing anyway",
+        category: .blockerService, error: error)
+    }
+    await patternService.clearAllCompletedDates()
+  }
+
+  // MARK: - Update
 
   /// Perform update
   func performUpdate() async throws {
@@ -101,20 +134,6 @@ final class BlockerService {
     Logger.debug("No update needed, all patterns are completed", category: .blockerService)
   }
 
-  /// Resets the Call Directory extension state and invalidates all patterns
-  func resetExtensionState() async {
-    sharedUserDefaultsService.setAction("reset")
-    sharedUserDefaultsService.setNumbers([])
-    do {
-      try await callDirectoryService.reloadExtension()
-    } catch {
-      Logger.error(
-        "Failed to reload extension during reset, continuing anyway",
-        category: .blockerService, error: error)
-    }
-    await patternService.clearAllCompletedDates()
-  }
-
   /// Performs `performUpdate()` with retry, reset, and exponential backoff
   func performUpdateWithRetry() async throws {
     var retryCount = 0
@@ -152,6 +171,28 @@ final class BlockerService {
       }
     }
   }
+
+  // MARK: - Reset
+
+  /// Resets the entire application: cancels notifications, deletes all data, and exits
+  func resetApplication(notificationService: NotificationService) async {
+    notificationService.cancelReminderNotification()
+    await patternService.deleteAllPatterns()
+    userDefaultsService.resetAllData()
+    sharedUserDefaultsService.resetAllData()
+    sharedUserDefaultsService.setAction("reset")
+    sharedUserDefaultsService.setNumbers([])
+    do {
+      try await callDirectoryService.reloadExtension()
+    } catch {
+      Logger.error(
+        "Failed to reload extension during reset",
+        category: .blockerService, error: error)
+    }
+    exit(0)
+  }
+
+  // MARK: - Private Helpers
 
   /// Process multiple pending patterns up to a limit
   private func processPatternsUpToLimit() async throws {
