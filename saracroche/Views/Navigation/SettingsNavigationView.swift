@@ -108,7 +108,7 @@ struct SettingsNavigationView: View {
 
           Button {
             if let url = URL(
-              string: "https://github.com/cbouvat/saracroche-ios"
+              string: "https://codeberg.org/cbouvat/saracroche-ios"
             ) {
               UIApplication.shared.open(url)
             }
