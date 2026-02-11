@@ -12,9 +12,9 @@ enum BlockerUpdateStatus {
     case .ok:
       return "À jour"
     case .inProgress:
-      return "Mise à jour en cours"
+      return "Mise à jour en cours, gardez l'application ouverte"
     case .error:
-      return "Erreur lors de la mise à jour"
+      return "Erreur lors de la mise à jour, redémarrer votre téléphone"
     }
   }
 
