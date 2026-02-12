@@ -1,64 +1,80 @@
 # Saracroche iOS
 
-> 🤖 **Also available for Android**: Check out [Saracroche Android](https://codeberg.org/cbouvat/saracroche-android) for Android users!
+> 🤖 **Also available for Android**: [Saracroche Android](https://codeberg.org/cbouvat/saracroche-android)
 
-## Description
+## Overview
 
-Saracroche is an iOS app that protects you from unwanted calls by blocking spam phone calls. It's designed to be simple, effective, and privacy-friendly.
+Saracroche is a privacy-focused iOS call blocking application that protects users from spam and unwanted calls using native CallKit extensions. Built with MVVM architecture and SwiftUI, it features a sophisticated pattern-based blocking system with wildcard support.
 
 ## Features
 
-- 🛡️ Automatically blocks numbers
-- 📱 Native iOS extension
-- 🔒 Privacy-respectful: no call data is collected
-- 🔄 Regular updates of the number database
+- 🛡️ **Pattern-based blocking**: Uses wildcard patterns (e.g., `33899######`) to block number ranges
+- 📱 **Native CallKit extensions**: System-level call blocking and identification
+- 🔒 **Privacy by design**: Zero call data collection, all processing happens on-device
+- 🔄 **Automatic updates**: Background updates every 6 hours with smart reprocessing
+- 📞 **Spam reporting**: Built-in reporting for unwanted calls and SMS
+- 💬 **SMS filtering**: Message filtering extension for text messages
 
 ## Installation
 
-### App Store
+**App Store**: 📱 [Download Saracroche](https://apps.apple.com/app/saracroche/id6743679292)
 
-Saracroche is available on the [App Store](https://apps.apple.com/app/saracroche/id6743679292).
+**TestFlight**: 🧪 [Try Beta Version](https://testflight.apple.com/join/CFCjF6d2)
 
-### TestFlight
+## Enterprise Edition
 
-You can also try the latest beta version through [TestFlight](https://testflight.apple.com/join/CFCjF6d2).
+Saracroche offers an **Enterprise edition** for business users with centralized management:
+
+- 🏢 **Centralized dashboard** for managing reports and blocking data
+- 📋 **Custom allow lists** for trusted business numbers
+- 📊 **Centralized reporting** of unwanted calls across the organization
+- 📱 **Multi-channel blocking** for calls and SMS with phishing protection
+- 🔧 **MDM deployment** via Intune with zero-touch configuration
+- 🔄 **Automatic updates** to keep protection current
+
+💼 [Learn more about Saracroche for Business](https://saracroche.org/fr/business)
+
+## For Developers
 
 ### Building from Source
 
-1. Clone the repository
-2. Copy `saracroche/Config.swift.example` to `Config.swift`
-3. Update the configuration with your server URL
-4. Open `saracroche.xcodeproj` in Xcode
-5. Build and run the project on your device
+```bash
+# Clone repository
+git clone https://codeberg.org/cbouvat/saracroche-ios.git
+cd saracroche-ios
 
-**Requirements:**
+# Open in Xcode
+open saracroche.xcodeproj
+```
+
+**Requirements**:
 
 - Xcode 15.0+
-- iOS 15.0+
-- Swift 5.9+
+- iOS 15.0+ deployment target
+- Swift 5.9+ toolchain
 
-## Technology Stack
+### Architecture
 
-- **Swift** - Primary programming language
-- **SwiftUI** - Modern UI framework
-- **CallKit** - iOS call blocking framework
-- **MVVM Architecture** - Clean architecture pattern
+Saracroche uses a 4-target architecture:
 
-## List of prefix numbers
+- **Main App**: SwiftUI interface with CoreData pattern storage
+- **Call Directory Extension**: CallKit-based system-level call blocking
+- **Unwanted Communication Reporting**: Call/SMS spam reporting UI
+- **Message Filter Extension**: SMS filtering capabilities
 
-The prefix numbers are provided by the remote download service and kept current via the app's background updates.
+### Technical Stack
+
+- **Language**: Swift 5.9+ with async/await
+- **UI**: SwiftUI with MVVM architecture
+- **Data**: CoreData (single "Pattern" entity)
+- **iOS APIs**: CallKit, IdentityLookup, App Groups
+- **Target**: iOS 15.0+, built with Xcode 15.0+
 
 ## Contributing
 
-Contributions are welcome! Here's how you can help:
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## Sponsorship
+## Support
 
 If you find Saracroche useful, consider sponsoring the project to help with maintenance and new features:
 
