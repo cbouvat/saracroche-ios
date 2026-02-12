@@ -13,7 +13,7 @@ enum Logger {
     case backgroundService = "BackgroundService"
     case callDirectoryService = "CallDirectoryService"
     case blockerViewModel = "BlockerViewModel"
-    case numbersViewModel = "NumbersViewModel"
+    case listsViewModel = "ListsViewModel"
     case callDirectoryHandler = "CallDirectoryHandler"
     case messageFilterExtension = "MessageFilterExtension"
     case notificationService = "NotificationService"

@@ -13,9 +13,9 @@ struct SaracrocheView: View {
         .tabItem {
           Label("Signaler", systemImage: "megaphone.fill")
         }
-      NumbersNavigationView()
+      ListsNavigationView()
         .tabItem {
-          Label("Numéros", systemImage: "number.square.fill")
+          Label("Listes", systemImage: "number.square.fill")
         }
       SettingsNavigationView(blockerViewModel: blockerViewModel)
         .tabItem {

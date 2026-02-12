@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AddPatternSheet: View {
   @Environment(\.dismiss) private var dismiss
-  @ObservedObject var viewModel: NumbersViewModel
+  @ObservedObject var viewModel: ListsViewModel
   @Binding var isPresented: Bool
 
   @State private var patternString: String = ""
@@ -14,7 +14,7 @@ struct AddPatternSheet: View {
   /// Real-time format validation error (computed from current input).
   private var formatError: String? {
     guard !patternString.isEmpty else { return nil }
-    return NumbersViewModel.validatePatternFormat(patternString)
+    return ListsViewModel.validatePatternFormat(patternString)
   }
 
   /// The error to display: async errors from the view model take priority, then format errors.
@@ -181,6 +181,6 @@ struct AddPatternSheet: View {
 
 #Preview {
   AddPatternSheet(
-    viewModel: NumbersViewModel(), isPresented: .constant(true)
+    viewModel: ListsViewModel(), isPresented: .constant(true)
   )
 }

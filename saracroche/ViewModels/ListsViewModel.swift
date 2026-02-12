@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 @MainActor
-class NumbersViewModel: ObservableObject {
+class ListsViewModel: ObservableObject {
   // MARK: - Published Properties
 
   // French list metadata
@@ -75,7 +75,7 @@ class NumbersViewModel: ObservableObject {
     patternError = nil
 
     // Validate pattern format
-    if let error = NumbersViewModel.validatePatternFormat(patternString) {
+    if let error = ListsViewModel.validatePatternFormat(patternString) {
       patternError = error
       return
     }
@@ -95,7 +95,7 @@ class NumbersViewModel: ObservableObject {
       name: name?.isEmpty == true ? nil : name,
       source: "user"
     ) != nil {
-      Logger.info("Prefix created: \(patternString)", category: .numbersViewModel)
+      Logger.info("Prefix created: \(patternString)", category: .listsViewModel)
       // Reload data
       await loadData()
     } else {
@@ -107,7 +107,7 @@ class NumbersViewModel: ObservableObject {
 
   func deletePattern(_ pattern: Pattern) async {
     await patternService.markPatternForDeletion(pattern)
-    Logger.info("Prefix marked for removal: \(pattern.pattern ?? "")", category: .numbersViewModel)
+    Logger.info("Prefix marked for removal: \(pattern.pattern ?? "")", category: .listsViewModel)
     await loadData()
   }
 
